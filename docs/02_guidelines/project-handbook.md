@@ -2,11 +2,19 @@
 
 ## 1. Project Overview
 **Project Name:** PreludioLab (プレリュディオラボ)  
-**Mission:** "The Prelude to a richer life with classical music."  
-AIエージェントを活用した、世界一のクラシック音楽アナリーゼ（楽曲分析）サイトを構築する。  
-「仕様駆動開発（Spec-Driven Development）」を採用し、AIとの協働による高速かつ持続可能な開発を目指す。  
+
+### Mission
+- The Prelude to a richer life with classical music. (クラシック音楽を通じて人生がより良くなるようなきっかけにしたい)
+- **Beyond Listening.** Dive deeper into the classics. （「聴く」の先へ。クラシックの深淵を体験する。）
 
 ### Core Philosophy
+- **ユーザーへの価値提供:** ユーザーにとっての価値を常に重視する。
+- **グローバル対応:** 国や言語を問わず、誰でも楽しめること。
+- **全レベル対応:** 初心者から熟練者まで楽しめるような内容にする。
+- **マルチモーダル体験:** 文字だけでなく楽譜や音源、参考動画など、マルチモーダルなUIを提供する。
+- **多角的なコンテンツ:** 楽曲紹介、音楽の仕組み、作曲家紹介、時代やジャンルの解説、演奏家紹介など多角的にコンテンツを提供する。
+
+### Development Principles
 1.  **Zero Cost Architecture:** ドメイン代以外の固定費を完全にゼロにする（Free Tier Only）。
 2.  **Docs as Code:** 仕様、タスク、知見をすべてMarkdownでGit管理し、AIのコンテキストとして活用する。
 3.  **Spec-Driven:** 仕様書を「唯一の正解」とし、実装と検証の基準とする。
