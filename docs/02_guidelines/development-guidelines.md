@@ -25,9 +25,9 @@ Next.js App Router (v15+) をベースとしたディレクトリ構成と責任
 ## 3. Git Branching Strategy
 **GitHub Flow** を採用する。シンプルさを最優先。
 
-1.  `main` ブランチは常にデプロイ可能な状態を保つ。
+1.  `master` ブランチは常にデプロイ可能な状態を保つ。
 2.  開発は `feat/xxx` や `fix/xxx` ブランチを作成して行う。
-3.  Pull Request を作成し、CI (Lint/Test) がパスしたら `main` にマージする。
+3.  Pull Request を作成し、CI (Lint/Test) がパスしたら `master` にマージする。
 4.  マージと同時にProduction環境（Vercel）へデプロイされる。
 
 ## 4. CI/CD Operations

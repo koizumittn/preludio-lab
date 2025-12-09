@@ -141,5 +141,5 @@ Antigravity IDE および Agent Script 開発時の指針。
 
   * **Context Awareness:** AIへの指示には必ず `docs/01_specs` の関連箇所を参照させること。
   * **Throttling:** APIコールを行うスクリプトには、必ずレートリミット（RPM）を考慮したWait処理を入れること。
-  * **Safety:** AIエージェントによる `main` ブランチへの直コミットは禁止。必ずPull Requestを作成させる。
+  * **Safety:** AIエージェントによる `master` ブランチへの直コミットは禁止。必ずPull Requestを作成させる。
 
