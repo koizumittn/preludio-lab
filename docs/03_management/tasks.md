@@ -7,6 +7,7 @@ Status: `[/]` 進行中
     - [ ] `01_specs/business-requirements.md` に要件ID (`REQ-BIZ-XXX`) を付与
     - [ ] `01_specs/technology-requirements.md` に要件ID (`REQ-TECH-XXX`) を付与
     - [ ] `01_specs/ui-ux-requirements.md` に要件ID (`REQ-UI-XXX`) を付与
+    - [ ] `01_specs/content-requirements.md` に要件ID (`REQ-CONT-XXX`) を付与
     - [ ] 各要件に対する「完了条件（Acceptance Criteria）」の記述
 - [ ] **基本設計**
     - [ ] **ルーティング設計:** `app/[lang]/` 配下のURL構造とページ遷移の定義
@@ -15,6 +16,8 @@ Status: `[/]` 進行中
     - [ ] **エージェント設計:** AIエージェント（Musicologist, Translator）の出力フォーマットとインターフェース定義
 
 ## Phase 0.5: 環境構築 (Environment Setup)
+- [ ] **ガイドライン策定**
+    - [x] `docs/02_guidelines/naming-conventions.md` (命名規則) の作成
 - [ ] **プロジェクトセットアップ**
     - [ ] Next.js アプリの初期化 (App Router, TypeScript)
     - [ ] Tailwind CSS & デザインシステムの設定 (Fonts, Colors)
