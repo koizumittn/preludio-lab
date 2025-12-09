@@ -24,8 +24,8 @@ Status: `[/]` 進行中
     - [ ] `docs/02_guidelines/development-guidelines.md` (開発)
     - [ ] `docs/02_guidelines/testing-guidelines.md` (テスト)
 - [ ] **プロジェクトセットアップ**
-    - [ ] Next.js アプリの初期化 (App Router, TypeScript)
-    - [ ] Tailwind CSS & デザインシステムの設定 (Fonts, Colors)
+    - [x] Next.js アプリの初期化 (App Router, TypeScript)
+    - [x] Tailwind CSS & デザインシステムの設定 (Fonts, Colors)
     - [ ] ESLint & Prettier の設定
 - [ ] **インフラ構築**
     - [ ] Vercel プロジェクトのセットアップ
