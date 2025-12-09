@@ -11,18 +11,18 @@
 
 ## 2. Technology Stack
 
-| Category | Technology | Selection Reason / Policy |
-| :--- | :--- | :--- |
-| **Frontend** | **Next.js (App Router)** | パフォーマンス、SEO、Vercelとの親和性を重視。 |
-| **Language** | **TypeScript** | 型安全性により、AIによるコード生成の精度と保守性を向上。 |
-| **Hosting** | **Vercel** | Hobby Plan (Free)。サーバーレス、グローバルCDN。 |
-| **Content Mgt** | **GitHub + MDX** | コンテンツのバージョン管理。**AIエージェントの作業場**として機能する。 |
-| **User DB / Auth** | **Supabase** | **(Free Tier & SSO Only)** メール/パスワード認証は無効化。OAuth連携のみ使用。 |
-| **Search** | **Pagefind** | 静的サイト内検索。サーバーレス・コストゼロ。 |
-| **Media (Score)** | **react-abc / verovio** | テキスト（ABC記法）からSVG楽譜をクライアント描画。 |
-| **Media (Audio)** | **YouTube IFrame API** | 外部プレーヤー制御。コストゼロで音源再生。 |
-| **AI Model** | **Gemini 3.0** | **Google AI Studio API**経由で利用。無料枠（Free Tier）を使用。 |
-| **Agent Runner** | **GitHub Actions** | **(Changed)** AIエージェントの実行環境。Cron定期実行や手動トリガーでスクリプトを起動し、コストゼロで計算リソースを確保。 |
+| Requirement ID | Category | Technology | Selection Reason / Policy |
+| :--- | :--- | :--- | :--- |
+| **REQ-TECH-001** | **Frontend** | **Next.js 15 (App Router)** | パフォーマンス、SEO、Vercelとの親和性を重視。 |
+| **REQ-TECH-002** | **Language** | **TypeScript** | 型安全性により、AIによるコード生成の精度と保守性を向上。 |
+| **REQ-TECH-003** | **Hosting** | **Vercel** | Hobby Plan (Free)。サーバーレス、グローバルCDN。 |
+| **REQ-TECH-004** | **Content Mgt** | **GitHub + MDX** | コンテンツのバージョン管理。**AIエージェントの作業場**として機能する。 |
+| **REQ-TECH-005** | **User DB / Auth** | **Supabase** | **(Free Tier & SSO Only)** メール/パスワード認証は無効化。OAuth連携のみ使用。 |
+| **REQ-TECH-006** | **Search** | **Pagefind** | 静的サイト内検索。サーバーレス・コストゼロ。 |
+| **REQ-TECH-007** | **Media (Score)** | **react-abc / verovio** | テキスト（ABC記法）からSVG楽譜をクライアント描画。 |
+| **REQ-TECH-008** | **Media (Audio)** | **YouTube IFrame API** | 外部プレーヤー制御。コストゼロで音源再生。 |
+| **REQ-TECH-009** | **AI Model** | **Gemini 3.0** | **Google AI Studio API**経由で利用。無料枠（Free Tier）を使用。 |
+| **REQ-TECH-010** | **Agent Runner** | **GitHub Actions** | **(Changed)** AIエージェントの実行環境。Cron定期実行や手動トリガーでスクリプトを起動し、コストゼロで計算リソースを確保。 |
 
 ## 3. AI Agent Infrastructure (Free Tier Architecture)
 
@@ -58,15 +58,15 @@ Google Generative AI SDK for Node.js を使用したカスタムスクリプト�
 
 ## 5. Security Architecture
 
-### Layer 1: AI Safety & Cost Control
+### [REQ-SEC-001] Layer 1: AI Safety & Cost Control
 * **Rate Limiting:** 無料枠の制限を超えないよう、スクリプト側でWait処理を入れる。
-* **Human Verification:** AIは必ず `Pull Request` を作成する。`main` ブランチへの直コミットは禁止。
+* **Human Verification:** AIは必ず `Pull Request` を作成する。`master` ブランチへの直コミットは禁止。
 
-### Layer 2: App Security (Supabase)
+### [REQ-SEC-002] Layer 2: App Security (Supabase)
 * **SSO Only:** パスワードを持たない。
 * **RLS:** Row Level Securityでデータアクセスを厳格化。
 
-### Layer 3: Infra Security
+### [REQ-SEC-003] Layer 3: Infra Security
 *   **Secrets Management:** Gemini API Key、Supabase Key等の機密情報は **GitHub Secrets** および **Vercel Environment Variables** にのみ保存。コード内には一切含めない。
 *   **Dependabot:** 依存関係の脆弱性を監視。
 

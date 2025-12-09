@@ -49,6 +49,23 @@
 ---
 
 ## 4. [REQ-USER] ターゲット・ペルソナ
-* **The Global Learner (グローバルな学習者):** 音楽理論や楽曲背景を母国語（英/西/日）で深く学びたい層。
-* **The Listener (聴取者):** 楽譜を目で追いながら、YouTube音源を聴きたい層（`ScoreRenderer` + `YouTubePlayer` の連携が必要）。
-* **The Developer (あなた):** インフラ管理の手間を極限まで減らし、Git操作のみでサイト運営と機能改善を行いたい開発者。
+
+### [REQ-USER-001] The Global Learner (グローバルな学習者)
+*   **Profile:** 音楽理論や楽曲背景を母国語（英/西/日）で深く学びたい層。
+*   **Needs:** 専門用語の正確な解説と、多言語でのアクセス。
+*   **Acceptance Criteria:**
+    *   主要な音楽用語（Cadence, Motifなど）が各言語で正しく定義されていること。
+    *   記事の言語切り替えが1クリックで行えること。
+
+### [REQ-USER-002] The Listener (聴取者)
+*   **Profile:** 楽譜を目で追いながら、YouTube音源を聴きたい層。
+*   **Needs:** 音楽体験の向上。楽譜が読めなくても「今どこを弾いているか」がわかる体験。
+*   **Acceptance Criteria:**
+    *   `ScoreRenderer` と `YouTubePlayer` が同期して動作すること。
+
+### [REQ-USER-003] The Developer (あなた)
+*   **Profile:** インフラ管理の手間を極限まで減らし、Git操作のみでサイト運営と機能改善を行いたい開発者。
+*   **Needs:** 運用コストゼロ、完全自動化されたデプロイフロー。
+*   **Acceptance Criteria:**
+    *   `git push` からデプロイ完了までが自動化されていること。
+    *   固定費が $0.00 であること。

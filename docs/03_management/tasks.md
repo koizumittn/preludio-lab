@@ -4,16 +4,16 @@ Status: `[/]` 進行中
 
 ## Phase 0: 要件定義・設計 (Requirements & Design)
 - [ ] **要件定義の精緻化**
-    - [ ] `01_specs/business-requirements.md` に要件ID (`REQ-BIZ-XXX`) を付与
-    - [ ] `01_specs/technology-requirements.md` に要件ID (`REQ-TECH-XXX`) を付与
-    - [ ] `01_specs/ui-ux-requirements.md` に要件ID (`REQ-UI-XXX`) を付与
-    - [ ] `01_specs/content-requirements.md` に要件ID (`REQ-CONT-XXX`) を付与
-    - [ ] 各要件に対する「完了条件（Acceptance Criteria）」の記述
+    - [x] `01_specs/business-requirements.md` をブラッシュアップし、要件ID (`REQ-BIZ-XXX`) を付与
+    - [x] `01_specs/technology-requirements.md` をブラッシュアップし、要件ID (`REQ-TECH-XXX`) を付与
+    - [x] `01_specs/ui-ux-requirements.md` をブラッシュアップし、要件ID (`REQ-UI-XXX`) を付与
+    - [x] `01_specs/content-requirements.md` をブラッシュアップし、要件ID (`REQ-CONT-XXX`) を付与
+    - [x] 各要件に対する「完了条件（Acceptance Criteria）」の記述
 - [ ] **基本設計**
-    - [ ] **ルーティング設計:** `app/[lang]/` 配下のURL構造とページ遷移の定義
-    - [ ] **コンテンツデータ設計:** MDX Frontmatterのスキーマ定義 (Title, Composer, Difficulty, Tags...)
-    - [ ] **コンポーネント設計:** UIパーツ（Atoms/Molecules）と機能コンポーネント（Organisms）のリストアップ
-    - [ ] **エージェント設計:** AIエージェント（Musicologist, Translator）の出力フォーマットとインターフェース定義
+    - [x] **ルーティング設計:** `app/[lang]/` 配下のURL構造とページ遷移の定義
+    - [x] **コンテンツデータ設計:** MDX Frontmatterのスキーマ定義 (Title, Composer, Difficulty, Tags...)
+    - [x] **コンポーネント設計:** UIパーツ（Atoms/Molecules）と機能コンポーネント（Organisms）のリストアップ
+    - [x] **エージェント設計:** AIエージェント（Musicologist, Translator）の出力フォーマットとインターフェース定義
 
 ## Phase 0.5: 環境構築 (Environment Setup)
 - [ ] **ガイドライン策定**
