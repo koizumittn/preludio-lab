@@ -67,5 +67,30 @@ Google Generative AI SDK for Node.js を使用したカスタムスクリプト�
 * **RLS:** Row Level Securityでデータアクセスを厳格化。
 
 ### Layer 3: Infra Security
-* **Secrets Management:** Gemini API Key、Supabase Key等の機密情報は **GitHub Secrets** および **Vercel Environment Variables** にのみ保存。コード内には一切含めない。
-* **Dependabot:** 依存関係の脆弱性を監視。
+*   **Secrets Management:** Gemini API Key、Supabase Key等の機密情報は **GitHub Secrets** および **Vercel Environment Variables** にのみ保存。コード内には一切含めない。
+*   **Dependabot:** 依存関係の脆弱性を監視。
+
+## 6. DevOps & QA Architecture
+
+### CI/CD Pipeline (GitHub Actions & Vercel)
+開発プロセスと品質担保の自動化。
+
+*   **Workflow A: Pull Request Checks (GitHub Actions)**
+    *   `main` へのPR作成時に発火。
+    *   **Lint:** ESLint / Prettier
+    *   **Type Check:** TypeScript (`tsc --noEmit`)
+    *   **Unit Test:** Vitest (Logic / Utils)
+*   **Workflow B: Agent Runner (GitHub Actions)**
+    *   Schedule / Manual Trigger で発火。
+    *   AIエージェントを実行し、コンテンツ生成PRを作成。
+*   **Workflow C: Deployment (Vercel)**
+    *   `main` へのマージ時に発火。
+    *   Production環境へ自動デプロイ。
+
+### Testing Strategy
+*   **Unit Testing:** `Vitest` を使用。
+    *   ユーティリティ関数（ロジック）、ABC記法パーサー等のテスト。
+*   **Integration Testing:** `React Testing Library` (Optional)。
+    *   複雑なコンポーネントの挙動確認。
+*   **E2E Testing:** `Playwright` (Phase 4以降)。
+    *   重要導線（記事閲覧、検索、ログイン）の回帰テスト。
