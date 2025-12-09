@@ -110,6 +110,13 @@ preludio-lab/
       * 仕様書に定義されたCriteriaに従って動作確認を行い、チェックを入れる。
       * 証拠（スクリーンショット等）を添付してマージする。
 
+### 3.3. Liquid Specifications (Adaptive Development)
+完璧な要件定義を待つのではなく、実装と要件を並行して育てるスタイル。
+
+*   **Doc First Rule:** 実装中に仕様の変更や矛盾に気づいた場合、**コードを修正する前に必ずドキュメント（Specs/Guidelines）を更新する**。常にドキュメントを「Single Source of Truth（唯一の正解）」に保つ。
+*   **Refactor by Agent:** ガイドラインが更新された場合、手動で直すのではなく、AIエージェントに「新ルールに基づいてリファクタリングせよ」と指示し、整合性を回復させる。
+*   **MVP Iteration:** 素案段階で実装を開始（MVP）し、動くものを見て得たフィードバックを仕様書に還元するサイクルを回す。
+
 -----
 
 ## 4\. Technology Stack
