@@ -26,7 +26,7 @@ Status: `[/]` 進行中
 - [ ] **プロジェクトセットアップ**
     - [x] Next.js アプリの初期化 (App Router, TypeScript)
     - [x] Tailwind CSS & デザインシステムの設定 (Fonts, Colors)
-    - [ ] ESLint & Prettier の設定
+    - [x] ESLint & Prettier の設定
 - [ ] **インフラ構築**
     - [ ] Vercel プロジェクトのセットアップ
     - [ ] Supabase プロジェクトのセットアップ (Auth: SSO Only)
