@@ -9,13 +9,13 @@ export const Header = () => {
                     <span className="text-xl font-bold tracking-tight text-gray-900">{SITE_NAME}</span>
                 </Link>
                 <nav className="hidden md:flex gap-6">
-                    <Link href="/jp/works" className="text-sm font-medium text-gray-700 hover:text-black">
+                    <Link href="/ja/works" className="text-sm font-medium text-gray-700 hover:text-black">
                         Works
                     </Link>
-                    <Link href="/jp/composers" className="text-sm font-medium text-gray-700 hover:text-black">
+                    <Link href="/ja/composers" className="text-sm font-medium text-gray-700 hover:text-black">
                         Composers
                     </Link>
-                    <Link href="/jp/about" className="text-sm font-medium text-gray-700 hover:text-black">
+                    <Link href="/ja/about" className="text-sm font-medium text-gray-700 hover:text-black">
                         About
                     </Link>
                 </nav>
