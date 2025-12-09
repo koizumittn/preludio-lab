@@ -6,6 +6,7 @@ Status: `[/]` 進行中
 - [ ] **要件定義の精緻化**
     - [ ] `01_specs/business-requirements.md` に要件ID (`REQ-BIZ-XXX`) を付与
     - [ ] `01_specs/technology-requirements.md` に要件ID (`REQ-TECH-XXX`) を付与
+    - [ ] `01_specs/ui-ux-requirements.md` に要件ID (`REQ-UI-XXX`) を付与
     - [ ] 各要件に対する「完了条件（Acceptance Criteria）」の記述
 - [ ] **基本設計**
     - [ ] **ルーティング設計:** `app/[lang]/` 配下のURL構造とページ遷移の定義
