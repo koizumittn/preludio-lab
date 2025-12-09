@@ -1,38 +1,38 @@
-# Agent Design (AI Infrastructure)
+# エージェント設計 (AI Agent Design)
 
-## 1. Agent Architecture
+## 1. エージェントアーキテクチャ (Agent Architecture)
 Ref: `technology-requirements.md` [REQ-TECH-010]
-Running on GitHub Actions.
+GitHub Actions上で動作する。
 
-## 2. Agent List
+## 2. エージェント一覧 (Agent List)
 
 ### [AGENT-MUSIC] Musicologist (音楽学者)
-*   **Role:** Expert in music theory and structural analysis.
-*   **Input:**
+*   **Role (役割):** 音楽理論と楽曲構造分析のエキスパート。
+*   **Input (入力):**
     *   `work_name`: "Prelude in C Major BWV 846"
     *   `composer`: "Bach"
-*   **Output (Artifact):**
-    *   `content/ja/works/[slug].mdx`: Full article with Frontmatter.
-*   **Capabilities:**
-    *   Extract key motifs and generate ABC notation.
-    *   Search YouTube for the best performance (using Data API).
-    *   Explain harmony and form in plain Japanese.
+*   **Output (出力成果物):**
+    *   `content/ja/works/[slug].mdx`: Frontmatterを含む完全な記事ファイル。
+*   **Capabilities (能力):**
+    *   主要なモチーフの抽出とABC記法による楽譜生成。
+    *   YouTube Data APIを使用した最適な演奏動画の検索。
+    *   和声や形式を平易な日本語で解説する。
 
 ### [AGENT-TRANS] Translator (翻訳者)
-*   **Role:** Localization specialist.
-*   **Input:**
+*   **Role (役割):** ローカライゼーションのスペシャリスト。
+*   **Input (入力):**
     *   `source_file`: `content/ja/works/[slug].mdx`
-    *   `target_lang`: `en` or `es`
-*   **Output:**
+    *   `target_lang`: `en` または `es`
+*   **Output (出力):**
     *   `content/[target_lang]/works/[slug].mdx`
-*   **Strategy:**
-    *   Translate text content but **keep ABC notation and Frontmatter keys intact**.
-    *   Translate Frontmatter *values* (e.g. title, description), but not keys.
+*   **Strategy (戦略):**
+    *   テキスト本文は翻訳するが、**ABC記法とFrontmatterのキーは保持する**。
+    *   Frontmatterの*値*（タイトル、説明文など）は翻訳する。
 
-## 3. Prompt Structure (RCICO)
+## 3. プロンプト構造 (RCICO)
 Ref: `prompt-engineering-standard.md`
 
-All prompts must follow the **RCICO** pattern:
+全てのプロンプトは **RCICO** パターンに従うこと：
 1.  **R**ole (役割)
 2.  **C**ontext (背景)
 3.  **I**nstruction (指示)

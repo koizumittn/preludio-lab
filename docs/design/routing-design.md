@@ -1,26 +1,26 @@
-# Routing Design
+# ルーティング設計 (Routing Design)
 
-## 1. URL Structure Principle
+## 1. URL構造の原則
 `domain/[lang]/[category]/[slug]`
 
-*   **[lang]:** `ja`, `en`, `es` (ISO 639-1)
-*   **[category]:** Resource collection name (plural)
-*   **[slug]:** Unique identifier (kebab-case)
+*   **[lang]:** `ja`, `en`, `es` (ISO 639-1) - 言語コード
+*   **[category]:** リソースコレクション名（複数形）
+*   **[slug]:** 一意の識別子（ケバブケース）
 
-## 2. Route Map
+## 2. ルートマップ (Route Map)
 
-| URL Pattern | Page Type | Description |
+| URLパターン | ページ種別 | 説明 |
 | :--- | :--- | :--- |
-| `/` | Redirect | Redirects to default locale (`/ja`) using Middleware. |
-| `/[lang]` | **Top Page** | Landing page. Hero, Categories, New Arrivals. |
-| `/[lang]/works` | **Index** | List of all work analysis articles. Filterable. |
-| `/[lang]/works/[slug]` | **Detail** | **(Core)** Work Analysis article with Score & Audio. |
-| `/[lang]/composers` | **Index** | List of composers. |
-| `/[lang]/composers/[slug]` | **Detail** | Composer profile and their works. |
-| `/[lang]/theory` | **Index** | List of theory articles. |
-| `/[lang]/theory/[slug]` | **Detail** | Theory explanation. |
-| `/[lang]/about` | **Static** | About the proejct. |
+| `/` | Redirect | デフォルト言語（`/ja`）へリダイレクト（Middlewareで処理）。 |
+| `/[lang]` | **Top Page** | ランディングページ。ヒーロー、カテゴリ、新着記事。 |
+| `/[lang]/works` | **Index** | 楽曲分析記事の一覧。フィルタ機能付き。 |
+| `/[lang]/works/[slug]` | **Detail** | **(Core)** 楽曲分析の詳細記事。楽譜と音源を含む。 |
+| `/[lang]/composers` | **Index** | 作曲家一覧。 |
+| `/[lang]/composers/[slug]` | **Detail** | 作曲家プロフィールとその作品リスト。 |
+| `/[lang]/theory` | **Index** | 音楽理論記事の一覧。 |
+| `/[lang]/theory/[slug]` | **Detail** | 理論解説の詳細。 |
+| `/[lang]/about` | **Static** | プロジェクトについて。 |
 
-## 3. Redirect Rules
-*   `/` -> `/ja` (307 Temporary Redirect -> 308 Permanent later)
-*   Disable direct access to `/works/[slug]` without locale (Middleware handles this).
+## 3. リダイレクトルール (Redirect Rules)
+*   `/` -> `/ja` (現在は 307 Temporary Redirect、将来的に 308 Permanent)
+*   言語パスなしでの `/works/[slug]` への直接アクセスは不可（Middlewareが処理）。
