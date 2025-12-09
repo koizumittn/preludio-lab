@@ -1,0 +1,71 @@
+# Project Technical Requirements Definition (v1.5)
+
+**Status:** Draft (Free Tier Edition). 
+**Date:** December 2025.  
+
+## 1. Core Philosophy
+* **Zero Cost Architecture:** ドメイン代以外の固定費を**完全にゼロ**にする。
+* **Serverless & Stateless:** 常時稼働するサーバーや有料のマネージドサービス（Vertex AI Agent Builder等）は使用しない。
+* **API Free Tier Strategy:** AIの頭脳には **Google AI Studio (Gemini API)** の無料枠を活用し、レートリミット（回数制限）内で稼働する設計とする。
+* **Google Native:** Googleのエコシステム（Gemini, YouTube, Search）を最大活用する。
+
+## 2. Technology Stack
+
+| Category | Technology | Selection Reason / Policy |
+| :--- | :--- | :--- |
+| **Frontend** | **Next.js (App Router)** | パフォーマンス、SEO、Vercelとの親和性を重視。 |
+| **Language** | **TypeScript** | 型安全性により、AIによるコード生成の精度と保守性を向上。 |
+| **Hosting** | **Vercel** | Hobby Plan (Free)。サーバーレス、グローバルCDN。 |
+| **Content Mgt** | **GitHub + MDX** | コンテンツのバージョン管理。**AIエージェントの作業場**として機能する。 |
+| **User DB / Auth** | **Supabase** | **(Free Tier & SSO Only)** メール/パスワード認証は無効化。OAuth連携のみ使用。 |
+| **Search** | **Pagefind** | 静的サイト内検索。サーバーレス・コストゼロ。 |
+| **Media (Score)** | **react-abc / verovio** | テキスト（ABC記法）からSVG楽譜をクライアント描画。 |
+| **Media (Audio)** | **YouTube IFrame API** | 外部プレーヤー制御。コストゼロで音源再生。 |
+| **AI Model** | **Gemini 3.0** | **Google AI Studio API**経由で利用。無料枠（Free Tier）を使用。 |
+| **Agent Runner** | **GitHub Actions** | **(Changed)** AIエージェントの実行環境。Cron定期実行や手動トリガーでスクリプトを起動し、コストゼロで計算リソースを確保。 |
+
+## 3. AI Agent Infrastructure (Free Tier Architecture)
+
+有料のADK/Vertex基盤の代わりに、**「GitHub Actions上でTypeScriptスクリプト（AIエージェント）を走らせる」**方式を採用する。
+
+### Execution Flow
+1.  **Trigger:** プロデューサー（あなた）がGitHub Actionsを手動実行、またはスケジュール（Cron）で起動。
+2.  **Process:** GitHubのサーバー上でスクリプトが実行され、Google AI Studio API (Gemini) を呼び出してコンテンツを生成。
+3.  **Output:** 生成結果をMDXファイルとして保存し、`Pull Request` を自動作成する。
+
+
+
+### Agent Implementation (Custom Scripts)
+Google Generative AI SDK for Node.js を使用したカスタムスクリプト群として実装。
+
+1.  **Orchestrator Script:** タスクの管理。Gemini APIのレートリミット（RPM/TPM）を超えないようにリクエスト間隔を制御する「スロットリング機能」を実装。
+2.  **Musicologist Script:**
+    * 楽曲解説生成
+    * ABC記法による楽譜生成
+    * YouTube Data API (Free Quota) を用いた動画検索
+3.  **Coder Script:** コンポーネント修正、Lint修正など。
+
+## 4. Content & Media Strategy
+
+### Score Strategy (Text-to-Image)
+* **Method:** Geminiに「ABC記法」を作成させ、MDXに埋め込む。
+* **Rendering:** クライアントサイドでSVG変換。版面権の問題をクリア。
+
+### Audio Strategy (YouTube Embed)
+* **Method:** 公式チャンネルの動画IDと開始時間を指定。
+* **Ad Policy:** 広告リスクを許容し、UI（スキップボタン等）でUXを緩和。
+* **Compliance:** YouTube利用規約に準拠。
+
+## 5. Security Architecture
+
+### Layer 1: AI Safety & Cost Control
+* **Rate Limiting:** 無料枠の制限を超えないよう、スクリプト側でWait処理を入れる。
+* **Human Verification:** AIは必ず `Pull Request` を作成する。`main` ブランチへの直コミットは禁止。
+
+### Layer 2: App Security (Supabase)
+* **SSO Only:** パスワードを持たない。
+* **RLS:** Row Level Securityでデータアクセスを厳格化。
+
+### Layer 3: Infra Security
+* **Secrets Management:** Gemini API Key、Supabase Key等の機密情報は **GitHub Secrets** および **Vercel Environment Variables** にのみ保存。コード内には一切含めない。
+* **Dependabot:** 依存関係の脆弱性を監視。
