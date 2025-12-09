@@ -17,7 +17,12 @@ Status: `[/]` 進行中
 
 ## Phase 0.5: 環境構築 (Environment Setup)
 - [ ] **ガイドライン策定**
-    - [x] `docs/02_guidelines/naming-conventions.md` (命名規則) の作成
+    - [ ] `docs/02_guidelines/naming-conventions.md` (命名規則)
+    - [ ] `docs/02_guidelines/score-notation-guidelines.md` (楽譜表記)
+    - [ ] `docs/02_guidelines/localization-guidelines.md` (翻訳・ローカライズ)
+    - [ ] `docs/02_guidelines/prompt-engineering-standard.md` (AIプロンプト)
+    - [ ] `docs/02_guidelines/development-guidelines.md` (開発)
+    - [ ] `docs/02_guidelines/testing-guidelines.md` (テスト)
 - [ ] **プロジェクトセットアップ**
     - [ ] Next.js アプリの初期化 (App Router, TypeScript)
     - [ ] Tailwind CSS & デザインシステムの設定 (Fonts, Colors)
