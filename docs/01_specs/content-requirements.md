@@ -9,35 +9,35 @@
 全ての楽曲分析記事は、以下の構成に従うこと。
 
 ### [REQ-CONT-STR-001] Introduction (導入)
-*   読者の興味を惹く「フック」を用意する（例：「なぜこの曲は"革命"と呼ばれるのか？」）。
-*   楽曲の基本情報（調性、形式、作曲年）を簡潔に提示する。
+*   **[REQ-CONT-STR-001-01] Hook:** 読者の興味を惹く「フック」を用意する（例：「なぜこの曲は"革命"と呼ばれるのか？」）。
+*   **[REQ-CONT-STR-001-02] Basic Info:** 楽曲の基本情報（調性、形式、作曲年）を簡潔に提示する。
 
 ### [REQ-CONT-STR-002] Historical Context (背景)
-*   作曲家の人生における位置づけ。
-*   初演時のエピソードや、当時の社会的背景。
+*   **[REQ-CONT-STR-002-01] Biography Context:** 作曲家の人生における位置づけ。
+*   **[REQ-CONT-STR-002-02] Episode:** 初演時のエピソードや、当時の社会的背景。
 
 ### [REQ-CONT-STR-003] Structural Analysis (構造分析) - **CORE VALUE**
-*   **Must:** 抽象的な感想ではなく、具体的な「小節数（Measure）」と「音楽用語」を用いて解説する。
-*   **Must:** 重要なテーマや動機（Motif）については、必ず **ABC記法による譜面** を挿入する。
-*   **Must (Audio Sync):** 譜面には、そのフレーズのYouTube再生時間（Start/End）をメタデータとして付与し、クリック再生可能にする。
-*   **Level:** 専門用語（「ドミナント」「展開部」「偽終止」など）は使用するが、文脈から意味が推測できるように書く。
+*   **[REQ-CONT-STR-003-01] Concrete Terms:** 抽象的な感想ではなく、具体的な「小節数（Measure）」と「音楽用語」を用いて解説する。
+*   **[REQ-CONT-STR-003-02] ABC Notation:** 重要なテーマや動機（Motif）については、必ず **ABC記法による譜面** を挿入する。
+*   **[REQ-CONT-STR-003-03] Audio Sync:** 譜面には、そのフレーズのYouTube再生時間（Start/End）をメタデータとして付与し、クリック再生可能にする。
+*   **[REQ-CONT-STR-003-04] Accessibility:** 専門用語（「ドミナント」「展開部」「偽終止」など）は使用するが、文脈から意味が推測できるように書く。
 
 ### [REQ-CONT-STR-005] File Naming Convention
-*   **Rule:** コンテンツのファイル名は、別途定義する「命名規則ガイドライン」に厳格に従うこと。URL（Slug）とファイル名は一致させる。
+*   **[REQ-CONT-STR-005-01] Rule:** コンテンツのファイル名は、別途定義する「命名規則ガイドライン」に厳格に従うこと。URL（Slug）とファイル名は一致させる。
 
 ### [REQ-CONT-STR-004] Listening Guide (聴きどころ)
-*   理論がわからなくても楽しめる、直感的なポイント。
-*   YouTube動画の具体的なタイムスタンプ（例: `03:45`）を提示し、プレーヤーと連動させる。
+*   **[REQ-CONT-STR-004-01] Intuitive:** 理論がわからなくても楽しめる、直感的なポイント。
+*   **[REQ-CONT-STR-004-02] Timestamp:** YouTube動画の具体的なタイムスタンプ（例: `03:45`）を提示し、プレーヤーと連動させる。
 
 ## 3. Editorial Guidelines
 
 ### Tone of Voice
-*   **Enthusiastic but Objective:** 情熱的でありながら、事実に忠実であること。
-*   **Global Neutral:** 特定の文化に依存しすぎる比喩は避け、翻訳しやすい平易なロジックで記述する。
+*   **[REQ-CONT-EDIT-001] Enthusiastic but Objective:** 情熱的でありながら、事実に忠実であること。
+*   **[REQ-CONT-EDIT-002] Global Neutral:** 特定の文化に依存しすぎる比喩は避け、翻訳しやすい平易なロジックで記述する。
 
 ### Multilingual Policy
-*   **Source Language:** 原則として「日本語」をマスターデータとし、他言語へ展開する。
-*   **Proper Nouns:** 人名・曲名は、各言語の一般的な表記に従う（例: Bach -> バッハ）。
+*   **[REQ-CONT-LANG-001] Source Language:** 原則として「日本語」をマスターデータとし、他言語へ展開する。
+*   **[REQ-CONT-LANG-002] Proper Nouns:** 人名・曲名は、各言語の一般的な表記に従う（例: Bach -> バッハ）。
 
 ## 4. Content Taxonomy
 サイト内のコンテンツを以下のカテゴリに分類する。

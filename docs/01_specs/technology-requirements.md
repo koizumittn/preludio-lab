@@ -59,16 +59,16 @@ Google Generative AI SDK for Node.js を使用したカスタムスクリプト�
 ## 5. Security Architecture
 
 ### [REQ-SEC-001] Layer 1: AI Safety & Cost Control
-* **Rate Limiting:** 無料枠の制限を超えないよう、スクリプト側でWait処理を入れる。
-* **Human Verification:** AIは必ず `Pull Request` を作成する。`master` ブランチへの直コミットは禁止。
+* **[REQ-SEC-001-01] Rate Limiting:** 無料枠の制限を超えないよう、スクリプト側でWait処理を入れる。
+* **[REQ-SEC-001-02] Human Verification:** AIは必ず `Pull Request` を作成する。`master` ブランチへの直コミットは禁止。
 
 ### [REQ-SEC-002] Layer 2: App Security (Supabase)
-* **SSO Only:** パスワードを持たない。
-* **RLS:** Row Level Securityでデータアクセスを厳格化。
+* **[REQ-SEC-002-01] SSO Only:** パスワードを持たない。
+* **[REQ-SEC-002-02] RLS:** Row Level Securityでデータアクセスを厳格化。
 
 ### [REQ-SEC-003] Layer 3: Infra Security
-*   **Secrets Management:** Gemini API Key、Supabase Key等の機密情報は **GitHub Secrets** および **Vercel Environment Variables** にのみ保存。コード内には一切含めない。
-*   **Dependabot:** 依存関係の脆弱性を監視。
+*   **[REQ-SEC-003-01] Secrets Management:** Gemini API Key、Supabase Key等の機密情報は **GitHub Secrets** および **Vercel Environment Variables** にのみ保存。コード内には一切含めない。
+*   **[REQ-SEC-003-02] Dependabot:** 依存関係の脆弱性を監視。
 
 ## 6. DevOps & QA Architecture
 
