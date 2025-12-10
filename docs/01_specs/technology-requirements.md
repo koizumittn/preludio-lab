@@ -43,7 +43,8 @@ Google Generative AI SDK for Node.js を使用したカスタムスクリプト�
 
 1.  **[REQ-TECH-AGENT-002] Orchestrator Script:** タスクの管理。Gemini APIのレートリミット（RPM/TPM）を超えないようにリクエスト間隔を制御する「スロットリング機能」を実装。
 2.  **[REQ-TECH-AGENT-003] Musicologist Script:**
-    *   楽曲解説生成 / ABC記法による楽譜生成
+    *   楽曲解説生成
+    *   ABC記法による楽譜生成
     *   YouTube Data API (Free Quota) を用いた動画検索
 3.  **[REQ-TECH-AGENT-004] Translator Script:** (Ref: [REQ-GOAL-003-03])
     *   **Trigger:** `Musicologist` による記事生成PRのマージ（またはドラフト完成）。
@@ -54,7 +55,7 @@ Google Generative AI SDK for Node.js を使用したカスタムスクリプト�
 ## 4. Content & Media Strategy
 
 ### Score Strategy (Text-to-Image)
-* **[REQ-TECH-STRAT-001] Method:** Geminiに「ABC記法」を作成させ、MDXに埋め込む。
+* **[REQ-TECH-STRAT-001] Method:** AIモデルに「ABC記法」を作成させ、MDXに埋め込む。
 * **[REQ-TECH-STRAT-002] Rendering:** クライアントサイドでSVG変換。版面権の問題をクリア。
 
 ### Audio Strategy (YouTube Embed)
