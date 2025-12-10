@@ -56,7 +56,7 @@ Google Generative AI SDK for Node.js を使用したカスタムスクリプト�
 
 ### Score Strategy (Text-to-Image)
 * **[REQ-TECH-STRAT-001] Method:** AIモデルに「ABC記法」を作成させ、MDXに埋め込む。
-* **[REQ-TECH-STRAT-002] Rendering:** クライアントサイドでSVG変換。版面権の問題をクリア。
+* **[REQ-TECH-STRAT-002] Rendering:** **レスポンシブ（譜面の折り返し）実現のため**、原則クライアントサイドで描画する。ただし、レンダリング負荷が高い場合はビルド時生成（SSG）とのハイブリッド構成を検討する。
 
 ### Audio Strategy (YouTube Embed)
 * **[REQ-TECH-STRAT-003] Method:** 公式チャンネルの動画IDと開始時間を指定。
