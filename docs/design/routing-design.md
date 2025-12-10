@@ -3,7 +3,7 @@
 ## 1. URL構造の原則
 `domain/[lang]/[category]/[slug]`
 
-*   **[lang]:** `ja`, `en`, `es` (ISO 639-1) - 言語コード
+*   **[lang]:** `ja` (JP), `en` (US/UK), `es` (ES/LATAM), `de` (DE), `zh` (CN), `fr` (FR), `it` (IT)
 *   **[category]:** リソースコレクション名（複数形）
 *   **[slug]:** 一意の識別子（ケバブケース）
 
