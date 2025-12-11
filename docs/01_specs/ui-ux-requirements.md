@@ -21,14 +21,24 @@
 *   **[REQ-UI-002-01] Headings:** Serif (e.g., *Noto Serif*, *Playfair Display*) - 格調高さの表現。
 *   **[REQ-UI-002-02] Body:** Sans-Serif (e.g., *Inter*, *Noto Sans*) - 長文の読みやすさとスクリーンでの可読性重視。
 *   **[REQ-UI-002-03] Score Text:** ABC記法や歌詞には等幅フォントまたは専用フォントを使用。
+*   **[REQ-UI-002-04] Vertical Rhythm:** ベースライングリッド（例: 4px/8px）を意識し、行間（Line Height）とマージンをシステム化することで、長文でも疲れない「リズム」を作る。
+*   **[REQ-UI-002-05] Measure:** 1行の文字数を全角35-40文字（英数70-80文字）程度に抑え、視線移動の負荷を軽減する。
+
+### [REQ-UI-SYS] Design System Architecture
+*   **[REQ-UI-SYS-001] Spacing:** 4pxまたは8pxの倍数（4, 8, 16, 24, 32, 48, 64px...）で余白を統一し、レイアウトに秩序を持たせる。
+*   **[REQ-UI-SYS-002] Border Radius:** カードやボタンの角丸を統一（例: 4px, 8px, Pill）し、親しみやすさと知的さを制御する。
+*   **[REQ-UI-SYS-003] Elevation (Depth):** フラットデザインをベースとしつつ、プレイヤーやドロップダウン等の「浮きがある要素」には、繊細なシャドウ（Glassmorphism等）を用いて階層関係を直感的に伝える。
 
 ## 3. Core Component UX
 
 ### [REQ-UI-003] Score Renderer (楽譜表示)
 *   **Responsive Layout:**
-    *   **[REQ-UI-003-01] Desktop:** 記事本文の横（2カラム）または中央配置。
-    *   **[REQ-UI-003-02] Mobile:** 画面幅に合わせて自動リフロー、または横スクロール。ピンチズーム対応。
+    *   **[REQ-UI-003-01] Desktop:** 記事本文の横（2カラム）または中央配置。十分な幅を確保し、頻繁な折り返しを防ぐ。
+    *   **[REQ-UI-003-02] Mobile:**
+        *   **Reflow Mode:** 画面幅に合わせて小節を自動で折り返す（縦に長くなるが、スクロールだけで読める）。
+        *   **Scroll Mode (Optional):** 横スクロールで譜面を閲覧できるモード（譜めくりの感覚）。
 *   **[REQ-UI-003-03] Sync Highlight:** 再生中の小節や音符をリアルタイムでハイライト表示する視覚的フィードバック。
+    *   **Auto Scroll:** ハイライト位置に合わせて譜面を自動スクロールさせる（ON/OFF切替可）。
 
 ### [REQ-UI-004] Audio Player (再生機能)
 *   **[REQ-UI-004-01] Floating Player:** スクロールしても常にアクセス可能な（または邪魔にならない）フローティングプレイヤー、あるいは最下部固定バー。
@@ -45,6 +55,11 @@
 ### [REQ-UI-006] Utilities & Compliance
 *   **[REQ-UI-006-01] Loading State (Skeleton):** 楽譜描画などの重い処理中は、スピナーではなく「スケルトンスクリーン」を表示し、体感速度を向上させる（`REQ-NFR-002-03`対応）。
 *   **[REQ-UI-006-02] Privacy Consent:** 初回訪問時、GDPR準拠のCookie同意バナーを表示し、同意されるまでYouTube等のサードパーティスクリプトをブロックする（`REQ-TECH-STACK-014`対応）。
+
+### [REQ-UI-INT] Interaction Design
+*   **[REQ-UI-INT-001] Micro-interactions:** ボタンのHover、Focus、Click時に、わずかなスケール変更や色変化のアニメーション（200ms程度）を付与し、「触れている感覚」を提供する。
+*   **[REQ-UI-INT-002] Transitions:** ページ遷移やモーダル開閉時に、フェードやスライドといった物理法則に基づいた自然なトランジション（Ease-out等）を適用する。唐突な画面切り替えは避ける。
+
 
 ## 4. Accessibility (A11y)
 **Target:** WCAG 2.1 Level AA 準拠を目指す。
