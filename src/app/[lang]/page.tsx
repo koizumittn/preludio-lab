@@ -14,9 +14,9 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
     return (
         <div className="flex flex-col items-center justify-center">
             {/* Hero Section */}
-            <section className="w-full bg-white py-24 text-center">
+            <section className="w-full bg-paper-white py-24 text-center">
                 <div className="container mx-auto px-4">
-                    <h1 className="mb-6 text-5xl font-extrabold tracking-tight text-gray-900 sm:text-6xl">
+                    <h1 className="mb-6 text-5xl font-extrabold tracking-tight text-preludio-black sm:text-6xl">
                         Beyond Listening.
                     </h1>
                     <p className="mx-auto mb-10 max-w-2xl text-lg text-gray-600">
@@ -25,13 +25,13 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                     <div className="flex justify-center gap-4">
                         <Link
                             href={`/${lang}/works`}
-                            className="rounded-full bg-gray-900 px-8 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-gray-700"
+                            className="rounded-full bg-preludio-black px-8 py-3 text-sm font-semibold text-paper-white shadow-lg transition hover:bg-gray-800"
                         >
                             Explore Works
                         </Link>
                         <Link
                             href={`/${lang}/about`}
-                            className="rounded-full bg-white px-8 py-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition hover:bg-gray-50"
+                            className="rounded-full bg-paper-white px-8 py-3 text-sm font-semibold text-preludio-black shadow-sm ring-1 ring-inset ring-gray-300 transition hover:bg-gray-50"
                         >
                             About Us
                         </Link>
@@ -41,7 +41,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
 
             {/* Categories */}
             <section className="container mx-auto py-20 px-4">
-                <h2 className="mb-12 text-center text-3xl font-bold text-gray-900">Discover</h2>
+                <h2 className="mb-12 text-center text-3xl font-bold text-preludio-black">Discover</h2>
                 <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
                     {CATEGORIES.map((cat) => (
                         <Link key={cat.id} href={`/${lang}/${cat.id}`} className={`group relative block overflow-hidden rounded-2xl p-8 transition hover:shadow-md ${cat.color}`}>
@@ -55,8 +55,8 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             {/* Featured Article (Dummy) */}
             <section className="w-full bg-gray-100 py-20">
                 <div className="container mx-auto px-4">
-                    <h2 className="mb-12 text-center text-3xl font-bold text-gray-900">Featured Work</h2>
-                    <div className="mx-auto max-w-4xl overflow-hidden rounded-2xl bg-white shadow-xl">
+                    <h2 className="mb-12 text-center text-3xl font-bold text-preludio-black">Featured Work</h2>
+                    <div className="mx-auto max-w-4xl overflow-hidden rounded-2xl bg-paper-white shadow-xl">
                         <div className="p-8 sm:p-12">
                             <div className="mb-4 text-sm font-bold text-blue-600">Work Analysis</div>
                             <h3 className="mb-4 text-3xl font-bold text-gray-900">Prelude in C Major, BWV 846</h3>
