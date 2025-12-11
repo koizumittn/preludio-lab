@@ -51,26 +51,38 @@ preludio-lab/
 │   ├── 03_management/       # タスク管理
 │   └── 04_adrs/             # 技術選定記録
 ├── src/                         # 【App】Next.js アプリケーション本体
-│   ├── app/
+│   ├── app/                     # 【UI Layer (Controller)】
 │   │   ├── [lang]/              # 多言語ルーティング
 │   │   │   ├── blog/
 │   │   │   │   └── [slug]/
 │   │   │   │       └── page.tsx
 │   │   │   └── page.tsx
-│   │   ├── api/                 # 必要に応じた内部API
+│   │   ├── _actions/            # Server Actions (Controller)
+│   │   ├── api/                 # Internal API Route Handlers
 │   │   └── layout.tsx
-│   ├── components/
-│   │   ├── features/
-│   │   │   ├── ScoreRenderer.tsx # react-abc/verovio ラッパー
-│   │   │   └── AudioPlayer.tsx   # YouTube IFrame API制御
-│   │   └── ui/                  # 共通UIコンポーネント
-│   ├── lib/
-│   │   ├── mdx/                 # MDX解析・取得ロジック
-│   │   └── supabase/            # Authクライアント
-│   └── middleware.ts            # 言語判定・リダイレクト処理
-├── .env.local                   # ローカル開発用環境変数
+│   ├── components/              # 【UI Layer (View)】
+│   │   ├── features/            # Feature-specific Components
+│   │   │   ├── ScoreRenderer.tsx
+│   │   │   └── AudioPlayer.tsx
+│   │   ├── ui/                  # Reusable UI Components
+│   │   └── providers/           # Context Providers
+│   ├── domain/                  # 【Domain Layer】(Pure TypeScript, No Dependencies)
+│   │   ├── entities/            # Data Structures & Business Rules
+│   │   ├── services/            # Domain Services
+│   │   └── repositories/        # Repository Interfaces (IUserRepository)
+│   ├── application/             # 【Application Layer】(Use Cases)
+│   │   ├── use-cases/           # RegisterUserUseCase
+│   │   └── dtos/                # Data Transfer Objects
+│   ├── infrastructure/          # 【Infrastructure Layer】(Implementation)
+│   │   ├── database/            # Supabase Client
+│   │   ├── repositories/        # Repository Architecture (SupabaseUserRepository)
+│   │   └── external/            # External APIs (Gemini, Bandcamp)
+│   ├── lib/                     # 【Shared】Utilities (Logger, Date, MDX)
+│   │   └── mdx/
+│   └── middleware.ts            # Middleware (Auth, i18n)
+├── .env.local                   # Local Environment Variables
 ├── next.config.mjs
-├── package.json                 # フロントエンド用依存管理
+├── package.json
 └── README.md
 ```
 

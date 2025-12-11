@@ -11,10 +11,12 @@
 ### Code Files
 | Type | Rule | Example | Note |
 | :--- | :--- | :--- | :--- |
-| **Directories** | `kebab-case` | `components/ui` | 小文字ハイフン繋ぎ。 |
+| **Directories** | `kebab-case` | `components/ui`, `use-cases` | 小文字ハイフン繋ぎ。 |
 | **React Components** | `PascalCase` | `ScoreRenderer.tsx` | コンポーネント名と一致させる。 |
 | **Hooks** | `camelCase` (usePrefix) | `useAudioPlayer.ts` | 必ず `use` で始める。 |
-| **Utilities / Libs** | `kebab-case` | `date-formatter.ts` | 関数ライブラリなど。 |
+| **Domain Entities** | `PascalCase` | `User.ts`, `Score.ts` | クラス名と一致させる。 |
+| **Use Cases** | `PascalCase` + Suffix | `RegisterUserUseCase.ts` | 動詞 + 目的語 + UseCase。 |
+| **Repositories** | `PascalCase` + Suffix | `IUserRepository.ts` | IFは `I` プレフィックス推奨。 |
 | **Next.js Routes** | `kebab-case` | `app/blog/[slug]/page.tsx` | URLの一部になるため小文字。 |
 
 ### Content Files (MDX) (Ref: `content-requirements.md`)
