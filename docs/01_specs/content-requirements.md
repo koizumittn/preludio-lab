@@ -54,7 +54,6 @@
 *   **[REQ-CONT-TAX-009] Originals (オリジナル作品):** 管理人（あなた）による自作曲の紹介と解説。PreludioLabだけの限定コンテンツ。
 
 ## 5. Series / Collections
-## 5. Series / Collections
 複数のコンテンツを特定のテーマでグルーピングする機能。
 
 ### [REQ-CONT-SERIES] Series Definitions
@@ -67,19 +66,19 @@
 
 ## 6. Data Schema (MDX Frontmatter)
 
-## 6. Data Schema (MDX Frontmatter)
+### [REQ-CONT-SCHEMA-001] Schema Compliance
 記事のメタデータ定義。全てのMDXファイルはこのスキーマに準拠する必要がある。
 
-| Field | Type | Required | Description / Rules |
-| :--- | :--- | :--- | :--- |
-| **title** | `string` | **Yes** | 記事のタイトル。 (例: "Prelude in C Major, BWV 846") |
-| **description** | `string` | **Yes** | 記事の概要（Meta Description用）。120文字以内。 |
-| **category** | `enum` | **Yes** | `Introduction` (楽曲紹介), `Composer`, `Theory`, `Instrument`, `Performer`, `Column`, `Originals` |
-| **composer** | `string` | No | 作曲家名（各言語の一般表記）。`Introduction` カテゴリでは必須。 |
-| **work_id** | `string` | No | 作品番号 (例: "BWV 846", "Op. 57")。`Introduction` カテゴリでは必須。 |
-| **key** | `string` | No | 調性 (例: "C Major", "cis-moll")。 |
-| **difficulty** | `1-5` | No | 演奏または理解の難易度。1(Beginner) - 5(Virtuoso)。 |
-| **tags** | `array` | No | 検索用タグ (例: `["Baroque", "Keyboard"]`)。 |
-| **date** | `date` | **Yes** | 公開日 (YYYY-MM-DD)。 |
-| **updated** | `date` | No | 最終更新日 (YYYY-MM-DD)。 |
-| **series** | `string` | No | シリーズID（Slug）。シリーズに含まれる場合のみ指定。 |
+| Field | Type | Required | Description | Example / Rules |
+| :--- | :--- | :--- | :--- | :--- |
+| **title** | `string` | **Yes** | 記事のタイトル。 | "Prelude in C Major, BWV 846" |
+| **description** | `string` | **Yes** | 記事の概要（Meta Description用）。120文字以内。 | - |
+| **category** | `enum` | **Yes** | 記事の分類。 | `Introduction`, `Composer`, `Theory` etc. |
+| **composer** | `string` | No | 作曲家名（各言語の一般表記）。`Introduction` カテゴリでは必須。 | "Johann Sebastian Bach" |
+| **work_id** | `string` | No | 作品番号。`Introduction` カテゴリでは必須。 | "BWV 846", "Op. 57" |
+| **key** | `string` | No | 調性。 | "C Major", "cis-moll" |
+| **difficulty** | `1-5` | No | 演奏または理解の難易度。 | 1(Beginner) - 5(Virtuoso) |
+| **tags** | `array` | No | 検索用タグ。 | `["Baroque", "Keyboard"]` |
+| **date** | `date` | **Yes** | 公開日 (YYYY-MM-DD)。 | "2025-12-09" |
+| **updated** | `date` | No | 最終更新日 (YYYY-MM-DD)。 | - |
+| **series** | `string` | No | シリーズID（Slug）。シリーズに含まれる場合のみ指定。 | "well-tempered-clavier-book1" |
