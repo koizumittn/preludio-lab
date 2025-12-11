@@ -34,13 +34,21 @@
 *   **[REQ-UI-004-01] Floating Player:** スクロールしても常にアクセス可能な（または邪魔にならない）フローティングプレイヤー、あるいは最下部固定バー。
 *   **[REQ-UI-004-02] Seamless State:** ページ遷移しても再生が途切れない（これはSPA/App Routerの利点を活かす）。
 
-### [REQ-UI-005] Navigation
-*   **[REQ-UI-005-01] Global Navigation:** 多言語切り替え、検索、カテゴリへのアクセスを容易に。
+### [REQ-UI-005] Navigation & Discovery
+*   **[REQ-UI-005-01] Global Navigation:**
+    *   **Language Switcher:** 1クリックで即座に言語を切り替えるドロップダウンまたはボタン（詳細は`REQ-BIZ-GOAL-003`参照）。
+    *   **Search:** 全文検索へのアクセス。
 *   **[REQ-UI-005-02] Table of Contents:** 長文記事のための目次をサイドバーまたは上部に固定表示。
+*   **[REQ-UI-005-03] Series Navigation:** シリーズ記事の場合、「前へ」「次へ」および「シリーズ目次」への導線を明示する。
+*   **[REQ-UI-005-04] Hero Visual:** 記事トップに大きなサムネイル画像（Hero Image）と、重要メタデータ（作曲家、難易度）を配置し、視覚的な第一印象を強化する（`REQ-CONT-SCHEMA`対応）。
+
+### [REQ-UI-006] Utilities & Compliance
+*   **[REQ-UI-006-01] Loading State (Skeleton):** 楽譜描画などの重い処理中は、スピナーではなく「スケルトンスクリーン」を表示し、体感速度を向上させる（`REQ-NFR-002-03`対応）。
+*   **[REQ-UI-006-02] Privacy Consent:** 初回訪問時、GDPR準拠のCookie同意バナーを表示し、同意されるまでYouTube等のサードパーティスクリプトをブロックする（`REQ-TECH-STACK-014`対応）。
 
 ## 4. Accessibility (A11y)
 **Target:** WCAG 2.1 Level AA 準拠を目指す。
 
-### [REQ-UI-006] Keyboard & A11y Support
-*   **[REQ-UI-006-01] Keyboard Support:** 全てのインタラクションがキーボードのみで操作可能であること。
-*   **[REQ-UI-006-02] Screen Reader:** 楽譜データ（ABC）は読み上げられない可能性があるため、代替テキスト（Alt）や構造化データによる解説を提供すること。
+### [REQ-UI-007] Keyboard & A11y Support
+*   **[REQ-UI-007-01] Keyboard Support:** 全てのインタラクションがキーボードのみで操作可能であること。
+*   **[REQ-UI-007-02] Screen Reader:** 楽譜データ（ABC）は読み上げられない可能性があるため、代替テキスト（Alt）や構造化データによる解説を提供すること。
