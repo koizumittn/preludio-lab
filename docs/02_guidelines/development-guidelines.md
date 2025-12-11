@@ -132,8 +132,41 @@ graph TD
         *   **Reason:** クライアントへAPIキーやDB接続情報を露出させないため（Security）、およびJSバンドルサイズを削減するため（Performance）。VercelなどのServerless環境でも動作する。
     *   `use client` はツリーの末端（Leaf）で使用し、サーバーレンダリングの恩恵を最大化する。
     *   Image Optimization: `next/image` を使用し、レイアウトシフト（CLS）を防ぐ。
+    *   **Dynamic Imports (`ssr: false`):**
+        *   Server Component (`page.tsx`等) 内で `dynamic(() => ..., { ssr: false })` を直接定義・使用することはビルドエラーの原因となる。
+        *   **Rule:** クライントサイド専用のライブラリ（`window` オブジェクトに依存するもの等）を使用する場合は、必ず **クライアントコンポーネントのラッパー (`Wrapper.tsx`)** を作成し、その中で `dynamic` インポートを行う。Server Componentからはそのラッパーを import する。
 
-### 2.3. Documentation & Comments
+### 2.3. Error Handling & Logging
+エラー時のログ出力は**デバッグと運用監視の基盤**である。実行環境に応じた戦略を適用する。
+
+#### A. Strategy Overview
+| 領域 | 実行環境 | 推奨ツール | 目的 |
+| :--- | :--- | :--- | :--- |
+| **Server** | Node.js / Edge | **Pino** | システム監視、エラー追跡、監査ログ。<br>構造化データ（JSON）が必須。 |
+| **Client** | Browser | **Sentry / Console** | ユーザー環境でのクラッシュ検知、UX計測。<br>大量のログ送信は避ける（通信コスト）。 |
+
+#### B. Implementation Policy
+*   **Server-Side:**
+    *   **Architecture:** Clean Architectureに基づき、`src/domain/services/logger-interface.ts` (Interface) を定義し、`src/infrastructure/logging/pino-logger.ts` (Implementation) で実装する。
+    *   **Usage:** 原則として `ILogger` インターフェース経由、または `PinoLogger` クラスを Controller (Server Action) でインスタンス化して使用する。
+    *   **No Console:** `console.log` の使用は禁止する。
+*   **Client-Side:**
+    *   **Development:** `console.log/error` を使用してデバッグを行う。
+    *   **Production:** 将来的には **Sentry** などのエラー監視SaaSへ送信する。`console.log` はビルド時に削除（`removeConsole`）することを推奨する。
+
+#### C. Log Level & Timing
+*   **When to Log (ログ出力すべきタイミング):**
+    *   **System Lifecycle:** アプリケーションの起動、終了、設定ロード時。
+    *   **Significant Business Events:** 重要なユーザーアクション（決済、データ更新、認証成功/失敗）。
+    *   **Errors & Exceptions:** 予期せぬエラー発生時（必ずStack Traceを含める）。
+    *   **Boundary Transitions:** 外部API呼び出し時（Request/Responseの概要）。※機密情報を含まないよう注意。
+*   **Log Level Policy:**
+    *   **ERROR:** 直ちに対処が必要な致命的エラー。システムが機能不全に陥っている状態。（例: DB接続断、決済失敗、Unhandled Exception）
+    *   **WARN:** 予期しない事象だが、システムは継続稼働可能な状態。または非推奨機能の使用。（例: 外部APIのレートリミット接近、フォールバック発動）
+    *   **INFO:** 正常な動作の主要なマイルストーン。（例: アプリ起動完了、ジョブ完了、ユーザーログイン）
+    *   **DEBUG:** 開発時のトラブルシューティング用詳細情報。（例: 内部変数の状態、if文の分岐判定結果）。本番環境では原則出力しない。
+
+### 2.4. Documentation & Comments
 *   **Documentation (JSDoc/TSDoc):**
     *   公開関数（Exported Functions）や複雑なロジックには、必ず JSDoc/TSDoc形式でコメントを記述する。
     *   IDEのホバー情報として表示されることを意識する。
