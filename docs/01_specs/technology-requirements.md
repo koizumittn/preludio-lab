@@ -77,6 +77,7 @@ Google Generative AI SDK for Node.js を使用したカスタムスクリプト�
 アプリケーション全体、特にSupabase利用時におけるセキュリティリスクへの対策。
 * **[REQ-SEC-002-01] Broken Access Control (OWASP #1):**
     *   Supabase RLS (Row Level Security) を全テーブルに適用し、「自分のデータのみ読み書き可能」を強制する。
+    *   **Reason:** SupabaseはクライアントからDBへ直接アクセスするアーキテクチャであるため、RLSが唯一のファイアウォールとなる（適用しないと全データが公開状態になるリスクがある）。
     *   管理者機能へのアクセスはRBAC (Role-Based Access Control) で厳格に制御する。
 * **[REQ-SEC-002-02] Injection (OWASP #3):**
     *   SQL Injection対策: すべてのDB操作はSupabase JS Client（ORMライク）経由で行い、生のSQLは原則禁止とする。
