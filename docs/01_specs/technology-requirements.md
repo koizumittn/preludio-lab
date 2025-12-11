@@ -13,28 +13,28 @@
 
 | Requirement ID | Category | Technology | Selection Reason / Policy |
 | :--- | :--- | :--- | :--- |
-| **REQ-TECH-001** | **Frontend** | **Next.js 15 (App Router)** | パフォーマンス、SEO、Vercelとの親和性を重視。 |
-| **REQ-TECH-002** | **Language** | **TypeScript** | 型安全性により、AIによるコード生成の精度と保守性を向上。 |
-| **REQ-TECH-003** | **Hosting** | **Vercel** | Hobby Plan (Free)。サーバーレス、グローバルCDN。 |
-| **REQ-TECH-004** | **Content Mgt** | **GitHub + MDX** | コンテンツのバージョン管理。**AIエージェントの作業場**として機能する。 |
-| **REQ-TECH-005** | **User DB / Auth** | **Supabase** | **(Free Tier & SSO Only)** メール/パスワード認証は無効化。OAuth連携のみ使用。 |
-| **REQ-TECH-006** | **Search** | **Pagefind** | 静的サイト内検索。サーバーレス・コストゼロ。 |
-| **REQ-TECH-007** | **Media (Score)** | **react-abc / verovio** | テキスト（ABC記法）からSVG楽譜をクライアント描画。 |
-| **REQ-TECH-008** | **Media (Audio)** | **YouTube IFrame API** | 外部プレーヤー制御。コストゼロで音源再生。 |
-| **REQ-TECH-009** | **AI Model** | **Gemini 3.0** | **Google AI Studio API**経由で利用。無料枠（Free Tier）を使用。 |
-| **REQ-TECH-010** | **Agent Runner** | **GitHub Actions** | **(Changed)** AIエージェントの実行環境。Cron定期実行や手動トリガーでスクリプトを起動し、コストゼロで計算リソースを確保。 |
-| **REQ-TECH-011** | **i18n & Fonts** | **next-intl / Google Fonts** | 7言語対応。CJKフォントの最適化読み込み（subsetting）によりCLSを防ぐ。 |
-| **REQ-TECH-012** | **Monitoring** | **Vercel Analytics / GSC** | MAU, 滞在時間, SEO順位の計測。Privacy-friendlyかつ無料枠で利用可能。 |
-| **REQ-TECH-013** | **Originals** | **Bandcamp Embed** | オリジナル曲の配信。販売導線（Bandcamp）との統合が容易。 |
+| **REQ-TECH-STACK-001** | **Frontend** | **Next.js 15 (App Router)** | パフォーマンス、SEO、Vercelとの親和性を重視。 |
+| **REQ-TECH-STACK-002** | **Language** | **TypeScript** | 型安全性により、AIによるコード生成の精度と保守性を向上。 |
+| **REQ-TECH-STACK-003** | **Hosting** | **Vercel** | Hobby Plan (Free)。サーバーレス、グローバルCDN。 |
+| **REQ-TECH-STACK-004** | **Content Mgt** | **GitHub + MDX** | コンテンツのバージョン管理。**AIエージェントの作業場**として機能する。 |
+| **REQ-TECH-STACK-005** | **User DB / Auth** | **Supabase** | **(Free Tier & SSO Only)** メール/パスワード認証は無効化。OAuth連携のみ使用。 |
+| **REQ-TECH-STACK-006** | **Search** | **Pagefind** | 静的サイト内検索。サーバーレス・コストゼロ。 |
+| **REQ-TECH-STACK-007** | **Media (Score)** | **react-abc / verovio** | テキスト（ABC記法）からSVG楽譜をクライアント描画。 |
+| **REQ-TECH-STACK-008** | **Media (Audio)** | **YouTube IFrame API** | 外部プレーヤー制御。コストゼロで音源再生。 |
+| **REQ-TECH-STACK-009** | **AI Model** | **Gemini 3.0** | **Google AI Studio API**経由で利用。無料枠（Free Tier）を使用。 |
+| **REQ-TECH-STACK-010** | **Agent Runner** | **GitHub Actions** | **(Changed)** AIエージェントの実行環境。Cron定期実行や手動トリガーでスクリプトを起動し、コストゼロで計算リソースを確保。 |
+| **REQ-TECH-STACK-011** | **i18n & Fonts** | **next-intl / Google Fonts** | 7言語対応。CJKフォントの最適化読み込み（subsetting）によりCLSを防ぐ。 |
+| **REQ-TECH-STACK-012** | **Monitoring** | **Vercel Analytics / GSC** | MAU, 滞在時間, SEO順位の計測。Privacy-friendlyかつ無料枠で利用可能。 |
+| **REQ-TECH-STACK-013** | **Originals** | **Bandcamp Embed** | オリジナル曲の配信。販売導線（Bandcamp）との統合が容易。 |
 
 ## 3. AI Agent Infrastructure (Free Tier Architecture)
 
 有料のADK/Vertex基盤の代わりに、**「GitHub Actions上でTypeScriptスクリプト（AIエージェント）を走らせる」**方式を採用する。
 
 ### Execution Flow
-1.  **Trigger:** プロデューサー（あなた）がGitHub Actionsを手動実行、またはスケジュール（Cron）で起動。
-2.  **Process:** GitHubのサーバー上でスクリプトが実行され、Google AI Studio API (Gemini) を呼び出してコンテンツを生成。
-3.  **[REQ-TECH-AGENT-001] Output:** 生成結果をMDXファイルとして保存し、`Pull Request` を自動作成する。
+1.  **[REQ-TECH-AGENT-FLOW-001] Trigger:** プロデューサー（あなた）がGitHub Actionsを手動実行、またはスケジュール（Cron）で起動。
+2.  **[REQ-TECH-AGENT-FLOW-002] Process:** GitHubのサーバー上でスクリプトが実行され、Google AI Studio API (Gemini) を呼び出してコンテンツを生成。
+3.  **[REQ-TECH-AGENT-FLOW-003] Output:** 生成結果をMDXファイルとして保存し、`Pull Request` を自動作成する。
 
 
 
@@ -73,13 +73,25 @@ Google Generative AI SDK for Node.js を使用したカスタムスクリプト�
 * **[REQ-SEC-001-01] Rate Limiting:** 無料枠の制限を超えないよう、スクリプト側でWait処理を入れる。
 * **[REQ-SEC-001-02] Human Verification:** AIは必ず `Pull Request` を作成する。`master` ブランチへの直コミットは禁止。
 
-### [REQ-SEC-002] Layer 2: App Security (Supabase)
-* **[REQ-SEC-002-01] SSO Only:** パスワードを持たない。
-* **[REQ-SEC-002-02] RLS:** Row Level Securityでデータアクセスを厳格化。
+### [REQ-SEC-002] Layer 2: App Security (General & OWASP Top 10)
+アプリケーション全体、特にSupabase利用時におけるセキュリティリスクへの対策。
+* **[REQ-SEC-002-01] Broken Access Control (OWASP #1):**
+    *   Supabase RLS (Row Level Security) を全テーブルに適用し、「自分のデータのみ読み書き可能」を強制する。
+    *   管理者機能へのアクセスはRBAC (Role-Based Access Control) で厳格に制御する。
+* **[REQ-SEC-002-02] Injection (OWASP #3):**
+    *   SQL Injection対策: すべてのDB操作はSupabase JS Client（ORMライク）経由で行い、生のSQLは原則禁止とする。
+    *   XSS (Cross Site Scripting)対策: React/Next.jsの標準エスケープとContent Security Policy (CSP) を活用する。
+* **[REQ-SEC-002-03] Authentication Failures:**
+    *   メール/パスワード認証を無効化し、ソーシャルログイン（OAuth）のみを許可することで、パスワード漏洩リスクをゼロにする。
 
-### [REQ-SEC-003] Layer 3: Infra Security
-*   **[REQ-SEC-003-01] Secrets Management:** Gemini API Key、Supabase Key等の機密情報は **GitHub Secrets** および **Vercel Environment Variables** にのみ保存。コード内には一切含めない。
-*   **[REQ-SEC-003-02] Dependabot:** 依存関係の脆弱性を監視。
+### [REQ-SEC-003] Layer 3: Infra Security & Continuity
+攻撃やコスト爆発からサービスを守り、持続可能性を担保する。
+*   **[REQ-SEC-003-01] Anti-DDoS:** Vercel Firewall (Automatic Mitigation) および Cloudflare (DNS) の標準機能を活用し、異常なトラフィックスパイクを防御する。
+*   **[REQ-SEC-003-02] Cost Explosion Prevention:**
+    *   **API Quota:** Gemini APIのリクエスト数をエージェント側で厳格にカウントし、無料枠（Free Tier）の上限に近づいたら処理を停止するCircuit Breakerを実装する。
+    *   **Spend Limits:** Vercel / Supabase などの有料課金が発生しうるサービスにおいて、Spend Cap（課金上限）またはアラートを設定する。
+*   **[REQ-SEC-003-03] Secrets Management:** Gemini API Key、Supabase Key等の機密情報は **GitHub Secrets** および **Vercel Environment Variables** にのみ保存。コード内には一切含めない。
+*   **[REQ-SEC-003-04] Dependabot:** 依存関係の脆弱性を監視。
 
 ## 6. DevOps & QA Architecture
 
