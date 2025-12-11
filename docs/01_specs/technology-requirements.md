@@ -24,7 +24,7 @@
 | **REQ-TECH-STACK-009** | **AI Model** | **Gemini 3.0** | **Google AI Studio API**経由で利用。無料枠（Free Tier）を使用。 |
 | **REQ-TECH-STACK-010** | **Agent Runner** | **GitHub Actions** | **(Changed)** AIエージェントの実行環境。Cron定期実行や手動トリガーでスクリプトを起動し、コストゼロで計算リソースを確保。 |
 | **REQ-TECH-STACK-011** | **i18n & Fonts** | **next-intl / Google Fonts** | 7言語対応。CJKフォントの最適化読み込み（subsetting）によりCLSを防ぐ。 |
-| **REQ-TECH-STACK-012** | **Monitoring** | **Vercel Analytics / GSC** | MAU, 滞在時間, SEO順位の計測。Privacy-friendlyかつ無料枠で利用可能。 |
+| **REQ-TECH-STACK-012** | **Monitoring** | **Vercel Analytics / GSC / Sentry** | MAU, 滞在時間, SEO順位, エラー検知。Privacy-friendlyかつ無料枠で利用可能。 |
 | **REQ-TECH-STACK-013** | **Originals** | **Bandcamp Embed** | オリジナル曲の配信。販売導線（Bandcamp）との統合が容易。 |
 | **REQ-TECH-STACK-014** | **Privacy** | **Cookie Consent** | GDPR準拠。YouTube等のThird-party Cookie読み込みを制御する同意バナー。 |
 
