@@ -23,6 +23,7 @@ Status: `[/]` 進行中
     - [x] `docs/02_guidelines/prompt-engineering-standard.md` (AIプロンプト)
     - [x] `docs/02_guidelines/development-guidelines.md` (開発)
     - [x] `docs/02_guidelines/testing-guidelines.md` (テスト)
+    - [x] **[Final Review]** Ensure all guidelines are consistent (Clean Architecture).
 - [ ] **プロジェクトセットアップ**
     - [x] Next.js アプリの初期化 (App Router, TypeScript)
     - [x] Tailwind CSS & デザインシステムの設定 (Fonts, Colors)
@@ -34,6 +35,10 @@ Status: `[/]` 進行中
 - [ ] **DevOps & QA基盤構築**
     - [ ] GitHub Actions Workflow作成: `ci-check.yml` (Lint / TypeCheck / Unit Test)
     - [ ] Vitest テスト環境のセットアップ
+- [ ] **AIエージェント環境構築 (AI Env)**
+    - [ ] `agents/` ディレクトリの初期化 (package.json, tsconfig.json)
+    - [ ] Google Generative AI SDK (Gemini) のインストール
+    - [ ] GitHub Actions Workflow作成: `agent-runner.yml` (Manual/Schedule Trigger)
 
 ## Phase 0.8: MVP / プロトタイプ開発 (Prototype)
 - [ ] **静的モックの実装**
@@ -53,23 +58,21 @@ Status: `[/]` 進行中
     - [ ] 要件と完了条件の定義
     - [ ] `AudioPlayer` コンポーネントの実装 (YouTube IFrame API)
     - [ ] 楽譜との同期ロジックの実装（任意/将来対応）
-- [ ] **多言語MDXシステム**
+- [ ] **多言語MDXシステム & コンテンツフロー**
     - [ ] MDXディレクトリ構成の設計 (`content/[lang]/...`)
     - [ ] MDX Loader / Parser の実装
     - [ ] Pagefind 検索の実装 (Ref: `technology-requirements`)
+    - [ ] **[New]** コンテンツパイプラインの定義: Agent出力(MDX) -> Git PR -> Deployの流れを検証
 
-## Phase 2: AIエージェント開発 ("Brain")
-- [ ] **エージェント実行環境の構築**
-    - [ ] `agents/` ディレクトリ構成の作成
-    - [ ] `agents/package.json` & TypeScript 設定
-    - [ ] GitHub Actions の設定 (`agent-runner.yml`)
+## Phase 2: AIエージェント開発 ("Brain") & コンテンツ量産
 - [ ] **音楽学者エージェント (Musicologist Agent)**
-    - [ ] プロンプト開発: 楽曲構造分析 (Music Theory)
-    - [ ] プロンプト開発: ABC譜面生成
-    - [ ] YouTube Data API 検索ツールの実装
-    - [ ] Gemini 3.0 Pro での生成品質テスト
+    - [ ] Script実装: `src/prompts/musicologist.ts` (楽曲分析・ABC譜面生成)
+    - [ ] Tool実装: `src/tools/youtube.ts` (YouTube Data API 検索)
+    - [ ] Orchestrator実装: `agents/src/index.ts` (Gemini API呼び出し制御)
+    - [ ] テスト: バッハ「平均律第1番」での生成品質検証 (Ref: `REQ-TECH-AGENT-003`)
 - [ ] **翻訳エージェント (Translator Agent)**
-    - [ ] プロンプト開発: 多言語翻訳 (EN/ES/JA)
+    - [ ] Script実装: `src/prompts/translator.ts` (多言語展開)
+    - [ ] テスト: 7言語への並列翻訳と正当性検証 (Ref: `REQ-TECH-AGENT-004`)
 
 ## Phase 3: ビジネス・成長施策 (Ref: `business-requirements.md`)
 - [ ] **SEO最適化** (Ref: `REQ-GOAL-001`)
