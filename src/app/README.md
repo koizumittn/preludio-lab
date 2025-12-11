@@ -1,20 +1,19 @@
 # App Directory Guidelines (UI Layer - Controller)
 
-このディレクトリは MVC における **Controller** に相当します。
-ルーティング、データフェッチ、およびレイアウト構築を責務とします。
+このディレクトリは **UI Controller** として機能します。
+Next.js App Router (Server Components & Server Actions) を使用して、ユーザーのリクエストを受け付け、Application層を実行します。
 
-## 責務 (Responsibilities)
-*   **Routing:** Next.js App Router の規約に従ってURL構造を定義する。
-*   **Data Fetching:** Server Components 内で `src/services/` からデータを取得する。
-*   **Layout:** 共通のUI構造 (`layout.tsx`) を定義する。
-*   **Metadata:** SEOメタデータ (`generateMetadata`) を定義する。
+## 責務
+*   **Routing:** 画面遷移とURLの管理。
+*   **Controller (Server Actions):**
+    1.  Dependency Injection (DI) を行う（Repositoryの実装をInfraから取得し、UseCaseに渡す）。
+    2.  `UseCase.execute()` を呼び出す。
+    3.  結果をUIコンポーネントに渡す。
 
 ## ルール (DOs)
-*   **DO** 原則として Server Components を使用する。
-*   **DO** データの取得には必ず `src/services/` 配下の関数を使用する。
-*   **DO** 取得したデータは Props として `src/components/` に渡す。
+*   **DO** `_actions/` ディレクトリに Server Actions を集約する。
+*   **DO** 具体的なビジネスロジックは書かず、必ず `src/application/` のユースケースを呼ぶ。
 
 ## 禁止事項 (DON'Ts)
-*   **DON'T** 複雑なビジネスロジックをここに書かない。`src/services/` または `src/lib/` に移動する。
-*   **DON'T** 外部API (fetch) を直接呼ばない。`src/services/` を経由する。
-*   **DON'T** DBクライアント (Supabase) を直接インポートしない。`src/services/` を経由する。
+*   **DON'T** ここでDB操作 (Supabaseなど) を直接行わない。Infra層を経由する。
+*   **DON'T** 複雑な分岐条件を書かない。Domain層に移譲する。

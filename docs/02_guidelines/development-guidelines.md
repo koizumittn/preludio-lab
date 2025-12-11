@@ -1,63 +1,116 @@
 # Development Guidelines (v1.0)
 
-## 1. Application Architecture (Layered Architecture)
-バックエンドのクリーンアーキテクチャの思想を取り入れつつ、Next.jsの特性に合わせた「実用的なレイヤードアーキテクチャ」を採用する。インフラ（Vercel, Supabase）への結合度を下げ、保守性と移植性を担保する。
+## 1. Application Architecture (Clean Architecture / Onion)
 
-### 1.1. Layers Definition
-*   **Domain Layer (`src/types/`, `src/app/.../_domain/`):**
-    *   技術やフレームワークに依存しない、純粋なデータ型やビジネスルール。
-    *   Example: `Score` 型, `User` 型, 難易度判定ロジック。
-*   **Infrastructure Layer (`src/services/`):**
-    *   外部サービス（Supabase, Gemini, FileSystem）との具体的な通信を担当。
-    *   **Repository Pattern:** 詳細な実装を隠蔽し、ドメイン層に対して抽象的なインターフェース（関数）のみを公開する。
-    *   Example: `AuthService.signIn()`, `ContentRepository.getPost()`
-*   **Feature/UI Layer (`src/app/`, `src/components/`):**
-    *   **App Router:** コントローラーとしての役割。URLを受け取り、Infrastructure層からデータを取得し、UIに渡す。
-    *   **Components:** データの表示とユーザー操作のみに関心を持つ。
+AIによるコード生成精度と保守性を最大化するため、**厳格なクリーンアーキテクチャ（Onion Architecture）**を採用する。
+記述量が増える「ボイラープレート」のコストはAIが吸収するため無視し、**「関心事の分離」**と**「依存方向の厳守」**を最優先する。
 
-### 1.2. Directory Structure Update
+### 1.1. Core Philosophy
+*   **Use Case層の導入:** UIとロジックを完全に切り離し、AIへの指示単位（Context）を明確にする。
+*   **DIP (Dependency Inversion Principle) の徹底:** `Domain` 層にインターフェースを置き、`Infrastructure` 層がそれを実装する。
+
+### 1.2. Directory Structure
+
 ```text
 src/
-├── app/                 # [UI Layer] Controller / Routing
-├── components/          # [UI Layer] View (Atomic or Feature-based)
-├── lib/                 # [Shared] Utilities
-├── services/            # [Infra Layer] API Calls / Repositories
-│   ├── auth/            # Wrapper for Supabase Auth
-│   ├── content/         # Wrapper for MDX / FileSystem
-│   └── payment/         # Wrapper for Stripe/Donation
-└── types/               # [Domain Layer] Entities / Interfaces
+├── app/                      # [UI Layer] Next.js App Router (Pages, Layouts)
+│   ├── _actions/             # Server Actions (Controller / Entry Point)
+│   └── (routes)/             # 各画面のルーティング
+├── components/               # [UI Layer] React Components (Pure View)
+│
+├── domain/                   # [Domain Layer] ★最重要・外部依存ゼロ
+│   ├── entities/             # 型定義・データ構造 (User, Score)
+│   ├── services/             # 純粋なドメインロジック (計算・判定)
+│   └── repositories/         # リポジトリのインターフェース定義 (IUserRepository)
+│
+├── application/              # [Use Case Layer] アプリケーションの機能単位
+│   ├── use-cases/            # 実処理クラス (RegisterUserUseCase)
+│   └── dtos/                 # 入出力データ定義 (RegisterUserInput)
+│
+├── infrastructure/           # [Infra Layer] 技術的詳細・外部連携
+│   ├── database/             # Supabase Client, Prismaなど
+│   ├── repositories/         # Domain層IFの実装 (SupabaseUserRepository)
+│   └── external/             # 外部APIクライアント (Stripe, Geminiなど)
+│
+└── lib/                      # [Shared] 汎用ユーティリティ
 ```
 
-### 1.3. Architecture Diagram & Dependency Flow
-各レイヤーがどのように協調するかを示す概念図。
+### 1.3. Layers Definition & Responsibilities
+
+#### Domain Layer (`src/domain/`)
+*   **役割:** ビジネスの「用語」「ルール」「契約（インターフェース）」を定義する。
+*   **ルール:** 他のいかなる層（Application, Infra, UI）にも依存してはならない。
+*   **AI指示のポイント:** 「まずは技術詳細を無視して、TypeScriptの型とInterfaceだけ定義して」
+
+#### Application Layer (`src/application/`)
+*   **役割:** ユーザーが「何をしたいか（ユースケース）」を表現する。
+*   **構成:**
+    *   **Use Case:** ドメイン層のInterfaceを使って処理フローを記述する。具体的なDB操作は知らなくて良い。
+    *   **DTO:** UI層とやり取りするための単純なデータ型。
+*   **AI指示のポイント:** 「Repository Interfaceを使って、〇〇を行うビジネスロジックを実装して」
+
+#### Infrastructure Layer (`src/infrastructure/`)
+*   **役割:** ドメイン層で定義されたInterfaceを、具体的な技術（Supabase, API）で実装する。
+*   **ルール:** ここを変更しても、DomainやApplication層のコードを変えてはならない。
+*   **AI指示のポイント:** 「Supabaseを使って `IUserRepository` の実体クラスを作成してください。」
+
+#### UI Layer (`src/app/`, `src/components/`)
+*   **役割:** データの表示とユーザー入力の受付。
+*   **Server Actions:** コントローラーとして機能する。ここで「依存性の注入（DI）」を行い、Use Caseを実行する。
+
+### 1.4. Architecture Diagram & Data Flow
+依存の矢印 `-->` は常に **内側（Domain）** に向かう。
 
 ```mermaid
 graph TD
-    User((User)) -->|Access URL| Controller[UI Layer: src/app]
-    Controller -->|1. Call Interface| Infra[Infra Layer: src/services]
-    Infra -.->|2. Implement| Repository[Domain Layer: src/types]
-    Infra -->|3. Fetch Data| External((Supabase/API))
-    Infra -->|4. Return Entity| Controller
-    Controller -->|5. Pass Props| View[UI Layer: src/components]
+    %% Layers
+    subgraph UI_Layer [UI Layer: src/app]
+        Page[Page / View]
+        Action[Server Action / Controller]
+    end
+
+    subgraph App_Layer [Application Layer: src/application]
+        Input[DTO: Input]
+        UseCase[Use Case Class]
+    end
+
+    subgraph Domain_Layer [Domain Layer: src/domain]
+        Entity[Entities]
+        RepoIF[Repository Interface]
+    end
+
+    subgraph Infra_Layer [Infra Layer: src/infrastructure]
+        RepoImpl[Repository Implementation]
+        DB[(Supabase / External)]
+    end
+
+    %% Flow
+    Page -->|1. Submit| Action
+    Action -->|2. Instantiate & Call| UseCase
     
+    %% Dependency Injection (Manual in Action)
+    Action -.->|Inject| RepoImpl
+    
+    %% Use Case Logic
+    UseCase -->|3. Use| RepoIF
+    UseCase -->|4. Manipulate| Entity
+    
+    %% Infra Implementation
+    RepoImpl -.-|>|Implements| RepoIF
+    RepoImpl -->|5. Fetch/Save| DB
+
+    %% Styling
     classDef domain fill:#f9f,stroke:#333,stroke-width:2px;
-    class Repository domain;
+    class Entity,RepoIF domain;
 ```
 
-### 1.4. Operational Flow Example (楽譜表示)
-1.  **Request:** ユーザーが `/works/bach/prelude` にアクセス。
-2.  **Controller (`src/app/works/[...]/page.tsx`):**
-    *   `ContentService.getScore("bach", "prelude")` を呼び出す。
-3.  **Infrastructure (`src/services/content/`):**
-    *   ファイルシステムからMDXを読み込み、パースする。
-    *   `src/types/Score.ts` で定義された型（Entity）に変換して返す。
-4.  **View (`src/components/ScoreRenderer.tsx`):**
-    *   受け取った `Score` オブジェクトを元に、楽譜を描画する。
+### 1.5. AI-Driven Development Workflow
+AIに対して、以下の順序で実装を依頼することで、コンテキストの混乱を防ぐ。
 
-### 1.5. Dependency Rule (重要)
-*   **Domain Layer (`src/types/`)** は、他のどの層にも依存してはならない（一番偉い）。
-*   **UI Layer** と **Infrastructure Layer** は、Domain Layer に依存する。
-*   これにより、インフラ（Supabase等）が変わっても、ドメイン（ビジネスロジック）は守られる。
+1.  **Phase 1: Domain Definition** (`src/domain` Entity & Interface)
+2.  **Phase 2: Use Case Implementation** (`src/application` Business Logic)
+3.  **Phase 3: Infrastructure Implementation** (`src/infrastructure` DB/API Adapter)
+4.  **Phase 4: UI Connection** (`src/app` Server Action & View)
 
 ## 2. Coding Standards
 **Google TypeScript Style Guide** をベースとし、以下の独自ルールを追加適用する。

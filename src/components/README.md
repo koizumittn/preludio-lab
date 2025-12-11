@@ -28,6 +28,6 @@ UIコンポーネントを「機能（Domain）」と「見た目（UI）」と�
 *   **DO** `use client` はインタラクション (`onClick`, `useState`) が必要な場合のみ付与する。
 
 ## 禁止事項 (DON'Ts)
-*   **DON'T** コンポーネント内でデータフェッチを行わない。データは Props として受け取る。
-*   **DON'T** `src/services/` に直接依存しない。コンポーネントはインフラ層を知るべきではない。
+*   **DON'T** コンポーネント内でデータフェッチを行わない。データの取得は `src/app` (Controller) の責務。
+*   **DON'T** `src/infrastructure` や `src/application` に依存しない。受け取るのは `src/domain` の Entity または Primitive な Props のみ。
 *   **DON'T** 重厚なビジネスロジックを含めない。
