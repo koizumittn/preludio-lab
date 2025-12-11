@@ -16,13 +16,13 @@ Status: `[/]` 進行中
     - [x] **エージェント設計:** AIエージェント（Musicologist, Translator）の出力フォーマットとインターフェース定義
 
 ## Phase 0.5: 環境構築 (Environment Setup)
-- [ ] **ガイドライン策定**
-    - [ ] `docs/02_guidelines/naming-conventions.md` (命名規則)
-    - [ ] `docs/02_guidelines/score-notation-guidelines.md` (楽譜表記)
-    - [ ] `docs/02_guidelines/localization-guidelines.md` (翻訳・ローカライズ)
-    - [ ] `docs/02_guidelines/prompt-engineering-standard.md` (AIプロンプト)
-    - [ ] `docs/02_guidelines/development-guidelines.md` (開発)
-    - [ ] `docs/02_guidelines/testing-guidelines.md` (テスト)
+- [x] **ガイドライン策定**
+    - [x] `docs/02_guidelines/naming-conventions.md` (命名規則)
+    - [x] `docs/02_guidelines/score-notation-guidelines.md` (楽譜表記)
+    - [x] `docs/02_guidelines/localization-guidelines.md` (翻訳・ローカライズ)
+    - [x] `docs/02_guidelines/prompt-engineering-standard.md` (AIプロンプト)
+    - [x] `docs/02_guidelines/development-guidelines.md` (開発)
+    - [x] `docs/02_guidelines/testing-guidelines.md` (テスト)
 - [ ] **プロジェクトセットアップ**
     - [x] Next.js アプリの初期化 (App Router, TypeScript)
     - [x] Tailwind CSS & デザインシステムの設定 (Fonts, Colors)
