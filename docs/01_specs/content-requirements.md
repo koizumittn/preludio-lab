@@ -92,3 +92,4 @@
 | **youtube_id** | `string` | No | メイン音源のYouTube ID（自動埋め込み用）。 | "dQw4w9WgXcQ" |
 | **youtube_start** | `string` | No | YouTube再生開始時間（HH:MM:SS）。 | "00:00:00" |
 | **youtube_end** | `string` | No | YouTube再生終了時間（HH:MM:SS）。 | "00:00:00" |
+| **ogp_excerpt** | `string` | No | OGP画像生成用のABC譜面コード（短い重要モチーフ）。未指定の場合はデフォルト画像。 | "L:1/8 cdef gabc'" |
