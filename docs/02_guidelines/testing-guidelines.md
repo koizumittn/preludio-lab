@@ -71,3 +71,25 @@ const useCase = new RegisterUserUseCase(mockRepo);
 await useCase.execute(input);
 expect(mockRepo.save).toHaveBeenCalledWith(expectedUser); // 呼び出し確認
 ```
+
+## 5. File Location & Naming
+テストファイルの配置場所と命名規則を以下の通り規定する。
+
+### 5.1. Unit & Integration Tests (Colocation)
+**原則として、テスト対象ファイルと同じディレクトリに配置する（Colocation）。**
+ディレクトリを分離すると、ファイルの移動時に追従しづらくなるためである。
+
+*   **Location:** 対象ファイルと同じディレクトリ (`src/...`)
+*   **Naming:** `[対象ファイル名].test.ts` (or `.test.tsx`)
+*   **Example:**
+    *   `src/domain/entities/User.ts`
+    *   `src/domain/entities/User.test.ts`
+
+### 5.2. E2E Tests
+E2Eテストはアプリケーション全体を外部から叩くテストであるため、ソースコードとは切り離して管理する。
+
+*   **Location:** プロジェクトルート直下の `e2e/` ディレクトリ
+*   **Naming:** `[機能名].spec.ts`
+*   **Example:**
+    *   `e2e/auth-flow.spec.ts`
+
