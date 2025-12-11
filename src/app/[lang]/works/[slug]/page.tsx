@@ -1,6 +1,11 @@
 import Link from 'next/link';
 import { ScorePlaceholder } from '@/components/ui/ScorePlaceholder';
 import { AudioPlayerPlaceholder } from '@/components/ui/AudioPlayerPlaceholder';
+import { Skeleton } from '@/components/ui/Skeleton';
+
+// ... (inside component)
+
+
 
 export default async function ArticlePage({ params }: { params: Promise<{ lang: string; slug: string }> }) {
     const { lang, slug } = await params;
@@ -63,7 +68,13 @@ export default async function ArticlePage({ params }: { params: Promise<{ lang: 
                         <div className="my-6">
                             {/* Replaced ScorePlaceholder with Skeleton for Loading State Demo */}
                             <div className="rounded-lg bg-white p-6 shadow-sm border border-gray-100">
-                                <ScorePlaceholder />
+                                <div className="space-y-4">
+                                    <Skeleton className="h-48 w-full" />
+                                    <div className="flex gap-2">
+                                        <Skeleton className="h-4 w-1/4" />
+                                        <Skeleton className="h-4 w-1/4" />
+                                    </div>
+                                </div>
                             </div>
                             <p className="mt-2 text-center text-sm text-gray-500 italic">Figure 1: Opening measures showing the arpeggio pattern</p>
                         </div>
