@@ -119,8 +119,16 @@ GitHub Flowをベースに、Verification環境（Preview Deploy）を組み込�
     *   **Trigger:** `master` へのマージ (Push)。
     *   **CD (Production):** Vercel Production Deployment を実行し、本番環境 (`preludiolab.com`) を更新。
 *   **[REQ-DEVOPS-FLOW-004] Workflow C: Agent Runner:**
-    *   **Trigger:** Schedule / Manual Trigger.
     *   **Action:** AIエージェントを実行し、コンテンツ生成PRを作成 (Workflow Aへ接続)。
+
+### [REQ-DEVOPS-RELEASE] Versioning & Rollback Strategy
+迅速なロールバックと効果測定を可能にするリリース管理フロー。
+
+*   **[REQ-DEVOPS-RELEASE-001] Semantic Versioning:** `vX.Y.Z` (Major.Minor.Patch) のタグを `master` マージ時に付与する。
+*   **[REQ-DEVOPS-RELEASE-002] GitHub Releases:** タグ付与をトリガーに Release Note を自動生成し、含まれる変更点（PRリンク）と当時のKPI期待値を記録する。
+*   **[REQ-DEVOPS-RELEASE-003] Instant Rollback:** 万が一の障害時は、`git revert` ではなく **Vercel Instant Rollback** 機能を使用し、1秒で正常な前バージョンへ切り戻す。
+    *   ロールバック後、改めて `hotfix` ブランチで修正を行い、バージョンを上げて再デプロイする。
+*   **[REQ-DEVOPS-RELEASE-004] Performance Baseline:** 各リリース（Deployment）に対し、Vercel Analytics の "Deployment Score" (Web Vitals) を記録し、バージョン間の性能劣化を監視する。
 
 ### [REQ-DEVOPS-TEST] Testing Strategy
 *   **[REQ-DEVOPS-TEST-001] Unit Testing:** `Vitest` を使用。ユーティリティ関数、ABCパーサー等のロジック検証。
