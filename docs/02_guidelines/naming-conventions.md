@@ -31,7 +31,21 @@
     *   **Era, Instrument, Performer:** それぞれ `eras/`, `instruments/`, `performers/` 配下。
     *   **Column:** `columns/{year}/{slug}.mdx`
         *   Example: `columns/2025/music-in-movies.mdx`
-*   **Slug Rules:** 英語小文字、ハイフン繋ぎ (`kebab-case`)。冠詞 (the, a) は省略推奨。
+### Asset Files (Images / Media)
+記事のディレクトリ構造と一致させることを原則とする。
+
+*   **Rule:** `kebab-case`. 拡張子も必ず小文字 (`.jpg`, `.png`, `.svg`) とする。
+*   **Directory Structure:**
+    *   `public/images/works/{composer}/{work}.jpg` (記事のHero画像等)
+    *   `public/images/composers/{composer}.jpg` (作曲家のポートレート)
+    *   `public/images/instruments/{instrument}.jpg`
+
+### Slug Rules (URL Optimization)
+*   **Format:** 英語小文字、ハイフン繋ぎ (`kebab-case`)。
+*   **Legibility:** 視認性とSEOを考慮し、**3〜5単語** 程度を目安とする。
+*   **Stop Words:** 意味の薄い単語 (`the`, `a`, `of`, `in`) は、文脈上必須でない限り省略する。
+    *   Good: `bach-prelude-c-major`
+    *   Bad: `the-prelude-in-c-major-by-johann-sebastian-bach` (長すぎる)
 
 ## 3. Code Identifiers
 *   **Variables / Functions:** `camelCase` (e.g., `isValid`, `fetchData`)
