@@ -137,34 +137,41 @@ graph TD
         *   **Rule:** クライントサイド専用のライブラリ（`window` オブジェクトに依存するもの等）を使用する場合は、必ず **クライアントコンポーネントのラッパー (`Wrapper.tsx`)** を作成し、その中で `dynamic` インポートを行う。Server Componentからはそのラッパーを import する。
 
 ### 2.3. Error Handling & Logging
-エラー時のログ出力は**デバッグと運用監視の基盤**である。実行環境に応じた戦略を適用する。
+エラー時のログ出力はデバッグと運用監視の基盤である。**「ログ（記録）」と「エラー通知（アラート）」の役割を明確に分担し**、実行環境に応じた戦略を適用する。
 
 #### A. Strategy Overview
-| 領域 | 実行環境 | 推奨ツール | 目的 |
+| 領域 | 実行環境 | 推奨ツール | 目的・役割 |
 | :--- | :--- | :--- | :--- |
-| **Server** | Node.js / Edge | **Pino** | システム監視、エラー追跡、監査ログ。<br>構造化データ（JSON）が必須。 |
-| **Client** | Browser | **Sentry / Console** | ユーザー環境でのクラッシュ検知、UX計測。<br>大量のログ送信は避ける（通信コスト）。 |
+| **Server** | Node.js / Edge | **Pino** (Log)<br>**Sentry** (Error) | **Pino:** システム動作の記録、監査ログ。構造化データ（JSON）必須。<br>**Sentry:** 予期せぬ例外（Crash/Exception）の検知と通知。 |
+| **Client** | Browser | **Sentry** / Console | **Sentry:** ユーザー環境でのクラッシュ検知、UX計測（Vercel Speed Insights併用）。<br>**Console:** 開発時のデバッグ用。 |
 
 #### B. Implementation Policy
 *   **Server-Side:**
     *   **Architecture:** Clean Architectureに基づき、`src/domain/services/logger-interface.ts` (Interface) を定義し、`src/infrastructure/logging/pino-logger.ts` (Implementation) で実装する。
-    *   **Usage:** 原則として `ILogger` インターフェース経由、または `PinoLogger` クラスを Controller (Server Action) でインスタンス化して使用する。
-    *   **No Console:** `console.log` の使用は禁止する。
+    *   **Integration:**
+        *   `PinoLogger` クラス内部で、`ERROR` レベルのログが出力された際、**自動的に `Sentry.captureException` も実行されるように実装する**。
+        *   呼び出し元（Use Case / Server Action）は Sentry を意識せず、Logger のみを依存させる。
+    *   **Traceability:**
+        *   ログには可能な限り `requestId` (Trace ID) を含め、一連の処理フローを追跡可能にする。
+    *   **Security (Redaction):**
+        *   パスワード、トークン、メールアドレスなどの機密情報（PII）がログに残らないよう、**Pino の `redact` オプション設定を必須**とする。
 *   **Client-Side:**
-    *   **Development:** `console.log/error` を使用してデバッグを行う。
-    *   **Production:** 将来的には **Sentry** などのエラー監視SaaSへ送信する。`console.log` はビルド時に削除（`removeConsole`）することを推奨する。
+    *   **Development:** `console.log` / `console.error` を使用してデバッグを行う。
+    *   **Production:**
+        *   ビルド設定 (`next.config.ts`) にて `compiler.removeConsole` を有効化する。
+        *   **例外:** Sentry へのエラー通知を阻害しないよう、**`console.error` のみ削除対象から除外（exclude）する設定を必須とする**。
 
 #### C. Log Level & Timing
 *   **When to Log (ログ出力すべきタイミング):**
     *   **System Lifecycle:** アプリケーションの起動、終了、設定ロード時。
-    *   **Significant Business Events:** 重要なユーザーアクション（決済、データ更新、認証成功/失敗）。
-    *   **Errors & Exceptions:** 予期せぬエラー発生時（必ずStack Traceを含める）。
+    *   **Significant Business Events:** 重要なユーザーアクション（決済、データ更新、認証成功/失敗）。これらは分析可能なよう、`event` プロパティ等を付与して識別しやすくする。
+    *   **Errors & Exceptions:** 予期せぬエラー発生時（必ず Stack Trace を含める）。
     *   **Boundary Transitions:** 外部API呼び出し時（Request/Responseの概要）。※機密情報を含まないよう注意。
 *   **Log Level Policy:**
-    *   **ERROR:** 直ちに対処が必要な致命的エラー。システムが機能不全に陥っている状態。（例: DB接続断、決済失敗、Unhandled Exception）
-    *   **WARN:** 予期しない事象だが、システムは継続稼働可能な状態。または非推奨機能の使用。（例: 外部APIのレートリミット接近、フォールバック発動）
+    *   **ERROR:** 直ちに対処が必要な致命的エラー。システムが機能不全に陥っている状態。（Sentry通知対象）
+    *   **WARN:** 予期しない事象だが、システムは継続稼働可能な状態。または非推奨機能の使用。
     *   **INFO:** 正常な動作の主要なマイルストーン。（例: アプリ起動完了、ジョブ完了、ユーザーログイン）
-    *   **DEBUG:** 開発時のトラブルシューティング用詳細情報。（例: 内部変数の状態、if文の分岐判定結果）。本番環境では原則出力しない。
+    *   **DEBUG:** 開発時のトラブルシューティング用詳細情報。（例: 内部変数の状態）。本番環境では原則出力しないか、出力レベル設定で制御する。
 
 ### 2.4. Documentation & Comments
 *   **Documentation (JSDoc/TSDoc):**
