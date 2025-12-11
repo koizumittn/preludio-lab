@@ -129,6 +129,9 @@ SaaSの標準機能を最大限活用し、追加開発コストをかけずに�
 ### [REQ-NFR-002] Performance
 *   **[REQ-NFR-002-01] Core Web Vitals:** Googleの提唱する指標（LCP, CLS, INP）において、モバイル/デスクトップ共に "Good" (緑) スコアを維持する。
 *   **[REQ-NFR-002-02] Edge Caching:** 静的コンテンツ（MDX生成されたHTML、画像、楽譜SVG）はVercel Edge Networkでキャッシュし、オリジン到達を最小化する。
+*   **[REQ-NFR-002-03] User Perceived Latency:**
+    *   **Page Transition:** ページ遷移ごとの反応速度を 200ms 以内とする（SPA/Soft Navigationの利点を活かす）。
+    *   **Score Rendering:** クライアントサイドでの楽譜描画完了時間を **1.5秒以内 (Mobile)** に抑え、待機中はSkeleton UIを表示して離脱を防ぐ。
 
 ### [REQ-NFR-003] Data Integrity & Backup
 *   **[REQ-NFR-003-01] Content as Code:** 記事、画像のマスターデータは全てGitHubリポジトリで管理し、**「Gitが唯一の正解（Source of Truth）」**となる状態を維持する。これにより、DB障害時の復旧（Disaster Recovery）をgit cloneのみで可能にする。
