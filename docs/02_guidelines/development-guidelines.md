@@ -149,8 +149,8 @@ graph TD
 *   **Server-Side:**
     *   **Architecture:** Clean Architectureに基づき、`src/domain/services/logger-interface.ts` (Interface) を定義し、`src/infrastructure/logging/pino-logger.ts` (Implementation) で実装する。
     *   **Integration:**
-        *   `PinoLogger` クラス内部で、`ERROR` レベルのログが出力された際、**自動的に `Sentry.captureException` も実行されるように実装する**。
-        *   呼び出し元（Use Case / Server Action）は Sentry を意識せず、Logger のみを依存させる。
+        *   **PinoLogger** を使用し、`ERROR` レベルのログ出力時に自動で **Sentry.captureException** が走るよう実装済み。
+        *   呼び出し元（Use Case / Server Action）は Logger のみを依存し、Sentry を直接意識しない。
     *   **Traceability:**
         *   ログには可能な限り `requestId` (Trace ID) を含め、一連の処理フローを追跡可能にする。
     *   **Security (Redaction):**
@@ -172,6 +172,83 @@ graph TD
     *   **WARN:** 予期しない事象だが、システムは継続稼働可能な状態。または非推奨機能の使用。
     *   **INFO:** 正常な動作の主要なマイルストーン。（例: アプリ起動完了、ジョブ完了、ユーザーログイン）
     *   **DEBUG:** 開発時のトラブルシューティング用詳細情報。（例: 内部変数の状態）。本番環境では原則出力しないか、出力レベル設定で制御する。
+
+### D. Exception Handling（例外処理）
+
+| 観点 | 推奨内容 | 目的 |
+|------|----------|------|
+| **統一的な例外捕捉** | すべての非同期処理（`fetch`, `axios`, `Promise` 系）と UI イベントハンドラは `try / catch` でラップし、例外は必ず捕捉する。 | 予期しないクラッシュを防ぎ、エラーログを一元化 |
+| **エラーハンドラ関数の共通化** | `src/utils/errorHandler.ts` に `handleError(error: unknown, context?: string)` を実装し、`Sentry.captureException` と `console.error` を内部で呼び出す。 | 再利用性と一貫したエラーレポート |
+| **ユーザー向けフィードバック** | UI では **エラートースト**（例: `react-hot-toast`）や **フォールバック UI** を表示し、内部エラー情報は決して露出しない。 | UX の低下防止と情報漏洩防止 |
+| **型安全なエラー** | カスタムエラークラス `AppError extends Error { code: string; status?: number; }` を作成し、`code` でエラー種別を識別できるようにする。 | エラーの分類とハンドリングロジックの簡素化 |
+| **境界層でのサニタイズ** | API 呼び出し層（`src/infrastructure/api/*`）で受け取ったエラーは **外部情報を除去** した上で上位に伝搬する。 | セキュリティ（機密情報漏洩防止） |
+| **テストでの例外シナリオ** | ユニットテストは `jest.mock` で例外を強制し、`handleError` が正しく呼ばれることを検証する。 | 回帰防止と例外処理の網羅性確保 |
+| **App Router での例外** | Server Components (`page.tsx`) のエラーは同ディレクトリの `error.tsx` で捕捉。Server Actions は `try/catch` し、失敗時は `{ success: false, errorMessage: '...' }` を返す。 | アプリ全体のホワイトアウト防止と安全なエラーハンドリング |
+| **エラーログのレベル** | 例外は **ERROR** レベルでログ出力し、`Sentry` に必ず送信する。開発時は `console.error` でスタックトレースを確認。 | 監視とデバッグの両立 |
+| **非同期 UI のローディング解除** | 例外が発生したら必ずローディング状態を解除し、ユーザーが再試行できるようにする。 | UI のハング防止 |
+
+#### 例：クライアント側エラーハンドラ実装（`src/utils/client-error-handler.ts`）
+```ts
+import * as Sentry from '@sentry/nextjs';
+import toast from 'react-hot-toast';
+
+/**
+ * クライアント用エラーハンドラ。Sentry へ送信し、ユーザーにはトーストで通知。
+ */
+export function handleClientError(error: unknown, userMessage?: string): void {
+  Sentry.captureException(error);
+  if (process.env.NODE_ENV === 'development') {
+    console.error('[Client Error]', error);
+  }
+  if (userMessage) toast.error(userMessage);
+}
+```
+```ts
+// src/utils/errorHandler.ts
+import * as Sentry from '@sentry/nextjs';
+
+/**
+ * アプリ全体で使用する例外ハンドラ。
+ * - Sentry に例外を送信
+ * - console.error でスタックトレースを出力（開発時のみ）
+ * - 必要に応じて UI フィードバックをトリガー
+ */
+export function handleError(error: unknown, context?: string): void {
+  const err = error instanceof Error ? error : new Error(String(error));
+
+  // Sentry に例外を送信
+  Sentry.captureException(err, {
+    tags: { context: context ?? 'unknown' },
+  });
+
+  // 開発環境では console.error で詳細を出力
+  // クライアント側は別ハンドラに委譲。サーバー側は PinoLogger を使用するのでここでは何もしない。
+  if (process.env.NODE_ENV === 'development') {
+    console.error('[Server Error]', err);
+  }
+}
+```
+
+#### 例：コンポーネントでの使用例
+```tsx
+import { handleError } from '@/utils/errorHandler';
+import toast from 'react-hot-toast';
+
+export default function SomeComponent() {
+  const fetchData = async () => {
+    try {
+      const res = await fetch('/api/data');
+      if (!res.ok) throw new Error('Network response was not ok');
+      // …データ処理
+    } catch (e) {
+      handleError(e, 'SomeComponent:fetchData');
+      toast.error('データ取得に失敗しました。再度お試しください。');
+    }
+  };
+
+  // …
+}
+```
 
 ### 2.4. Documentation & Comments
 *   **Documentation (JSDoc/TSDoc):**
