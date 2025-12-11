@@ -32,7 +32,8 @@
 ## 3. Editorial Guidelines
 
 ### Tone of Voice
-*   **[REQ-CONT-EDIT-001] Enthusiastic but Objective:** 情熱的でありながら、事実に忠実であること。
+### Tone of Voice
+*   **[REQ-CONT-EDIT-001] Friendly & Accessible:** 親しみやすさを重視する。専門的な内容であっても、読者を突き放さず、隣で語りかけるようなトーン（"Guide"）を心がける。情熱的であることは良いが、独りよがりな熱弁は避ける。
 *   **[REQ-CONT-EDIT-002] Global Neutral:** 特定の文化に依存しすぎる比喩は避け、翻訳しやすい平易なロジックで記述する。
 
 ### Multilingual Policy
@@ -42,7 +43,7 @@
 ## 4. Content Taxonomy
 サイト内のコンテンツを以下のカテゴリに分類する。
 
-*   **[REQ-CONT-TAX-001] Work Analysis (楽曲解説):** 個別の楽曲の詳細分析。コアコンテンツ。
+*   **[REQ-CONT-TAX-001] Work Introduction (楽曲紹介):** 個別の楽曲の魅力紹介。初心者にも分かりやすい「入り口」としての解説記事。SEOキーワードとしては「分析 (Analysis)」も狙うが、ユーザーへの見せ方は「紹介」とする。
 *   **[REQ-CONT-TAX-002] Composer (作曲家):** 作曲家の生涯、スタイル、代表作の紹介。 (例: バッハ、ベートーヴェン)
 *   **[REQ-CONT-TAX-003] Theory (音楽の仕組み):** 形式（ソナタ形式など）、和声、記譜法などの理論解説。
 *   **[REQ-CONT-TAX-004] Era (時代様式):** 各時代（バロック、古典派、ロマン派など）の歴史的背景と様式の特徴。
@@ -53,24 +54,32 @@
 *   **[REQ-CONT-TAX-009] Originals (オリジナル作品):** 管理人（あなた）による自作曲の紹介と解説。PreludioLabだけの限定コンテンツ。
 
 ## 5. Series / Collections
+## 5. Series / Collections
 複数のコンテンツを特定のテーマでグルーピングする機能。
-*   **例:** 「ピアノ協奏曲名曲選」「バッハのオルガン作品全集」「初心者向け音楽理論コース」
-*   **構造:** 1つのシリーズ記事が、複数の子記事（分析記事など）へのリンクを持つ目次的な役割を果たす。
+
+### [REQ-CONT-SERIES] Series Definitions
+*   **[REQ-CONT-SERIES-001] Concept:** 「ピアノ協奏曲名曲選」「バッハのオルガン作品全集」「初心者向け音楽理論コース」など、文脈のあるまとまりを提供する。
+*   **[REQ-CONT-SERIES-002] Structure:**
+    *   **Parent:** シリーズのトップページ（目次、概要）。
+    *   **Children:** シリーズに属する各記事。
+*   **[REQ-CONT-SERIES-003] Navigation:**
+    *   記事ページ内に「シリーズ目次」へのリンク、および「前の記事」「次の記事」へのナビゲーションを自動生成する。
 
 ## 6. Data Schema (MDX Frontmatter)
 
-記事のメタデータは厳格に型定義する。
+## 6. Data Schema (MDX Frontmatter)
+記事のメタデータ定義。全てのMDXファイルはこのスキーマに準拠する必要がある。
 
-```yaml
----
-title: "Prelude in C Major, BWV 846"
-category: "Analysis" # Analysis, Composer, Theory, Instrument, Performer
-series: "well-tempered-clavier-book1" # Optional: Series Slug
-composer: "Johann Sebastian Bach"
-work_id: "BWV 846"
-key: "C Major"
-difficulty: 2  # 1 (Beginner) to 5 (Virtuoso)
-tags: ["Baroque", "Keyboard"]
-date: "2025-12-09"
----
-```
+| Field | Type | Required | Description / Rules |
+| :--- | :--- | :--- | :--- |
+| **title** | `string` | **Yes** | 記事のタイトル。 (例: "Prelude in C Major, BWV 846") |
+| **description** | `string` | **Yes** | 記事の概要（Meta Description用）。120文字以内。 |
+| **category** | `enum` | **Yes** | `Introduction` (楽曲紹介), `Composer`, `Theory`, `Instrument`, `Performer`, `Column`, `Originals` |
+| **composer** | `string` | No | 作曲家名（各言語の一般表記）。`Introduction` カテゴリでは必須。 |
+| **work_id** | `string` | No | 作品番号 (例: "BWV 846", "Op. 57")。`Introduction` カテゴリでは必須。 |
+| **key** | `string` | No | 調性 (例: "C Major", "cis-moll")。 |
+| **difficulty** | `1-5` | No | 演奏または理解の難易度。1(Beginner) - 5(Virtuoso)。 |
+| **tags** | `array` | No | 検索用タグ (例: `["Baroque", "Keyboard"]`)。 |
+| **date** | `date` | **Yes** | 公開日 (YYYY-MM-DD)。 |
+| **updated** | `date` | No | 最終更新日 (YYYY-MM-DD)。 |
+| **series** | `string` | No | シリーズID（Slug）。シリーズに含まれる場合のみ指定。 |
