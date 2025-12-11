@@ -1,11 +1,37 @@
 # Development Guidelines (v1.0)
 
-## 1. Application Architecture
-Next.js App Router (v15+) をベースとしたディレクトリ構成と責任分界点。
+## 1. Application Architecture (Layered Architecture)
+バックエンドのクリーンアーキテクチャの思想を取り入れつつ、Next.jsの特性に合わせた「実用的なレイヤードアーキテクチャ」を採用する。インフラ（Vercel, Supabase）への結合度を下げ、保守性と移植性を担保する。
 
-*   **Atomic Design (Loose):** コンポーネントは `features/` (機能単位) と `ui/` (汎用単位) に分割する。厳密なAtomic Designよりも「コロケーション（関連するものを近くに置く）」を重視する。
-*   **Server Components:** 原則としてServer Componentを使用する。`use client` はインタラクティブなLeaf Componentにのみ付与する。
-*   **Data Fetching:** フェッチ処理はServer Component内 (`page.tsx` や `layout.tsx`) で行い、Propsとして渡す。
+### 1.1. Layers Definition
+*   **Domain Layer (`src/types/`, `src/app/.../_domain/`):**
+    *   技術やフレームワークに依存しない、純粋なデータ型やビジネスルール。
+    *   Example: `Score` 型, `User` 型, 難易度判定ロジック。
+*   **Infrastructure Layer (`src/services/`):**
+    *   外部サービス（Supabase, Gemini, FileSystem）との具体的な通信を担当。
+    *   **Repository Pattern:** 詳細な実装を隠蔽し、ドメイン層に対して抽象的なインターフェース（関数）のみを公開する。
+    *   Example: `AuthService.signIn()`, `ContentRepository.getPost()`
+*   **Feature/UI Layer (`src/app/`, `src/components/`):**
+    *   **App Router:** コントローラーとしての役割。URLを受け取り、Infrastructure層からデータを取得し、UIに渡す。
+    *   **Components:** データの表示とユーザー操作のみに関心を持つ。
+
+### 1.2. Directory Structure Update
+```text
+src/
+├── app/                 # [UI Layer] Controller / Routing
+├── components/          # [UI Layer] View (Atomic or Feature-based)
+├── lib/                 # [Shared] Utilities
+├── services/            # [Infra Layer] API Calls / Repositories
+│   ├── auth/            # Wrapper for Supabase Auth
+│   ├── content/         # Wrapper for MDX / FileSystem
+│   └── payment/         # Wrapper for Stripe/Donation
+└── types/               # [Domain Layer] Entities / Interfaces
+```
+
+### 1.3. Dependency Rule
+*   `UI Layer` -> `Infrastructure Layer` -> `Domain Layer` (データの流れ)
+*   `UI Layer` -> `Domain Layer` (型の依存)
+*   **Infrastructure層の実装詳細（Supabase SDKなど）を、UIコンポーネントで直接インポートすることを禁止する。** 必ず `services/` 配下の関数を経由すること。
 
 ## 2. Coding Standards
 **Google TypeScript Style Guide** をベースとし、以下の独自ルールを追加適用する。
