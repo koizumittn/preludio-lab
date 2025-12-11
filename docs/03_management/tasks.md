@@ -24,8 +24,8 @@ Status: `[/]` 進行中
     - [x] `docs/02_guidelines/development-guidelines.md` (開発)
     - [x] `docs/02_guidelines/testing-guidelines.md` (テスト)
     - [x] **[Final Review]** Ensure all guidelines are consistent (Clean Architecture).
-- [ ] **プロジェクトセットアップ**
-    - [ ] GitHubリポジトリの作成とRemote設定
+- [x] **プロジェクトセットアップ**
+    - [x] GitHubリポジトリの作成とRemote設定
     - [x] Next.js アプリの初期化 (App Router, TypeScript)
     - [x] Tailwind CSS & デザインシステムの設定 (Fonts, Colors)
     - [x] ESLint & Prettier の設定
@@ -34,7 +34,7 @@ Status: `[/]` 進行中
     - [ ] Supabase プロジェクトのセットアップ (Auth: SSO Only)
     - [ ] **ドメイン設定:** `preludiolab.com` の取得とVercelへの紐付け
 - [ ] **DevOps & QA基盤構築**
-    - [ ] GitHub Actions Workflow作成: `ci-check.yml` (Lint / TypeCheck / Unit Test)
+    - [x] GitHub Actions Workflow作成: `ci-check.yml` (Lint / TypeCheck / Unit Test)
     - [ ] Vitest テスト環境のセットアップ
 - [ ] **AIエージェント環境構築 (AI Env)**
     - [ ] `agents/` ディレクトリの初期化 (package.json, tsconfig.json)
@@ -43,8 +43,8 @@ Status: `[/]` 進行中
 
 ## Phase 0.8: MVP / プロトタイプ開発 (Prototype)
 - [ ] **静的モックの実装**
-    - [x] トップページのデザイン・実装 (Hardcoded)
-    - [x] 記事詳細ページのレイアウト確認 (Dummy Data)
+    - [x] トップページのデザイン・実装 (Hardcoded + Design Tokens)
+    - [x] 記事詳細ページのレイアウト確認 (Dummy Data + Skeleton)
     - [x] 楽譜・プレイヤーのプレースホルダー配置
 - [ ] **デプロイ・動作確認**
     - [ ] Vercelへの初回デプロイ
@@ -54,12 +54,13 @@ Status: `[/]` 進行中
 - [ ] **楽譜レンダリングエンジン** (Ref: `REQ-TECH-SCORE` TBD)
     - [ ] 要件と完了条件（Acceptance Criteria）の定義
     - [ ] `ScoreRenderer` コンポーネントの実装 (`react-abc` / `verovio`)
+    - [ ] `ScoreRenderer` コンポーネントの実装 (`react-abc` / `verovio`)
     - [ ] SVGレンダリングパフォーマンスの検証
-    - [ ] スケルトン表示 (Loading State) の実装 (Ref: `REQ-UI-006-01`)
+    - [x] スケルトン表示 (Loading State) の実装 (Ref: `REQ-UI-006-01`)
 - [ ] **オーディオプレイヤー統合** (Ref: `REQ-TECH-AUDIO`)
     - [ ] 要件と完了条件の定義
     - [ ] `AudioPlayer` コンポーネントの実装 (YouTube IFrame API)
-    - [ ] UIモード実装: Mini Player (Footer) & Focus Mode (Ref: `REQ-UI-004-02`)
+    - [x] UIモード実装: Mini Player (Footer) & Focus Mode (Ref: `REQ-UI-004-02`)
     - [ ] 楽譜との同期ロジックの実装（任意/将来対応）
 - [ ] **多言語MDXシステム & コンテンツフロー**
     - [ ] MDXディレクトリ構成の設計 (`content/[lang]/...`)
@@ -99,7 +100,7 @@ Status: `[/]` 進行中
     - [ ] サイトマップ & Robots.txt の生成
     - [ ] RSSフィードの生成 (Ref: `REQ-TECH-SEO-001`)
 - [ ] **コンプライアンス**
-    - [ ] Cookie同意バナー (GDPR Consent) の実装 (Ref: `REQ-UI-006-02`)
+    - [x] Cookie同意バナー (GDPR Consent) の実装 (Ref: `REQ-UI-006-02`)
 - [ ] **マネタイズ実装**
     - [ ] 楽譜アフィリエイトリンクの実装 (Ref: `REQ-BIZ-001`)
     - [ ] 寄付/スポンサーボタンの実装 (Ref: `REQ-BIZ-002`)

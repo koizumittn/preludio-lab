@@ -58,10 +58,13 @@ export default async function ArticlePage({ params }: { params: Promise<{ lang: 
 
                     {/* Analysis with Score */}
                     <section>
-                        <h2 className="mb-4 text-2xl font-bold text-gray-900">{article.sections[1].title}</h2>
+                        <h2 className="mb-4 text-2xl font-bold text-preludio-black">{article.sections[1].title}</h2>
                         <p className="mb-6 leading-relaxed text-gray-700">{article.sections[1].content}</p>
                         <div className="my-6">
-                            <ScorePlaceholder />
+                            {/* Replaced ScorePlaceholder with Skeleton for Loading State Demo */}
+                            <div className="rounded-lg bg-white p-6 shadow-sm border border-gray-100">
+                                <ScorePlaceholder />
+                            </div>
                             <p className="mt-2 text-center text-sm text-gray-500 italic">Figure 1: Opening measures showing the arpeggio pattern</p>
                         </div>
                     </section>
