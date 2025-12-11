@@ -54,14 +54,18 @@ Status: `[/]` 進行中
     - [ ] 要件と完了条件（Acceptance Criteria）の定義
     - [ ] `ScoreRenderer` コンポーネントの実装 (`react-abc` / `verovio`)
     - [ ] SVGレンダリングパフォーマンスの検証
-- [ ] **オーディオプレイヤー統合** (Ref: `REQ-TECH-AUDIO` TBD)
+    - [ ] **[New]** スケルトン表示 (Loading State) の実装 (Ref: `REQ-UI-006-01`)
+- [ ] **オーディオプレイヤー統合** (Ref: `REQ-TECH-AUDIO`)
     - [ ] 要件と完了条件の定義
     - [ ] `AudioPlayer` コンポーネントの実装 (YouTube IFrame API)
+    - [ ] **[New]** UIモード実装: Mini Player (Footer) & Focus Mode (Ref: `REQ-UI-004-02`)
     - [ ] 楽譜との同期ロジックの実装（任意/将来対応）
 - [ ] **多言語MDXシステム & コンテンツフロー**
     - [ ] MDXディレクトリ構成の設計 (`content/[lang]/...`)
     - [ ] MDX Loader / Parser の実装
     - [ ] Pagefind 検索の実装 (Ref: `technology-requirements`)
+    - [ ] **[New]** 目次 (TOC) 自動生成機能の実装 (Ref: `REQ-UI-005-02`)
+    - [ ] **[New]** シリーズナビゲーション (Previous/Next/Index) の実装 (Ref: `REQ-CONT-SERIES`)
     - [ ] **[New]** コンテンツパイプラインの定義: Agent出力(MDX) -> Git PR -> Deployの流れを検証
 
 ## Phase 2: AIエージェント開発 ("Brain") & コンテンツ量産
@@ -78,7 +82,9 @@ Status: `[/]` 進行中
 - [ ] **SEO最適化** (Ref: `REQ-GOAL-001`)
     - [ ] 動的メタデータ生成の実装
     - [ ] サイトマップ & Robots.txt の生成
-- [ ] **マネタイズ実装**
+    - [ ] **[New]** RSSフィードの生成 (Ref: `REQ-TECH-SEO-001`)
+- [ ] **コンプライアンス & マネタイズ**
+    - [ ] **[New]** Cookie同意バナー (GDPR Consent) の実装 (Ref: `REQ-UI-006-02`)
     - [ ] 楽譜アフィリエイトリンクの実装 (Ref: `REQ-BIZ-001`)
     - [ ] 寄付/スポンサーボタンの実装 (Ref: `REQ-BIZ-002`)
     - [ ] オリジナルコンテンツへの誘導実装 (Ref: `REQ-BIZ-003`)
