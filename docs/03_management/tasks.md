@@ -54,37 +54,52 @@ Status: `[/]` 進行中
     - [ ] 要件と完了条件（Acceptance Criteria）の定義
     - [ ] `ScoreRenderer` コンポーネントの実装 (`react-abc` / `verovio`)
     - [ ] SVGレンダリングパフォーマンスの検証
-    - [ ] **[New]** スケルトン表示 (Loading State) の実装 (Ref: `REQ-UI-006-01`)
+    - [ ] スケルトン表示 (Loading State) の実装 (Ref: `REQ-UI-006-01`)
 - [ ] **オーディオプレイヤー統合** (Ref: `REQ-TECH-AUDIO`)
     - [ ] 要件と完了条件の定義
     - [ ] `AudioPlayer` コンポーネントの実装 (YouTube IFrame API)
-    - [ ] **[New]** UIモード実装: Mini Player (Footer) & Focus Mode (Ref: `REQ-UI-004-02`)
+    - [ ] UIモード実装: Mini Player (Footer) & Focus Mode (Ref: `REQ-UI-004-02`)
     - [ ] 楽譜との同期ロジックの実装（任意/将来対応）
 - [ ] **多言語MDXシステム & コンテンツフロー**
     - [ ] MDXディレクトリ構成の設計 (`content/[lang]/...`)
     - [ ] MDX Loader / Parser の実装
     - [ ] Pagefind 検索の実装 (Ref: `technology-requirements`)
-    - [ ] **[New]** 目次 (TOC) 自動生成機能の実装 (Ref: `REQ-UI-005-02`)
-    - [ ] **[New]** シリーズナビゲーション (Previous/Next/Index) の実装 (Ref: `REQ-CONT-SERIES`)
-    - [ ] **[New]** コンテンツパイプラインの定義: Agent出力(MDX) -> Git PR -> Deployの流れを検証
+    - [ ] 目次 (TOC) 自動生成機能の実装 (Ref: `REQ-UI-005-02`)
+    - [ ] シリーズナビゲーション (Previous/Next/Index) の実装 (Ref: `REQ-CONT-SERIES`)
+    - [ ] コンテンツパイプラインの定義: Agent出力(MDX) -> Git PR -> Deployの流れを検証
 
 ## Phase 2: AIエージェント開発 ("Brain") & コンテンツ量産
 - [ ] **音楽学者エージェント (Musicologist Agent)**
-    - [ ] Script実装: `src/prompts/musicologist.ts` (楽曲分析・ABC譜面生成)
-    - [ ] Tool実装: `src/tools/youtube.ts` (YouTube Data API 検索)
-    - [ ] Orchestrator実装: `agents/src/index.ts` (Gemini API呼び出し制御)
-    - [ ] テスト: バッハ「平均律第1番」での生成品質検証 (Ref: `REQ-TECH-AGENT-003`)
+    - [ ] **Prompt Design:**
+        - [ ] 楽曲構造分析プロンプトの設計 (Music Theory)
+        - [ ] ABC譜面生成プロンプトの設計 (Notation Rules)
+    - [ ] **Implementation:**
+        - [ ] Tool実装: `src/tools/youtube.ts` (YouTube Data API 検索)
+        - [ ] Orchestrator実装: `agents/src/index.ts` (Gemini API呼び出し制御)
+    - [ ] **Verification:**
+        - [ ] テスト: バッハ「平均律第1番」での生成品質検証 (Ref: `REQ-TECH-AGENT-003`)
+
 - [ ] **翻訳エージェント (Translator Agent)**
-    - [ ] Script実装: `src/prompts/translator.ts` (多言語展開)
-    - [ ] テスト: 7言語への並列翻訳と正当性検証 (Ref: `REQ-TECH-AGENT-004`)
+    - [ ] **Prompt Design:**
+        - [ ] 多言語翻訳プロンプトの設計 (Tone & Style Guide)
+    - [ ] **Implementation (Core):**
+        - [ ] 翻訳Orchestratorの実装 (Parallel Execution)
+    - [ ] **Implementation & Verification (Per Language):**
+        - [ ] 英語 (EN) の出力検証
+        - [ ] スペイン語 (ES) の出力検証
+        - [ ] ドイツ語 (DE) の出力検証
+        - [ ] フランス語 (FR) の出力検証
+        - [ ] イタリア語 (IT) の出力検証
+        - [ ] 中国語 (ZH) の出力検証
 
 ## Phase 3: ビジネス・成長施策 (Ref: `business-requirements.md`)
 - [ ] **SEO最適化** (Ref: `REQ-GOAL-001`)
     - [ ] 動的メタデータ生成の実装
     - [ ] サイトマップ & Robots.txt の生成
-    - [ ] **[New]** RSSフィードの生成 (Ref: `REQ-TECH-SEO-001`)
-- [ ] **コンプライアンス & マネタイズ**
-    - [ ] **[New]** Cookie同意バナー (GDPR Consent) の実装 (Ref: `REQ-UI-006-02`)
+    - [ ] RSSフィードの生成 (Ref: `REQ-TECH-SEO-001`)
+- [ ] **コンプライアンス**
+    - [ ] Cookie同意バナー (GDPR Consent) の実装 (Ref: `REQ-UI-006-02`)
+- [ ] **マネタイズ実装**
     - [ ] 楽譜アフィリエイトリンクの実装 (Ref: `REQ-BIZ-001`)
     - [ ] 寄付/スポンサーボタンの実装 (Ref: `REQ-BIZ-002`)
     - [ ] オリジナルコンテンツへの誘導実装 (Ref: `REQ-BIZ-003`)
