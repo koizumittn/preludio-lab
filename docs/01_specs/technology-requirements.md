@@ -72,9 +72,10 @@ Google Generative AI SDK for Node.js を使用したカスタムスクリプト�
 検索エンジンからの流入最大化と、SNSでの拡散力強化を技術面から支える。
 
 *   **[REQ-TECH-SEO-001] Sitemap & RSS:** `next-sitemap` 等を使用し、全多言語ページのsitemap.xmlとRSSフィードをビルド時に自動生成する。
-*   **[REQ-TECH-SEO-002] Dynamic OGP (Open Graph Protocol) Generation:** SNSシェア時のクリック率（CTR）を最大化するため、アイキャッチ画像を動的に生成する。
-    *   **Method:** `vercel/og` を使用し、記事のメタデータ（タイトル・作曲家）と「譜面の冒頭（SVG）」を自動合成する。これにより、個別の画像作成コストをかけずに、音楽ファンに刺さるリッチなシェア体験を提供する。
-    *   **Performance:** Edge Functionでの生成により、SNSクローラーに対しても高速(<1s)に応答する。
+*   **[REQ-TECH-SEO-002] Dynamic OGP Generation (Hybrid):** 記事のカテゴリに応じて最適な画像を生成・配信する。
+    *   **Work/Introduction:** 楽曲のユニークさを伝えるため、**「譜面の冒頭（SVG）」**とタイトルを合成する。作曲家のイラストだけでは、同じ作曲家の別の曲と区別がつかないため。
+    *   **Composer/Column:** **「作曲家のポートレート（イラスト）」**や任意のサムネイル画像（`thumbnail` frontmatter）を使用し、キャッチーさを優先する。
+    *   **Implementation:** `vercel/og` を使用し、これらのロジックをEdge Function上で動的に振り分ける。
 *   **[REQ-TECH-SEO-003] Structured Data (JSON-LD):** Googleの「Rich Results」に対応するため、`MusicComposition` や `Article` タイプの構造化データを自動埋め込みする。
 
 ## 5. Security Architecture
