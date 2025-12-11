@@ -73,7 +73,7 @@
 | :--- | :--- | :--- | :--- | :--- |
 | **title** | `string` | **Yes** | 記事のタイトル。 | "Prelude in C Major, BWV 846" |
 | **description** | `string` | **Yes** | 記事の概要（Meta Description用）。120文字以内。 | - |
-| **category** | `enum` | **Yes** | 記事の分類。 | `Introduction`, `Composer`, `Theory` etc. |
+| **category** | `enum` | **Yes** | 記事の分類。 | `Introduction`, `Composer`, `Theory`, `Era`, `Instrument`, `Performer`, `Terminology`, `Column`, `Originals` |
 | **composer** | `string` | No | 作曲家名（各言語の一般表記）。`Introduction` カテゴリでは必須。 | "Johann Sebastian Bach" |
 | **work_id** | `string` | No | 作品番号。`Introduction` カテゴリでは必須。 | "BWV 846", "Op. 57" |
 | **key** | `string` | No | 調性。 | "C Major", "cis-moll" |
@@ -84,3 +84,5 @@
 | **series** | `string` | No | シリーズID（Slug）。シリーズに含まれる場合のみ指定。 | "well-tempered-clavier-book1" |
 | **thumbnail** | `string` | No | サムネイル画像パス（OGP用）。 | "/images/scores/bwv846.jpg" |
 | **youtube_id** | `string` | No | メイン音源のYouTube ID（自動埋め込み用）。 | "dQw4w9WgXcQ" |
+| **youtube_start** | `string` | No | YouTube再生開始時間（HH:MM:SS）。 | "00:00:00" |
+| **youtube_end** | `string` | No | YouTube再生終了時間（HH:MM:SS）。 | "00:00:00" |

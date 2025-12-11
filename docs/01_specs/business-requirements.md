@@ -69,7 +69,7 @@ YouTubeなどのコンテンツプラットフォームから良質な動画・�
     *   **[REQ-USER-001-AC01]** 主要な音楽用語（Cadence, Motifなど）が各言語で正しく定義されていること。
     *   **[REQ-USER-001-AC02]** 記事の言語切り替えが1クリックで行えること。
 
-### [REQ-USER-002] The Listener (聴取者)
+### [REQ-USER-002] The Listener (聴講者)
 *   **[REQ-USER-002-01] Profile:** 楽譜を目で追いながら、YouTube音源を聴きたい層。
 *   **[REQ-USER-002-02] Needs:** 音楽体験の向上。楽譜が読めなくても「今どこを弾いているか」がわかる体験。
 *   **Acceptance Criteria:**
