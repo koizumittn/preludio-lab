@@ -143,3 +143,12 @@ Antigravity IDE および Agent Script 開発時の指針。
   * **Throttling:** APIコールを行うスクリプトには、必ずレートリミット（RPM）を考慮したWait処理を入れること。
   * **Safety:** AIエージェントによる `master` ブランチへの直コミットは禁止。必ずPull Requestを作成させる。
 
+## 6. Guidelines Index
+プロジェクトの具体的な規約については、以下の個別ガイドラインを参照すること。
+
+*   **[Naming Conventions](naming-conventions.md):** ファイル名、変数名、ID命名規則。
+*   **[Development Guidelines](development-guidelines.md):** Next.js/React コーディング規約、セキュリティ、Styling。
+*   **[Score Notation](score-notation-guidelines.md):** ABC記法の記述ルール、OGP用スニペット品質基準。
+*   **[Localization](localization-guidelines.md):** 7言語対応方針、AI翻訳ポリシー、用語辞書。
+*   **[Testing](testing-guidelines.md):** 単体・統合・E2Eテストの戦略と対象環境。
+*   **[Prompt Standard](prompt-engineering-standard.md):** AIエージェント（Musicologist/Translator）の定義とプロンプト設計規則。

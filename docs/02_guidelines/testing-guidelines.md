@@ -20,10 +20,11 @@
     *   `ScoreRenderer` などのコア機能コンポーネント。
     *   ユーザーインタラクション（クリック、入力）を伴うUI。
 
-## 4. E2E Testing (Future)
+## 4. E2E Testing (Phase 4+)
 **Tool:** `Playwright`
 
-*   **Target:**
-    *   トップページから記事詳細への遷移。
-    *   多言語切り替えの動作確認。
-    *   本番デプロイ前の最終確認（Smoke Test）。
+*   **Target Environment:** **Verification Environment (Vercel Preview)** に対して実行する。`localhost` ではない。
+*   **Scenarios:**
+    *   トップページから楽曲記事への遷移とレンダリング確認。
+    *   多言語切り替え機能の動作テスト。
+    *   **Smoke Test:** 本番リリース前の必須チェック項目（例: 500エラーが出ていないか）。

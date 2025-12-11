@@ -17,12 +17,21 @@
 | **Utilities / Libs** | `kebab-case` | `date-formatter.ts` | 関数ライブラリなど。 |
 | **Next.js Routes** | `kebab-case` | `app/blog/[slug]/page.tsx` | URLの一部になるため小文字。 |
 
-### Content Files (MDX)
-*   **Rule:** `kebab-case` (All Lowercase)
-*   **Format:** `{work-id}-{title-slug}.mdx` or `{topic-slug}.mdx`
-    *   Good: `bwv846-prelude-in-c.mdx`
-    *   Good: `beethoven-symphony-5.mdx`
-    *   Bad: `BWV846.mdx` (大文字混じり), `symphony_5.mdx` (アンダースコア)
+### Content Files (MDX) (Ref: `content-requirements.md`)
+記事MDXファイルの配置と命名は、カテゴリ (`REQ-CONT-TAX`) に従う。
+
+*   **Root Directory:** `content/[lang]/`
+*   **Categories & Patterns:**
+    *   **Introduction (楽曲):** `works/{composer-slug}/{work-slug}.mdx`
+        *   Example: `works/bach/prelude-in-c.mdx`
+    *   **Composer (作曲家):** `composers/{composer-slug}.mdx`
+        *   Example: `composers/bach.mdx`
+    *   **Theory (理論):** `theory/{topic-slug}.mdx`
+        *   Example: `theory/sonata-form.mdx`
+    *   **Era, Instrument, Performer:** それぞれ `eras/`, `instruments/`, `performers/` 配下。
+    *   **Column:** `columns/{year}/{slug}.mdx`
+        *   Example: `columns/2025/music-in-movies.mdx`
+*   **Slug Rules:** 英語小文字、ハイフン繋ぎ (`kebab-case`)。冠詞 (the, a) は省略推奨。
 
 ## 3. Code Identifiers
 *   **Variables / Functions:** `camelCase` (e.g., `isValid`, `fetchData`)
@@ -34,7 +43,7 @@
     *   `feat/score-renderer`
     *   `fix/typo-in-handbook`
     *   `docs/update-naming-rules`
-*   **Commits:** Conventional Commits に準拠し、以下のPrefixを使用する。
+### Commits
     *   **Prefix List:**
         *   `feat`: 機能開発 (New features for the application code). ※業界標準は `feat` (featureの略) です。
         *   `content`: **[New]** コンテンツの追加・修正 (MDX files, images).
@@ -46,3 +55,15 @@
         *   `feat: 楽譜レンダラーの実装`
         *   `content: バッハ「前奏曲」の記事を追加`
         *   `docs: 命名規則ガイドラインの更新`
+
+## 5. Requirement IDs
+要件定義書で使用するIDの命名規則。
+
+| Pattern | Category | Example | Reference |
+| :--- | :--- | :--- | :--- |
+| **REQ-BIZ-XXX** | Business Goals | `REQ-BIZ-GOAL-001` | `business-requirements.md` |
+| **REQ-USER-XXX** | User / Persona | `REQ-USER-001` | `business-requirements.md` |
+| **REQ-TECH-STACK-XXX** | Tech Stack | `REQ-TECH-STACK-001` | `technology-requirements.md` |
+| **REQ-TECH-AGENT-XXX** | AI Agent | `REQ-TECH-AGENT-001` | `technology-requirements.md` |
+| **REQ-UI-XXX** | UI/UX | `REQ-UI-001` | `ui-ux-requirements.md` |
+| **REQ-CONT-XXX** | Content | `REQ-CONT-TAX-001` | `content-requirements.md` |

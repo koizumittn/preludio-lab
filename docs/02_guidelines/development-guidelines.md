@@ -33,3 +33,13 @@ Next.js App Router (v15+) をベースとしたディレクトリ構成と責任
 ## 4. CI/CD Operations
 *   **CI:** GitHub Actionsにより、Lint, TypeCheck, Unit Test を自動実行。
 *   **CD:** Vercel Integrationにより自動デプロイ。
+
+## 5. Styling Guidelines (Tailwind CSS)
+*   **Utility First:** 原則として `className` にTailwindのユーティリティクラスを直接記述する。`@apply` は再利用性が極めて高い場合（ボタン等）に限定する。
+*   **No Arbitrary Values:** `w-[350px]` のようなArbitrary Valueの使用は避け、`tailwind.config.ts` で定義されたトークン（Spacing, Colors）を使用する。デザインシステムの一貫性を保つため。
+*   **Responsiveness:** モバイルファーストで記述する。`md:flex` のように、ブレークポイント以上のスタイルをプレフィックスで指定する。
+
+## 6. Security & Database Guidelines (Supabase)
+*   **RLS (Row Level Security):** すべてのテーブルに対して RLS を有効化 (`ENABLE ROW LEVEL SECURITY`) し、ポリシーを明示的に定義する。
+*   **No Raw SQL:** SQLインジェクションを防ぐため、Supabase Client SDK (`supabase-js`) のメソッドチェーンのみを使用する。生SQLの実行は禁止。
+*   **Secrets:** APIキーや接続文字列は `.env.local` で管理し、リポジトリにはコミットしない。クライアント側に露出させる変数は `NEXT_PUBLIC_` プレフィックスを付けるが、最小限に留める。

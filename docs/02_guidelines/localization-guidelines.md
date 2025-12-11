@@ -3,7 +3,16 @@
 ## 1. Supported Languages
 *   **English (en):** グローバル標準。アメリカ英語 (US) をベースとする。
 *   **Spanish (es):** 欧州・中南米向け。汎用的なスペイン語 (Neutral Spanish) を目指す。
-*   **Japanese (ja):** 日本国内向け。
+*   **Japanese (ja):** 日本国内向け（Source Language）。
+*   **German (de):** 音楽用語の正確性を重視（独: Satz, Takt etc.）。
+*   **French (fr):** 芸術的な表現を尊重する。
+*   **Italian (it):** 音楽用語の故郷として、自然な表現を目指す。
+*   **Chinese (zh):** 簡体字 (zh-CN) を採用する。
+
+## 5. AI Translation Policy (Ref: `REQ-GOAL-003-03`)
+*   **Automation:** 翻訳プロセスは **100% AIエージェント** により実行される。人間によるレビューは行わない（コスト削減のため）。
+*   **Source of Truth:** 日本語 (ja) をマスターとし、他言語への翻訳漏れがないよう管理する。
+*   **Feedback Loop:** ユーザーからの誤訳報告があった場合のみ、個別に修正を行う。
 
 ## 2. Musical Terminology Policy
 音楽用語の翻訳において、専門性と分かりやすさのバランスを定義する。

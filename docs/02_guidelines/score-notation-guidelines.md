@@ -37,3 +37,15 @@ K: C
 %%staffwidth 500
 "C" c2 e2 g2 c'2 | "F" (a2 f2) c2 A2 | "G7" B2 d2 f2 g2 | "C" c4 z4 |]
 ```
+
+## 5. Excerpt Policy (Ref: `REQ-CONT-STR-006`)
+*   **Length:** 視覚的な譜例は **4〜8小節** に留める。スマートフォンでの視認性を最優先し、長すぎる譜例は分割する。
+*   **Context:** 譜例は短くても、音声再生は「その後の展開」まで続ける（Contextual Playback）。
+
+## 6. OGP & Validation Schema
+*   **OGP Snippet (`ogp_excerpt`):**
+    *   **Rule:** OGP画像用に個別のABCコードを用意する。
+    *   **Scale:** `%%scale 1.5` 程度に拡大し、タイトルと冒頭2-4小節のみを表示する（スマホのタイムラインで視認可能にするため）。
+*   **Validation:**
+    *   **Render Check:** 必ず `verovio` などのレンダラーで描画崩れがないか確認する。
+    *   **Audio Check:** YouTubeのタイムスタンプと譜面の同期がズレていないか、実機（またはプレビュー）で確認する。
