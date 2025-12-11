@@ -82,3 +82,5 @@
 | **date** | `date` | **Yes** | 公開日 (YYYY-MM-DD)。 | "2025-12-09" |
 | **updated** | `date` | No | 最終更新日 (YYYY-MM-DD)。 | - |
 | **series** | `string` | No | シリーズID（Slug）。シリーズに含まれる場合のみ指定。 | "well-tempered-clavier-book1" |
+| **thumbnail** | `string` | No | サムネイル画像パス（OGP用）。 | "/images/scores/bwv846.jpg" |
+| **youtube_id** | `string` | No | メイン音源のYouTube ID（自動埋め込み用）。 | "dQw4w9WgXcQ" |
