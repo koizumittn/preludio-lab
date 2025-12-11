@@ -153,6 +153,16 @@ graph TD
 *   **Client-Side:**
     *   **Development:** `console.log/error` を使用してデバッグを行う。
     *   **Production:** **Sentry** を標準のエラー監視ツールとして採用する。`console.log` はビルド時に削除（`removeConsole`）することを推奨する。
+*   **Traceability (Request ID Policy):**
+    分散システムにおけるログの相関関係（Correlation）を担保するため、以下の3点の実装を必須とする。
+    1.  **Generation (Middleware):**
+          * `src/middleware.ts` にて、全てのリクエストに対し一意な `crypto.randomUUID()` を生成する。
+          * 生成したIDをHTTPリクエストヘッダー `X-Request-ID` に付与して後続処理に渡す。
+    2.  **Propagation (Server Action / Controller):**
+          * Server Actionの冒頭で `next/headers` を使用して `X-Request-ID` を取得する。
+          * Logger（`PinoLogger`）のインスタンス化時、またはメソッド呼び出し時にこのIDを渡す。（**Dependency Injection**）
+    3.  **Output (Logger Implementation):**
+          * `PinoLogger` は受け取った Request ID を内部に保持し、出力される全てのログレコード（JSON）のルートまたは `trace` プロパティ内に `{ requestId: "..." }` を含める。
 
 #### C. Log Level & Timing
 *   **When to Log (ログ出力すべきタイミング):**
