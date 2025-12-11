@@ -139,3 +139,11 @@ SaaSの標準機能を最大限活用し、追加開発コストをかけずに�
 
 ### [REQ-NFR-004] Fault Tolerance
 *   **[REQ-NFR-004-01] Graceful Degradation:** 外部API（YouTube, Gemini）の障害時は、エラーページではなく「代替表示（リンク表示やキャッシュ済みデータ）」を行い、サイト全体の停止を防ぐ。
+
+### [REQ-NFR-005] Volume & Limits
+想定されるデータ量とアクセス規模に対し、性能劣化を起こさない設計とする。
+*   **[REQ-NFR-005-01] Traffic Volume:** ビジネス要件 [REQ-GOAL-001-01] にある **100万人/月 (MAU)** のアクセスに耐えうるアーキテクチャとする（Vercel CDN / Serverless Functionsの自動スケールにより担保）。
+*   **[REQ-NFR-005-02] Content Volume:** 記事数が **1,000件** を超えても、以下の性能を維持する。
+    *   **Search:** Pagefind インデックス分割により、検索応答速度を一定（100ms以下）に保つ。
+    *   **Build:** 増分ビルド（Incremental Static Regeneration）または分割ビルドを活用し、デプロイ時間を15分以内に抑える。
+    *   **Navigation:** 記事数増加によるルーティング解決の遅延を発生させない（Dynamic Routes + ISR）。
