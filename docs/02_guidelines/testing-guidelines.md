@@ -1,30 +1,73 @@
-# Testing Guidelines (v1.0)
+# Testing Guidelines (v2.0 - Clean Architecture)
+
+開発ガイドラインで定義された「クリーンアーキテクチャ」のレイヤー構造に基づき、各層のテスト戦略を規定します。
 
 ## 1. Testing Philosophy (The Test Pyramid)
-*   **Unit Tests:** 多めに書く。ロジックの正しさを保証する。高速。
-*   **Integration Tests:** 必要に応じて。コンポーネント間の連携を確認する。
-*   **E2E Tests:** 重要導線のみ。ユーザー体験を保証する。低速で壊れやすい。
+**「ドメインロジックの純粋性と堅牢性」** を最優先します。
+UIやインフラは変わりやすいため、そこに依存しない `Domain` と `Application` 層のテストカバレッジを厚くします。
 
-## 2. Unit Testing Strategy
-**Tool:** `Vitest` (Jest互換、Viteネイティブ)
+## 2. Layer-by-Layer Strategy
 
-*   **Target:**
-    *   `src/lib/` 配下のユーティリティ関数（特にMDXパーサー、ABC記法変換ロジック）。
-    *   複雑なロジックを持つCustom Hooks。
-*   **Naming:** `*.test.ts` または `*.test.tsx`。対象ファイルの真横に配置する（Colocation）。
+### 2.1. Domain Layer (`src/domain/`)
+**最も重要。ビジネスルールの正しさを保証するため、極めて高いカバレッジを目指します。**
 
-## 3. Integration / Component Testing
-**Tool:** `React Testing Library`
+*   **Type:** **Pure Unit Test**
+*   **Tool:** `Vitest`
+*   **Strategy:**
+    *   外部依存やモック（Mock）は一切使用しません。入力に対する出力が正しいかを検証します。
+    *   境界値テスト（Boundary Value Analysis）を重点的に行います。
+*   **Target:** `Entities`, `Domain Services`
 
-*   **Target:**
-    *   `ScoreRenderer` などのコア機能コンポーネント。
-    *   ユーザーインタラクション（クリック、入力）を伴うUI。
+### 2.2. Application Layer (`src/application/`)
+**ユースケース（処理の流れ）が正しく構成されているかを確認します。**
 
-## 4. E2E Testing (Phase 4+)
-**Tool:** `Playwright`
+*   **Type:** **Unit Test (with Mocks)**
+*   **Tool:** `Vitest`
+*   **Strategy:**
+    *   `src/domain/repositories` のインターフェースを **Mock化** してテストします（Repositoryの挙動は制御下に置く）。
+    *   「正常系」だけでなく「リポジトリがエラーを吐いた場合」などの「異常系」もテストします。
+*   **Target:** `Use Case` classes
 
-*   **Target Environment:** **Verification Environment (Vercel Preview)** に対して実行する。`localhost` ではない。
-*   **Scenarios:**
-    *   トップページから楽曲記事への遷移とレンダリング確認。
-    *   多言語切り替え機能の動作テスト。
-    *   **Smoke Test:** 本番リリース前の必須チェック項目（例: 500エラーが出ていないか）。
+### 2.3. Infrastructure Layer (`src/infrastructure/`)
+**外部システム（Supabase, API）との連携が正しく行えるかを確認します。**
+
+*   **Type:** **Integration Test**
+*   **Tool:** `Vitest`
+*   **Strategy:**
+    *   基本的には「モック」を使用しますが、重要なパス（Supabaseへの接続など）については、テスト環境やエミュレータを用いた結合テストを検討します。
+    *   外部APIのアダプターは、レスポンスのパース処理が正しいかをテストします。
+
+### 2.4. UI Layer (`src/app/`, `src/components/`)
+**見た目とユーザーインタラクションを確認します。**
+
+*   **Type:** **Component Test / E2E**
+*   **Tools:** `React Testing Library`, `Storybook`, `Playwright`
+*   **Strategy:**
+    *   **Presentation (`src/components`):** `Storybook` での見た目確認、`React Testing Library` でのインタラクション（クリック等）確認。
+    *   **Controller (`src/app`):** E2Eテストでカバーします。複雑なロジックはここには無いはずなので、単体テストは不要です。
+
+## 3. Tooling Stack
+
+| Category | Tool | Scope |
+| :--- | :--- | :--- |
+| **Unit / Integration** | **Vitest** | Domain, Application, Infra |
+| **Component** | **Storybook** | UI Components (Visual) |
+| **E2E** | **Playwright** | Critical User Flows (Smoke Test) |
+
+## 4. Test Example (Pseudocode)
+
+### Domain Test
+```typescript
+// Score.test.ts
+const score = new Score({ level: 5 });
+expect(score.isDifficult()).toBe(true); // 純粋な計算
+```
+
+### Application Test
+```typescript
+// RegisterUserUseCase.test.ts
+const mockRepo = { save: vi.fn() }; // Mock
+const useCase = new RegisterUserUseCase(mockRepo);
+await useCase.execute(input);
+expect(mockRepo.save).toHaveBeenCalledWith(expectedUser); // 呼び出し確認
+```
