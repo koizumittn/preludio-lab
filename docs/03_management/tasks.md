@@ -25,6 +25,7 @@ Status: `[/]` 進行中
     - [x] `docs/02_guidelines/testing-guidelines.md` (テスト)
     - [x] **[Final Review]** Ensure all guidelines are consistent (Clean Architecture).
 - [ ] **プロジェクトセットアップ**
+    - [ ] GitHubリポジトリの作成とRemote設定
     - [x] Next.js アプリの初期化 (App Router, TypeScript)
     - [x] Tailwind CSS & デザインシステムの設定 (Fonts, Colors)
     - [x] ESLint & Prettier の設定
