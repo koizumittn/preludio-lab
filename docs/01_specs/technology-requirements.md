@@ -118,3 +118,21 @@ Google Generative AI SDK for Node.js を使用したカスタムスクリプト�
     *   複雑なコンポーネントの挙動確認。
 *   **E2E Testing:** `Playwright` (Phase 4以降)。
     *   重要導線（記事閲覧、検索、ログイン）の回帰テスト。
+
+## 7. Non-Functional Requirements (SaaS Native)
+SaaSの標準機能を最大限活用し、追加開発コストをかけずに非機能要件を担保する。
+
+### [REQ-NFR-001] Availability & Scalability
+*   **[REQ-NFR-001-01] Uptime:** VercelおよびSupabaseのSLA/SLOに準拠する（目標稼働率 99.9%）。
+*   **[REQ-NFR-001-02] Auto Scaling:** スパイクアクセス時はVercel Functionsの自動スケーリングにより処理する。サーバーのプロビジョニングは行わない。
+
+### [REQ-NFR-002] Performance
+*   **[REQ-NFR-002-01] Core Web Vitals:** Googleの提唱する指標（LCP, CLS, INP）において、モバイル/デスクトップ共に "Good" (緑) スコアを維持する。
+*   **[REQ-NFR-002-02] Edge Caching:** 静的コンテンツ（MDX生成されたHTML、画像、楽譜SVG）はVercel Edge Networkでキャッシュし、オリジン到達を最小化する。
+
+### [REQ-NFR-003] Data Integrity & Backup
+*   **[REQ-NFR-003-01] Content as Code:** 記事、画像のマスターデータは全てGitHubリポジトリで管理し、**「Gitが唯一の正解（Source of Truth）」**となる状態を維持する。これにより、DB障害時の復旧（Disaster Recovery）をgit cloneのみで可能にする。
+*   **[REQ-NFR-003-02] User Data (Best Effort):** Supabase Free Tierの標準バックアップ機能（Daily）に依存する。ユーザーデータ（お気に入り等）は「消失してもサービス提供自体は継続可能」な区分とし、過剰な冗長化コストをかけない。
+
+### [REQ-NFR-004] Fault Tolerance
+*   **[REQ-NFR-004-01] Graceful Degradation:** 外部API（YouTube, Gemini）の障害時は、エラーページではなく「代替表示（リンク表示やキャッシュ済みデータ）」を行い、サイト全体の停止を防ぐ。
