@@ -1,7 +1,7 @@
 # エージェント設計 (AI Agent Design)
 
 ## 1. エージェントアーキテクチャ (Agent Architecture)
-Ref: `technology-requirements.md` [REQ-TECH-010]
+Ref: `technology-requirements.md` [REQ-TECH-AGENT-FLOW-001]
 GitHub Actions上で動作する。
 
 ## 2. エージェント一覧 (Agent List)
