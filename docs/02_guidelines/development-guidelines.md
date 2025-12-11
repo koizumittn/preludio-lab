@@ -2,11 +2,11 @@
 
 ## 1. Application Architecture (Clean Architecture / Onion)
 
-AIによるコード生成精度と保守性を最大化するため、**厳格なクリーンアーキテクチャ（Onion Architecture）**を採用する。
-記述量が増える「ボイラープレート」のコストはAIが吸収するため無視し、**「関心事の分離」**と**「依存方向の厳守」**を最優先する。
+開発の効率性と保守性を最大化するため、**厳格なクリーンアーキテクチャ（Onion Architecture）**を採用する。
+記述量が増える「ボイラープレート」のコストよりも、**「関心事の分離」**と**「依存方向の厳守」**を最優先する。
 
 ### 1.1. Core Philosophy
-*   **Use Case層の導入:** UIとロジックを完全に切り離し、AIへの指示単位（Context）を明確にする。
+*   **Use Case層の導入:** UIとロジックを完全に切り離し、実装単位（Context）を明確にする。
 *   **DIP (Dependency Inversion Principle) の徹底:** `Domain` 層にインターフェースを置き、`Infrastructure` 層がそれを実装する。
 
 ### 1.2. Directory Structure
@@ -40,19 +40,19 @@ src/
 #### Domain Layer (`src/domain/`)
 *   **役割:** ビジネスの「用語」「ルール」「契約（インターフェース）」を定義する。
 *   **ルール:** 他のいかなる層（Application, Infra, UI）にも依存してはならない。
-*   **AI指示のポイント:** 「まずは技術詳細を無視して、TypeScriptの型とInterfaceだけ定義して」
+*   **実装のポイント:** 「まずは技術詳細を無視して、TypeScriptの型とInterfaceだけ定義する」
 
 #### Application Layer (`src/application/`)
 *   **役割:** ユーザーが「何をしたいか（ユースケース）」を表現する。
 *   **構成:**
     *   **Use Case:** ドメイン層のInterfaceを使って処理フローを記述する。具体的なDB操作は知らなくて良い。
     *   **DTO:** UI層とやり取りするための単純なデータ型。
-*   **AI指示のポイント:** 「Repository Interfaceを使って、〇〇を行うビジネスロジックを実装して」
+*   **実装のポイント:** 「Repository Interfaceを使って、〇〇を行うビジネスロジックを実装する」
 
 #### Infrastructure Layer (`src/infrastructure/`)
 *   **役割:** ドメイン層で定義されたInterfaceを、具体的な技術（Supabase, API）で実装する。
 *   **ルール:** ここを変更しても、DomainやApplication層のコードを変えてはならない。
-*   **AI指示のポイント:** 「Supabaseを使って `IUserRepository` の実体クラスを作成してください。」
+*   **実装のポイント:** 「Supabaseを使って `IUserRepository` の実体クラスを作成する」
 
 #### UI Layer (`src/app/`, `src/components/`)
 *   **役割:** データの表示とユーザー入力の受付。
@@ -104,8 +104,8 @@ graph TD
     class Entity,RepoIF domain;
 ```
 
-### 1.5. AI-Driven Development Workflow
-AIに対して、以下の順序で実装を依頼することで、コンテキストの混乱を防ぐ。
+### 1.5. Development Workflow
+以下の順序で実装を進めることで、依存関係の混乱を防ぐ。
 
 1.  **Phase 1: Domain Definition** (`src/domain` Entity & Interface)
 2.  **Phase 2: Use Case Implementation** (`src/application` Business Logic)
@@ -155,7 +155,7 @@ AIに対して、以下の順序で実装を依頼することで、コンテキ
     *   **Summary:** 何をしたか。
     *   **Related Issues:** 関連するIssue番号 closes #123.
     *   **Verification:** どうやって動作確認したか（スクショ、動画、コマンド）。
-*   **Review:** 最低1名の承認（Approve）を必須とする（AIエージェントによる自動承認も含む）。
+*   **Review:** 最低1名の承認（Approve）を必須とする。
 *   **Merge Strategy:** **Squash & Merge** を原則とする。
     *   **Reason:** 開発中の試行錯誤（typo修正など）の履歴を1つのコミットにまとめ、`master` の履歴を「機能単位」でクリーンに保つため。
 
