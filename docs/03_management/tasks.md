@@ -54,7 +54,7 @@ Status: `[/]` 進行中
 - [ ] **楽譜レンダリングエンジン** (Ref: `REQ-TECH-SCORE` TBD)
     - [ ] 要件と完了条件（Acceptance Criteria）の定義
     - [ ] `ScoreRenderer` コンポーネントの実装 (`react-abc` / `verovio`)
-    - [ ] `ScoreRenderer` コンポーネントの実装 (`react-abc` / `verovio`)
+
     - [ ] SVGレンダリングパフォーマンスの検証
     - [x] スケルトン表示 (Loading State) の実装 (Ref: `REQ-UI-006-01`)
 - [ ] **オーディオプレイヤー統合** (Ref: `REQ-TECH-AUDIO`)
