@@ -96,28 +96,36 @@ Google Generative AI SDK for Node.js を使用したカスタムスクリプト�
 
 ## 6. DevOps & QA Architecture
 
-### CI/CD Pipeline (GitHub Actions & Vercel)
-開発プロセスと品質担保の自動化。
+### [REQ-DEVOPS-ENV] Environment Definitions
+3層のランドスケープ定義により、品質担保と本番安定性を両立する。
 
-*   **Workflow A: Pull Request Checks (GitHub Actions)**
-    *   `main` へのPR作成時に発火。
-    *   **Lint:** ESLint / Prettier
-    *   **Type Check:** TypeScript (`tsc --noEmit`)
-    *   **Unit Test:** Vitest (Logic / Utils)
-*   **Workflow B: Agent Runner (GitHub Actions)**
-    *   Schedule / Manual Trigger で発火。
-    *   AIエージェントを実行し、コンテンツ生成PRを作成。
-*   **Workflow C: Deployment (Vercel)**
-    *   `main` へのマージ時に発火。
-    *   Production環境へ自動デプロイ。
+| Env ID | Environment | Infrastructure | Access URL | Purpose |
+| :--- | :--- | :--- | :--- | :--- |
+| **REQ-DEVOPS-ENV-001** | **Development** | **Local PC** | `localhost:3000` | 機能開発、単体テスト、AIエージェントの試運転。 |
+| **REQ-DEVOPS-ENV-002** | **Verification** | **Vercel Preview** | `*.vercel.app` | **Staging環境。** PR作成時に自動デプロイ。E2Eテスト、UI確認、Lighthouse計測を行う。 |
+| **REQ-DEVOPS-ENV-003** | **Production** | **Vercel Production** | `preludiolab.com` | **本番環境。** `master` ブランチと同期。エンドユーザー向け公開。 |
 
-### Testing Strategy
-*   **Unit Testing:** `Vitest` を使用。
-    *   ユーティリティ関数（ロジック）、ABC記法パーサー等のテスト。
-*   **Integration Testing:** `React Testing Library` (Optional)。
-    *   複雑なコンポーネントの挙動確認。
-*   **E2E Testing:** `Playwright` (Phase 4以降)。
-    *   重要導線（記事閲覧、検索、ログイン）の回帰テスト。
+### [REQ-DEVOPS-FLOW] CI/CD Pipeline & Branch Strategy
+GitHub Flowをベースに、Verification環境（Preview Deploy）を組み込んだワークフロー。
+
+*   **[REQ-DEVOPS-FLOW-001] Branch Strategy:**
+    *   `master`: 本番用ブランチ（常にProductionと同期）。直接コミット禁止。
+    *   `feat/*`, `fix/*`: 作業用ブランチ。`master` から派生し、PRを経て `master` へマージ。
+*   **[REQ-DEVOPS-FLOW-002] Workflow A: Pull Request (Verification):**
+    *   **Trigger:** `master` へのPR作成/更新。
+    *   **CI:** Build check, Lint (ESLint), Format (Prettier), Type check (tsc), Unit Test (Vitest) を実行。
+    *   **CD (Preview):** Vercel Preview Deployment を自動作成し、Verification環境のURLをPRにコメント通知。
+*   **[REQ-DEVOPS-FLOW-003] Workflow B: Production Release:**
+    *   **Trigger:** `master` へのマージ (Push)。
+    *   **CD (Production):** Vercel Production Deployment を実行し、本番環境 (`preludiolab.com`) を更新。
+*   **[REQ-DEVOPS-FLOW-004] Workflow C: Agent Runner:**
+    *   **Trigger:** Schedule / Manual Trigger.
+    *   **Action:** AIエージェントを実行し、コンテンツ生成PRを作成 (Workflow Aへ接続)。
+
+### [REQ-DEVOPS-TEST] Testing Strategy
+*   **[REQ-DEVOPS-TEST-001] Unit Testing:** `Vitest` を使用。ユーティリティ関数、ABCパーサー等のロジック検証。
+*   **[REQ-DEVOPS-TEST-002] Integration Testing:** `React Testing Library` (Optional)。複雑なコンポーネントの挙動確認。
+*   **[REQ-DEVOPS-TEST-003] E2E Testing:** `Playwright` (Phase 4以降)。重要導線（閲覧、検索、ログイン）の回帰テストをVerification環境に対して実行。
 
 ## 7. Non-Functional Requirements (SaaS Native)
 SaaSの標準機能を最大限活用し、追加開発コストをかけずに非機能要件を担保する。
