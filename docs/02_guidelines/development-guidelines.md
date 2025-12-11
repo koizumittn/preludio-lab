@@ -96,7 +96,7 @@ graph TD
     UseCase -->|4. Manipulate| Entity
     
     %% Infra Implementation
-    RepoImpl -.-|>|Implements| RepoIF
+    RepoImpl -.->|Implements| RepoIF
     RepoImpl -->|5. Fetch/Save| DB
 
     %% Styling
