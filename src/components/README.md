@@ -6,6 +6,9 @@
 ## ディレクトリ構造
 *   `features/`: ドメイン固有の機能コンポーネント (例: `ScoreRenderer`, `AudioPlayer`)。
 *   `ui/`: 再利用可能な共通UIパーツ (例: `Button`, `Card`)。
+*   `layouts/`: ヘッダー、フッター、サイドバーなどのレイアウト枠。
+*   `providers/`: React Context Providers (例: `ThemeProvider`, `AuthProvider`)。Client Componentとして実装し、`app/layout.tsx` でインポートする。
+*   `skeletons/`: Suspense 用のローディングスケルトン (例: `ScoreSkeleton`)。
 
 ## ルール (DOs)
 *   **DO** コンポーネントは純粋 (Pure) かつ決定的 (Deterministic) に保つ（同じPropsなら同じ表示になる）。
