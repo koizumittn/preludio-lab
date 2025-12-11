@@ -1,18 +1,18 @@
 # Services Directory Guidelines (Infrastructure Layer)
 
-This directory is the implementation of the **Repository Pattern**.
-It handles all external communication (APIs, DB, FileSystem).
+このディレクトリは **Repository Pattern (リポジトリパターン)** の実装場所です。
+外部システム（API, DB, ファイルシステム）との全ての通信を担当します。
 
-## Structure
-*   `auth/`: Supabase Auth wrapping.
-*   `content/`: MDX reading/parsing logic.
-*   `gemini/`: Google AI Studio API calls.
-*   `youtube/`: YouTube Data API calls.
+## ディレクトリ構造
+*   `auth/`: Supabase Auth のラッパー。
+*   `content/`: MDX の読み込み・パース処理。
+*   `gemini/`: Google AI Studio API との通信。
+*   `youtube/`: YouTube Data API との通信。
 
-## Rules (DOs)
-*   **DO** abstract the implementation details. (e.g. `getPost()` rather than `fs.readFileSync()`).
-*   **DO** handle errors and return typed results defined in `src/types/`.
+## ルール (DOs)
+*   **DO** 実装詳細を隠蔽（抽象化）する。（例: `fs.readFileSync()` を直接呼ばず、`getPost()` という関数にする）。
+*   **DO** エラーハンドリングを行い、`src/types/` で定義された型付きの結果を返す。
 
-## Prohibitions (DON'Ts)
-*   **DON'T** export raw SDK clients (SupabaseClient) to the UI layer.
-*   **DON'T** return UI components. Return Data.
+## 禁止事項 (DON'Ts)
+*   **DON'T** 生のSDKクライアント (SupabaseClientなど) をUI層に export しない。
+*   **DON'T** UIコンポーネントを返さない。返すのは「データ」のみ。

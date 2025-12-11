@@ -1,16 +1,16 @@
 # Types Directory Guidelines (Domain Layer)
 
-This directory defines the **Domain Entities** and Interfaces.
-It is the "Language" of the project.
+このディレクトリは **ドメインエンティティ** とインターフェースを定義する場所です。
+プロジェクトにおける「共通言語」となります。
 
-## Responsibilities
-*   **Entities:** `Score`, `User`, `Composer`.
-*   **Interfaces:** `ContentRepository`, `AuthService` (Abstract interfaces).
+## 責務 (Responsibilities)
+*   **Entities:** `Score`, `User`, `Composer` などのデータ型。
+*   **Interfaces:** `ContentRepository`, `AuthService` などの抽象インターフェース。
 
-## Rules (DOs)
-*   **DO** use `interface` or `type` definitions.
-*   **DO** define strictly typed structures.
+## ルール (DOs)
+*   **DO** `interface` または `type` 定義を使用する。
+*   **DO** 厳格な型定義を行う。
 
-## Prohibitions (DON'Ts)
-*   **DON'T** include implementation logic (functions). Only Types.
-*   **DON'T** import from `src/app` or `src/components`. (No dependency on UI).
+## 禁止事項 (DON'Ts)
+*   **DON'T** 実装ロジック（関数の中身）を含めない。型定義のみにする。
+*   **DON'T** `src/app` や `src/components` から import しない（UI層への依存禁止）。

@@ -1,20 +1,20 @@
 # App Directory Guidelines (UI Layer - Controller)
 
-This directory corresponds to the **Controller** in MVC.
-It is responsible for Routing, Data Fetching, and Layouts.
+このディレクトリは MVC における **Controller** に相当します。
+ルーティング、データフェッチ、およびレイアウト構築を責務とします。
 
-## Responsibilities
-*   **Routing:** Define URL structure using Next.js App Router conventions.
-*   **Data Fetching:** Fetch data from `src/services/` in Server Components.
-*   **Layout:** Define common UI structures (`layout.tsx`).
-*   **Metadata:** Define SEO metadata (`generateMetadata`).
+## 責務 (Responsibilities)
+*   **Routing:** Next.js App Router の規約に従ってURL構造を定義する。
+*   **Data Fetching:** Server Components 内で `src/services/` からデータを取得する。
+*   **Layout:** 共通のUI構造 (`layout.tsx`) を定義する。
+*   **Metadata:** SEOメタデータ (`generateMetadata`) を定義する。
 
-## Rules (DOs)
-*   **DO** use Server Components by default.
-*   **DO** call functions from `src/services/` to fetch data.
-*   **DO** pass fetched data to components in `src/components/` via props.
+## ルール (DOs)
+*   **DO** 原則として Server Components を使用する。
+*   **DO** データの取得には必ず `src/services/` 配下の関数を使用する。
+*   **DO** 取得したデータは Props として `src/components/` に渡す。
 
-## Prohibitions (DON'Ts)
-*   **DON'T** write complex business logic here. Move it to `src/services/` or `src/lib/`.
-*   **DON'T** call external APIs (fetch) directly. Use `src/services/`.
-*   **DON'T** import DB clients (Supabase) directly. Use `src/services/`.
+## 禁止事項 (DON'Ts)
+*   **DON'T** 複雑なビジネスロジックをここに書かない。`src/services/` または `src/lib/` に移動する。
+*   **DON'T** 外部API (fetch) を直接呼ばない。`src/services/` を経由する。
+*   **DON'T** DBクライアント (Supabase) を直接インポートしない。`src/services/` を経由する。
