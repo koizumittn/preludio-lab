@@ -24,6 +24,7 @@ Next.js App Router (v15+) をベースとしたディレクトリ構成と責任
     *   **Props:** 必ず `interface` で定義し、エクスポートする。`React.FC` は使用しない。
 *   **Server vs Client:**
     *   データフェッチは Server Component で行う。
+        *   **Reason:** クライアントへAPIキーやDB接続情報を露出させないため（Security）、およびJSバンドルサイズを削減するため（Performance）。VercelなどのServerless環境でも動作する。
     *   `use client` はツリーの末端（Leaf）で使用し、サーバーレンダリングの恩恵を最大化する。
     *   Image Optimization: `next/image` を使用し、レイアウトシフト（CLS）を防ぐ。
 
@@ -40,6 +41,7 @@ Next.js App Router (v15+) をベースとしたディレクトリ構成と責任
 ### 3.1. Branch Rules
 *   `master`: **Protected Branch.** 直接コミット禁止。PRマージのみ受け付ける。常にデプロイ可能な状態（Deployable）を維持する。
 *   `feat/{issue-id}-{slug}`: 機能追加。
+    *   **Note:** Issue ID (`#123`) を含めることで、GitHub上でIssueとPR/Branchが自動的に紐付き、追跡性（Traceability）が向上する。
 *   `fix/{issue-id}-{slug}`: バグ修正。
 *   `docs/{slug}`: ドキュメント修正。
 
@@ -49,7 +51,8 @@ Next.js App Router (v15+) をベースとしたディレクトリ構成と責任
     *   **Related Issues:** 関連するIssue番号 closes #123.
     *   **Verification:** どうやって動作確認したか（スクショ、動画、コマンド）。
 *   **Review:** 最低1名の承認（Approve）を必須とする（AIエージェントによる自動承認も含む）。
-*   **Merge Strategy:** **Squash & Merge** を原則とする。開発中の細かいコミットログ（wip, fix typo等）をまとめ、`master` の履歴をクリーンに保つ。
+*   **Merge Strategy:** **Squash & Merge** を原則とする。
+    *   **Reason:** 開発中の試行錯誤（typo修正など）の履歴を1つのコミットにまとめ、`master` の履歴を「機能単位」でクリーンに保つため。
 
 ### 3.3. Commit Message Convention
 *   **Prefix:** `naming-conventions.md` で定義されたPrefix (`feat:`, `fix:`, etc.) を必ず付与する。
@@ -63,7 +66,9 @@ Next.js App Router (v15+) をベースとしたディレクトリ構成と責任
 ## 5. Styling Guidelines (Tailwind CSS)
 *   **Utility First:** 原則として `className` にTailwindのユーティリティクラスを直接記述する。`@apply` は再利用性が極めて高い場合（ボタン等）に限定する。
 *   **No Arbitrary Values:** `w-[350px]` のようなArbitrary Valueの使用は避け、`tailwind.config.ts` で定義されたトークン（Spacing, Colors）を使用する。デザインシステムの一貫性を保つため。
-*   **Responsiveness:** モバイルファーストで記述する。`md:flex` のように、ブレークポイント以上のスタイルをプレフィックスで指定する。
+*   **Responsiveness:** **モバイルファースト**で記述する。
+    *   **Rule:** プレフィックス無し＝スマホ（全サイズ）。`md:` などのプレフィックス＝そのサイズ以上での上書き（Desktop）。
+    *   Example: `className="flex md:block"` → スマホでは `flex`、PCでは `block`。
 
 ## 6. Security & Database Guidelines (Supabase)
 *   **RLS (Row Level Security):** すべてのテーブルに対して RLS を有効化 (`ENABLE ROW LEVEL SECURITY`) し、ポリシーを明示的に定義する。
