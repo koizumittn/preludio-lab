@@ -66,6 +66,9 @@
 ### [REQ-UI-INT] Interaction Design
 *   **[REQ-UI-INT-001] Micro-interactions:** ボタンのHover、Focus、Click時に、わずかなスケール変更や色変化のアニメーション（200ms程度）を付与し、「触れている感覚」を提供する。
 *   **[REQ-UI-INT-002] Transitions:** ページ遷移やモーダル開閉時に、フェードやスライドといった物理法則に基づいた自然なトランジション（Ease-out等）を適用する。唐突な画面切り替えは避ける。
+*   **[REQ-UI-INT-003] Social Sharing:**
+    *   **Share Bar:** 記事読了後、またはスクロール追従型の「シェアボタン（X, Facebook, Copy Link）」を配置する。
+    *   **Click-to-Tweet:** 記事内の名言や要約など、引用価値の高いテキストを選択・シェアしやすくするUIを提供する。
 
 
 ## 4. Accessibility (A11y)
