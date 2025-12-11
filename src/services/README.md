@@ -9,12 +9,15 @@
 
 ## ディレクトリ構成
 ### 1. Repository Interface (Abstraction)
-まず、`src/types/repositories/` または、本ディレクトリのルートで「インターフェース」を定義します（TypeScript）。
-*   `AIProvider.ts` (❌ `GeminiProvider`)
-*   `VideoProvider.ts` (❌ `YouTubeProvider`)
+インターフェースは **Domain Layer (`src/types/repositories/`)** に配置することを強く推奨します。
+
+*   **Reason:** クリーンアーキテクチャの「依存性逆転の原則 (DIP)」に従うため。
+    *   `src/services/` (Infrastructure) が `src/types/` (Domain) に依存する形を作る。
+    *   UI層は `src/types/` だけを知っていればよく、`src/services/` への依存を最小限にできる。
 
 ### 2. Implementation (Infrastructure)
-具体的な実装は、機能名を表すディレクトリ配下、またはファイル名で区別します。
+具体的な実装クラスのみを本ディレクトリ (`src/services/`) に配置します。
+実装クラスは `src/types/repositories/` で定義されたインターフェースを `implements` します。
 
 *   `auth/`: 認証機能。
     *   `index.ts`: `AuthRepository` の実装 (内部でSupabaseを呼ぶ)。
