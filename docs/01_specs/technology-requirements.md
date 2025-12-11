@@ -124,7 +124,7 @@ GitHub Flowをベースに、Verification環境（Preview Deploy）を組み込�
 ### [REQ-DEVOPS-RELEASE] Versioning & Rollback Strategy
 迅速なロールバックと効果測定を可能にするリリース管理フロー。
 
-*   **[REQ-DEVOPS-RELEASE-001] Semantic Versioning:** `vX.Y.Z` (Major.Minor.Patch) のタグを `master` マージ時に付与する。
+*   **[REQ-DEVOPS-RELEASE-001] Semantic Versioning:** アプリケーションコードの改修時（機能追加・バグ修正）にのみ `vX.Y.Z` タグを付与する。単なる記事コンテンツの追加時はバージョン更新を行わない。
 *   **[REQ-DEVOPS-RELEASE-002] GitHub Releases:** タグ付与をトリガーに Release Note を自動生成し、含まれる変更点（PRリンク）と当時のKPI期待値を記録する。
 *   **[REQ-DEVOPS-RELEASE-003] Instant Rollback:** 万が一の障害時は、`git revert` ではなく **Vercel Instant Rollback** 機能を使用し、1秒で正常な前バージョンへ切り戻す。
     *   ロールバック後、改めて `hotfix` ブランチで修正を行い、バージョンを上げて再デプロイする。
