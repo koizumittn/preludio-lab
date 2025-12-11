@@ -28,10 +28,36 @@ src/
 └── types/               # [Domain Layer] Entities / Interfaces
 ```
 
-### 1.3. Dependency Rule
-*   `UI Layer` -> `Infrastructure Layer` -> `Domain Layer` (データの流れ)
-*   `UI Layer` -> `Domain Layer` (型の依存)
-*   **Infrastructure層の実装詳細（Supabase SDKなど）を、UIコンポーネントで直接インポートすることを禁止する。** 必ず `services/` 配下の関数を経由すること。
+### 1.3. Architecture Diagram & Dependency Flow
+各レイヤーがどのように協調するかを示す概念図。
+
+```mermaid
+graph TD
+    User((User)) -->|Access URL| Controller[UI Layer: src/app]
+    Controller -->|1. Call Interface| Infra[Infra Layer: src/services]
+    Infra -.->|2. Implement| Repository[Domain Layer: src/types]
+    Infra -->|3. Fetch Data| External((Supabase/API))
+    Infra -->|4. Return Entity| Controller
+    Controller -->|5. Pass Props| View[UI Layer: src/components]
+    
+    classDef domain fill:#f9f,stroke:#333,stroke-width:2px;
+    class Repository domain;
+```
+
+### 1.4. Operational Flow Example (楽譜表示)
+1.  **Request:** ユーザーが `/works/bach/prelude` にアクセス。
+2.  **Controller (`src/app/works/[...]/page.tsx`):**
+    *   `ContentService.getScore("bach", "prelude")` を呼び出す。
+3.  **Infrastructure (`src/services/content/`):**
+    *   ファイルシステムからMDXを読み込み、パースする。
+    *   `src/types/Score.ts` で定義された型（Entity）に変換して返す。
+4.  **View (`src/components/ScoreRenderer.tsx`):**
+    *   受け取った `Score` オブジェクトを元に、楽譜を描画する。
+
+### 1.5. Dependency Rule (重要)
+*   **Domain Layer (`src/types/`)** は、他のどの層にも依存してはならない（一番偉い）。
+*   **UI Layer** と **Infrastructure Layer** は、Domain Layer に依存する。
+*   これにより、インフラ（Supabase等）が変わっても、ドメイン（ビジネスロジック）は守られる。
 
 ## 2. Coding Standards
 **Google TypeScript Style Guide** をベースとし、以下の独自ルールを追加適用する。
