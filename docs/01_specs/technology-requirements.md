@@ -26,6 +26,7 @@
 | **REQ-TECH-STACK-011** | **i18n & Fonts** | **next-intl / Google Fonts** | 7言語対応。CJKフォントの最適化読み込み（subsetting）によりCLSを防ぐ。 |
 | **REQ-TECH-STACK-012** | **Monitoring** | **Vercel Analytics / GSC** | MAU, 滞在時間, SEO順位の計測。Privacy-friendlyかつ無料枠で利用可能。 |
 | **REQ-TECH-STACK-013** | **Originals** | **Bandcamp Embed** | オリジナル曲の配信。販売導線（Bandcamp）との統合が容易。 |
+| **REQ-TECH-STACK-014** | **Privacy** | **Cookie Consent** | GDPR準拠。YouTube等のThird-party Cookie読み込みを制御する同意バナー。 |
 
 ## 3. AI Agent Infrastructure (Free Tier Architecture)
 
@@ -119,6 +120,7 @@ GitHub Flowをベースに、Verification環境（Preview Deploy）を組み込�
     *   **Trigger:** `master` へのマージ (Push)。
     *   **CD (Production):** Vercel Production Deployment を実行し、本番環境 (`preludiolab.com`) を更新。
 *   **[REQ-DEVOPS-FLOW-004] Workflow C: Agent Runner:**
+    *   **Trigger:** Schedule / Manual Trigger.
     *   **Action:** AIエージェントを実行し、コンテンツ生成PRを作成 (Workflow Aへ接続)。
 
 ### [REQ-DEVOPS-RELEASE] Versioning & Rollback Strategy
