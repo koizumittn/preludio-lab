@@ -59,7 +59,7 @@ Status: `[/]` 進行中
 - [ ] **オーディオプレイヤー統合** (Ref: `REQ-TECH-AUDIO`)
     - [ ] 要件と完了条件の定義
     - [ ] `AudioPlayer` コンポーネントの実装 (YouTube IFrame API)
-    - [x] UIモード実装: Mini Player (Footer) & Focus Mode (Ref: `REQ-UI-004-02`)
+    - [ ] UIモード実装: Mini Player (Footer) & Focus Mode (Ref: `REQ-UI-004-02`)
     - [ ] 楽譜との同期ロジックの実装（任意/将来対応）
 - [ ] **多言語MDXシステム & コンテンツフロー**
     - [ ] MDXディレクトリ構成の設計 (`content/[lang]/...`)
