@@ -23,7 +23,7 @@ export default async function RootLayout({
 }) {
     const { lang } = await params;
     return (
-        <html lang={lang} suppressHydrationWarning>
+        <html lang={lang}>
             <body className={inter.className}>
                 <Header />
                 <main className="min-h-screen bg-gray-50 pb-24">{children}</main>

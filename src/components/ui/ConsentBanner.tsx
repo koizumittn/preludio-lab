@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 /**
  * [REQ-UI-006-02] Privacy Consent Banner
@@ -9,12 +9,14 @@ import { useState } from 'react';
 export function ConsentBanner() {
 
 
-    const [isVisible, setIsVisible] = useState(() => {
-        if (typeof window !== 'undefined') {
-            return !localStorage.getItem('cookie-consent');
+    const [isVisible, setIsVisible] = useState(false);
+
+    useEffect(() => {
+        const consented = localStorage.getItem('cookie-consent');
+        if (!consented) {
+            setIsVisible(true);
         }
-        return false;
-    });
+    }, []);
 
     const handleAccept = () => {
         localStorage.setItem('cookie-consent', 'true');
