@@ -1,21 +1,20 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 /**
  * [REQ-UI-006-02] Privacy Consent Banner
  * GDPR-compliant cookie consent banner.
  */
 export function ConsentBanner() {
-    const [isVisible, setIsVisible] = useState(false);
 
-    useEffect(() => {
-        // Mock: Check local storage
-        const consented = localStorage.getItem('cookie-consent');
-        if (!consented) {
-            setIsVisible(true);
+
+    const [isVisible, setIsVisible] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return !localStorage.getItem('cookie-consent');
         }
-    }, []);
+        return false;
+    });
 
     const handleAccept = () => {
         localStorage.setItem('cookie-consent', 'true');

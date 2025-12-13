@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { AudioPlayerPlaceholder } from '@/components/ui/AudioPlayerPlaceholder';
-import ScoreClientWrapper from '@/components/features/score/ScoreClientWrapper';
+import Score from '@/components/features/score';
 
 import { PinoLogger } from '@/infrastructure/logging/pino-logger';
 
@@ -9,7 +9,7 @@ import { PinoLogger } from '@/infrastructure/logging/pino-logger';
 <div className="my-6">
     {/* Score Renderer (Client Wrapper) */}
     <div className="rounded-lg bg-white p-4 shadow-sm border border-gray-100 overflow-hidden">
-        <ScoreClientWrapper abc={`
+        <Score abc={`
 X:1
 T:Prelude in C Major
 C:J.S. Bach
@@ -51,7 +51,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ lang: 
             ],
         };
     } catch (error) {
-        logger.error('Failed to fetch article data', error, { slug });
+        logger.error('Failed to fetch article data', error as Error, { slug });
         // You might want to render an error page or redirect here
         return <div>Error loading article.</div>;
     }
@@ -99,7 +99,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ lang: 
                             {/* Replaced ScorePlaceholder with Skeleton for Loading State Demo */}
                             {/* Score Renderer (Client Wrapper) */}
                             <div className="rounded-lg bg-white p-4 shadow-sm border border-gray-100 overflow-hidden">
-                                <ScoreClientWrapper abc={`
+                                <Score abc={`
 X:1
 T:Prelude in C Major
 C:J.S. Bach
