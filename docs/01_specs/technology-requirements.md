@@ -53,6 +53,9 @@ Google Generative AI SDK for Node.js を使用したカスタムスクリプト�
     *   **Process:** マスター記事（JA）を読み込み、他6言語（EN/ES/DE/ZH/FR/IT）へ並列翻訳を実行。
     *   **Output:** 各言語ディレクトリにMDXを生成し、一括でPRを作成。人間によるレビューは行わない。
 5.  **[REQ-TECH-AGENT-006] Coder Script:** コンポーネント修正、Lint修正など。
+6.  **[REQ-TECH-AGENT-007] Designer Script:** (Ref: [REQ-UI-PROCESS-001])
+    *   **Role:** デザインシステム（Tokens/CSS）の構築と保守、およびUI実装の品質管理。
+    *   **Tasks:** UIコンポーネントの作成、Tailwind Configの更新、Visual Regression Testingによる見た目の崩れ検知。
 
 ## 4. Content & Media Strategy
 
