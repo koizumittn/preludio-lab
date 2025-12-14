@@ -136,6 +136,29 @@ graph TD
         *   Server Component (`page.tsx`等) 内で `dynamic(() => ..., { ssr: false })` を直接定義・使用することはビルドエラーの原因となる。
         *   **Rule:** クライントサイド専用のライブラリ（`window` オブジェクトに依存するもの等）を使用する場合は、必ず **クライアントコンポーネントのラッパー (`Wrapper.tsx`)** を作成し、その中で `dynamic` インポートを行う。Server Componentからはそのラッパーを import する。
 
+### 2.2.1. Hydration & SSR Safety (Update from PR #3)
+Next.js (App Router) における Hydration Mismatch を防ぐため、以下のルールを厳守する。
+
+1.  **Stable IDs:**
+    *   リストのキーやID属性に `Math.random()` や `Date.now()` を使用してはならない。これらはサーバーとクライアントで異なる値を生成する。
+    *   **Rule:** 一意なIDが必要な場合は、必ずReact標準の `useId()` フックを使用する。
+
+2.  **Safe State Initialization:**
+    *   `window` や `localStorage` に依存する値を `useState` の初期値にしてはならない。
+    *   **Bad:** `useState(() => localStorage.getItem('key'))` // Server: undefined, Client: 'value' -> Mismatch
+    *   **Good:** `useState(false)` で初期化し、`useEffect` 内で値を更新する。
+        ```tsx
+        const [val, setVal] = useState(false);
+        useEffect(() => {
+            const stored = localStorage.getItem('key');
+            if (stored) setVal(true);
+        }, []);
+        ```
+
+3.  **Browser Extensions:**
+    *   拡張機能が `html` や `body` タグに属性 (`data-uid` 等) を注入することで発生する Hydration Error は、開発環境において**無視して良い**（本番環境では影響しないため）。
+    *   **Rule:** アプリケーションコードに問題がない限り、安易に `suppressHydrationWarning` を使用しない。例外的に使用する場合は、その理由をコメントに残すこと。
+
 ### 2.3. Error Handling & Logging
 エラー時のログ出力はデバッグと運用監視の基盤である。**「ログ（記録）」と「エラー通知（アラート）」の役割を明確に分担し**、実行環境に応じた戦略を適用する。
 
