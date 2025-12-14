@@ -17,6 +17,7 @@ UIやインフラは変わりやすいため、そこに依存しない `Domain`
     *   外部依存やモック（Mock）は一切使用しない。入力に対する出力が正しいかを検証する。
     *   境界値テスト（Boundary Value Analysis）を重点的に行う。
 *   **Target:** `Entities`, `Domain Services`
+*   **Validation:** Zodスキーマのパース検証（不正入力でエラーになるか）もここで担保しても良い（またはApplication層）。
 
 ### 2.2. Application Layer (`src/application/`)
 **ユースケース（処理の流れ）が正しく構成されているかを確認する。**
@@ -43,8 +44,16 @@ UIやインフラは変わりやすいため、そこに依存しない `Domain`
 *   **Type:** **Component Test / E2E**
 *   **Tools:** `React Testing Library`, `Storybook`, `Playwright`
 *   **Strategy:**
-    *   **Presentation (`src/components`):** `Storybook` での見た目確認、`React Testing Library` でのインタラクション（クリック等）確認。
-    *   **Controller (`src/app`):** E2Eテストでカバーする。複雑なロジックはここには無いはずなので、単体テストは不要である。
+    *   **Presentation (`src/components`):**
+        *   `Storybook` での見た目確認。
+        *   `React Testing Library` でのインタラクション（クリック等）確認。
+        *   **Wrapper Patternのテスト:**
+            *   `*Renderer.tsx`: テスト対象のメイン。RTL等でロジックをテストする。
+            *   `*ClientWrapper.tsx`: ほぼローディングと動的読み込みのみのため、Unitテストは必須としない（E2Eでカバー）。
+    *   **Controller (`src/app` - Server Actions):**
+        *   Server Actionsは「関数」としてエクスポートされているため、Unit Test（Integration Test）が可能。
+        *   **Validation Check:** Zodバリデーションが機能しているか、不正データを渡して検証する。
+        *   **Mock Repositories:** ドメイン層以下をモックして、Action自体の挙動（Cookie設定、リダイレクト等）をテストする。
 
 ## 3. Tooling Stack
 
