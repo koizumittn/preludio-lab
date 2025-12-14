@@ -124,3 +124,19 @@
 *   **高さ:** 64px
 *   **外観:** Glassmorphism (半透明 + ブラー背景).
 *   **配置:** Fixed Bottom (画面下部固定), `z-30`.
+
+---
+
+## 7. 変更容易性とテーマ管理 (Changeability)
+トライ＆エラーを高速に行うため、以下の実装ルールを徹底する。
+
+### [REQ-UI-SYS-004] Variable-First Strategy
+*   **Single Source of Truth:** 全ての色、フォント、基本スペーシングは `globals.css` 内の CSS Variables (`:root`) として定義する。Tailwind Configはこれを参照するだけに留める。
+    *   *メリット:* `globals.css` の値を書き換えるだけで、アプリ全体の色味を一瞬で変更できる。
+*   **Prohibit Hardcoding:** コンポーネント内での「マジックナンバー」や「直接のHex指定」を禁止する。
+    *   NG: `text-[#333333]`, `w-[350px]`
+    *   OK: `text-primary`, `max-w-sm`
+
+### [REQ-UI-SYS-005] Component Slots
+*   **Structure over Style:** コンポーネントは「構造」のみを責務とし、色や装飾はクラス名の付け替え（Variablesの変更）で対応できるように作る。
+*   レイアウト変更に強いよう、固定幅（px）ではなく、Flex/Gridと相対単位（%, rem）を使用する。
