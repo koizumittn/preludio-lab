@@ -132,9 +132,13 @@ graph TD
         *   **Reason:** クライアントへAPIキーやDB接続情報を露出させないため（Security）、およびJSバンドルサイズを削減するため（Performance）。VercelなどのServerless環境でも動作する。
     *   `use client` はツリーの末端（Leaf）で使用し、サーバーレンダリングの恩恵を最大化する。
     *   Image Optimization: `next/image` を使用し、レイアウトシフト（CLS）を防ぐ。
-    *   **Dynamic Imports (`ssr: false`):**
-        *   Server Component (`page.tsx`等) 内で `dynamic(() => ..., { ssr: false })` を直接定義・使用することはビルドエラーの原因となる。
-        *   **Rule:** クライントサイド専用のライブラリ（`window` オブジェクトに依存するもの等）を使用する場合は、必ず **クライアントコンポーネントのラッパー (`Wrapper.tsx`)** を作成し、その中で `dynamic` インポートを行う。Server Componentからはそのラッパーを import する。
+    *   **Client-Only Library Integration (The Wrapper Pattern):**
+        *   **Context:** `window` / `document` に依存するライブラリ（例: `abcjs`, `leaflet`）をServer Componentから直接インポートするとビルドエラーになる。
+        *   **Rule:** 以下の3ファイル構成（Wrapper Pattern）を標準とする。
+            1.  `FeatureRenderer.tsx`: ライブラリを直接使用する実装（`'use client'`）。
+            2.  `FeatureClientWrapper.tsx`: `dynamic(() => import('./FeatureRenderer'), { ssr: false })` を行い、ローディング中のスケルトン（`loading`）を提供する。
+            3.  `index.tsx`: **Wrapperをデフォルトエクスポート** する。
+            *   **Rationale:** 利用側（Server Component）は `import Feature from '@/components/features/xxx'` とするだけで、CSR限定実行とLoading UIが自動的に適用され、安全かつクリーンに保たれる。
 
 ### 2.2.1. Hydration & SSR Safety (Update from PR #3)
 Next.js (App Router) における Hydration Mismatch を防ぐため、以下のルールを厳守する。
