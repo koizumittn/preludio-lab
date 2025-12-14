@@ -16,17 +16,6 @@ export class PinoLogger implements ILogger {
         // - Production: JSON for observability
         this.logger = pino({
             level: process.env.LOG_LEVEL || 'info', // Default to info
-            transport:
-                process.env.NODE_ENV === 'development'
-                    ? {
-                        target: 'pino-pretty',
-                        options: {
-                            colorize: true,
-                            translateTime: 'SYS:standard', // e.g., 2024-01-01 12:00:00
-                            ignore: 'pid,hostname',
-                        },
-                    }
-                    : undefined,
         });
     }
 
