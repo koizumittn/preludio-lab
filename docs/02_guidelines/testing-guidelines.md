@@ -38,8 +38,10 @@ UIやインフラは変わりやすいため、そこに依存しない `Domain`
 *   **Type:** **Integration Test**
 *   **Tool:** `Vitest`
 *   **Strategy:**
-    *   基本的には「モック」を使用するが、重要なパス（Supabaseへの接続など）については、テスト環境やエミュレータを用いた結合テストを行う。
-    *   外部APIのアダプターは、レスポンスのパース処理が正しいかをテストする。
+*   **Strategy:**
+    *   **Scope Limitation:** 実際のDB接続を伴うテストはコストが高いため、Unit Testでは**「データ変換ロジック（Mapper）」の検証**に集中する。
+        *   例: Supabaseからのレスポンス(Snake Case)が、正しくEntity(Camel Case)に変換されているか。
+    *   **Mocking:** `supabase-js` クライアント自体をモックし、通信発生を回避する。実際の通信テストは手動またはE2Eで行う。
 
 ### 2.4. UI Layer (`src/app/`, `src/components/`)
 **見た目とユーザーインタラクションを確認する。**
@@ -47,17 +49,21 @@ UIやインフラは変わりやすいため、そこに依存しない `Domain`
 *   **Type:** **Component Test / E2E**
 *   **Tools:** `React Testing Library`, `Storybook`, `Playwright`
 *   **Strategy:**
-    *   **Presentation (`src/components`):**
-        *   `Storybook` での見た目確認。
-        *   `React Testing Library` でのインタラクション（クリック等）確認。
-        *   **Wrapper Patternのテスト:**
-            *   `[Feature]Renderer.tsx`: テスト対象のメイン（ロジック実装部）。
-                *   **Note:** `React Testing Library (RTL)` を使用し、内部stateではなく「ユーザーから見た振る舞い（ボタンが押せるか、表示が変わったか）」をテストする。
-            *   `[Feature]ClientWrapper.tsx`: ほぼローディングと動的読み込みのみのため、Unitテストは必須としない（E2Eでカバー）。
+*   **Strategy:**
+    *   **Server Component (`src/app/**/page.tsx`):**
+        *   **Rule:** `async` コンポーネントの単体テストは困難（RTL非対応）なため、**Unit Testは作成しない**。
+        *   **Alternative:** E2Eテスト (`Playwright`) で表示確認を行う。
+    *   **Client Component (`src/components`):**
+        *   **Rule:** `React Testing Library (RTL)` を使用し、内部stateではなく「ユーザーから見た振る舞い（ボタンが押せるか、表示が変わったか）」をテストする。
+        *   **Wrapper Pattern:**
+            *   `[Feature]Renderer.tsx`: テスト対象のメイン。RTLでロジック検証。
+            *   `[Feature]ClientWrapper.tsx`: E2Eに任せ、Unit Testはスキップ可。
     *   **Controller (`src/app` - Server Actions):**
-        *   Server Actionsは「関数」としてエクスポートされているため、Unit Test（Integration Test）が可能。
+        *   **Mocking Strategy:** `next/navigation` (`redirect`) や `next/headers` (`cookies`) を使用している場合は、必ず `vi.mock` でモック化する。
+            ```ts
+            vi.mock('next/navigation', () => ({ redirect: vi.fn() }));
+            ```
         *   **Validation Check:** Zodバリデーションが機能しているか、不正データを渡して検証する。
-        *   **Mock Repositories:** ドメイン層以下をモックして、Action自体の挙動（Cookie設定、リダイレクト等）をテストする。
 
 ## 3. Tooling Stack
 
