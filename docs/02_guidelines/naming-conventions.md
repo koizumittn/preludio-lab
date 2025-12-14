@@ -13,11 +13,13 @@
 | :--- | :--- | :--- | :--- |
 | **Directories** | `kebab-case` | `components/ui`, `use-cases` | 小文字ハイフン繋ぎ。 |
 | **React Components** | `PascalCase` | `ScoreRenderer.tsx` | コンポーネント名と一致させる。 |
+| **Client Wrapper** | `PascalCase` + Wrapper | `ScoreClientWrapper.tsx` | Client-Onlyライブラリのラッパー。 |
 | **Hooks** | `camelCase` (usePrefix) | `useAudioPlayer.ts` | 必ず `use` で始める。 |
 | **Domain Entities** | `PascalCase` | `User.ts`, `Score.ts` | クラス名と一致させる。 |
 | **Use Cases** | `PascalCase` + Suffix | `RegisterUserUseCase.ts` | 動詞 + 目的語 + UseCase。 |
+| **DTOs** | `kebab-case` | `user.dto.ts` | ファイル名はkebab、中身はPascal。 |
 | **Repositories** | `PascalCase` + Suffix | `IUserRepository.ts` | IFは `I` プレフィックス推奨。 |
-| **Next.js Routes** | `kebab-case` | `app/blog/[slug]/page.tsx` | URLの一部になるため小文字。 |
+| **Next.js Server Actions** | `camelCase` + Action | `registerUserAction` | Controllerとしての役割を明示。 |
 
 ### Content Files (MDX) (Ref: `content-requirements.md`)
 記事MDXファイルの配置と命名は、カテゴリ (`REQ-CONT-TAX`) に従う。
@@ -52,6 +54,9 @@
 ## 3. Code Identifiers
 *   **Variables / Functions:** `camelCase` (e.g., `isValid`, `fetchData`)
 *   **Types / Interfaces:** `PascalCase` (e.g., `ScoreData`, `UserProps`)
+*   **Zod Schemas:** `PascalCase` + Schema (e.g., `UserSchema`)
+*   **DTO Types:** `PascalCase` + Dto (e.g., `UserDto`)
+*   **Utilities:** `camelCase` (e.g., `cn`, `formatDate`)
 *   **Constants:** `UPPER_SNAKE_CASE` (e.g., `MAX_RETRY_COUNT`)
 
 ## 4. Git Naming
