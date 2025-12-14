@@ -46,7 +46,7 @@
 ### フォントファミリー
 *   **Serif (見出し):** `Noto Serif JP`, `serif`
     *   H1, H2, ヒーローセクション用。「アカデミック」な印象を与える。
-    *   **Performance:** `next/font/google` でサブセット化し、読み込み中はシステムフォントを表示してCLSを防ぐ。
+    *   **Performance:** `next/font/google` でサブセット化し、読み込み中はシステムフォントを表示して**CLS（読み込み時のレイアウトのガタつき）**を防ぐ。
 *   **Sans (本文/UI):** `Inter`, `Noto Sans JP`, `sans-serif`
     *   インターフェース、長文用。「モダンで読みやすい」印象を与える。
 *   **Mono (コード/データ):** `JetBrains Mono`, `monospace`
