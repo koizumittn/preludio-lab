@@ -144,9 +144,9 @@ GitHub Flowをベースに、Verification環境（Preview Deploy）を組み込�
 *   **[REQ-DEVOPS-RELEASE-004] Performance Baseline:** 各リリース（Deployment）に対し、Vercel Analytics の "Deployment Score" (Web Vitals) を記録し、バージョン間の性能劣化を監視する。
 
 ### [REQ-DEVOPS-TEST] Testing Strategy
-*   **[REQ-DEVOPS-TEST-001] Unit Testing:** `Vitest` を使用。ユーティリティ関数、ABCパーサー等のロジック検証。
-*   **[REQ-DEVOPS-TEST-002] Integration Testing:** `React Testing Library` (Optional)。複雑なコンポーネントの挙動確認。
-*   **[REQ-DEVOPS-TEST-003] E2E Testing:** `Playwright` (Phase 4以降)。重要導線（閲覧、検索、ログイン）の回帰テストをVerification環境に対して実行。
+*   **[REQ-DEVOPS-TEST-001] Unit Testing:** `Vitest` を使用。Domain/Application層、およびServer Actionsのバリデーションを検証。
+*   **[REQ-DEVOPS-TEST-002] Client Component Testing:** `React Testing Library` を使用。Wrapper PatternにおけるRenderer（UIロジック）の振る舞いを検証する。
+*   **[REQ-DEVOPS-TEST-003] E2E Testing:** `Playwright` を使用。Server Components (Pages) の表示や重要導線（閲覧、検索、ログイン）の回帰テストを実行。
 
 ## 7. Non-Functional Requirements (SaaS Native)
 SaaSの標準機能を最大限活用し、追加開発コストをかけずに非機能要件を担保する。

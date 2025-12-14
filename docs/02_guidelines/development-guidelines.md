@@ -48,6 +48,13 @@ src/
     *   **Use Case:** ドメイン層のInterfaceを使って処理フローを記述する。具体的なDB操作は知らなくて良い。
     *   **DTO:** UI層とやり取りするための単純なデータ型。
 *   **実装のポイント:** 「Repository Interfaceを使って、〇〇を行うビジネスロジックを実装する」
+    *   **Validation Rule:** DTOの定義には必ず **Zod Schema** を併記し、型定義は `z.infer` から生成する。
+        ```ts
+        // src/application/dtos/user.dto.ts
+        import { z } from 'zod';
+        export const UserSchema = z.object({ name: z.string().min(1) });
+        export type UserDto = z.infer<typeof UserSchema>;
+        ```
 
 #### Infrastructure Layer (`src/infrastructure/`)
 *   **役割:** ドメイン層で定義されたInterfaceを、具体的な技術（Supabase, API）で実装する。
@@ -57,6 +64,7 @@ src/
 #### UI Layer (`src/app/`, `src/components/`)
 *   **役割:** データの表示とユーザー入力の受付。
 *   **Server Actions:** コントローラーとして機能する。ここで「依存性の注入（DI）」を行い、Use Caseを実行する。
+    *   **Validation Rule:** Actionの冒頭で必ず `Schema.safeParse()` を実行し、不正な入力はドメイン層に渡す前に弾く。
 
 ### 1.4. Architecture Diagram & Data Flow
 依存の矢印 `-->` は常に **内側（Domain）** に向かう。
@@ -127,14 +135,44 @@ graph TD
 *   **Component Definition:**
     *   `function` キーワードを使用する（アロー関数 `const Component = () => {}` は、Propsの型定義が見づらくなるため避ける）。
     *   **Props:** 必ず `interface` で定義し、エクスポートする。`React.FC` は使用しない。
+    *   **Export:** 原則として **Named Export** (`export const Component = ...` または `export function ...`) を使用する。
+        *   **Reason:** リファクタリング時の自動リネームを確実にするため、およびTree Shaking効率化のため。
+        *   **Exception:** Next.jsの `page.tsx`, `layout.tsx` 等は `export default` が必須のため例外とする。
 *   **Server vs Client:**
     *   データフェッチは Server Component で行う。
         *   **Reason:** クライアントへAPIキーやDB接続情報を露出させないため（Security）、およびJSバンドルサイズを削減するため（Performance）。VercelなどのServerless環境でも動作する。
     *   `use client` はツリーの末端（Leaf）で使用し、サーバーレンダリングの恩恵を最大化する。
     *   Image Optimization: `next/image` を使用し、レイアウトシフト（CLS）を防ぐ。
-    *   **Dynamic Imports (`ssr: false`):**
-        *   Server Component (`page.tsx`等) 内で `dynamic(() => ..., { ssr: false })` を直接定義・使用することはビルドエラーの原因となる。
-        *   **Rule:** クライントサイド専用のライブラリ（`window` オブジェクトに依存するもの等）を使用する場合は、必ず **クライアントコンポーネントのラッパー (`Wrapper.tsx`)** を作成し、その中で `dynamic` インポートを行う。Server Componentからはそのラッパーを import する。
+    *   **Client-Only Library Integration (The Wrapper Pattern):**
+        *   **Context:** `window` / `document` に依存するライブラリ（例: `abcjs`, `leaflet`）をServer Componentから直接インポートするとビルドエラーになる。
+        *   **Rule:** 以下の3ファイル構成（Wrapper Pattern）を標準とする。
+            1.  `FeatureRenderer.tsx`: ライブラリを直接使用する実装（`'use client'`）。
+            2.  `FeatureClientWrapper.tsx`: `dynamic(() => import('./FeatureRenderer'), { ssr: false })` を行い、ローディング中のスケルトン（`loading`）を提供する。
+            3.  `index.tsx`: **Wrapperをデフォルトエクスポート** する。
+            *   **Rationale:** 利用側（Server Component）は `import Feature from '@/components/features/xxx'` とするだけで、CSR限定実行とLoading UIが自動的に適用され、安全かつクリーンに保たれる。
+
+### 2.2.1. Hydration & SSR Safety (Update from PR #3)
+Next.js (App Router) における Hydration Mismatch を防ぐため、以下のルールを厳守する。
+
+1.  **Stable IDs:**
+    *   リストのキーやID属性に `Math.random()` や `Date.now()` を使用してはならない。これらはサーバーとクライアントで異なる値を生成する。
+    *   **Rule:** 一意なIDが必要な場合は、必ずReact標準の `useId()` フックを使用する。
+
+2.  **Safe State Initialization:**
+    *   `window` や `localStorage` に依存する値を `useState` の初期値にしてはならない。
+    *   **Bad:** `useState(() => localStorage.getItem('key'))` // Server: undefined, Client: 'value' -> Mismatch
+    *   **Good:** `useState(false)` で初期化し、`useEffect` 内で値を更新する。
+        ```tsx
+        const [val, setVal] = useState(false);
+        useEffect(() => {
+            const stored = localStorage.getItem('key');
+            if (stored) setVal(true);
+        }, []);
+        ```
+
+3.  **Browser Extensions:**
+    *   拡張機能が `html` や `body` タグに属性 (`data-uid` 等) を注入することで発生する Hydration Error は、開発環境において**無視して良い**（本番環境では影響しないため）。
+    *   **Rule:** アプリケーションコードに問題がない限り、安易に `suppressHydrationWarning` を使用しない。例外的に使用する場合は、その理由をコメントに残すこと。
 
 ### 2.3. Error Handling & Logging
 エラー時のログ出力はデバッグと運用監視の基盤である。**「ログ（記録）」と「エラー通知（アラート）」の役割を明確に分担し**、実行環境に応じた戦略を適用する。
@@ -291,6 +329,9 @@ export default function SomeComponent() {
 *   **Responsiveness:** **モバイルファースト**で記述する。
     *   **Rule:** プレフィックス無し＝スマホ（全サイズ）。`md:` などのプレフィックス＝そのサイズ以上での上書き（Desktop）。
     *   Example: `className="flex md:block"` → スマホでは `flex`、PCでは `block`。
+*   **Class Merging (`cn` util):**
+    *   再利用可能なコンポーネントでは、Props経由のスタイル上書きを可能にするため、必ず `clsx` (条件付き適用) と `tailwind-merge` (競合解決) を組み合わせたユーティリティ (`cn()` 等) を使用する。
+    *   **Rule:** 文字列連結（`className + " bg-red-500"`）は禁止。`cn("bg-red-500", className)` を使用する。
 
 ## 6. Security & Database Guidelines (Supabase)
 *   **RLS (Row Level Security):** すべてのテーブルに対して RLS を有効化 (`ENABLE ROW LEVEL SECURITY`) し、ポリシーを明示的に定義する。

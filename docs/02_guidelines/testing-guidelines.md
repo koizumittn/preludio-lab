@@ -17,6 +17,7 @@ UIやインフラは変わりやすいため、そこに依存しない `Domain`
     *   外部依存やモック（Mock）は一切使用しない。入力に対する出力が正しいかを検証する。
     *   境界値テスト（Boundary Value Analysis）を重点的に行う。
 *   **Target:** `Entities`, `Domain Services`
+*   **Validation:** Domain層では「ビジネスルールの整合性」をテストする。入力値の形式（フォーマット）チェックはここではなく、Application層の責務とする。
 
 ### 2.2. Application Layer (`src/application/`)
 **ユースケース（処理の流れ）が正しく構成されているかを確認する。**
@@ -26,7 +27,10 @@ UIやインフラは変わりやすいため、そこに依存しない `Domain`
 *   **Strategy:**
     *   `src/domain/repositories` のインターフェースを **Mock化** してテストする（Repositoryの挙動は制御下に置く）。
     *   「正常系」だけでなく「リポジトリがエラーを吐いた場合」などの「異常系」もテストする。
-*   **Target:** `Use Case` classes
+*   **Target:** `Use Case` classes, `DTOs`
+*   **Validation Rule (Strict):**
+    *   **DTO Test:** `zod` スキーマ定義を含む DTO ファイルに対してテストを作成し、境界値や不正なフォーマットの入力が正しくエラー（`ZodError`）になることを検証する。
+    *   **Use Case:** バリデーション済みのデータが渡ってくる前提で、ビジネスフローをテストする。
 
 ### 2.3. Infrastructure Layer (`src/infrastructure/`)
 **外部システム（Supabase, API）との連携が正しく行えるかを確認する。**
@@ -34,8 +38,10 @@ UIやインフラは変わりやすいため、そこに依存しない `Domain`
 *   **Type:** **Integration Test**
 *   **Tool:** `Vitest`
 *   **Strategy:**
-    *   基本的には「モック」を使用するが、重要なパス（Supabaseへの接続など）については、テスト環境やエミュレータを用いた結合テストを行う。
-    *   外部APIのアダプターは、レスポンスのパース処理が正しいかをテストする。
+*   **Strategy:**
+    *   **Scope Limitation:** 実際のDB接続を伴うテストはコストが高いため、Unit Testでは**「データ変換ロジック（Mapper）」の検証**に集中する。
+        *   例: Supabaseからのレスポンス(Snake Case)が、正しくEntity(Camel Case)に変換されているか。
+    *   **Mocking:** `supabase-js` クライアント自体をモックし、通信発生を回避する。実際の通信テストは手動またはE2Eで行う。
 
 ### 2.4. UI Layer (`src/app/`, `src/components/`)
 **見た目とユーザーインタラクションを確認する。**
@@ -43,8 +49,21 @@ UIやインフラは変わりやすいため、そこに依存しない `Domain`
 *   **Type:** **Component Test / E2E**
 *   **Tools:** `React Testing Library`, `Storybook`, `Playwright`
 *   **Strategy:**
-    *   **Presentation (`src/components`):** `Storybook` での見た目確認、`React Testing Library` でのインタラクション（クリック等）確認。
-    *   **Controller (`src/app`):** E2Eテストでカバーする。複雑なロジックはここには無いはずなので、単体テストは不要である。
+*   **Strategy:**
+    *   **Server Component (`src/app/**/page.tsx`):**
+        *   **Rule:** `async` コンポーネントの単体テストは困難（RTL非対応）なため、**Unit Testは作成しない**。
+        *   **Alternative:** E2Eテスト (`Playwright`) で表示確認を行う。
+    *   **Client Component (`src/components`):**
+        *   **Rule:** `React Testing Library (RTL)` を使用し、内部stateではなく「ユーザーから見た振る舞い（ボタンが押せるか、表示が変わったか）」をテストする。
+        *   **Wrapper Pattern:**
+            *   `[Feature]Renderer.tsx`: テスト対象のメイン。RTLでロジック検証。
+            *   `[Feature]ClientWrapper.tsx`: E2Eに任せ、Unit Testはスキップ可。
+    *   **Controller (`src/app` - Server Actions):**
+        *   **Mocking Strategy:** `next/navigation` (`redirect`) や `next/headers` (`cookies`) を使用している場合は、必ず `vi.mock` でモック化する。
+            ```ts
+            vi.mock('next/navigation', () => ({ redirect: vi.fn() }));
+            ```
+        *   **Validation Check:** Zodバリデーションが機能しているか、不正データを渡して検証する。
 
 ## 3. Tooling Stack
 
