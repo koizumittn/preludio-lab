@@ -1,31 +1,61 @@
 import Link from 'next/link';
-import { ScorePlaceholder } from '@/components/ui/ScorePlaceholder';
 import { AudioPlayerPlaceholder } from '@/components/ui/AudioPlayerPlaceholder';
-import { Skeleton } from '@/components/ui/Skeleton';
+import Score from '@/components/features/score';
+
+import { PinoLogger } from '@/infrastructure/logging/pino-logger';
+
+// ... (inside component)
+
+<div className="my-6">
+    {/* Score Renderer (Client Wrapper) */}
+    <div className="rounded-lg bg-white p-4 shadow-sm border border-gray-100 overflow-hidden">
+        <Score abc={`
+X:1
+T:Prelude in C Major
+C:J.S. Bach
+M:4/4
+L:1/16
+K:C
+c2e2g2c'2 c2e2g2c'2 | c2e2g2c'2 c2e2g2c'2 |
+d2f2a2d'2 d2f2a2d'2 | d2f2a2d'2 d2f2a2d'2 |
+`} />
+    </div>
+    <p className="mt-2 text-center text-sm text-gray-500 italic">Figure 1: Opening measures showing the arpeggio pattern</p>
+</div>
 
 // ... (inside component)
 
 
+const logger = new PinoLogger();
 
 export default async function ArticlePage({ params }: { params: Promise<{ lang: string; slug: string }> }) {
     const { lang, slug } = await params;
-    // Mock Data
-    const article = {
-        title: 'Prelude in C Major, BWV 846',
-        composer: 'Johann Sebastian Bach',
-        key: 'C Major',
-        difficulty: 'Beginner - Intermediate',
-        sections: [
-            {
-                title: 'Introduction',
-                content: 'This prelude is the first piece from "The Well-Tempered Clavier", Book I. It is famous for its rolling arpeggios that create a rich harmonic texture without a distinct melodic line.',
-            },
-            {
-                title: 'Structural Analysis',
-                content: 'The piece consists entirely of broken chords (arpeggios). The harmonic progression is the core of this work. Observe the bass line movement.',
-            },
-        ],
-    };
+    let article;
+
+    try {
+        // Mock Data
+        article = {
+            title: 'Prelude in C Major, BWV 846',
+            composer: 'Johann Sebastian Bach',
+            key: 'C Major',
+            difficulty: 'Beginner - Intermediate',
+            sections: [
+                {
+                    title: 'Introduction',
+                    content: 'This prelude is the first piece from "The Well-Tempered Clavier", Book I. It is famous for its rolling arpeggios that create a rich harmonic texture without a distinct melodic line.',
+                },
+                {
+                    title: 'Structural Analysis',
+                    content: 'The piece consists entirely of broken chords (arpeggios). The harmonic progression is the core of this work. Observe the bass line movement.',
+                },
+            ],
+        };
+    } catch (error) {
+        logger.error('Failed to fetch article data', error as Error, { slug });
+        // You might want to render an error page or redirect here
+        return <div>Error loading article.</div>;
+    }
+
 
     return (
         <div className="container mx-auto max-w-4xl px-4 py-12">
@@ -67,14 +97,18 @@ export default async function ArticlePage({ params }: { params: Promise<{ lang: 
                         <p className="mb-6 leading-relaxed text-gray-700">{article.sections[1].content}</p>
                         <div className="my-6">
                             {/* Replaced ScorePlaceholder with Skeleton for Loading State Demo */}
-                            <div className="rounded-lg bg-white p-6 shadow-sm border border-gray-100">
-                                <div className="space-y-4">
-                                    <Skeleton className="h-48 w-full" />
-                                    <div className="flex gap-2">
-                                        <Skeleton className="h-4 w-1/4" />
-                                        <Skeleton className="h-4 w-1/4" />
-                                    </div>
-                                </div>
+                            {/* Score Renderer (Client Wrapper) */}
+                            <div className="rounded-lg bg-white p-4 shadow-sm border border-gray-100 overflow-hidden">
+                                <Score abc={`
+X:1
+T:Prelude in C Major
+C:J.S. Bach
+M:4/4
+L:1/16
+K:C
+c2e2g2c'2 c2e2g2c'2 | c2e2g2c'2 c2e2g2c'2 |
+d2f2a2d'2 d2f2a2d'2 | d2f2a2d'2 d2f2a2d'2 |
+`} />
                             </div>
                             <p className="mt-2 text-center text-sm text-gray-500 italic">Figure 1: Opening measures showing the arpeggio pattern</p>
                         </div>

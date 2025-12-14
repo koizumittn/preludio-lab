@@ -7,10 +7,11 @@ import { useState, useEffect } from 'react';
  * GDPR-compliant cookie consent banner.
  */
 export function ConsentBanner() {
+
+
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
-        // Mock: Check local storage
         const consented = localStorage.getItem('cookie-consent');
         if (!consented) {
             setIsVisible(true);

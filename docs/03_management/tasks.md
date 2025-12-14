@@ -48,19 +48,18 @@ Status: `[/]` 進行中
     - [x] 楽譜・プレイヤーのプレースホルダー配置
 - [ ] **デプロイ・動作確認**
     - [ ] Vercelへの初回デプロイ
-    - [ ] レスポンシブ挙動の確認
+    - [x] レスポンシブ挙動の確認
 
 ## Phase 1: コア機能開発 ("Lab" Components)
 - [ ] **楽譜レンダリングエンジン** (Ref: `REQ-TECH-SCORE` TBD)
     - [ ] 要件と完了条件（Acceptance Criteria）の定義
-    - [ ] `ScoreRenderer` コンポーネントの実装 (`react-abc` / `verovio`)
-
+    - [x] `ScoreRenderer` コンポーネントの実装 (`abcjs`)
     - [ ] SVGレンダリングパフォーマンスの検証
     - [x] スケルトン表示 (Loading State) の実装 (Ref: `REQ-UI-006-01`)
 - [ ] **オーディオプレイヤー統合** (Ref: `REQ-TECH-AUDIO`)
     - [ ] 要件と完了条件の定義
     - [ ] `AudioPlayer` コンポーネントの実装 (YouTube IFrame API)
-    - [x] UIモード実装: Mini Player (Footer) & Focus Mode (Ref: `REQ-UI-004-02`)
+    - [ ] UIモード実装: Mini Player (Footer) & Focus Mode (Ref: `REQ-UI-004-02`)
     - [ ] 楽譜との同期ロジックの実装（任意/将来対応）
 - [ ] **多言語MDXシステム & コンテンツフロー**
     - [ ] MDXディレクトリ構成の設計 (`content/[lang]/...`)
