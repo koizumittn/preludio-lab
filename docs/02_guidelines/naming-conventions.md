@@ -12,14 +12,21 @@
 | Type | Rule | Example | Note |
 | :--- | :--- | :--- | :--- |
 | **Directories** | `kebab-case` | `components/ui`, `use-cases` | 小文字ハイフン繋ぎ。 |
-| **React Components** | `PascalCase` | `ScoreRenderer.tsx` | コンポーネント名と一致させる。 |
+| **React Components** | `PascalCase` | `ScoreRenderer.tsx` | App Router予約語（`page.tsx`等）を除く。 |
+| **App Router Files** | `kebab-case` (Fixed) | `page.tsx`, `layout.tsx` | Next.jsの仕様による予約ファイル名。 |
 | **Client Wrapper** | `PascalCase` + Wrapper | `ScoreClientWrapper.tsx` | Client-Onlyライブラリのラッパー。 |
 | **Hooks** | `camelCase` (usePrefix) | `useAudioPlayer.ts` | 必ず `use` で始める。 |
 | **Domain Entities** | `PascalCase` | `User.ts`, `Score.ts` | クラス名と一致させる。 |
 | **Use Cases** | `PascalCase` + Suffix | `RegisterUserUseCase.ts` | 動詞 + 目的語 + UseCase。 |
 | **DTOs** | `kebab-case` | `user.dto.ts` | ファイル名はkebab、中身はPascal。 |
 | **Repositories** | `PascalCase` + Suffix | `IUserRepository.ts` | IFは `I` プレフィックス推奨。 |
-| **Next.js Server Actions** | `camelCase` + Action | `registerUserAction` | Controllerとしての役割を明示。 |
+| **Next.js Server Actions** | `kebab-case` (File) | `register-user.ts` | ファイル名はkebab。 |
+
+### Code Identifiers (関数・変数名)
+| Type | Rule | Example | Note |
+| :--- | :--- | :--- | :--- |
+| **Action Functions** | `camelCase` + Action | `registerUserAction` | エクスポートする関数名。 |
+| **Variables** | `camelCase` | `isValid` | |
 
 ### Content Files (MDX) (Ref: `content-requirements.md`)
 記事MDXファイルの配置と命名は、カテゴリ (`REQ-CONT-TAX`) に従う。

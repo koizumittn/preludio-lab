@@ -135,6 +135,9 @@ graph TD
 *   **Component Definition:**
     *   `function` キーワードを使用する（アロー関数 `const Component = () => {}` は、Propsの型定義が見づらくなるため避ける）。
     *   **Props:** 必ず `interface` で定義し、エクスポートする。`React.FC` は使用しない。
+    *   **Export:** 原則として **Named Export** (`export const Component = ...` または `export function ...`) を使用する。
+        *   **Reason:** リファクタリング時の自動リネームを確実にするため、およびTree Shaking効率化のため。
+        *   **Exception:** Next.jsの `page.tsx`, `layout.tsx` 等は `export default` が必須のため例外とする。
 *   **Server vs Client:**
     *   データフェッチは Server Component で行う。
         *   **Reason:** クライアントへAPIキーやDB接続情報を露出させないため（Security）、およびJSバンドルサイズを削減するため（Performance）。VercelなどのServerless環境でも動作する。
