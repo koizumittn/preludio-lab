@@ -41,18 +41,18 @@
 Google Generative AI SDK for Node.js を使用したカスタムスクリプト群として実装。
 
 1.  **[REQ-TECH-AGENT-002] Orchestrator Script:** タスクの管理。Gemini APIのレートリミット（RPM/TPM）を超えないようにリクエスト間隔を制御する「スロットリング機能」を実装。
-2.  **[REQ-TECH-003] AI Context Injection:**
+2.  **[REQ-TECH-AGENT-003] AI Context Injection:**
     *   **課題:** 多言語展開における音楽用語の誤訳（例: Key→鍵、Note→メモ）および理論の嘘を防ぐ。
     *   **実装:** 記事生成・翻訳を行うAIエージェントに対し、「多言語音楽用語辞書（JSON）」および「信頼できる理論ソース」をコンテキストとして注入（RAGまたはSystem Prompt埋め込み）してから実行させるフローを確立する。
-3.  **[REQ-TECH-AGENT-003] Musicologist Script:**
+3.  **[REQ-TECH-AGENT-004] Musicologist Script:**
     *   楽曲解説生成
     *   ABC記法による楽譜生成
     *   YouTube Data API (Free Quota) を用いた動画検索
-4.  **[REQ-TECH-AGENT-004] Translator Script:** (Ref: [REQ-GOAL-003-03])
+4.  **[REQ-TECH-AGENT-005] Translator Script:** (Ref: [REQ-GOAL-003-03])
     *   **Trigger:** `Musicologist` による記事生成PRのマージ（またはドラフト完成）。
     *   **Process:** マスター記事（JA）を読み込み、他6言語（EN/ES/DE/ZH/FR/IT）へ並列翻訳を実行。
     *   **Output:** 各言語ディレクトリにMDXを生成し、一括でPRを作成。人間によるレビューは行わない。
-5.  **[REQ-TECH-AGENT-005] Coder Script:** コンポーネント修正、Lint修正など。
+5.  **[REQ-TECH-AGENT-006] Coder Script:** コンポーネント修正、Lint修正など。
 
 ## 4. Content & Media Strategy
 
