@@ -48,6 +48,13 @@ src/
     *   **Use Case:** ドメイン層のInterfaceを使って処理フローを記述する。具体的なDB操作は知らなくて良い。
     *   **DTO:** UI層とやり取りするための単純なデータ型。
 *   **実装のポイント:** 「Repository Interfaceを使って、〇〇を行うビジネスロジックを実装する」
+    *   **Validation Rule:** DTOの定義には必ず **Zod Schema** を併記し、型定義は `z.infer` から生成する。
+        ```ts
+        // src/application/dtos/user.dto.ts
+        import { z } from 'zod';
+        export const UserSchema = z.object({ name: z.string().min(1) });
+        export type UserDto = z.infer<typeof UserSchema>;
+        ```
 
 #### Infrastructure Layer (`src/infrastructure/`)
 *   **役割:** ドメイン層で定義されたInterfaceを、具体的な技術（Supabase, API）で実装する。
@@ -57,6 +64,7 @@ src/
 #### UI Layer (`src/app/`, `src/components/`)
 *   **役割:** データの表示とユーザー入力の受付。
 *   **Server Actions:** コントローラーとして機能する。ここで「依存性の注入（DI）」を行い、Use Caseを実行する。
+    *   **Validation Rule:** Actionの冒頭で必ず `Schema.safeParse()` を実行し、不正な入力はドメイン層に渡す前に弾く。
 
 ### 1.4. Architecture Diagram & Data Flow
 依存の矢印 `-->` は常に **内側（Domain）** に向かう。
@@ -318,6 +326,9 @@ export default function SomeComponent() {
 *   **Responsiveness:** **モバイルファースト**で記述する。
     *   **Rule:** プレフィックス無し＝スマホ（全サイズ）。`md:` などのプレフィックス＝そのサイズ以上での上書き（Desktop）。
     *   Example: `className="flex md:block"` → スマホでは `flex`、PCでは `block`。
+*   **Class Merging (`cn` util):**
+    *   再利用可能なコンポーネントでは、Props経由のスタイル上書きを可能にするため、必ず `clsx` (条件付き適用) と `tailwind-merge` (競合解決) を組み合わせたユーティリティ (`cn()` 等) を使用する。
+    *   **Rule:** 文字列連結（`className + " bg-red-500"`）は禁止。`cn("bg-red-500", className)` を使用する。
 
 ## 6. Security & Database Guidelines (Supabase)
 *   **RLS (Row Level Security):** すべてのテーブルに対して RLS を有効化 (`ENABLE ROW LEVEL SECURITY`) し、ポリシーを明示的に定義する。
