@@ -51,8 +51,8 @@ UIやインフラは変わりやすいため、そこに依存しない `Domain`
         *   `Storybook` での見た目確認。
         *   `React Testing Library` でのインタラクション（クリック等）確認。
         *   **Wrapper Patternのテスト:**
-            *   `*Renderer.tsx`: テスト対象のメイン。RTL等でロジックをテストする。
-            *   `*ClientWrapper.tsx`: ほぼローディングと動的読み込みのみのため、Unitテストは必須としない（E2Eでカバー）。
+            *   `[Feature]Renderer.tsx`: テスト対象のメイン（ロジック実装部）。RTL等でロジックをテストする。
+            *   `[Feature]ClientWrapper.tsx`: ほぼローディングと動的読み込みのみのため、Unitテストは必須としない（E2Eでカバー）。
     *   **Controller (`src/app` - Server Actions):**
         *   Server Actionsは「関数」としてエクスポートされているため、Unit Test（Integration Test）が可能。
         *   **Validation Check:** Zodバリデーションが機能しているか、不正データを渡して検証する。
