@@ -9,11 +9,14 @@ Status: `[/]` 進行中
     - [x] `01_specs/ui-ux-requirements.md` をブラッシュアップし、要件ID (`REQ-UI-XXX`) を付与
     - [x] `01_specs/content-requirements.md` をブラッシュアップし、要件ID (`REQ-CONT-XXX`) を付与
     - [x] 各要件に対する「完了条件（Acceptance Criteria）」の記述
+    - [x] **[Update]** AIデザインプロセス (`REQ-UI-PROCESS`) の追加
+    - [x] **[Update]** Designer Agent (`REQ-TECH-AGENT-007`) の追加
 - [x] **基本設計**
     - [x] **ルーティング設計:** `app/[lang]/` 配下のURL構造とページ遷移の定義
     - [x] **コンテンツデータ設計:** MDX Frontmatterのスキーマ定義 (Title, Composer, Difficulty, Tags...)
     - [x] **コンポーネント設計:** UIパーツ（Atoms/Molecules）と機能コンポーネント（Organisms）のリストアップ
-    - [x] **エージェント設計:** AIエージェント（Musicologist, Translator）の出力フォーマットとインターフェース定義
+    - [x] **デザイン仕様策定:** `docs/05_design/ui-design.md` (Tokens, Changeability) の作成
+    - [x] **エージェント設計:** AIエージェント（Musicologist, Translator, *Designer*）の出力フォーマットとインターフェース定義
 
 ## Phase 0.5: 環境構築 (Environment Setup)
 - [x] **ガイドライン策定**
@@ -27,7 +30,7 @@ Status: `[/]` 進行中
 - [x] **プロジェクトセットアップ**
     - [x] GitHubリポジトリの作成とRemote設定
     - [x] Next.js アプリの初期化 (App Router, TypeScript)
-    - [x] Tailwind CSS & デザインシステムの設定 (Fonts, Colors)
+    - [x] Tailwind CSS & デザインシステムの実装 (Variables in `globals.css`, Fonts in `layout.tsx`)
     - [x] ESLint & Prettier の設定
 - [ ] **インフラ構築**
     - [ ] Vercel プロジェクトのセットアップ

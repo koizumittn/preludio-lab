@@ -80,3 +80,14 @@
 ### [REQ-UI-007] Keyboard & A11y Support
 *   **[REQ-UI-007-01] Keyboard Support:** 全てのインタラクションがキーボードのみで操作可能であること。
 *   **[REQ-UI-007-02] Screen Reader:** 楽譜データ（ABC）は読み上げられない可能性があるため、代替テキスト（Alt）や構造化データによる解説を提供すること。
+
+## 5. AI Design Process (AI-First Workflow)
+人間のデザイナーを雇用せず、AIエージェントによる自動生成とコードベースのデザイン管理で品質を担保する。
+
+### [REQ-UI-PROCESS-001] AI-First Design Workflow
+*   **[REQ-UI-PROCESS-001-01] Concept & Inspiration:** 人間（Producer）がムードボードやキーワード（例: "Timeless & Modern", "Swiss Style"）を定義し、AIエージェントがそれを具体的なカラースキームやフォントの組み合わせ（Tokens）に変換する。
+*   **[REQ-UI-PROCESS-001-02] Component Generation:** `Designer Agent` がデザインシステムに基づき、Reactコンポーネント（Tailwind CSS）を直接生成する。Figma等のデザインツールは「思考の補助」としてのみ使用し、**正としてのデザインデータ（Master）はコード（Github）に置く。**
+
+### [REQ-UI-PROCESS-002] Design System as Code
+*   **[REQ-UI-PROCESS-002-01] Token Management:** 色、スペース、タイポグラフィの定義はすべて `tailwind.config.ts` または CSS Variables として管理し、AIがこれを参照して実装を行う。
+*   **[REQ-UI-PROCESS-002-02] Visual Regression Testing:** デザイン崩れの検知は、人間（Producer）の目視確認に加え、AIによるスナップショット比較（VRT）によって自動化する。
