@@ -17,7 +17,7 @@ UIやインフラは変わりやすいため、そこに依存しない `Domain`
     *   外部依存やモック（Mock）は一切使用しない。入力に対する出力が正しいかを検証する。
     *   境界値テスト（Boundary Value Analysis）を重点的に行う。
 *   **Target:** `Entities`, `Domain Services`
-*   **Validation:** Zodスキーマのパース検証（不正入力でエラーになるか）もここで担保しても良い（またはApplication層）。
+*   **Validation:** Domain層では「ビジネスルールの整合性」をテストする。入力値の形式（フォーマット）チェックはここではなく、Application層の責務とする。
 
 ### 2.2. Application Layer (`src/application/`)
 **ユースケース（処理の流れ）が正しく構成されているかを確認する。**
@@ -27,7 +27,10 @@ UIやインフラは変わりやすいため、そこに依存しない `Domain`
 *   **Strategy:**
     *   `src/domain/repositories` のインターフェースを **Mock化** してテストする（Repositoryの挙動は制御下に置く）。
     *   「正常系」だけでなく「リポジトリがエラーを吐いた場合」などの「異常系」もテストする。
-*   **Target:** `Use Case` classes
+*   **Target:** `Use Case` classes, `DTOs`
+*   **Validation Rule (Strict):**
+    *   **DTO Test:** `zod` スキーマ定義を含む DTO ファイルに対してテストを作成し、境界値や不正なフォーマットの入力が正しくエラー（`ZodError`）になることを検証する。
+    *   **Use Case:** バリデーション済みのデータが渡ってくる前提で、ビジネスフローをテストする。
 
 ### 2.3. Infrastructure Layer (`src/infrastructure/`)
 **外部システム（Supabase, API）との連携が正しく行えるかを確認する。**
