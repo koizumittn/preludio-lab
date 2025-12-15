@@ -97,6 +97,21 @@ Status: `[/]` 進行中
         - [ ] イタリア語 (IT) の出力検証
         - [ ] 中国語 (ZH) の出力検証
 
+- [ ] **コンテンツ量産体制の構築と実行 (Content Operations)**
+    - [ ] **Strategy:**
+        - [ ] 初回リリース用コンテンツ選定 (Target: 10-20 articles for Launch)
+        - [ ] コンテントマップ作成 (Composers / Genres / Difficulty Matrix)
+    - [ ] **Execution (Pilot):**
+        - [ ] エージェントによるパイロット記事 5本生成
+        - [ ] 人手による品質レビュー (Music Theory, Notation, Translation Checks)
+        - [ ] 修正フィードバックループの確立 (Prompt Tuning based on feedback)
+    - [ ] **Execution (Batch):**
+        - [ ] バッチ処理による記事大量生成
+        - [ ] 画像・メディアアセットの半自動生成 (OGP, Analysis Diagrams)
+    - [ ] **QA & Publication:**
+        - [ ] リンク切れ・レイアウト崩れの最終チェック
+        - [ ] 公開スケジュール策定
+
 ## Phase 3: ビジネス・成長施策 (Ref: `business-requirements.md`)
 - [ ] **SEO最適化** (Ref: `REQ-GOAL-001`)
     - [ ] 動的メタデータ生成の実装
