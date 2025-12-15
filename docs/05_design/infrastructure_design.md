@@ -79,6 +79,7 @@
 1.  Push `feat/*` -> GitHub Actions (Test)
 2.  PR -> Vercel Preview (Deploy)
 3.  Merge `master` -> Vercel Production (Deploy *Disabled pre-launch*)
+    -   *Note: ローンチ前は Vercel 設定 (`Settings > Git`) で Production への Auto-Deploy を無効化し、手動デプロイで運用します。*
 
 ### セキュリティ対策 (Security Measures)
 - **Branch Protection:** `master` ブランチへの直接Pushを禁止し、必ずPRとCI通過を必須とする（GitHub設定）。
@@ -88,12 +89,32 @@
 ---
 
 ## 7. 可観測性と監視 (Observability & Monitoring)
-- **Speed:** Vercel Analytics / Speed Insights
-- **Error:** Sentry (Free Tier)
-- **DB Health:** Supabase Dashboard
+アプリケーションの健全性とエラーをプロアクティブに監視します（[REQ-TECH-STACK-012]準拠）。
+
+### 監視ツールスタック
+- **Access / Speed:** **Vercel Analytics** & **Speed Insights**
+  - Web Vitals (LCP, CLS, INP) の継続的な計測。
+  - リアルタイムのアクセス解析（Privacy-friendly）。
+- **Error Tracking:** **Sentry** (Free Tier)
+  - フロントエンドおよびAPIルートでの未処理例外（Exception）の捕捉。
+  - リリースごとの不具合発生率の可視化。
+- **Database Health:** **Supabase Dashboard**
+  - CPU/RAM使用率、ディスク容量、スロークエリの監視。
 
 ---
 
 ## 8. クォータ管理と制限 (Quota & Cost Management) (Free Tier)
-- **Vercel:** 100GB Bandwidth, 10s Function Timeout
-- **Supabase:** 500MB DB Size, 2 Active Projects
+Hobby Plan (Free Tier) の制限内で運用するための管理指針です。
+
+### Vercel (Hobby Plan)
+- **Bandwidth:** 100GB / month
+- **Serverless Function:** 10s timeout / 1,000,000 invocations
+  - *対策:* 重い処理は Edge Functions または GitHub Actions (Agent) へオフロードする。
+
+### Supabase (Free Tier)
+- **Database Size:** 500MB
+  - *対策:* 画像などのバイナリはDBに入れず、必ず Object Storage または外部ホスティング（YouTube等）を利用する。
+- **Active Projects:** 2 projects maximum
+  - *対策:* Prod/Devの2環境構成までとし、それ以上はDockerを利用する。
+- **Pausing:** 1週間アクセスがないと一時停止される。
+  - *対策:* 定期的なCronジョブまたはアクセスにより稼働を維持する。
