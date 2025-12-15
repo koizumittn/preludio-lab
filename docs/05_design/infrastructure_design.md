@@ -9,8 +9,8 @@
 
 | 環境 (Environment) | アプリケーション (App) | データベース (DB) | AIエージェント (Agent Runner) | 用途・特徴 |
 | :--- | :--- | :--- | :--- | :--- |
-| **Development** | **Local PC**<br>`localhost:3000` | **Supabase (Prod)**<br>*直接接続* | **Local PC**<br>*手動実行* | 機能開発、単体テスト、エージェントの試運転。 |
-| **Staging** | **Vercel Preview**<br>`git-branch-url` | **Supabase (Prod)**<br>*直接接続* | **GitHub Actions**<br>*Pull Request Trigger* | ステージング相当。自動デプロイによる動作確認、E2Eテスト。 |
+| **Development** | **Local PC**<br>`localhost:3000` | **Local Supabase (Docker)**<br>*完全分離 / オフライン* | **Local PC**<br>*手動実行* | 機能開発、単体テスト、エージェントの試運転。**本番データ破壊リスクなし**。 |
+| **Staging** | **Vercel Preview**<br>`git-branch-url` | **Supabase (Prod)**<br>*直接接続 (要注意)* | **GitHub Actions**<br>*Pull Request Trigger* | ステージング相当。本番DBを参照するため、**書き込みテストは厳禁**。 |
 | **Production** | **Vercel Production**<br>`preludiolab.com` | **Supabase (Prod)**<br>*本番データ* | **GitHub Actions**<br>*Schedule / API Trigger* | 本番稼働環境。エンドユーザー向け公開。 |
 
 ---
@@ -31,6 +31,19 @@
 - **DDoS Protection:** Vercel標準のDDoS緩和措置を利用。
 - **HTTPS Enforcement:** 常時SSL/TLS化（HSTS自動適用）。
 - **Environment Variables:** 機密情報はVercel Dashboardで暗号化保管し、コードには含めない。
+
+---
+
+### 環境戦略 (Environment Strategy)
+| Environment | Next.js Runtime | Connected Database | Note |
+| :--- | :--- | :--- | :--- |
+| **Development** | Local | **Local Supabase (Docker)** | 安全。何を壊しても本番に影響なし。 |
+| **Staging** | Vercel (Preview) | **Supabase (Cloud)** | 本番と同じDBを参照（※コストゼロでの妥協点。書込禁止） |
+| **Production** | Vercel (Prod) | **Supabase (Cloud)** | 本番運用。 |
+
+**リスク管理 (Seed Data Strategy):**
+- **Master Data as Code:** 重要なマスタデータ（カテゴリ定義など）はDBのみに持たせず、コードベース（Seedファイル）で管理する。
+- **Reconstruction:** 万が一DBが消失しても、Seed実行によりアプリが動作する最低限の状態へ復旧可能にする。
 
 ---
 
@@ -68,8 +81,12 @@
 
 ### セキュリティ対策 (Security Measures)
 - **RLS (Row Level Security):** 全テーブルでRLSを有効化し、認証に基づいた厳格なアクセス制御を行う（**最重要**）。
-- **Backup:** 日次バックアップ（7世代保持）の自動実行を確認。
 - **Data API Security:** 不要なスキーマ公開を防ぐため、Public SchemaのみをExpose対象とする。
+- **Backup Strategy (Free Tier Limitation):**
+  - **Limitation:** Supabase Free Tierには、任意の時点に戻せるPITRや、UIからの簡単リストア機能は**含まれない**（運営への依頼が必要、日数もかかる）。
+  - **Self-Managed Backup:**
+      1.  **Seed Data:** 復旧可能なマスタデータはGit管理する。
+      2.  **pg_dump:** (Option) GitHub Actions定期実行により、主要データをダンプして外部ストレージ（Artifacts等）に退避するフローを検討する。
 
 ---
 
