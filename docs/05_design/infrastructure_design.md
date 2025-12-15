@@ -21,142 +21,79 @@
 ### プロジェクト設定
 - **Platform:** Vercel (Hobby Plan)
 - **Project Name:** `preludio-lab`
-- **Framework:** Next.js (App Router)
-- **Region (Function):** `Washington, D.C., USA (iad1)` (デフォルト)
-  - *理由: DB (US East) とのレイテンシを最小化するため。*
+- **Region (Function):** `Washington, D.C., USA (iad1)`
 
 ### 環境変数 (Environment Variables)
-| Key | Description | Environment |
-| :--- | :--- | :--- |
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase Project URL | Production, Preview, Development |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase Anonymous Key (Publishable) | Production, Preview, Development |
-| `SUPABASE_DB_PASSWORD` | Database Password (管理者/CI用) | (Optional) Production |
+- `NEXT_PUBLIC_SUPABASE_URL` / `ANON_KEY`
+- `SUPABASE_DB_PASSWORD` (Prod Only)
+
+### セキュリティ対策 (Security Measures)
+- **DDoS Protection:** Vercel標準のDDoS緩和措置を利用。
+- **HTTPS Enforcement:** 常時SSL/TLS化（HSTS自動適用）。
+- **Environment Variables:** 機密情報はVercel Dashboardで暗号化保管し、コードには含めない。
 
 ---
 
 ## 3. DNS (Cloudflare)
 ドメイン管理およびDNSには **Cloudflare** を使用します。
 
-### ドメイン設定
-- **Production:** `preludiolab.com` (Primary), `www.preludiolab.com`
-- **Registrar:** (取得元)
-- **Name Servers:** Cloudflare Nameservers
+### 設定
+- **Production Domain:** `preludiolab.com`
+- **DNS Records:** A/CNAME to `Vercel IP` (Proxy Status: `DNS Only`)
 
-### DNSレコード設定
-Vercelとの接続には以下のレコードを使用します。
-
-- **A Record:**
-  - Name: `@`
-  - Content: `Vercel IP` (Vercelダッシュボードで確認・管理)
-  - Proxy Status: `DNS Only` (推奨)
-- **CNAME Record** (or A Record for www):
-  - Name: `www`
-  - Content: `Vercel IP` (Vercelダッシュボードで確認・管理)
-  - Proxy Status: `DNS Only` (推奨)
-
-*Note: Proxy Statusを `Proxied` (Orange Cloud) にする場合は、Cloudflare側でのSSL設定(Full/Strict)に注意が必要ですが、現在は `DNS Only` でVercelに証明書管理を任せる構成とします。*
+### セキュリティ対策 (Security Measures)
+- **Account Security:** Cloudflareアカウントへの **2要素認証 (2FA)** を必須化。
+- **DNSSEC:** ドメインレジストラ側でDNSSECを有効化し、DNSキャッシュポイズニングを防止（必要に応じて）。
 
 ---
 
 ## 4. CDN (Vercel Edge Network)
 コンテンツ配信ネットワーク（CDN）には、ホスティングに付帯する **Vercel Edge Network** を利用します。
 
-- **静的アセット:** 画像、フォント、ビルド済みのJS/CSSは自動的にエッジキャッシュされます。
-- **ISR (Incremental Static Regeneration):** 生成されたHTMLページもエッジでキャッシュされ、高速に配信されます。
-- **Cache-Control:** Next.js の仕様に従い、適切なヘッダーが自動付与されます。
+### 設定
+- **Cache Policy:** 静的アセットおよびISRページのキャッシュ。
+
+### セキュリティ対策 (Security Measures)
+- **End-to-End Encryption:** クライアント⇔エッジ⇔オリジン間の全経路暗号化。
+- **Security Headers:** Next.jsの設定により `X-Content-Type-Options`, `X-Frame-Options` 等を付与し、ブラウザベースの攻撃（XSS/Clickjacking）を軽減。
 
 ---
 
 ## 5. データベース (Supabase)
 
-### プロジェクト設定
-- **Project Name:** `preludio-lab`
+### 設定
 - **Region:** `US East (N. Virginia)`
-  - *理由: Vercel IAD1 との接続性が最良であり、グローバルハブとしても最適。*
-- **Pricing Plan:** Free Tier
+- **Auth Mode:** **SSO Only** (Email/Password Disabled)
+- **Environment:** Single DB (Prod)
 
-### 認証戦略 (Authentication Strategy)
-- **Mode:** **SSO Only** (OAuth)
-- **Providers:**
-  - Email: **Disabled** (無効 - セキュリティリスク低減のため)
-  - Phone: **Disabled** (無効)
-  - Social: Google / GitHub (任意 - Optional)
-- **Settings:**
-  - `Data API`: Enabled (Public Schema)
-
-### 環境戦略 (Single DB Strategy)
-現在、全環境で **単一のデータベース (Single Database)** を使用して運用しています。
-
-**リスク管理:**
-- `Production` DB を共有しているため、**破壊的な操作 (DROP, DELETE) は極めて慎重に行う必要があります**。
-- 将来的な拡張について:
-  - Phase 2以降: `preludio-lab-dev` プロジェクトを作成し、Staging環境として分離することを検討します（Free Tierはアクティブプロジェクト2つまで可能）。
-  - オフライン開発が必須となる場合は、ローカルで Docker を使用します。
+### セキュリティ対策 (Security Measures)
+- **RLS (Row Level Security):** 全テーブルでRLSを有効化し、認証に基づいた厳格なアクセス制御を行う（**最重要**）。
+- **Backup:** 日次バックアップ（7世代保持）の自動実行を確認。
+- **Data API Security:** 不要なスキーマ公開を防ぐため、Public SchemaのみをExpose対象とする。
 
 ---
 
 ## 6. デプロイメントパイプライン
 
-### CI/CD (GitHub Actions & Vercel)
-1.  **Push to `feat/*`**:
-    -   GitHub Actions: Lint, TypeCheck, Unit Test を実行。
-2.  **Pull Request**:
-    -   Vercel: **Preview Environment** へ自動デプロイ。
-3.  **Merge to `master`**:
-    -   Vercel: **Production Environment** へ自動デプロイ。
-    -   *Note: ローンチ前は Vercel 設定 (`Settings > Git`) で Production への Auto-Deploy を無効化し、手動デプロイで運用します。*
+### CI/CD Flow
+1.  Push `feat/*` -> GitHub Actions (Test)
+2.  PR -> Vercel Preview (Deploy)
+3.  Merge `master` -> Vercel Production (Deploy *Disabled pre-launch*)
 
-### シークレット管理 (Secrets Management)
-- **Supabase Credentials:**
-  - `anon` key は公開情報です（ブラウザで使用しても安全）。
-  - `service_role` key および `DB Password` は **機密情報 (Secrets)** です。
-  - **保管場所:** Password Manager (e.g. Apple Keychain) + Vercel Env Vars。**Gitには絶対にコミットしません。**
+### セキュリティ対策 (Security Measures)
+- **Branch Protection:** `master` ブランチへの直接Pushを禁止し、必ずPRとCI通過を必須とする（GitHub設定）。
+- **Secrets Scanning:** GitHubへの誤ったシークレット混入を防ぐため、ローカルで `git-secrets` 等の導入を推奨。
+- **Least Privilege:** CI/CD用のアクセストークンは、必要最小限の権限（Repo Scope等）でのみ発行する。
 
 ---
 
 ## 7. 可観測性と監視 (Observability & Monitoring)
-アプリケーションの健全性とエラーをプロアクティブに監視します（[REQ-TECH-STACK-012]準拠）。
-
-### 監視ツールスタック
-- **Access / Speed:** **Vercel Analytics** & **Speed Insights**
-  - Web Vitals (LCP, CLS, INP) の継続的な計測。
-  - リアルタイムのアクセス解析（Privacy-friendly）。
-- **Error Tracking:** **Sentry** (Free Tier)
-  - フロントエンドおよびAPIルートでの未処理例外（Exception）の捕捉。
-  - リリースごとの不具合発生率の可視化。
-- **Database Health:** **Supabase Dashboard**
-  - CPU/RAM使用率、ディスク容量、スロークエリの監視。
+- **Speed:** Vercel Analytics / Speed Insights
+- **Error:** Sentry (Free Tier)
+- **DB Health:** Supabase Dashboard
 
 ---
 
-## 8. セキュリティとバックアップ (Security & Backup)
-
-### データセキュリティ (Supabase)
-- **RLS (Row Level Security):**
-  - **原則:** すべてのテーブルに対して RLS を有効化 (`ENABLE ROW LEVEL SECURITY`) する。
-  - **ポリシー:** 認証済みユーザー、または特定の条件下（公開データ等）でのみ読み書きを許可するポリシーを厳格に適用する。
-- **Backup Strategy:**
-  - **Automated Backup:** Supabase Free Tier 標準の **日次バックアップ** を利用（保持期間: 7日間）。
-  - **Disaster Recovery:** 重大なデータ損失時は、Supabaseサポートへの連絡またはPITR（Pro Plan以上）が必要となる点を留意する。
-
-### ネットワークセキュリティ
-- **Cloudflare / Vercel:** 標準のWAFおよびDDoS保護を利用。
-- **SSL/TLS:** Vercelによる自動証明書発行とHTTPS強制により、通信経路を暗号化。
-
----
-
-## 9. クォータ管理と制限 (Quota & Cost Management)
-Hobby Plan (Free Tier) の制限内で運用するための管理指針です。
-
-### Vercel (Hobby Plan)
-- **Bandwidth:** 100GB / month
-- **Serverless Function:** 10s timeout / 1,000,000 invocations
-  - *対策:* 重い処理は Edge Functions または GitHub Actions (Agent) へオフロードする。
-
-### Supabase (Free Tier)
-- **Database Size:** 500MB
-  - *対策:* 画像などのバイナリはDBに入れず、必ず Object Storage または外部ホスティング（YouTube等）を利用する。
-- **Active Projects:** 2 projects maximum
-  - *対策:* Prod/Devの2環境構成までとし、それ以上はDockerを利用する。
-- **Pausing:** 1週間アクセスがないと一時停止される。
-  - *対策:* 定期的なCronジョブまたはアクセスにより稼働を維持する。
+## 8. クォータ管理と制限 (Quota & Cost Management) (Free Tier)
+- **Vercel:** 100GB Bandwidth, 10s Function Timeout
+- **Supabase:** 500MB DB Size, 2 Active Projects
