@@ -38,7 +38,6 @@ UIやインフラは変わりやすいため、そこに依存しない `Domain`
 *   **Type:** **Integration Test**
 *   **Tool:** `Vitest`
 *   **Strategy:**
-*   **Strategy:**
     *   **Scope Limitation:** 実際のDB接続を伴うテストはコストが高いため、Unit Testでは**「データ変換ロジック（Mapper）」の検証**に集中する。
         *   例: Supabaseからのレスポンス(Snake Case)が、正しくEntity(Camel Case)に変換されているか。
     *   **Mocking:** `supabase-js` クライアント自体をモックし、通信発生を回避する。実際の通信テストは手動またはE2Eで行う。
@@ -48,7 +47,6 @@ UIやインフラは変わりやすいため、そこに依存しない `Domain`
 
 *   **Type:** **Component Test / E2E**
 *   **Tools:** `React Testing Library`, `Storybook`, `Playwright`
-*   **Strategy:**
 *   **Strategy:**
     *   **Server Component (`src/app/**/page.tsx`):**
         *   **Rule:** `async` コンポーネントの単体テストは困難（RTL非対応）なため、**Unit Testは作成しない**。
@@ -65,13 +63,21 @@ UIやインフラは変わりやすいため、そこに依存しない `Domain`
             ```
         *   **Validation Check:** Zodバリデーションが機能しているか、不正データを渡して検証する。
 
-## 3. Tooling Stack
+## 3. Tooling Stack & Configuration
 
 | Category | Tool | Scope |
 | :--- | :--- | :--- |
 | **Unit / Integration** | **Vitest** | Domain, Application, Infra |
 | **Component** | **Storybook** | UI Components (Visual) |
 | **E2E** | **Playwright** | Critical User Flows (Smoke Test) |
+
+### 3.1. Scripts & Config
+*   **Config File:** `vitest.config.ts` (React/TS対応済み), `vitest.setup.ts` (Global Setup)
+*   **Commands:**
+    *   `npm test`: 全てのテストを1回実行する。
+    *   `npm run test:watch`: ウォッチモードでテストを実行する（変更を検知して再実行）。
+    *   `npm run test:coverage`: カバレッジレポートを生成する。
+*   **CI Integration:** `ci-check.yml` 内の `Unit Test` ステップで実行される。
 
 ## 4. Test Example (Pseudocode)
 
