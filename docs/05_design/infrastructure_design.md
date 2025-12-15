@@ -47,11 +47,11 @@ Vercelとの接続には以下のレコードを使用します。
 
 - **A Record:**
   - Name: `@`
-  - Content: `76.76.21.21` (Vercel IP)
+  - Content: `Vercel IP` (Vercelダッシュボードで確認・管理)
   - Proxy Status: `DNS Only` (推奨)
 - **CNAME Record** (or A Record for www):
   - Name: `www`
-  - Content: `76.76.21.21` (Vercel IP)
+  - Content: `Vercel IP` (Vercelダッシュボードで確認・管理)
   - Proxy Status: `DNS Only` (推奨)
 
 *Note: Proxy Statusを `Proxied` (Orange Cloud) にする場合は、Cloudflare側でのSSL設定(Full/Strict)に注意が必要ですが、現在は `DNS Only` でVercelに証明書管理を任せる構成とします。*
@@ -104,12 +104,13 @@ Vercelとの接続には以下のレコードを使用します。
     -   Vercel: **Preview Environment** へ自動デプロイ。
 3.  **Merge to `master`**:
     -   Vercel: **Production Environment** へ自動デプロイ。
+    -   *Note: ローンチ前は Vercel 設定 (`Settings > Git`) で Production への Auto-Deploy を無効化し、手動デプロイで運用します。*
 
 ### シークレット管理 (Secrets Management)
 - **Supabase Credentials:**
   - `anon` key は公開情報です（ブラウザで使用しても安全）。
   - `service_role` key および `DB Password` は **機密情報 (Secrets)** です。
-  - **保管場所:** 1Password (マスター) + Vercel Env Vars。**Gitには絶対にコミットしません。**
+  - **保管場所:** Password Manager (e.g. Apple Keychain) + Vercel Env Vars。**Gitには絶対にコミットしません。**
 
 ---
 
