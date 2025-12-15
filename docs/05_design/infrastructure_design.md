@@ -10,7 +10,7 @@
 | 環境 (Environment) | アプリケーション (App) | データベース (DB) | AIエージェント (Agent Runner) | 用途・特徴 |
 | :--- | :--- | :--- | :--- | :--- |
 | **Development** | **Local PC**<br>`localhost:3000` | **Supabase (Prod)**<br>*直接接続* | **Local PC**<br>*手動実行* | 機能開発、単体テスト、エージェントの試運転。 |
-| **Verification** | **Vercel Preview**<br>`git-branch-url` | **Supabase (Prod)**<br>*直接接続* | **GitHub Actions**<br>*Pull Request Trigger* | ステージング相当。自動デプロイによる動作確認、E2Eテスト。 |
+| **Staging** | **Vercel Preview**<br>`git-branch-url` | **Supabase (Prod)**<br>*直接接続* | **GitHub Actions**<br>*Pull Request Trigger* | ステージング相当。自動デプロイによる動作確認、E2Eテスト。 |
 | **Production** | **Vercel Production**<br>`preludiolab.com` | **Supabase (Prod)**<br>*本番データ* | **GitHub Actions**<br>*Schedule / API Trigger* | 本番稼働環境。エンドユーザー向け公開。 |
 
 ---
