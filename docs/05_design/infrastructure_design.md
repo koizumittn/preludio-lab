@@ -15,19 +15,15 @@
 
 ---
 
-## 2. ホスティング (Application)
+## 2. ホスティング (Vercel)
+アプリケーション（Next.js）のホスティングには **Vercel** を使用します。
 
 ### プロジェクト設定
+- **Platform:** Vercel (Hobby Plan)
 - **Project Name:** `preludio-lab`
-- **Framework:** Next.js
+- **Framework:** Next.js (App Router)
 - **Region (Function):** `Washington, D.C., USA (iad1)` (デフォルト)
   - *理由: DB (US East) とのレイテンシを最小化するため。*
-
-### ドメイン設定
-- **Production:** `preludiolab.com` (Primary), `www.preludiolab.com`
-- **DNS (Cloudflare):**
-  - A Record: `VercelのIPアドレス` (公式ドキュメント参照)
-  - Proxy Status: `DNS Only` (Vercel側でのSSL管理を推奨)
 
 ### 環境変数 (Environment Variables)
 | Key | Description | Environment |
@@ -38,7 +34,40 @@
 
 ---
 
-## 3. データベース (Database)
+## 3. DNS (Cloudflare)
+ドメイン管理およびDNSには **Cloudflare** を使用します。
+
+### ドメイン設定
+- **Production:** `preludiolab.com` (Primary), `www.preludiolab.com`
+- **Registrar:** (取得元)
+- **Name Servers:** Cloudflare Nameservers
+
+### DNSレコード設定
+Vercelとの接続には以下のレコードを使用します。
+
+- **A Record:**
+  - Name: `@`
+  - Content: `76.76.21.21` (Vercel IP)
+  - Proxy Status: `DNS Only` (推奨)
+- **CNAME Record** (or A Record for www):
+  - Name: `www`
+  - Content: `76.76.21.21` (Vercel IP)
+  - Proxy Status: `DNS Only` (推奨)
+
+*Note: Proxy Statusを `Proxied` (Orange Cloud) にする場合は、Cloudflare側でのSSL設定(Full/Strict)に注意が必要ですが、現在は `DNS Only` でVercelに証明書管理を任せる構成とします。*
+
+---
+
+## 4. CDN (Vercel Edge Network)
+コンテンツ配信ネットワーク（CDN）には、ホスティングに付帯する **Vercel Edge Network** を利用します。
+
+- **静的アセット:** 画像、フォント、ビルド済みのJS/CSSは自動的にエッジキャッシュされます。
+- **ISR (Incremental Static Regeneration):** 生成されたHTMLページもエッジでキャッシュされ、高速に配信されます。
+- **Cache-Control:** Next.js の仕様に従い、適切なヘッダーが自動付与されます。
+
+---
+
+## 5. データベース (Supabase)
 
 ### プロジェクト設定
 - **Project Name:** `preludio-lab`
@@ -66,7 +95,7 @@
 
 ---
 
-## 4. デプロイメントパイプライン
+## 6. デプロイメントパイプライン
 
 ### CI/CD (GitHub Actions & Vercel)
 1.  **Push to `feat/*`**:
