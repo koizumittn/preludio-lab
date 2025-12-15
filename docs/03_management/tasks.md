@@ -35,10 +35,11 @@ Status: `[/]` 進行中
 - [x] **インフラ構築**
     - [x] Vercel プロジェクトのセットアップ
     - [x] Supabase プロジェクトのセットアップ (Auth: SSO Only)
+    - [ ] **Local DB Setup:** Docker Compose & Supabase CLI Setup (for Dev Isolation) <!-- Postponed due to Docker version issue -->
     - [x] **ドメイン設定:** `preludiolab.com` の取得とVercelへの紐付け
 - [ ] **DevOps & QA基盤構築**
     - [x] GitHub Actions Workflow作成: `ci-check.yml` (Lint / TypeCheck / Unit Test)
-    - [ ] Vitest テスト環境のセットアップ
+    - [x] Vitest テスト環境のセットアップ
 - [ ] **AIエージェント環境構築 (AI Env)**
     - [ ] `agents/` ディレクトリの初期化 (package.json, tsconfig.json)
     - [ ] Google Generative AI SDK (Gemini) のインストール
