@@ -1,21 +1,32 @@
 # インフラ設計書 & 設定定義
 
 ## 概要 (Overview)
-「Zero Cost Architecture」に基づき、Vercel と Supabase の Free Tier を活用します。
+「Zero Cost Architecture」に基づき、各種SaaSの Free Tier（無料枠）を最大限活用する構成とします。
 本ドキュメントは、実際の環境設定値と運用戦略を定義します。
 
-## 1. ホスティング (Vercel)
+## 1. 環境定義 (Environment Definitions)
+アプリケーション、データベース、AIエージェントの各コンポーネントにおける環境分離戦略を定義します。
+
+| 環境 (Environment) | アプリケーション (App) | データベース (DB) | AIエージェント (Agent Runner) | 用途・特徴 |
+| :--- | :--- | :--- | :--- | :--- |
+| **Development** | **Local PC**<br>`localhost:3000` | **Supabase (Prod)**<br>*直接接続* | **Local PC**<br>*手動実行* | 機能開発、単体テスト、エージェントの試運転。 |
+| **Verification** | **Vercel Preview**<br>`git-branch-url` | **Supabase (Prod)**<br>*直接接続* | **GitHub Actions**<br>*Pull Request Trigger* | ステージング相当。自動デプロイによる動作確認、E2Eテスト。 |
+| **Production** | **Vercel Production**<br>`preludiolab.com` | **Supabase (Prod)**<br>*本番データ* | **GitHub Actions**<br>*Schedule / API Trigger* | 本番稼働環境。エンドユーザー向け公開。 |
+
+---
+
+## 2. ホスティング (Application)
 
 ### プロジェクト設定
 - **Project Name:** `preludio-lab`
 - **Framework:** Next.js
 - **Region (Function):** `Washington, D.C., USA (iad1)` (デフォルト)
-  - *理由: Supabase (US East) とのレイテンシを最小化するため。*
+  - *理由: DB (US East) とのレイテンシを最小化するため。*
 
 ### ドメイン設定
 - **Production:** `preludiolab.com` (Primary), `www.preludiolab.com`
 - **DNS (Cloudflare):**
-  - A Record: `76.76.21.21` (Vercel)
+  - A Record: `VercelのIPアドレス` (公式ドキュメント参照)
   - Proxy Status: `DNS Only` (Vercel側でのSSL管理を推奨)
 
 ### 環境変数 (Environment Variables)
@@ -27,7 +38,7 @@
 
 ---
 
-## 2. データベース (Supabase)
+## 3. データベース (Database)
 
 ### プロジェクト設定
 - **Project Name:** `preludio-lab`
@@ -47,12 +58,6 @@
 ### 環境戦略 (Single DB Strategy)
 現在、全環境で **単一のデータベース (Single Database)** を使用して運用しています。
 
-| Environment | Next.js Runtime | Connected Database | Note |
-| :--- | :--- | :--- | :--- |
-| **Production** | Vercel (Prod) | `preludio-lab` (Prod) | **本番データ (Live Data)** |
-| **Preview** | Vercel (Preview) | `preludio-lab` (Prod) | *書き込み操作に注意すること* |
-| **Development** | Local (localhost) | `preludio-lab` (Prod) | *書き込み操作に注意すること* |
-
 **リスク管理:**
 - `Production` DB を共有しているため、**破壊的な操作 (DROP, DELETE) は極めて慎重に行う必要があります**。
 - 将来的な拡張について:
@@ -61,7 +66,7 @@
 
 ---
 
-## 3. デプロイメントパイプライン
+## 4. デプロイメントパイプライン
 
 ### CI/CD (GitHub Actions & Vercel)
 1.  **Push to `feat/*`**:
