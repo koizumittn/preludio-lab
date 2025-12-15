@@ -35,11 +35,8 @@ jobs:
       - name: Type Check
         run: npm run type-check
 
-      # 暫定: テストファイルがないため、vitestが入っていれば実行、なければスキップ
-      # 現状はVitest未導入の可能性があるため、条件付き実行または導入後に有効化
-      # ここでは一旦コメントアウトし、後ほどVitest導入時に有効化する
-      # - name: Unit Test
-      #   run: npm run test
+      - name: Unit Test
+        run: npm run test
 
       - name: Build
         run: npm run build

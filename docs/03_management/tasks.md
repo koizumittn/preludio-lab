@@ -32,13 +32,14 @@ Status: `[/]` 進行中
     - [x] Next.js アプリの初期化 (App Router, TypeScript)
     - [x] Tailwind CSS & デザインシステムの実装 (Variables in `globals.css`, Fonts in `layout.tsx`)
     - [x] ESLint & Prettier の設定
-- [ ] **インフラ構築**
-    - [ ] Vercel プロジェクトのセットアップ
-    - [ ] Supabase プロジェクトのセットアップ (Auth: SSO Only)
-    - [ ] **ドメイン設定:** `preludiolab.com` の取得とVercelへの紐付け
+- [x] **インフラ構築**
+    - [x] Vercel プロジェクトのセットアップ
+    - [x] Supabase プロジェクトのセットアップ (Auth: SSO Only)
+    - [ ] **Local DB Setup:** Docker Compose & Supabase CLI Setup (for Dev Isolation) <!-- Postponed due to Docker version issue -->
+    - [x] **ドメイン設定:** `preludiolab.com` の取得とVercelへの紐付け
 - [ ] **DevOps & QA基盤構築**
     - [x] GitHub Actions Workflow作成: `ci-check.yml` (Lint / TypeCheck / Unit Test)
-    - [ ] Vitest テスト環境のセットアップ
+    - [x] Vitest テスト環境のセットアップ
 - [ ] **AIエージェント環境構築 (AI Env)**
     - [ ] `agents/` ディレクトリの初期化 (package.json, tsconfig.json)
     - [ ] Google Generative AI SDK (Gemini) のインストール
