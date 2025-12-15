@@ -110,3 +110,52 @@ Vercelとの接続には以下のレコードを使用します。
   - `anon` key は公開情報です（ブラウザで使用しても安全）。
   - `service_role` key および `DB Password` は **機密情報 (Secrets)** です。
   - **保管場所:** 1Password (マスター) + Vercel Env Vars。**Gitには絶対にコミットしません。**
+
+---
+
+## 7. 可観測性と監視 (Observability & Monitoring)
+アプリケーションの健全性とエラーをプロアクティブに監視します（[REQ-TECH-STACK-012]準拠）。
+
+### 監視ツールスタック
+- **Access / Speed:** **Vercel Analytics** & **Speed Insights**
+  - Web Vitals (LCP, CLS, INP) の継続的な計測。
+  - リアルタイムのアクセス解析（Privacy-friendly）。
+- **Error Tracking:** **Sentry** (Free Tier)
+  - フロントエンドおよびAPIルートでの未処理例外（Exception）の捕捉。
+  - リリースごとの不具合発生率の可視化。
+- **Database Health:** **Supabase Dashboard**
+  - CPU/RAM使用率、ディスク容量、スロークエリの監視。
+
+---
+
+## 8. セキュリティとバックアップ (Security & Backup)
+
+### データセキュリティ (Supabase)
+- **RLS (Row Level Security):**
+  - **原則:** すべてのテーブルに対して RLS を有効化 (`ENABLE ROW LEVEL SECURITY`) する。
+  - **ポリシー:** 認証済みユーザー、または特定の条件下（公開データ等）でのみ読み書きを許可するポリシーを厳格に適用する。
+- **Backup Strategy:**
+  - **Automated Backup:** Supabase Free Tier 標準の **日次バックアップ** を利用（保持期間: 7日間）。
+  - **Disaster Recovery:** 重大なデータ損失時は、Supabaseサポートへの連絡またはPITR（Pro Plan以上）が必要となる点を留意する。
+
+### ネットワークセキュリティ
+- **Cloudflare / Vercel:** 標準のWAFおよびDDoS保護を利用。
+- **SSL/TLS:** Vercelによる自動証明書発行とHTTPS強制により、通信経路を暗号化。
+
+---
+
+## 9. クォータ管理と制限 (Quota & Cost Management)
+Hobby Plan (Free Tier) の制限内で運用するための管理指針です。
+
+### Vercel (Hobby Plan)
+- **Bandwidth:** 100GB / month
+- **Serverless Function:** 10s timeout / 1,000,000 invocations
+  - *対策:* 重い処理は Edge Functions または GitHub Actions (Agent) へオフロードする。
+
+### Supabase (Free Tier)
+- **Database Size:** 500MB
+  - *対策:* 画像などのバイナリはDBに入れず、必ず Object Storage または外部ホスティング（YouTube等）を利用する。
+- **Active Projects:** 2 projects maximum
+  - *対策:* Prod/Devの2環境構成までとし、それ以上はDockerを利用する。
+- **Pausing:** 1週間アクセスがないと一時停止される。
+  - *対策:* 定期的なCronジョブまたはアクセスにより稼働を維持する。
