@@ -1,4 +1,4 @@
-# 1. Adopt Next.js and Supabase
+# Adopt Next.js and Supabase
 
 Date: 2025-12-15
 
