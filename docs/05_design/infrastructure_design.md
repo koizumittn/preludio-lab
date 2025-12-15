@@ -1,78 +1,78 @@
-# Infrastructure Design & Configuration
+# インフラ設計書 & 設定定義
 
-## Overview
-Based on "Zero Cost Architecture", we utilize Vercel and Supabase Free Tier.
-This document defines the actual configuration values and operational strategies.
+## 概要 (Overview)
+「Zero Cost Architecture」に基づき、Vercel と Supabase の Free Tier を活用します。
+本ドキュメントは、実際の環境設定値と運用戦略を定義します。
 
-## 1. Hosting (Vercel)
+## 1. ホスティング (Vercel)
 
-### Project Settings
+### プロジェクト設定
 - **Project Name:** `preludio-lab`
 - **Framework:** Next.js
-- **Region (Function):** `Washington, D.C., USA (iad1)` (Default)
-  - *Reason: To minimize latency with Supabase (US East).*
+- **Region (Function):** `Washington, D.C., USA (iad1)` (デフォルト)
+  - *理由: Supabase (US East) とのレイテンシを最小化するため。*
 
-### Domains
+### ドメイン設定
 - **Production:** `preludiolab.com` (Primary), `www.preludiolab.com`
 - **DNS (Cloudflare):**
   - A Record: `76.76.21.21` (Vercel)
-  - Proxy Status: `DNS Only` (Recommended for SSL handling by Vercel)
+  - Proxy Status: `DNS Only` (Vercel側でのSSL管理を推奨)
 
-### Environment Variables
+### 環境変数 (Environment Variables)
 | Key | Description | Environment |
 | :--- | :--- | :--- |
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase Project URL | Production, Preview, Development |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase Anonymous Key (Publishable) | Production, Preview, Development |
-| `SUPABASE_DB_PASSWORD` | Database Password (for Admin/CI) | (Optional) Production |
+| `SUPABASE_DB_PASSWORD` | Database Password (管理者/CI用) | (Optional) Production |
 
 ---
 
-## 2. Database (Supabase)
+## 2. データベース (Supabase)
 
-### Project Settings
+### プロジェクト設定
 - **Project Name:** `preludio-lab`
 - **Region:** `US East (N. Virginia)`
-  - *Reason: Best connectivity with Vercel IAD1 and global hub.*
+  - *理由: Vercel IAD1 との接続性が最良であり、グローバルハブとしても最適。*
 - **Pricing Plan:** Free Tier
 
-### Authentication Strategy
+### 認証戦略 (Authentication Strategy)
 - **Mode:** **SSO Only** (OAuth)
 - **Providers:**
-  - Email: **Disabled** (Security Risk Mitigation)
-  - Phone: **Disabled**
-  - Social: Google / GitHub (Optional)
+  - Email: **Disabled** (無効 - セキュリティリスク低減のため)
+  - Phone: **Disabled** (無効)
+  - Social: Google / GitHub (任意 - Optional)
 - **Settings:**
   - `Data API`: Enabled (Public Schema)
 
-### Environment Strategy (Single DB)
-Currently, we operate with a **Single Database Strategy** for all environments.
+### 環境戦略 (Single DB Strategy)
+現在、全環境で **単一のデータベース (Single Database)** を使用して運用しています。
 
 | Environment | Next.js Runtime | Connected Database | Note |
 | :--- | :--- | :--- | :--- |
-| **Production** | Vercel (Prod) | `preludio-lab` (Prod) | **Live Data** |
-| **Preview** | Vercel (Preview) | `preludio-lab` (Prod) | *Careful with write operations* |
-| **Development** | Local (localhost) | `preludio-lab` (Prod) | *Careful with write operations* |
+| **Production** | Vercel (Prod) | `preludio-lab` (Prod) | **本番データ (Live Data)** |
+| **Preview** | Vercel (Preview) | `preludio-lab` (Prod) | *書き込み操作に注意すること* |
+| **Development** | Local (localhost) | `preludio-lab` (Prod) | *書き込み操作に注意すること* |
 
-**Risk Management:**
-- Since `Production` DB is shared, **destructive actions (DROP, DELETE) must be performed with extreme caution**.
-- For future expansion:
-  - Phase 2+: Considered creating `preludio-lab-dev` project for staging (Free Tier allows 2 active projects).
-  - Use Docker locally if offline development is strictly required.
+**リスク管理:**
+- `Production` DB を共有しているため、**破壊的な操作 (DROP, DELETE) は極めて慎重に行う必要があります**。
+- 将来的な拡張について:
+  - Phase 2以降: `preludio-lab-dev` プロジェクトを作成し、Staging環境として分離することを検討します（Free Tierはアクティブプロジェクト2つまで可能）。
+  - オフライン開発が必須となる場合は、ローカルで Docker を使用します。
 
 ---
 
-## 3. Deployment Pipeline
+## 3. デプロイメントパイプライン
 
 ### CI/CD (GitHub Actions & Vercel)
 1.  **Push to `feat/*`**:
-    -   GitHub Actions: Lint, TypeCheck, Unit Test.
+    -   GitHub Actions: Lint, TypeCheck, Unit Test を実行。
 2.  **Pull Request**:
-    -   Vercel: Deploys to **Preview Environment**.
+    -   Vercel: **Preview Environment** へ自動デプロイ。
 3.  **Merge to `master`**:
-    -   Vercel: Deploys to **Production Environment**.
+    -   Vercel: **Production Environment** へ自動デプロイ。
 
-### Secrets Management
+### シークレット管理 (Secrets Management)
 - **Supabase Credentials:**
-  - `anon` key is public (safe for browser).
-  - `service_role` key and `DB Password` are **Secrets**.
-  - **Storage:** 1Password (Master) + Vercel Env Vars. **Never in Git.**
+  - `anon` key は公開情報です（ブラウザで使用しても安全）。
+  - `service_role` key および `DB Password` は **機密情報 (Secrets)** です。
+  - **保管場所:** 1Password (マスター) + Vercel Env Vars。**Gitには絶対にコミットしません。**
