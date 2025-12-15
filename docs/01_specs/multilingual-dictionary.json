@@ -1,0 +1,83 @@
+{
+    "meta": {
+        "description": "Multilingual Dictionary for AI Agents (Translator/Musicologist).",
+        "languages": [
+            "en",
+            "ja",
+            "es",
+            "fr",
+            "de",
+            "it",
+            "zh"
+        ],
+        "version": "1.0.0"
+    },
+    "terms": [
+        {
+            "id": "term_work",
+            "context": "Musical Composition",
+            "en": "Work",
+            "ja": "作品",
+            "es": "Obra",
+            "fr": "Œuvre",
+            "de": "Werk",
+            "it": "Opera",
+            "zh": "作品"
+        },
+        {
+            "id": "term_movement",
+            "context": "Section of a work",
+            "en": "Movement",
+            "ja": "楽章",
+            "es": "Movimiento",
+            "fr": "Mouvement",
+            "de": "Satz",
+            "it": "Movimento",
+            "zh": "乐章"
+        },
+        {
+            "id": "term_score",
+            "context": "Sheet Music",
+            "en": "Score",
+            "ja": "楽譜",
+            "es": "Partitura",
+            "fr": "Partition",
+            "de": "Partitur",
+            "it": "Partitura",
+            "zh": "乐谱"
+        },
+        {
+            "id": "term_key",
+            "context": "Tonality (e.g. C Major)",
+            "en": "Key",
+            "ja": "調",
+            "es": "Tonalidad",
+            "fr": "Tonalité",
+            "de": "Tonart",
+            "it": "Tonalità",
+            "zh": "调"
+        },
+        {
+            "id": "term_bar",
+            "context": "Measure",
+            "en": "Bar",
+            "ja": "小節",
+            "es": "Compás",
+            "fr": "Mesure",
+            "de": "Takt",
+            "it": "Battuta",
+            "zh": "小节"
+        },
+        {
+            "id": "term_composer",
+            "context": "Author of music",
+            "en": "Composer",
+            "ja": "作曲家",
+            "es": "Compositor",
+            "fr": "Compositeur",
+            "de": "Komponist",
+            "it": "Compositore",
+            "zh": "作曲家"
+        }
+    ]
+}

@@ -3,6 +3,10 @@
 PreludioLabプロジェクトにおける「ユビキタス言語（Ubiquitous Language）」を定義します。
 開発者、PM、AIエージェント間で、言葉の定義を統一するために使用します。
 
+> [!NOTE]
+> AIエージェント（翻訳・執筆）用の多言語対訳データ（7ヶ国語）は [multilingual-dictionary.json](./multilingual-dictionary.json) で管理しています。
+> 本ドキュメントは、主に**ドメイン概念の定義**と**日本語/英語の対応**に焦点を当てています。
+
 ## Domain: Content & Music (音楽・コンテンツ)
 
 | Term (En) | Term (Ja) | Description | Context / Usage |
