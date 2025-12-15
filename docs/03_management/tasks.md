@@ -32,10 +32,10 @@ Status: `[/]` 進行中
     - [x] Next.js アプリの初期化 (App Router, TypeScript)
     - [x] Tailwind CSS & デザインシステムの実装 (Variables in `globals.css`, Fonts in `layout.tsx`)
     - [x] ESLint & Prettier の設定
-- [ ] **インフラ構築**
-    - [ ] Vercel プロジェクトのセットアップ
-    - [ ] Supabase プロジェクトのセットアップ (Auth: SSO Only)
-    - [ ] **ドメイン設定:** `preludiolab.com` の取得とVercelへの紐付け
+- [x] **インフラ構築**
+    - [x] Vercel プロジェクトのセットアップ
+    - [x] Supabase プロジェクトのセットアップ (Auth: SSO Only)
+    - [x] **ドメイン設定:** `preludiolab.com` の取得とVercelへの紐付け
 - [ ] **DevOps & QA基盤構築**
     - [x] GitHub Actions Workflow作成: `ci-check.yml` (Lint / TypeCheck / Unit Test)
     - [ ] Vitest テスト環境のセットアップ
