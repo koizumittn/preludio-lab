@@ -193,6 +193,8 @@ Next.js (App Router) における Hydration Mismatch を防ぐため、以下の
         *   ログには可能な限り `requestId` (Trace ID) を含め、一連の処理フローを追跡可能にする。
     *   **Security (Redaction):**
         *   パスワード、トークン、メールアドレスなどの機密情報（PII）がログに残らないよう、**Pino の `redact` オプション設定を必須**とする。
+    *   **Exception (CLI/Agents):**
+        *   GitHub Actionsや開発用スクリプト (`agents/` 等) においては、可読性とシンプルさを優先し、`console.log` / `console.error` の使用を許可する。ただし、機密情報の出力は厳禁とする。
 *   **Client-Side:**
     *   **Development:** `console.log` / `console.error` を使用してデバッグを行う。
     *   **Production:**
