@@ -1,40 +1,92 @@
-# エージェント設計 (AI Agent Design)
+# AI Agent Design (Multi-Agent System)
 
-## 1. エージェントアーキテクチャ (Agent Architecture)
-Ref: `technology-requirements.md` [REQ-TECH-AGENT-FLOW-001]
-GitHub Actions上で動作する。
+## 1. Architecture Overview
+本システムは **Multi-Agent System (MAS)** として設計され、各エージェントは独立した責務を持つ。
+通信方式には **File Bucket Relay (via GitHub Artifacts)** を採用し、Zero Cost (Free Tier) 環境での安定稼働を実現する。
 
-## 2. エージェント一覧 (Agent List)
+Ref: [ADR: Multi-Agent Architecture](../04_adrs/multi-agent-strategy.md)
+Ref: [Strategy: AI Agent Strategy](ai-agent-strategy.md)
 
-### [AGENT-MUSIC] Musicologist (音楽学者)
-*   **Role (役割):** 音楽理論と楽曲構造分析のエキスパート。
-*   **Input (入力):**
-    *   `work_name`: "Prelude in C Major BWV 846"
-    *   `composer`: "Bach"
-*   **Output (出力成果物):**
-    *   `content/ja/works/[slug].mdx`: Frontmatterを含む完全な記事ファイル。
-*   **Capabilities (能力):**
-    *   主要なモチーフの抽出とABC記法による楽譜生成。
-    *   YouTube Data APIを使用した最適な演奏動画の検索。
-    *   和声や形式を平易な日本語で解説する。
+## 2. Agent Roles & Responsibilities
 
-### [AGENT-TRANS] Translator (翻訳者)
-*   **Role (役割):** ローカライゼーションのスペシャリスト。
-*   **Input (入力):**
-    *   `source_file`: `content/ja/works/[slug].mdx`
-    *   `target_lang`: `en` または `es`
-*   **Output (出力):**
-    *   `content/[target_lang]/works/[slug].mdx`
-*   **Strategy (戦略):**
-    *   テキスト本文は翻訳するが、**ABC記法とFrontmatterのキーは保持する**。
-    *   Frontmatterの*値*（タイトル、説明文など）は翻訳する。
+### 2.1. Content Division (制作部門)
 
-## 3. プロンプト構造 (RCICO)
-Ref: `prompt-engineering-standard.md`
+#### [AGENT-CONTENT-DIR] Content Director (Orchestrator)
+*   **Role:** 進行管理、構成作成。
+*   **Input:** Theme (e.g., "Bach: Air on the G String")
+*   **Action:**
+    1.  Gemini(Flash)を使用し、記事構成案 (Skeleton) を作成。
+    2.  `Writer`, `Composer`, `Curator` への指示書を含む `context.json` を生成。
+*   **Output:** `context.json` (Upload to Artifacts)
 
-全てのプロンプトは **RCICO** パターンに従うこと：
-1.  **R**ole (役割)
-2.  **C**ontext (背景)
-3.  **I**nstruction (指示)
-4.  **C**onstraint (制約)
-5.  **O**utput (出力形式)
+#### [AGENT-WRITER] Writer (Specialist)
+*   **Role:** 本文執筆 (Musicologist)。
+*   **Input:** `context.json` (Download from Artifacts)
+*   **Action:**
+    1.  Contextに基づき、Gemini(Pro)を使用して解説本文を執筆。
+    2.  Markdown形式で整形。
+*   **Output:** `draft_ja.md` (Upload to Artifacts)
+
+#### [AGENT-COMPOSER] Composer (Specialist)
+*   **Role:** 楽譜データ作成 (Engraver)。
+*   **Input:** `context.json`
+*   **Action:** 指定された小節のABC記法テキストを生成。
+*   **Output:** `scores.json` (Upload to Artifacts)
+
+#### [AGENT-CURATOR] Curator (Specialist)
+*   **Role:** 動画選定。
+*   **Input:** `context.json`
+*   **Action:** YouTube Data APIを叩き、条件に合う動画IDを取得。
+*   **Output:** `videos.json` (Upload to Artifacts)
+
+#### [AGENT-TRANS] Translator (Specialist)
+*   **Role:** 多言語展開。
+*   **Input:** `master_ja.md` (from Git Branch)
+*   **Strategy:** **Decoupled Batch Worklow.** 言語ごとに独立したジョブとして、時間差で実行する。
+*   **Output:** `draft_[lang].md` (Commit to Branch)
+
+#### [AGENT-REVIEWER] Chief Editor (Reviewer)
+*   **Role:** 品質管理。
+*   **Input:** All Artifacts
+*   **Action:** 整合性チェック、Facts Check。
+*   **Output:** Approval or Feedback (Retry Loop Max: 2)
+
+---
+
+### 2.2. Engineering Division (開発部門)
+
+#### [AGENT-TECH-LEAD] Tech Lead (Orchestrator)
+*   **Role:** 技術設計、ボイラープレート生成。
+*   **Responsibility:** 要件定義からファイル設計までを一気通貫で担当。
+
+#### [AGENT-ENGINEER] Engineer (Implementer)
+*   **Role:** 実装 & 自己レビュー。
+*   **Responsibility:** Lint/Type Checkをパスしたコードのみを提出する。
+
+#### [AGENT-QA] QA Engineer (Specialist)
+*   **Role:** テスト生成。
+*   **Responsibility:** Vitest / Playwright のテストコードを作成。
+
+## 3. Implementation Details (File Bucket Relay)
+
+### Data Schema (context.json)
+```json
+{
+  "theme": "Bach: Air on the G String",
+  "structure": [
+    {
+      "section_id": "intro",
+      "instruction_for_writer": "バッハの生涯と曲の背景...",
+      "instruction_for_composer": null
+    },
+    {
+      "section_id": "analysis",
+      "instruction_for_writer": "通奏低音の特徴...",
+      "instruction_for_composer": "冒頭4小節のバスライン"
+    }
+  ]
+}
+```
+
+### Prompt Engineering Standard (RCICO)
+全てのプロンプトは `prompt-engineering-standard.md` に従い **RCICO** (Role, Context, Instruction, Constraint, Output) 形式で記述する。
