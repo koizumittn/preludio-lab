@@ -41,9 +41,9 @@ Status: `[/]` 進行中
     - [x] GitHub Actions Workflow作成: `ci-check.yml` (Lint / TypeCheck / Unit Test)
     - [x] Vitest テスト環境のセットアップ
 - [ ] **AIエージェント環境構築 (AI Env)**
-    - [ ] `agents/` ディレクトリの初期化 (package.json, tsconfig.json)
-    - [ ] Google Generative AI SDK (Gemini) のインストール
-    - [ ] GitHub Actions Workflow作成: `agent-runner.yml` (Manual/Schedule Trigger)
+    - [x] `agents/` ディレクトリの初期化 (package.json, tsconfig.json)
+    - [x] Google Generative AI SDK (Gemini) のインストール
+    - [x] GitHub Actions Workflow作成: `agent-runner.yml` (Manual/Schedule Trigger)
 
 ## Phase 0.8: MVP / プロトタイプ開発 (Prototype)
 - [ ] **静的モックの実装**
