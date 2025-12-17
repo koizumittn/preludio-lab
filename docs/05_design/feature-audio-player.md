@@ -88,6 +88,15 @@ graph TD
     <main>{children}</main>
     {/* ...Footer... */}
     
+    {/* Global Persistent Components */}
+    <YouTubePlayer />
+    <MiniPlayer />
+    <FocusPlayer />
+</AppProviders>
+```
+
+これにより、ユーザーが `/works/bach-prelude` から `/about` へ移動しても、音楽は途切れずに再生され続けます。
+
 ## 6. User Interaction & UX
 
 ユーザー視点での操作フローと挙動の定義。
