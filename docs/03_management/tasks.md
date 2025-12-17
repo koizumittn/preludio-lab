@@ -37,20 +37,20 @@ Status: `[/]` 進行中
     - [x] Supabase プロジェクトのセットアップ (Auth: SSO Only)
     - [ ] **Local DB Setup:** Docker Compose & Supabase CLI Setup (for Dev Isolation) <!-- Postponed due to Docker version issue -->
     - [x] **ドメイン設定:** `preludiolab.com` の取得とVercelへの紐付け
-- [ ] **DevOps & QA基盤構築**
+- [x] **DevOps & QA基盤構築**
     - [x] GitHub Actions Workflow作成: `ci-check.yml` (Lint / TypeCheck / Unit Test)
     - [x] Vitest テスト環境のセットアップ
-- [ ] **AIエージェント環境構築 (AI Env)**
+- [x] **AIエージェント環境構築 (AI Env)**
     - [x] `agents/` ディレクトリの初期化 (package.json, tsconfig.json)
     - [x] Google Generative AI SDK (Gemini) のインストール
     - [x] GitHub Actions Workflow作成: `agent-runner.yml` (Manual/Schedule Trigger)
 
 ## Phase 0.8: MVP / プロトタイプ開発 (Prototype)
-- [ ] **静的モックの実装**
+- [x] **静的モックの実装**
     - [x] トップページのデザイン・実装 (Hardcoded + Design Tokens)
     - [x] 記事詳細ページのレイアウト確認 (Dummy Data + Skeleton)
     - [x] 楽譜・プレイヤーのプレースホルダー配置
-- [ ] **デプロイ・動作確認**
+- [x] **デプロイ・動作確認**
     - [x] Vercelへの初回デプロイ (Framework Preset, Pino Config Fixed)
     - [x] サーバーサイドログ (Pino) の復旧と確認
     - [x] レスポンシブ挙動の確認
