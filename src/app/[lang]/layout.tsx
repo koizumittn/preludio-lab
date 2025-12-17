@@ -5,7 +5,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { MiniPlayer } from '@/components/ui/Player/MiniPlayer';
 import { FocusPlayer } from '@/components/ui/Player/FocusPlayer';
-import { YouTubePlayer } from '@/components/features/player/YouTubePlayer';
+import YouTubePlayer from '@/components/features/player';
 import { AppProviders } from '@/components/providers/AppProviders';
 import { ConsentBanner } from '@/components/ui/ConsentBanner';
 import { SITE_NAME, SITE_DESCRIPTION } from '@/lib/constants';

@@ -4,7 +4,9 @@ import React, { useEffect, useRef } from 'react';
 import YouTube, { YouTubeProps, YouTubeEvent } from 'react-youtube';
 import { useAudioPlayer } from '@/components/providers/AudioPlayerContext';
 
-export function YouTubePlayer() {
+// export * from ... if needed
+
+export default function YouTubePlayer() {
     const {
         videoId,
         isPlaying,
