@@ -86,6 +86,9 @@ graph TD
 ### 5.1. AudioPlayerFeature (`src/components/features/player/`)
 *   **Role:** 音声再生エンジン。画面上は 1px × 1px の不可視領域として存在します。
 *   **Implementation:** 内部的に `YouTubePlayer` をラップしていますが、責務は汎用的な「オーディオ再生機能」の提供です。
+*   **Reliability Strategy (Manual Load):**
+    *   `react-youtube` のデフォルト動作（Prop変更による自動ロード）を無効化し、`safeLoadVideo` ヘルパー経由での手動ロードを強制しています。
+    *   これにより、非同期的に発生するYouTube APIエラー（Promise Rejection）を確実に捕捉し、Sentryへの通知とユーザーへのトーストフィードバックを実現しています。
 *   **Behavior:**
     *   `Context.isPlaying` の変化を `useEffect` で監視し、APIに対して `playVideo()` / `pauseVideo()` を発行します。
     *   `setInterval` (500ms) で再生時間をポーリングし、Contextに通知します。

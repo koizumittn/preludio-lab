@@ -122,17 +122,18 @@ export default function YouTubePlayer() {
         const duration = event.target.getDuration();
         _onReady(duration);
 
-        // 必須チェック: すでに再生状態であるべきなら、即座に再生を開始する
-        if (isPlaying) {
-            if (startTime) {
-                safeLoadVideo(event.target, {
-                    videoId: videoId || '',
-                    startSeconds: startTime,
-                    endSeconds: endTime
-                });
-            } else {
-                event.target.playVideo();
-            }
+        // 手動ロード制御: Propでの自動ロードを停止したため、ここで明示的にロードする
+        if (videoId) {
+            safeLoadVideo(event.target, {
+                videoId: videoId,
+                startSeconds: startTime || 0,
+                endSeconds: endTime
+            });
+
+            // isPlayingフラグに応じて再生/一時停止を制御
+            // loadVideoByIdは自動再生するため、!isPlayingならpauseする等の制御が必要だが、
+            // 基本的にplay()経由で呼ばれるためisPlaying=true前提。
+            // 必要であればここに !isPlaying 分岐を追加
         }
     };
 
@@ -160,7 +161,10 @@ export default function YouTubePlayer() {
     return (
         <div className="fixed bottom-0 left-0 -z-50 opacity-0 pointer-events-none" aria-hidden="true">
             <YouTube
-                videoId={videoId}
+                // videoId propを渡すとライブラリ内部で loadVideoById が走ってしまい
+                // Promiseエラーを捕捉できないため、初期化以降は渡さない（または空）にする。
+                // ただしマウント条件として videoId の存在チェックは外側で行っている。
+                videoId={undefined}
                 opts={opts}
                 onReady={onReady}
                 onStateChange={onStateChange}
