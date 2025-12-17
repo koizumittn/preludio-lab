@@ -61,11 +61,11 @@ Status: `[/]` 進行中
     - [x] `ScoreRenderer` コンポーネントの実装 (`abcjs`)
     - [x] SVGレンダリングパフォーマンスの検証
     - [x] スケルトン表示 (Loading State) の実装 (Ref: `REQ-UI-006-01`)
-- [/] **オーディオプレイヤー統合** (Ref: `REQ-TECH-AUDIO`)
+- [x] **オーディオプレイヤー統合** (Ref: `REQ-TECH-AUDIO`)
     - [x] 要件と完了条件の定義
     - [x] `AudioPlayer` コンポーネントの実装 (YouTube IFrame API)
     - [x] UIモード実装: Mini Player (Footer) & Focus Mode (Ref: `REQ-UI-004-02`)
-    - [ ] 楽譜との同期ロジックの実装（任意/将来対応）
+    - [x] 楽譜との同期ロジックの実装（Click to Play / StartTime指定の実装）
 - [ ] **多言語MDXシステム & コンテンツフロー**
     - [ ] MDXディレクトリ構成の設計 (`content/[lang]/...`)
     - [ ] MDX Loader / Parser の実装
