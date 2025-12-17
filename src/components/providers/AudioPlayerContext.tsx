@@ -13,6 +13,7 @@ export interface PlayerState {
     videoTitle: string | null;
     videoAuthor: string | null; // e.g., Composer or Channel Name
     artworkSrc: string | null; // URL for the thumbnail/artwork
+    platformLink: string | null; // URL for the external platform (attribution)
     isReady: boolean;
     volume: number;
     startTime?: number;
@@ -21,7 +22,7 @@ export interface PlayerState {
 }
 
 export interface PlayerActions {
-    play: (videoId?: string, meta?: { title?: string; author?: string; artworkSrc?: string }, options?: { startTime?: number; endTime?: number }) => void;
+    play: (videoId?: string, meta?: { title?: string; author?: string; artworkSrc?: string; platformLink?: string }, options?: { startTime?: number; endTime?: number }) => void;
     pause: () => void;
     togglePlay: () => void;
     seekTo: (time: number) => void;
@@ -55,6 +56,7 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
         videoTitle: null,
         videoAuthor: null,
         artworkSrc: null,
+        platformLink: null,
         isReady: false,
         volume: 100,
         startTime: undefined,
@@ -80,7 +82,7 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
         playerRef.current = player;
     }, []);
 
-    const play = useCallback((videoId?: string, meta?: { title?: string; author?: string; artworkSrc?: string }, options?: { startTime?: number; endTime?: number }) => {
+    const play = useCallback((videoId?: string, meta?: { title?: string; author?: string; artworkSrc?: string; platformLink?: string }, options?: { startTime?: number; endTime?: number }) => {
         setState((prev) => {
             const newState = { ...prev, isPlaying: true, playbackId: prev.playbackId + 1 };
             if (videoId && videoId !== prev.videoId) {
@@ -93,11 +95,13 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
                 newState.videoTitle = null;
                 newState.videoAuthor = null;
                 newState.artworkSrc = null;
+                newState.platformLink = null;
             }
             if (meta) {
                 if (meta.title) newState.videoTitle = meta.title;
                 if (meta.author) newState.videoAuthor = meta.author;
                 if (meta.artworkSrc) newState.artworkSrc = meta.artworkSrc;
+                if (meta.platformLink) newState.platformLink = meta.platformLink;
             }
             if (options) {
                 newState.startTime = options.startTime;

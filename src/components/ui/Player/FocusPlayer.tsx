@@ -15,10 +15,10 @@ export function FocusPlayer() {
     const {
         mode,
         setMode,
-        videoId,
         videoTitle,
         videoAuthor,
         artworkSrc,
+        platformLink,
         isPlaying,
         togglePlay,
         currentTime,
@@ -116,9 +116,9 @@ export function FocusPlayer() {
                     </p>
 
                     {/* Attribution Link */}
-                    {videoId && (
+                    {platformLink && (
                         <a
-                            href={`https://www.youtube.com/watch?v=${videoId}`}
+                            href={platformLink}
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={() => {
