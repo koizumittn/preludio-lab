@@ -114,8 +114,13 @@ export function FocusPlayer() {
                         {videoTitle || 'Unknown Title'}
                     </h2>
                     <p className="text-lg text-classic-gold font-medium">
-                        {videoAuthor || 'Unknown Composer'}
+                        {videoComposer || 'Unknown Composer'}
                     </p>
+                    {videoPerformer && (
+                        <p className="text-sm text-gray-500 font-medium">
+                            {videoPerformer}
+                        </p>
+                    )}
 
                     {/* Attribution Link */}
                     {platformUrl && platformLabel && (
