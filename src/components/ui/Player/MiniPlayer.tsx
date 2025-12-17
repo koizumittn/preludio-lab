@@ -49,7 +49,7 @@ export function MiniPlayer() {
             {/* Progress Bar */}
             <div className="h-1 w-full bg-gray-200 cursor-pointer group" onClick={() => setMode('focus')}>
                 <div
-                    className="h-full bg-classic-gold transition-all duration-300 ease-linear"
+                    className="h-full bg-accent transition-all duration-300 ease-linear"
                     style={{ width: `${progressPercent}%` }}
                 />
             </div>
