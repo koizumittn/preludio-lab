@@ -66,13 +66,13 @@ Status: `[/]` 進行中
     - [x] `AudioPlayer` コンポーネントの実装 (YouTube IFrame API)
     - [x] UIモード実装: Mini Player (Footer) & Focus Mode (Ref: `REQ-UI-004-02`)
     - [x] 楽譜との同期ロジックの実装（Click to Play / StartTime指定の実装）
-- [ ] **多言語MDXシステム & コンテンツフロー**
-    - [ ] MDXディレクトリ構成の設計 (`content/[lang]/...`)
-    - [ ] MDX Loader / Parser の実装
-    - [ ] Pagefind 検索の実装 (Ref: `technology-requirements`)
-    - [ ] 目次 (TOC) 自動生成機能の実装 (Ref: `REQ-UI-005-02`)
-    - [ ] シリーズナビゲーション (Previous/Next/Index) の実装 (Ref: `REQ-CONT-SERIES`)
-    - [ ] コンテンツパイプラインの定義: Agent出力(MDX) -> Git PR -> Deployの流れを検証
+- [x] **多言語MDXシステム & コンテンツフロー**
+    - [x] MDXディレクトリ構成の設計 (`content/[lang]/...`)
+    - [x] MDX Loader / Parser の実装
+    - [x] Pagefind 検索の実装 (Ref: `technology-requirements`)
+    - [x] 目次 (TOC) 自動生成機能の実装 (Ref: `REQ-UI-005-02`)
+    - [x] シリーズナビゲーション (Previous/Next/Index) の実装 (Ref: `REQ-CONT-SERIES`)
+    - [x] コンテンツパイプラインの定義: Agent出力(MDX) -> Git PR -> Deployの流れを検証 (Manual Build Verified)
 
 ## Phase 2: AIエージェント開発 ("Brain") & コンテンツ量産
 - [ ] **音楽学者エージェント (Musicologist Agent)**

@@ -140,3 +140,26 @@
 ### [REQ-UI-SYS-005] Component Slots
 *   **Structure over Style:** コンポーネントは「構造」のみを責務とし、色や装飾はクラス名の付け替え（Variablesの変更）で対応できるように作る。
 *   レイアウト変更に強いよう、固定幅（px）ではなく、Flex/Gridと相対単位（%, rem）を使用する。
+
+---
+
+## 8. ページレイアウト仕様 (Page Layout Specs)
+
+### ワーク詳細ページ (Work Detail Page)
+*   **コンテナ:** `max-w-6xl` (1152px) - コンテンツを中央に集め、没入感を高めるタイトな設計。
+*   **基本構造 (Desktop):**
+    1.  **Header (Full Width):** ページタイトル、メタデータを横幅いっぱいに表示。グリッドには含めない。
+    2.  **Grid System (12 Columns):**
+        *   **Main Content:** `col-span-7` (約60%) - 記事本文。`max-w-none` は使用せず、可読性の高い行長 (~65ch) を維持。余白を大きくとる。
+        *   **Gap:** `gap-16` ~ `gap-24` - コンテンツとサイドバーの分離を明確にする大きな余白。
+        *   **Sidebar:** `col-span-4` (約35%) - ウィジェットエリア。
+*   **レスポンシブ (Mobile / Tablet < lg):**
+    *   **Stacked Layout:** 2カラムグリッドを解除し、全てシングルカラムで表示。
+    *   **Sidebar Relocation:** デスクトップで右側にあった機能（Player, TOC）は、モバイルでは**記事本文の直上 (Pre-content)** に移動する。
+    *   **Collapsible TOC:** 目次はアコーディオン（`<details>`）に格納し、ファーストビューを占有しないようにする。
+
+### Sidebar Widgets
+*   **Sticky Positioning:** スクロール追従 (`top-24`).
+*   **Component Visuals:**
+    1.  **YouTube Player:** **Dark Theme Card** (Black bg). 映像エリアとして視覚的な重みを持たせる。
+    2.  **Listening Guide:** **Light Theme Card** (Paper/White bg). テキスト情報として本文と馴染ませる。
