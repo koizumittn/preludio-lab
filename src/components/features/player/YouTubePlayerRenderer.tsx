@@ -3,6 +3,7 @@
 import React, { useEffect, useRef } from 'react';
 import YouTube, { YouTubeProps, YouTubeEvent } from 'react-youtube';
 import { useAudioPlayer } from '@/components/providers/AudioPlayerContext';
+import { handleClientError } from '@/utils/client-error-handler';
 
 // export * from ... if needed
 
@@ -138,8 +139,7 @@ export default function YouTubePlayer() {
     };
 
     const onError = (error: any) => {
-        console.error('YouTube Player Error:', error);
-        // 必要に応じてContext経由でフォールバックやToastを表示可能
+        handleClientError(error, 'YouTube Player Error occurred');
     };
 
     if (!videoId) return null;
