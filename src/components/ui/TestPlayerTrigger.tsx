@@ -14,7 +14,7 @@ export function TestPlayerTrigger() {
             author: 'J.S. Bach'
         }, {
             startTime: 5,   // Skip first 5s (Silence/Intro)
-            endTime: 30     // Stop at 30s for testing
+            // endTime: 30  // Removed endTime to allow testing of Seek without force-stopping
         });
     };
 

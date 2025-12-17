@@ -15,12 +15,25 @@ export function MiniPlayer() {
         isPlaying,
         togglePlay,
         currentTime,
-        duration
+        duration,
+        seekTo
     } = useAudioPlayer();
 
     if (mode === 'hidden' || mode === 'focus') return null;
 
     const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
+
+    const handleSkipBackward = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        const newTime = Math.max(0, currentTime - 10);
+        seekTo(newTime);
+    };
+
+    const handleSkipForward = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        const newTime = Math.min(duration, currentTime + 10);
+        seekTo(newTime);
+    };
 
     return (
         <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-gray-200 bg-paper-white/95 backdrop-blur-md transition-all duration-300 shadow-up">
@@ -53,7 +66,11 @@ export function MiniPlayer() {
 
                 {/* Controls */}
                 <div className="flex items-center gap-4 flex-shrink-0">
-                    <button className="hidden sm:block p-2 text-gray-600 hover:text-preludio-black">
+                    <button
+                        onClick={handleSkipBackward}
+                        className="hidden sm:block p-2 text-gray-600 hover:text-preludio-black transition-colors"
+                        aria-label="Skip Backward 10s"
+                    >
                         ⏮
                     </button>
                     <button
@@ -66,7 +83,11 @@ export function MiniPlayer() {
                     >
                         {isPlaying ? '⏸' : '▶'}
                     </button>
-                    <button className="hidden sm:block p-2 text-gray-600 hover:text-preludio-black">
+                    <button
+                        onClick={handleSkipForward}
+                        className="hidden sm:block p-2 text-gray-600 hover:text-preludio-black transition-colors"
+                        aria-label="Skip Forward 10s"
+                    >
                         ⏭
                     </button>
                 </div>
