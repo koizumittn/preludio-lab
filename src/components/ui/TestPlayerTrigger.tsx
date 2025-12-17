@@ -13,7 +13,9 @@ export function TestPlayerTrigger() {
             title: 'Prelude in C Major, BWV 846',
             author: 'J.S. Bach',
             artworkSrc: 'https://img.youtube.com/vi/gVah1cr3pU0/hqdefault.jpg',
-            platformLink: 'https://www.youtube.com/watch?v=gVah1cr3pU0'
+            platformUrl: 'https://www.youtube.com/watch?v=gVah1cr3pU0',
+            platformLabel: 'Watch on YouTube',
+            platformType: 'youtube'
         }, {
             startTime: 10,  // Skip first 10s (Silence/Intro)
             endTime: 40     // Stop at 40s for testing

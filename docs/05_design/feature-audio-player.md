@@ -77,7 +77,9 @@ graph TD
 | `duration` | `number` | 動画の総再生時間（秒）。 |
 | `mode` | `'hidden' \| 'mini' \| 'focus'` | プレイヤーの表示モード。 |
 | `volume` | `number` | 音量 (0-100)。 |
-| `platformLink` | `string \| null` | プラットフォーム（YouTube等）への直接リンクURL。UIはこれをそのまま表示する。 |
+| `platformUrl` | `string \| null` | プラットフォーム（外部サイト）へのURL。 |
+| `platformLabel` | `string \| null` | リンクの表示ラベル (例: "Watch on YouTube")。 |
+| `platformType` | `'youtube' \| 'default'` | アイコン種別識別子。 |
 
 ## 5. Component Specifications
 
@@ -103,7 +105,7 @@ graph TD
     *   画面全体を覆うモーダル (`fixed inset-0`)。
     *   シークバー（スライダー）による任意位置へのジャンプ。
     *   「最小化」ボタンで Mini Player に戻る。
-    *   **Trust & Attribution:** `platformLink` が存在する場合、"Watch on YouTube" リンクを表示し、ソース元への導線を提供する。リンク生成ロジックを持たず、データとして受け取ったURLを使用する。
+    *   **Trust & Attribution:** `platformUrl` が存在する場合、そのリンクを表示する。テキストは `platformLabel` (例: "Watch on YouTube") を使用し、アイコンは `platformType` に応じて切り替える。UIはテキストやURLの生成ロジックを持たず、渡されたデータをそのまま表示する。
 
 ## 6. Integration (Root Layout)
 ページ遷移による再レンダリング（リセット）を防ぐため、`src/app/[lang]/layout.tsx` の最上位レベルに配置されています。

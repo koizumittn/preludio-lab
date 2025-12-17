@@ -13,7 +13,9 @@ export interface PlayerState {
     videoTitle: string | null;
     videoAuthor: string | null; // e.g., Composer or Channel Name
     artworkSrc: string | null; // URL for the thumbnail/artwork
-    platformLink: string | null; // URL for the external platform (attribution)
+    platformUrl: string | null; // e.g. "https://youtube.com/..."
+    platformLabel: string | null; // e.g. "Watch on YouTube"
+    platformType: 'youtube' | 'default' | null;
     isReady: boolean;
     volume: number;
     startTime?: number;
@@ -22,7 +24,18 @@ export interface PlayerState {
 }
 
 export interface PlayerActions {
-    play: (videoId?: string, meta?: { title?: string; author?: string; artworkSrc?: string; platformLink?: string }, options?: { startTime?: number; endTime?: number }) => void;
+    play: (
+        videoId?: string,
+        meta?: {
+            title?: string;
+            author?: string;
+            artworkSrc?: string;
+            platformUrl?: string;
+            platformLabel?: string;
+            platformType?: 'youtube' | 'default';
+        },
+        options?: { startTime?: number; endTime?: number }
+    ) => void;
     pause: () => void;
     togglePlay: () => void;
     seekTo: (time: number) => void;
@@ -56,7 +69,9 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
         videoTitle: null,
         videoAuthor: null,
         artworkSrc: null,
-        platformLink: null,
+        platformUrl: null,
+        platformLabel: null,
+        platformType: null,
         isReady: false,
         volume: 100,
         startTime: undefined,
@@ -82,7 +97,18 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
         playerRef.current = player;
     }, []);
 
-    const play = useCallback((videoId?: string, meta?: { title?: string; author?: string; artworkSrc?: string; platformLink?: string }, options?: { startTime?: number; endTime?: number }) => {
+    const play = useCallback((
+        videoId?: string,
+        meta?: {
+            title?: string;
+            author?: string;
+            artworkSrc?: string;
+            platformUrl?: string;
+            platformLabel?: string;
+            platformType?: 'youtube' | 'default';
+        },
+        options?: { startTime?: number; endTime?: number }
+    ) => {
         setState((prev) => {
             const newState = { ...prev, isPlaying: true, playbackId: prev.playbackId + 1 };
             if (videoId && videoId !== prev.videoId) {
@@ -95,13 +121,17 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
                 newState.videoTitle = null;
                 newState.videoAuthor = null;
                 newState.artworkSrc = null;
-                newState.platformLink = null;
+                newState.platformUrl = null;
+                newState.platformLabel = null;
+                newState.platformType = null;
             }
             if (meta) {
                 if (meta.title) newState.videoTitle = meta.title;
                 if (meta.author) newState.videoAuthor = meta.author;
                 if (meta.artworkSrc) newState.artworkSrc = meta.artworkSrc;
-                if (meta.platformLink) newState.platformLink = meta.platformLink;
+                if (meta.platformUrl) newState.platformUrl = meta.platformUrl;
+                if (meta.platformLabel) newState.platformLabel = meta.platformLabel;
+                if (meta.platformType) newState.platformType = meta.platformType;
             }
             if (options) {
                 newState.startTime = options.startTime;
