@@ -1,5 +1,10 @@
 import Link from 'next/link';
-import { SITE_DESCRIPTION } from '@/lib/constants';
+import { SITE_DESCRIPTION, LOCALES } from '@/lib/constants';
+
+// Explicitly define parameters for static generation
+export async function generateStaticParams() {
+    return LOCALES.map((lang) => ({ lang }));
+}
 
 // Categories for the MVP
 const CATEGORIES = [

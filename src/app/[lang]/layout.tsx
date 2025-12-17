@@ -26,6 +26,14 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
 };
 
+import { LOCALES } from '@/lib/constants';
+
+// Explicitly define parameters for static generation
+export async function generateStaticParams() {
+    return LOCALES.map((lang) => ({ lang }));
+}
+
+
 export default async function RootLayout({
     children,
     params,
