@@ -1,0 +1,168 @@
+'use client';
+
+import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
+
+export type PlayerMode = 'hidden' | 'mini' | 'focus';
+
+export interface PlayerState {
+    isPlaying: boolean;
+    currentTime: number;
+    duration: number;
+    videoId: string | null;
+    mode: PlayerMode;
+    videoTitle: string | null;
+    videoAuthor: string | null; // e.g., Composer or Channel Name
+    isReady: boolean;
+    volume: number;
+}
+
+export interface PlayerActions {
+    play: (videoId?: string, meta?: { title?: string; author?: string }) => void;
+    pause: () => void;
+    togglePlay: () => void;
+    seekTo: (time: number) => void;
+    setVolume: (volume: number) => void;
+    setMode: (mode: PlayerMode) => void;
+
+    // Internal use by YouTubePlayer component
+    _onReady: (duration: number) => void;
+    _onProgress: (currentTime: number) => void;
+    _onDuration: (duration: number) => void;
+    _onStateChange: (isPlaying: boolean) => void;
+}
+
+const AudioPlayerContext = createContext<(PlayerState & PlayerActions) | null>(null);
+
+export function useAudioPlayer() {
+    const context = useContext(AudioPlayerContext);
+    if (!context) {
+        throw new Error('useAudioPlayer must be used within an AudioPlayerProvider');
+    }
+    return context;
+}
+
+export function AudioPlayerProvider({ children }: { children: React.ReactNode }) {
+    const [state, setState] = useState<PlayerState>({
+        isPlaying: false,
+        currentTime: 0,
+        duration: 0,
+        videoId: null,
+        mode: 'hidden',
+        videoTitle: null,
+        videoAuthor: null,
+        isReady: false,
+        volume: 100,
+    });
+
+    // NOTE: We need a mechanism to communicate with the YouTube Player instance.
+    // In a cleaner architecture, we might use a ref exposed by the player,
+    // but since the Player component is likely a sibling, we might need an Event Bus or 
+    // simply expose 'requests' in the state that the player listens to.
+    // simpler approach for now: The Context holds the "Truth", the Player component listens to it.
+    // HOWEVER, `seekTo` is imperative.
+    // Let's use a Mutable Ref for imperative commands to avoid re-renders or complex state flags for "seek request".
+
+    // Actually, for React wrapper of Youtube, checking props change is enough for Play/Pause/VideoId.
+    // But SeekTo usually requires calling an instance method.
+    // Let's add a "seekRequest" timestamp/value to state? 
+    // Or better, expose a registration callback for the player.
+    const playerRef = React.useRef<any>(null); // Holds the YouTube Player object
+
+    const setPlayerInstance = useCallback((player: any) => {
+        playerRef.current = player;
+    }, []);
+
+    const play = useCallback((videoId?: string, meta?: { title?: string; author?: string }) => {
+        setState((prev) => {
+            const newState = { ...prev, isPlaying: true };
+            if (videoId && videoId !== prev.videoId) {
+                newState.videoId = videoId;
+                newState.currentTime = 0; // Reset time on new video
+                if (prev.mode === 'hidden') {
+                    newState.mode = 'mini';
+                }
+            }
+            if (meta) {
+                if (meta.title) newState.videoTitle = meta.title;
+                if (meta.author) newState.videoAuthor = meta.author;
+            }
+            return newState;
+        });
+    }, []);
+
+    const pause = useCallback(() => {
+        setState((prev) => ({ ...prev, isPlaying: false }));
+    }, []);
+
+    const togglePlay = useCallback(() => {
+        setState((prev) => ({ ...prev, isPlaying: !prev.isPlaying }));
+    }, []);
+
+    const seekTo = useCallback((time: number) => {
+        if (playerRef.current && typeof playerRef.current.seekTo === 'function') {
+            playerRef.current.seekTo(time, true);
+            setState(prev => ({ ...prev, currentTime: time }));
+        }
+    }, []);
+
+    const setVolume = useCallback((volume: number) => {
+        if (playerRef.current && typeof playerRef.current.setVolume === 'function') {
+            playerRef.current.setVolume(volume);
+            setState(prev => ({ ...prev, volume }));
+        }
+    }, []);
+
+    const setMode = useCallback((mode: PlayerMode) => {
+        setState((prev) => ({ ...prev, mode }));
+    }, []);
+
+    // --- Internal Callbacks from Player Component ---
+
+    const _onReady = useCallback((duration: number) => {
+        setState((prev) => ({ ...prev, isReady: true, duration }));
+    }, []);
+
+    const _onProgress = useCallback((currentTime: number) => {
+        setState((prev) => ({ ...prev, currentTime }));
+    }, []);
+
+    const _onDuration = useCallback((duration: number) => {
+        setState((prev) => ({ ...prev, duration }));
+    }, []);
+
+    const _onStateChange = useCallback((isPlaying: boolean) => {
+        // Only update if different to avoid loops, though likely fine
+        setState((prev) => {
+            if (prev.isPlaying === isPlaying) return prev;
+            return { ...prev, isPlaying };
+        });
+    }, []);
+
+    const value = useMemo(() => ({
+        ...state,
+        play,
+        pause,
+        togglePlay,
+        seekTo,
+        setVolume,
+        setMode,
+        _onReady,
+        _onProgress,
+        _onDuration,
+        _onStateChange,
+        setPlayerInstance, // Internal helper to register player
+    }), [state, play, pause, togglePlay, seekTo, setVolume, setMode, _onReady, _onProgress, _onDuration, _onStateChange, setPlayerInstance]);
+
+    return (
+        <AudioPlayerContext.Provider value={value}>
+            {children}
+        </AudioPlayerContext.Provider>
+    );
+}
+
+// Extend the interface to include the internal setter
+declare module './AudioPlayerContext' {
+    interface PlayerActions {
+        setPlayerInstance: (player: any) => void;
+    }
+}

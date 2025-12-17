@@ -4,6 +4,9 @@ import '../globals.css';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { MiniPlayer } from '@/components/ui/Player/MiniPlayer';
+import { FocusPlayer } from '@/components/ui/Player/FocusPlayer';
+import { YouTubePlayer } from '@/components/features/player/YouTubePlayer';
+import { AppProviders } from '@/components/providers/AppProviders';
 import { ConsentBanner } from '@/components/ui/ConsentBanner';
 import { SITE_NAME, SITE_DESCRIPTION } from '@/lib/constants';
 
@@ -45,11 +48,18 @@ export default async function RootLayout({
     return (
         <html lang={lang} className={`${inter.variable} ${notoSerif.variable}`}>
             <body className="antialiased bg-paper text-primary font-sans">
-                <Header />
-                <main className="min-h-screen pb-24">{children}</main>
-                <Footer />
-                <MiniPlayer />
-                <ConsentBanner />
+                <AppProviders>
+                    <Header />
+                    <main className="min-h-screen pb-24">{children}</main>
+                    <Footer />
+
+                    {/* Global Audio Player Components */}
+                    <YouTubePlayer />
+                    <MiniPlayer />
+                    <FocusPlayer />
+
+                    <ConsentBanner />
+                </AppProviders>
             </body>
         </html>
     );
