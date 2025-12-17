@@ -151,18 +151,34 @@ export default function YouTubePlayer() {
     useEffect(() => {
         const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
             const reason = event.reason;
-            // Check if it's the specific video ID error. Reason might be an Error object or a string.
-            const message = reason instanceof Error ? reason.message : String(reason);
 
-            if (message.includes('Invalid video id')) {
-                handleClientError(new Error(message), 'Video load failed: Invalid ID');
+            // Debugging: Log the exact structure of the rejection reason
+            console.log('[YouTubePlayerRenderer] Debug - Rejection Reason:', reason);
+
+            let errorMessage = '';
+            if (reason instanceof Error) {
+                errorMessage = reason.message;
+            } else if (typeof reason === 'string') {
+                errorMessage = reason;
+            } else {
+                try {
+                    errorMessage = JSON.stringify(reason);
+                } catch (e) {
+                    errorMessage = String(reason);
+                }
+            }
+
+            if (errorMessage && errorMessage.includes('Invalid video id')) {
+                handleClientError(new Error(errorMessage), 'Video load failed: Invalid ID');
                 event.preventDefault();
             }
         };
 
-        window.addEventListener('unhandledrejection', handleUnhandledRejection);
+        // Use capture phase to ensure we catch it early
+        window.addEventListener('unhandledrejection', handleUnhandledRejection, true);
+
         return () => {
-            window.removeEventListener('unhandledrejection', handleUnhandledRejection);
+            window.removeEventListener('unhandledrejection', handleUnhandledRejection, true);
         };
     }, []);
 
