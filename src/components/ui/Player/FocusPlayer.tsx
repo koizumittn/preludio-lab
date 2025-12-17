@@ -121,6 +121,9 @@ export function FocusPlayer() {
                             href={`https://www.youtube.com/watch?v=${videoId}`}
                             target="_blank"
                             rel="noopener noreferrer"
+                            onClick={() => {
+                                if (isPlaying) togglePlay();
+                            }}
                             className="inline-flex items-center gap-1.5 mt-2 px-3 py-1 rounded-full text-xs font-medium text-gray-400 border border-gray-200 hover:text-preludio-black hover:border-gray-400 transition-all group"
                         >
                             <svg className="w-3 h-3 transition-colors group-hover:text-[#FF0000]" fill="currentColor" viewBox="0 0 24 24">
