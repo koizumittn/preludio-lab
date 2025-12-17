@@ -93,10 +93,21 @@
 ## 6. デプロイメントパイプライン
 
 ### CI/CD Flow
-1.  Push `feat/*` -> GitHub Actions (Test)
-2.  PR -> Vercel Preview (Deploy)
-3.  Merge `master` -> Vercel Production (Deploy *Disabled pre-launch*)
-    -   *Note: ローンチ前は Vercel 設定 (`Settings > Git`) で Production への Auto-Deploy を無効化し、手動デプロイで運用します。*
+1.  **Pull Request:** `feat/*` -> GitHub Actions (Test) -> Vercel Preview (Auto Deploy)
+2.  **Merge:** Merge `master` -> Vercel Production (Build Skipped)
+    -   *Setting:* Vercel Dashboard > Settings > Git > Production Branch > **"Auto-deploy" Disabled**
+3.  **Release:** Manual Promotion -> Vercel Production (Live)
+    -   *Action:* Vercel Dashboard > Deployments > (Select Commit) > **"Promote to Production"**
+
+### 詳細手順: 本番自動デプロイの無効化 (Plan A)
+ローンチ前および安全な運用のため、以下の設定を適用します。
+
+1.  **Vercel Dashboard** にアクセスし、プロジェクト (`preludio-lab`) を開く。
+2.  **Settings** タブをクリック。
+3.  左メニューから **Git** を選択。
+4.  **Production Branch** セクションを探す。
+5.  **Auto-deploy** のトグルスイッチを **OFF** (無効) にする。
+    - これにより、`master` へのマージ時に本番環境が勝手に更新されるのを防げます。
 
 ### セキュリティ対策 (Security Measures)
 - **Branch Protection:** `master` ブランチへの直接Pushを禁止し、必ずPRとCI通過を必須とする（GitHub設定）。
