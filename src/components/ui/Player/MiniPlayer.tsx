@@ -12,6 +12,7 @@ export function MiniPlayer() {
         setMode,
         videoTitle,
         videoAuthor,
+        artworkSrc,
         isPlaying,
         togglePlay,
         currentTime,
@@ -62,7 +63,15 @@ export function MiniPlayer() {
                     role="button"
                     aria-label="Open Full Player"
                 >
-                    <div className={`h-10 w-10 bg-gray-300 rounded-md flex-shrink-0 ${isPlaying ? 'animate-pulse-slow' : ''}`} /> {/* Artwork Placeholder */}
+                    {/* Artwork */}
+                    <div className={`h-10 w-10 bg-gray-300 rounded-md flex-shrink-0 overflow-hidden relative ${isPlaying ? 'animate-pulse-slow' : ''}`}>
+                        {artworkSrc ? (
+                            <img src={artworkSrc} alt={videoTitle || 'Artwork'} className="w-full h-full object-cover" />
+                        ) : (
+                            <div className="w-full h-full bg-gray-300" />
+                        )}
+                    </div>
+
                     <div className="min-w-0 pr-4">
                         <div className="text-sm font-bold text-preludio-black truncate">
                             {videoTitle || 'Loading...'}

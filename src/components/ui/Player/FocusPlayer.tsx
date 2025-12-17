@@ -17,6 +17,7 @@ export function FocusPlayer() {
         setMode,
         videoTitle,
         videoAuthor,
+        artworkSrc,
         isPlaying,
         togglePlay,
         currentTime,
@@ -89,15 +90,19 @@ export function FocusPlayer() {
                 {/* Artwork Placeholder - Dynamic shadow based on playing state */}
                 <div className={`
                     w-64 h-64 sm:w-80 sm:h-80 bg-gray-100 rounded-2xl shadow-2xl 
-                    transition-transform duration-700 ease-out border border-gray-200
+                    transition-transform duration-700 ease-out border border-gray-200 overflow-hidden
                     ${isPlaying ? 'scale-100' : 'scale-95 opacity-90'}
                 `}>
-                    <div className="w-full h-full flex items-center justify-center text-gray-300">
-                        {/* Music Note Icon */}
-                        <svg className="w-24 h-24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
-                        </svg>
-                    </div>
+                    {artworkSrc ? (
+                        <img src={artworkSrc} alt={videoTitle || 'Artwork'} className="w-full h-full object-cover" />
+                    ) : (
+                        <div className="w-full h-full flex items-center justify-center text-gray-300">
+                            {/* Music Note Icon */}
+                            <svg className="w-24 h-24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                            </svg>
+                        </div>
+                    )}
                 </div>
 
                 {/* Metadata */}

@@ -11,7 +11,8 @@ export function TestPlayerTrigger() {
         // Let's use Glenn Gould: gVah1cr3pU0
         play('gVah1cr3pU0', {
             title: 'Prelude in C Major, BWV 846',
-            author: 'J.S. Bach'
+            author: 'J.S. Bach',
+            artworkSrc: 'https://img.youtube.com/vi/gVah1cr3pU0/hqdefault.jpg'
         }, {
             startTime: 10,  // Skip first 10s (Silence/Intro)
             endTime: 40     // Stop at 40s for testing
