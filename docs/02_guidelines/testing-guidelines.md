@@ -118,3 +118,23 @@ E2Eテストはアプリケーション全体を外部から叩くテストで�
 *   **Example:**
     *   `e2e/auth-flow.spec.ts`
 
+## 6. Verification Strategy (Non-Functional & Ad-hoc)
+自動テストではカバーしきれない非機能要件や、一時的な検証を行う際の戦略。
+
+### 6.1. Performance Verification
+定量的な数値目標（Acceptance Criteria）を設けて検証する。
+
+*   **Metrics:** 読み込み時間、レンダリング時間、Lighthouseスコア等。
+*   **Method:**
+    *   `console.time` / `performance.now()` を一時的に埋め込み計測する（本番ログ自動削除設定の確認必須）。
+    *   Chrome DevTools の CPU Throttling を使用し、モバイル環境をシミュレートする。
+*   **Evidence:** スクリーンショットやログ出力を記録し、成果物（Walkthrough）に残す。
+
+### 6.2. Ad-hoc Verification Pages
+特定のコンポーネントや挙動を隔離して検証するために、一時的なページを作成する場合のルール。
+
+*   **Location:** `src/app/[lang]/_test/` (推奨) または検証専用ブランチを作成する。
+    *   **Note:** `src/app/test` のようにルート直下に配置すると、`[lang]` の動的ルーティングやMiddlewareと競合して 404 になる場合があるため注意する。
+*   **Cleanup:** 検証完了後は速やかに削除する。Gitにはコミットしない（または検証用ブランチでのみ管理する）。
+
+

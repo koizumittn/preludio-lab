@@ -31,7 +31,9 @@ export default function ScoreRenderer({ abc }: ScoreRendererProps) {
                 // staffwidth will be auto-calculated by 'responsive: resize'
             };
             try {
+                console.time('ScoreRender');
                 abcjs.renderAbc(uniqueId, abc, renderOptions);
+                console.timeEnd('ScoreRender');
                 console.debug('ScoreRenderer: rendering completed');
             } catch (error) {
                 console.error('ScoreRenderer: rendering error', error);
