@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useId } from 'react';
 import * as abcjs from 'abcjs';
+import { handleClientError } from '@/utils/client-error-handler';
 // import { Skeleton } from '@/components/ui/Skeleton'; // removed unused import
 
 interface ScoreRendererProps {
@@ -36,7 +37,7 @@ export default function ScoreRenderer({ abc }: ScoreRendererProps) {
                 console.timeEnd('ScoreRender');
                 console.debug('ScoreRenderer: rendering completed');
             } catch (error) {
-                console.error('ScoreRenderer: rendering error', error);
+                handleClientError(error, 'Failed to render score');
             }
         }
     }, [abc, uniqueId]);

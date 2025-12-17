@@ -4,7 +4,11 @@ import '../globals.css';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { MiniPlayer } from '@/components/ui/Player/MiniPlayer';
+import { FocusPlayer } from '@/components/ui/Player/FocusPlayer';
+import { AudioPlayerFeature } from '@/components/features/player';
+import { AppProviders } from '@/components/providers/AppProviders';
 import { ConsentBanner } from '@/components/ui/ConsentBanner';
+import { Toaster } from 'react-hot-toast';
 import { SITE_NAME, SITE_DESCRIPTION } from '@/lib/constants';
 
 // Font Configuration
@@ -43,13 +47,21 @@ export default async function RootLayout({
 }) {
     const { lang } = await params;
     return (
-        <html lang={lang} className={`${inter.variable} ${notoSerif.variable}`}>
+        <html lang={lang} className={`${inter.variable} ${notoSerif.variable}`} suppressHydrationWarning>
             <body className="antialiased bg-paper text-primary font-sans">
-                <Header />
-                <main className="min-h-screen pb-24">{children}</main>
-                <Footer />
-                <MiniPlayer />
-                <ConsentBanner />
+                <AppProviders>
+                    <Header />
+                    <main className="min-h-screen pb-24">{children}</main>
+                    <Footer />
+
+                    {/* Global Audio Player Components */}
+                    <AudioPlayerFeature />
+                    <MiniPlayer />
+                    <FocusPlayer />
+
+                    <ConsentBanner />
+                    <Toaster position="bottom-right" />
+                </AppProviders>
             </body>
         </html>
     );

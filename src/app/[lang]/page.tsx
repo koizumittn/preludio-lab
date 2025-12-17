@@ -66,9 +66,11 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                             <div className="mb-4 text-sm font-bold text-blue-600">Work Analysis</div>
                             <h3 className="mb-4 text-3xl font-bold text-gray-900">Prelude in C Major, BWV 846</h3>
                             <p className="mb-6 text-gray-600">An in-depth analysis of Bach&apos;s masterpiece from The Well-Tempered Clavier. Understand functionality of harmony and the beauty of arpeggios.</p>
-                            <Link href={`/${lang}/works/prelude-c-major`} className="inline-flex items-center text-blue-600 hover:underline">
-                                Read Analysis &rarr;
-                            </Link>
+                            <div className="flex flex-wrap gap-4">
+                                <Link href={`/${lang}/works/prelude-c-major`} className="inline-flex items-center text-blue-600 hover:underline">
+                                    Read Analysis &rarr;
+                                </Link>
+                            </div>
                         </div>
                     </div>
                 </div>

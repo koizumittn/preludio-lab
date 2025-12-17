@@ -1,0 +1,154 @@
+# Audio Player Feature Design Specification
+
+**Ref:** `REQ-TECH-AUDIO` (technology-requirements.md) / `REQ-UI-004` (ui-ux-requirements.md)
+
+## 1. Overview
+Preludio Labにおける「Audio Player」は、ユーザーが楽譜を閲覧しながら直感的に演奏を確認できる学習支援機能です。
+ページ遷移しても再生が途切れない「Persistent Player（常駐型プレイヤー）」として設計されています。
+
+## 2. User Interaction & UX
+
+ユーザー視点での操作フローと挙動の定義。
+
+### 2.1. 再生開始 (Entry Points)
+ユーザーは以下のいずれかのアクションで再生を開始できます。
+1.  **楽曲ページ上の再生ボタン:** 記事ヘッダーや、楽譜の特定箇所にある「Play」ボタンをクリック。
+    *   *Behavior:* プレイヤーが非表示の場合は `Mini Mode` で下部に出現し、即座に再生を開始します。
+
+### 2.2. プレイヤーの操作 (Controls)
+*   **Mini Player (常駐モード):**
+    *   **再生/一時停止:** 中央のボタンでトグル操作。
+    *   **拡大:** バー領域全体（またはExpandボタン）をクリックすると `Focus Mode` へ遷移。
+    *   **表示情報:** 曲名、作曲者名 (Composer)、演奏者名 (Performer)、簡易プログレスバー。
+*   **Focus Player (全画面モード):**
+    *   **シーク:** プログレスバーをドラッグして任意の位置へ移動。
+    *   **最小化:** 「⌄」ボタンで `Mini Mode` へ戻る（再生は継続）。
+    *   **表示情報:** 大きなジャケット画像、詳細なタイムスタンプ。
+
+### 2.3. ページ遷移時の挙動 (Persistence)
+*   **シームレスな再生:** ユーザーがサイト内を回遊（例: 楽曲ページ → トップページ → Aboutページ）しても、プレイヤーは途切れずに再生を続けます。
+*   **状態維持:** プレイヤーのモード（Mini/Focus）や音量は、ページ遷移後も保持されます。
+
+## 3. Architecture Pattern (Headless UI & Wrapper)
+
+実装とUIを完全に分離するため、**Headless UI** パターンと **Wrapper Pattern** を採用しています。
+
+```mermaid
+graph TD
+    subgraph UI_Layer [UI Layer]
+        Context[AudioPlayerContext<br>(Global State)]
+        Mini[MiniPlayer<br>(Footer UI)]
+        Focus[FocusPlayer<br>(Fullscreen UI)]
+    end
+
+    subgraph Feature_Layer [Feature Layer]
+        Wrapper[YouTubePlayerClientWrapper<br>(SSR Guard)]
+        Renderer[YouTubePlayerRenderer<br>(Logic Implementation)]
+    end
+
+    subgraph Infrastructure [Infrastructure]
+        Lib[react-youtube]
+        API[YouTube IFrame API]
+    end
+
+    %% Flow
+    Context <-->|Sync State| Mini
+    Context <-->|Sync State| Focus
+    Context <-->|Control / Events| Renderer
+    
+    Wrapper --> Renderer
+    Renderer --> Lib
+    Lib --> API
+```
+
+### 3.1. Wrapper Pattern
+`react-youtube` などの外部ライブラリは `window` オブジェクトに依存するため、そのままServer Componentで使用するとビルドエラーになります。
+これを防ぐため、`YouTubePlayerClientWrapper` で `next/dynamic` (`ssr: false`) を使用し、クライアントサイドでの実行を保証しています。
+
+## 4. State Management (AudioPlayerContext)
+
+アプリケーション全体で単一の「再生状態」を共有します。
+
+| State | Type | Description |
+| :--- | :--- | :--- |
+| `isPlaying` | `boolean` | 再生中か否か。Contextが真の値を持ち、Player実体はこれに追従します。 |
+| `videoId` | `string | null` | 現在ロードされているYouTube動画ID。 |
+| `currentTime` | `number` | 現在の再生位置（秒）。Playerからポーリングで更新されます。 |
+| `duration` | `number` | 動画の総再生時間（秒）。 |
+| `mode` | `'hidden' \| 'mini' \| 'focus'` | プレイヤーの表示モード。 |
+| `volume` | `number` | 音量 (0-100)。 |
+| `videoTitle` | `string \| null` | 曲名。 |
+| `videoComposer` | `string \| null` | 作曲者名。 |
+| `videoPerformer` | `string \| null` | 演奏者名。 |
+| `artworkSrc` | `string \| null` | アートワーク画像URL。 |
+| `platformUrl` | `string \| null` | プラットフォーム（外部サイト）へのURL。 |
+| `platformLabel` | `string \| null` | リンクの表示ラベル (例: "Watch on YouTube")。 |
+| `platformLabel` | `string \| null` | リンクの表示ラベル (例: "Watch on YouTube")。 |
+| `platformType` | `'youtube' \| 'default'` | アイコン種別識別子。 |
+
+### 4.1. Data Structures (Score Integration)
+
+楽譜コンポーネント (`ScoreClientWrapper`) やその他UIから再生を開始する際に渡すべきメタデータ構造は以下の通りです。
+
+```typescript
+interface AudioMetadata {
+    videoId: string;           // YouTube Video ID (Required)
+    title?: string;            // 曲名 (Optional, default: "Audio Recording")
+    composer?: string;         // 作曲者名 (Optional, e.g. "J.S. Bach")
+    performer?: string;        // 演奏者名 (Optional, e.g. "Glenn Gould")
+    artworkSrc?: string;       // アートワーク画像URL (Optional)
+    platformUrl?: string;      // 出典URL (Optional, default: YouTube Watch URL)
+    platformLabel?: string;    // 出典ラベル (Optional, default: "Watch on YouTube")
+    platformType?: 'youtube' | 'default'; // アイコン種別 (Optional, default: 'youtube')
+    startTime?: number;        // 再生開始位置 秒 (Optional)
+    endTime?: number;          // 再生終了位置 秒 (Optional)
+}
+```
+
+## 5. Component Specifications
+
+### 5.1. AudioPlayerFeature (`src/components/features/player/`)
+*   **Role:** 音声再生エンジン。画面上は 1px × 1px の不可視領域として存在します。
+*   **Implementation:** 内部的に `YouTubePlayer` をラップしていますが、責務は汎用的な「オーディオ再生機能」の提供です。
+*   **Reliability Strategy (Manual Load):**
+    *   `react-youtube` のデフォルト動作（Prop変更による自動ロード）を無効化し、`safeLoadVideo` ヘルパー経由での手動ロードを強制しています。
+    *   これにより、非同期的に発生するYouTube APIエラー（Promise Rejection）を確実に捕捉し、Sentryへの通知とユーザーへのトーストフィードバックを実現しています。
+*   **Behavior:**
+    *   `Context.isPlaying` の変化を `useEffect` で監視し、APIに対して `playVideo()` / `pauseVideo()` を発行します。
+    *   `setInterval` (500ms) で再生時間をポーリングし、Contextに通知します。
+    *   YouTube APIのイベント (`onReady`, `onStateChange`) をフックし、動画のロード完了や終了をContextに伝えます。
+
+### 5.2. MiniPlayer (`src/components/ui/Player/MiniPlayer.tsx`)
+*   **Role:** 常駐型の簡易コントローラー。
+*   **UI Specs:**
+    *   画面下部に固定配置 (`fixed bottom-0`)。
+    *   再生/停止ボタン、タイトル、進捗プログレスバーを表示。
+    *   タップ/クリックで `Focus Mode` へ展開。
+    *   モバイル端末の "Thumb Zone" (親指操作エリア) を意識したレイアウト。
+
+### 5.3. FocusPlayer (`src/components/ui/Player/FocusPlayer.tsx`)
+*   **Role:** 詳細操作と没入感のための全画面モード。
+*   **UI Specs:**
+    *   画面全体を覆うモーダル (`fixed inset-0`)。
+    *   シークバー（スライダー）による任意位置へのジャンプ。
+    *   「最小化」ボタンで Mini Player に戻る。
+    *   **Trust & Attribution:** `platformUrl` が存在する場合、そのリンクを表示する。テキストは `platformLabel` (例: "Watch on YouTube") を使用し、アイコンは `platformType` に応じて切り替える。UIはテキストやURLの生成ロジックを持たず、渡されたデータをそのまま表示する。
+
+## 6. Integration (Root Layout)
+ページ遷移による再レンダリング（リセット）を防ぐため、`src/app/[lang]/layout.tsx` の最上位レベルに配置されています。
+
+```tsx
+<AppProviders>
+    {/* ...Header... */}
+    <main>{children}</main>
+    {/* ...Footer... */}
+    
+    {/* Global Persistent Components */}
+    <AudioPlayerFeature />
+    <MiniPlayer />
+    <FocusPlayer />
+</AppProviders>
+```
+
+これにより、ユーザーが `/works/bach-prelude` から `/about` へ移動しても、音楽は途切れずに再生され続けます。
+
