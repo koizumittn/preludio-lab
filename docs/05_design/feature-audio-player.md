@@ -83,7 +83,27 @@ graph TD
 | `artworkSrc` | `string \| null` | アートワーク画像URL。 |
 | `platformUrl` | `string \| null` | プラットフォーム（外部サイト）へのURL。 |
 | `platformLabel` | `string \| null` | リンクの表示ラベル (例: "Watch on YouTube")。 |
+| `platformLabel` | `string \| null` | リンクの表示ラベル (例: "Watch on YouTube")。 |
 | `platformType` | `'youtube' \| 'default'` | アイコン種別識別子。 |
+
+### 4.1. Data Structures (Score Integration)
+
+楽譜コンポーネント (`ScoreClientWrapper`) やその他UIから再生を開始する際に渡すべきメタデータ構造は以下の通りです。
+
+```typescript
+interface AudioMetadata {
+    videoId: string;           // YouTube Video ID (Required)
+    title?: string;            // 曲名 (Optional, default: "Audio Recording")
+    composer?: string;         // 作曲者名 (Optional, e.g. "J.S. Bach")
+    performer?: string;        // 演奏者名 (Optional, e.g. "Glenn Gould")
+    artworkSrc?: string;       // アートワーク画像URL (Optional)
+    platformUrl?: string;      // 出典URL (Optional, default: YouTube Watch URL)
+    platformLabel?: string;    // 出典ラベル (Optional, default: "Watch on YouTube")
+    platformType?: 'youtube' | 'default'; // アイコン種別 (Optional, default: 'youtube')
+    startTime?: number;        // 再生開始位置 秒 (Optional)
+    endTime?: number;          // 再生終了位置 秒 (Optional)
+}
+```
 
 ## 5. Component Specifications
 
