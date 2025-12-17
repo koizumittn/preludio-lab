@@ -105,9 +105,10 @@
 1.  **Vercel Dashboard** にアクセスし、プロジェクト (`preludio-lab`) を開く。
 2.  **Settings** タブをクリック。
 3.  左メニューから **Git** を選択。
-4.  **Production Branch** セクションを探す。
-5.  **Auto-deploy** のトグルスイッチを **OFF** (無効) にする。
-    - これにより、`master` へのマージ時に本番環境が勝手に更新されるのを防げます。
+4.  **Ignored Build Step** セクションを探す。
+5.  Behavior のドロップダウンから **"Only build pre-production"** を選択する。
+    - **意味:** プレビュー環境（PR/Branch）のみビルドし、本番環境（Production）のビルドはスキップします。
+    - **本番デプロイ方法:** 手動で `vercel --prod` を実行するか、Dashboardからプレビューデプロイを選択して "Promote to Production" を実行します。
 
 ### セキュリティ対策 (Security Measures)
 - **Branch Protection:** `master` ブランチへの直接Pushを禁止し、必ずPRとCI通過を必須とする（GitHub設定）。
