@@ -339,3 +339,24 @@ export default function SomeComponent() {
 *   **RLS (Row Level Security):** すべてのテーブルに対して RLS を有効化 (`ENABLE ROW LEVEL SECURITY`) し、ポリシーを明示的に定義する。
 *   **No Raw SQL:** SQLインジェクションを防ぐため、Supabase Client SDK (`supabase-js`) のメソッドチェーンのみを使用する。生SQLの実行は禁止。
 *   **Secrets:** APIキーや接続文字列は `.env.local` で管理し、リポジトリにはコミットしない。クライアント側に露出させる変数は `NEXT_PUBLIC_` プレフィックスを付けるが、最小限に留める。
+
+## 7. Deployment & Configuration Guidelines
+VercelへのデプロイおよびNext.jsの設定におけるベストプラクティス。
+
+### 7.1. Vercel Project Settings
+*   **Framework Preset:** 必ず **"Next.js"** を指定する。"Other" 等になっていると、ビルドは成功してもApp Routerのルーティングが機能せず 404 エラーとなる。
+*   **Root Directory:** `package.json` がリポジトリ直下にある場合、デフォルト（`.` または空欄）を使用する。
+
+### 7.2. Next.js Configuration (Turbopack)
+Next.js 15+ の Turbopack は Rust ベースの高速バンドラだが、一部のネイティブモジュールや Worker Thread を使用するライブラリと互換性問題を起こす場合がある。
+*   **Pino / Thread-stream:** `next.config.ts` の `serverExternalPackages` に明示的に追加し、バンドルから除外する。
+    ```ts
+    const nextConfig: NextConfig = {
+      serverExternalPackages: ["pino", "pino-pretty", "thread-stream"],
+    };
+    ```
+
+### 7.3. TypeScript Configuration
+*   **Exclusions:** Next.js アプリケーションの依存関係に含まれない独立したスクリプトディレクトリ（例: `agents/`）は、ルートの `tsconfig.json` の `exclude` に追加する。
+    *   **Reason:** Next.js ビルドプロセスがそれらのファイルを型チェックしようとし、アプリ側の依存関係（`dotenv` 等）の欠落によりビルドエラーになるのを防ぐため。
+
