@@ -51,6 +51,12 @@ export function TestPlayerTrigger() {
             >
                 Test Play (Archive)
             </button>
+            <button
+                onClick={() => play('INVALID_VIDEO_ID_FOR_TESTING')}
+                className="px-4 py-2 bg-red-100 text-red-700 text-sm font-bold rounded-full hover:bg-red-200 transition-colors shadow-sm"
+            >
+                Test Error (Invalid ID)
+            </button>
         </div>
     );
 }

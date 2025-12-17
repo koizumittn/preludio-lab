@@ -8,6 +8,7 @@ import { FocusPlayer } from '@/components/ui/Player/FocusPlayer';
 import { AudioPlayerFeature } from '@/components/features/player';
 import { AppProviders } from '@/components/providers/AppProviders';
 import { ConsentBanner } from '@/components/ui/ConsentBanner';
+import { Toaster } from 'react-hot-toast';
 import { SITE_NAME, SITE_DESCRIPTION } from '@/lib/constants';
 
 // Font Configuration
@@ -59,6 +60,7 @@ export default async function RootLayout({
                     <FocusPlayer />
 
                     <ConsentBanner />
+                    <Toaster position="bottom-right" />
                 </AppProviders>
             </body>
         </html>
