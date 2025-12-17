@@ -1,6 +1,7 @@
 'use client';
 
 import { useAudioPlayer } from '@/components/providers/AudioPlayerContext';
+import toast from 'react-hot-toast';
 
 export function TestPlayerTrigger() {
     const { play } = useAudioPlayer();
@@ -56,6 +57,12 @@ export function TestPlayerTrigger() {
                 className="px-4 py-2 bg-red-100 text-red-700 text-sm font-bold rounded-full hover:bg-red-200 transition-colors shadow-sm"
             >
                 Test Error (Invalid ID)
+            </button>
+            <button
+                onClick={() => toast.success('Toast is working!')}
+                className="px-4 py-2 bg-green-100 text-green-700 text-sm font-bold rounded-full hover:bg-green-200 transition-colors shadow-sm"
+            >
+                Test Toast
             </button>
         </div>
     );

@@ -60,11 +60,15 @@ export default function YouTubePlayer() {
                 if (playerState !== 1) player.playVideo();
             } else {
                 // 新規リクエスト、または動画変更、または未ロード状態
-                player.loadVideoById({
-                    videoId: videoId,
-                    startSeconds: startTime || 0,
-                    endSeconds: endTime
-                });
+                try {
+                    player.loadVideoById({
+                        videoId: videoId,
+                        startSeconds: startTime || 0,
+                        endSeconds: endTime
+                    });
+                } catch (e) {
+                    handleClientError(e, 'Failed to load video');
+                }
             }
         } else {
             const playerState = player.getPlayerState();
@@ -139,6 +143,7 @@ export default function YouTubePlayer() {
     };
 
     const onError = (error: any) => {
+        console.log('[YouTubePlayerRenderer] onError called', error); // Debug log
         handleClientError(error, 'YouTube Player Error occurred');
     };
 
