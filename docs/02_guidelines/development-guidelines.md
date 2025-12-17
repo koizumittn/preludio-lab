@@ -41,7 +41,7 @@ src/
 *   **役割:** ビジネスの「用語」「ルール」「契約（インターフェース）」を定義する。
 *   **ルール:** 他のいかなる層（Application, Infra, UI）にも依存してはならない。
 *   **実装のポイント:** 「まずは技術詳細を無視して、TypeScriptの型とInterfaceだけ定義する」
-    *   **Design First:** UIとロジックをつなぐ重要なデータ構造（例: `AudioMetadata`）は、実装前にDesign Doc等で定義し、関係者間で合意（Contract）を形成すること。これにより「Unknown Composer」のような連携ミスを防ぐ。
+
 
 
 #### Application Layer (`src/application/`)
@@ -152,8 +152,13 @@ graph TD
             2.  `FeatureClientWrapper.tsx`: `dynamic(() => import('./FeatureRenderer'), { ssr: false })` を行い、ローディング中のスケルトン（`loading`）を提供する。
             3.  `index.tsx`: **Wrapperをデフォルトエクスポート** する。
             *   **Rationale:** 利用側（Server Component）は `import Feature from '@/components/features/xxx'` とするだけで、CSR限定実行とLoading UIが自動的に適用され、安全かつクリーンに保たれる。
+            *   **Rationale:** 利用側（Server Component）は `import Feature from '@/components/features/xxx'` とするだけで、CSR限定実行とLoading UIが自動的に適用され、安全かつクリーンに保たれる。
 
-### 2.2.2. Context & State Refactoring Safety
+### 2.2.2. Component Design & Contracts (Design First)
+UIコンポーネント間、あるいはロジックとUIをつなぐ重要なデータ構造（例: `AudioMetadata`や複雑なProps）は、実装に着手する前にDesign Doc等で**Interface定義**を行い、関係者（AI含む）間で合意（Contract）を形成する。
+*   **Benefits:** 「呼び出し元が `author` を渡しているのに、コンポーネントは `composer` を待っている」といった連携ミス（Interface Mismatch）を未然に防ぐ。
+
+### 2.2.3. Context & State Refactoring Safety
 Global State (Context) の型定義を変更する際（フィールド追加・削除・リネーム）は、**すべてのConsumer（利用者）を検索し、Destructuring（分割代入）の記述漏れがないか確認する**ことを義務付ける。
 *   **Risk:** TypeScriptの型定義だけ更新しても、Consumer側で `const { oldField } = useCtx()` のように古いフィールドを参照していたり、新しい必須フィールドを取り出し忘れていると `ReferenceError` や `undefined` バグにつながる。
 
