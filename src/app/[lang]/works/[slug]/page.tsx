@@ -99,7 +99,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ lang: 
                             {/* Replaced ScorePlaceholder with Skeleton for Loading State Demo */}
                             {/* Score Renderer (Client Wrapper) */}
                             <div className="rounded-lg bg-white p-4 shadow-sm border border-gray-100 overflow-hidden">
-                                <Score abc={`
+                                <Score
+                                    abc={`
 X:1
 T:Prelude in C Major
 C:J.S. Bach
@@ -108,7 +109,13 @@ L:1/16
 K:C
 c2e2g2c'2 c2e2g2c'2 | c2e2g2c'2 c2e2g2c'2 |
 d2f2a2d'2 d2f2a2d'2 | d2f2a2d'2 d2f2a2d'2 |
-`} />
+`}
+                                    audioMetadata={{
+                                        videoId: 'gVah1cr3pU0',
+                                        startTime: 0,
+                                        endTime: 15
+                                    }}
+                                />
                             </div>
                             <p className="mt-2 text-center text-sm text-gray-500 italic">Figure 1: Opening measures showing the arpeggio pattern</p>
                         </div>
