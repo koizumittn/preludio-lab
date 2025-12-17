@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { SITE_DESCRIPTION, LOCALES } from '@/lib/constants';
-import { TestPlayerTrigger } from '@/components/ui/TestPlayerTrigger';
 
 // Explicitly define parameters for static generation
 export async function generateStaticParams() {
@@ -71,7 +70,6 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                                 <Link href={`/${lang}/works/prelude-c-major`} className="inline-flex items-center text-blue-600 hover:underline">
                                     Read Analysis &rarr;
                                 </Link>
-                                <TestPlayerTrigger />
                             </div>
                         </div>
                     </div>

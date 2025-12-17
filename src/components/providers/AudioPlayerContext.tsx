@@ -49,7 +49,7 @@ export interface PlayerActions {
     _onStateChange: (isPlaying: boolean) => void;
 }
 
-const AudioPlayerContext = createContext<(PlayerState & PlayerActions) | null>(null);
+export const AudioPlayerContext = createContext<(PlayerState & PlayerActions) | null>(null);
 
 export function useAudioPlayer() {
     const context = useContext(AudioPlayerContext);
