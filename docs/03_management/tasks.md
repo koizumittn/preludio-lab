@@ -56,10 +56,10 @@ Status: `[/]` 進行中
     - [x] レスポンシブ挙動の確認
 
 ## Phase 1: コア機能開発 ("Lab" Components)
-- [ ] **楽譜レンダリングエンジン** (Ref: `REQ-TECH-SCORE` TBD)
-    - [ ] 要件と完了条件（Acceptance Criteria）の定義
+- [x] **楽譜レンダリングエンジン** (Ref: `REQ-TECH-SCORE`)
+    - [x] 要件と完了条件（Acceptance Criteria）の定義
     - [x] `ScoreRenderer` コンポーネントの実装 (`abcjs`)
-    - [ ] SVGレンダリングパフォーマンスの検証
+    - [x] SVGレンダリングパフォーマンスの検証
     - [x] スケルトン表示 (Loading State) の実装 (Ref: `REQ-UI-006-01`)
 - [ ] **オーディオプレイヤー統合** (Ref: `REQ-TECH-AUDIO`)
     - [ ] 要件と完了条件の定義

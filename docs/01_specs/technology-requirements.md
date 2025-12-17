@@ -60,10 +60,13 @@ Google Generative AI SDK for Node.js を使用したカスタムスクリプト�
 ## 4. Content & Media Strategy
 
 ### Score Strategy (Text-to-Image)
-*   **[REQ-TECH-STRAT-001] Method:** AIモデルに「ABC記法」を作成させ、MDXに埋め込む。
-*   **[REQ-TECH-002] Client-Side Score Rendering:**
-    *   **方針:** Vercelの帯域消費を最小化（テキストデータのみ転送）するため、楽譜データは「ABC記譜法（テキスト）」で保持する。
-    *   **実装:** クライアントサイドにて `abcjs` ライブラリを用い、ブラウザ上でSVGレンダリングを行う。これにより画像ホスティングコストと帯域超過リスクを完全に排除する。
+*   **[REQ-TECH-SCORE] Client-Side Score Rendering:**
+    *   **Technology:** `abcjs` ライブラリ (クライアントサイドSVGレンダリング)。
+    *   **[REQ-TECH-SCORE-01] Performance:** ユーザー離脱を防ぐため、モバイルデバイス（ミッドレンジAndroid）において、クライアントサイドでのレンダリングを **1.5秒以内** に完了させること。
+        *   *(Verified 2025-12-17: ~45ms on MVP implementation)*
+    *   **[REQ-TECH-SCORE-02] Loading State:** `abcjs` エンジンの初期化およびレンダリング中は、Skeleton UI または低解像度のプレースホルダーを表示すること。
+    *   **[REQ-TECH-SCORE-03] Bandwidth Optimization:** Vercelの帯域コストを最小限に抑えるため、レンダリング済み画像（MBサイズ）ではなく、生のABCテキスト（KBサイズ）を転送する。
+    *   **[REQ-TECH-SCORE-04] Accessibility:** 生成されるSVGには、`abcjs` がサポートする範囲でアクセシビリティ対応のタイトル・説明を含めること。
 
 ### Audio Strategy (YouTube Embed)
 *   **[REQ-TECH-STRAT-003] Method:** 公式チャンネルの動画IDと開始時間を指定。
