@@ -41,6 +41,8 @@ src/
 *   **役割:** ビジネスの「用語」「ルール」「契約（インターフェース）」を定義する。
 *   **ルール:** 他のいかなる層（Application, Infra, UI）にも依存してはならない。
 *   **実装のポイント:** 「まずは技術詳細を無視して、TypeScriptの型とInterfaceだけ定義する」
+    *   **Design First:** UIとロジックをつなぐ重要なデータ構造（例: `AudioMetadata`）は、実装前にDesign Doc等で定義し、関係者間で合意（Contract）を形成すること。これにより「Unknown Composer」のような連携ミスを防ぐ。
+
 
 #### Application Layer (`src/application/`)
 *   **役割:** ユーザーが「何をしたいか（ユースケース）」を表現する。
@@ -151,6 +153,11 @@ graph TD
             3.  `index.tsx`: **Wrapperをデフォルトエクスポート** する。
             *   **Rationale:** 利用側（Server Component）は `import Feature from '@/components/features/xxx'` とするだけで、CSR限定実行とLoading UIが自動的に適用され、安全かつクリーンに保たれる。
 
+### 2.2.2. Context & State Refactoring Safety
+Global State (Context) の型定義を変更する際（フィールド追加・削除・リネーム）は、**すべてのConsumer（利用者）を検索し、Destructuring（分割代入）の記述漏れがないか確認する**ことを義務付ける。
+*   **Risk:** TypeScriptの型定義だけ更新しても、Consumer側で `const { oldField } = useCtx()` のように古いフィールドを参照していたり、新しい必須フィールドを取り出し忘れていると `ReferenceError` や `undefined` バグにつながる。
+
+
 ### 2.2.1. Hydration & SSR Safety (Update from PR #3)
 Next.js (App Router) における Hydration Mismatch を防ぐため、以下のルールを厳守する。
 
@@ -236,8 +243,10 @@ Next.js (App Router) における Hydration Mismatch を防ぐため、以下の
     *   例: `react-youtube` の `videoId` Propによる自動ロードを使用せず、`player.loadVideoById()` を自前で呼び出し、戻り値の Promise を `.catch()` する。
 2.  **Assumption of Failure:**
     *   「ライブラリは失敗しない」という前提を捨て、「失敗した場合にユーザーに何を伝えるか（Toast, Fallback UI）」を常に実装する。
-3.  **Strict Async Error Handling:**
     *   外部API呼び出しは `try/catch` だけでなく、戻り値が Promise でないか確認し、必要であればチェーンで `.catch()` を接続する。Frameworkやライブラリによっては `await` してもエラーが補足できない実装（Fire-and-forget）があるため注意する。
+4.  **Privacy & CORS Noise Reduction:**
+    *   YouTube等の埋め込みプレイヤーを使用する場合、`www.youtube-nocookie.com` ドメインを使用することで、トラッキングCookieを抑制し、ブラウザコンソールへのCORSエラーノイズ（`googleads.g.doubleclick.net`等）を低減できる。
+
 
 #### 例：クライアント側エラーハンドラ実装（`src/utils/client-error-handler.ts`）
 ```ts
@@ -322,6 +331,10 @@ export default function SomeComponent() {
 *   **Class Merging (`cn` util):**
     *   再利用可能なコンポーネントでは、Props経由のスタイル上書きを可能にするため、必ず `clsx` (条件付き適用) と `tailwind-merge` (競合解決) を組み合わせたユーティリティ (`cn()` 等) を使用する。
     *   **Rule:** 文字列連結（`className + " bg-red-500"`）は禁止。`cn("bg-red-500", className)` を使用する。
+*   **Defensive Styling (Visibility Protection):**
+    *   テキストを表示するコンポーネント（特にオーバーレイや絶対配置されるもの）は、背景画像や親要素の色に依存せず視認性を確保するため、**自身の背景色（Background Color）を明示的に指定する**。
+    *   例: `bg-white/95 backdrop-blur-md` (半透明+ぼかし) を使用し、下に何が来ても文字が読めるようにする。
+
 
 ## 5. Security & Database Guidelines (Supabase)
 *   **RLS (Row Level Security):** すべてのテーブルに対して RLS を有効化 (`ENABLE ROW LEVEL SECURITY`) し、ポリシーを明示的に定義する。
