@@ -143,7 +143,6 @@ export default function YouTubePlayer() {
     };
 
     const onError = (error: any) => {
-        console.log('[YouTubePlayerRenderer] onError called', error); // Debug log
         handleClientError(error, 'YouTube Player Error occurred');
     };
 
@@ -152,10 +151,11 @@ export default function YouTubePlayer() {
     useEffect(() => {
         const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
             const reason = event.reason;
-            if (reason instanceof Error && reason.message.includes('Invalid video id')) {
-                console.log('[YouTubePlayerRenderer] Caught unhandled rejection:', reason);
-                handleClientError(reason, 'Video load failed: Invalid ID');
-                // Prevent the error from showing up as "Uncaught" in console
+            // Check if it's the specific video ID error. Reason might be an Error object or a string.
+            const message = reason instanceof Error ? reason.message : String(reason);
+
+            if (message.includes('Invalid video id')) {
+                handleClientError(new Error(message), 'Video load failed: Invalid ID');
                 event.preventDefault();
             }
         };
