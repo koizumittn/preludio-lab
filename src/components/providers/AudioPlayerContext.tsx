@@ -14,10 +14,12 @@ export interface PlayerState {
     videoAuthor: string | null; // e.g., Composer or Channel Name
     isReady: boolean;
     volume: number;
+    startTime?: number; // Optional: playback start offset
+    endTime?: number;   // Optional: playback end offset
 }
 
 export interface PlayerActions {
-    play: (videoId?: string, meta?: { title?: string; author?: string }) => void;
+    play: (videoId?: string, meta?: { title?: string; author?: string }, options?: { startTime?: number; endTime?: number }) => void;
     pause: () => void;
     togglePlay: () => void;
     seekTo: (time: number) => void;
@@ -52,6 +54,8 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
         videoAuthor: null,
         isReady: false,
         volume: 100,
+        startTime: undefined,
+        endTime: undefined,
     });
 
     // NOTE: We need a mechanism to communicate with the YouTube Player instance.
@@ -72,7 +76,7 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
         playerRef.current = player;
     }, []);
 
-    const play = useCallback((videoId?: string, meta?: { title?: string; author?: string }) => {
+    const play = useCallback((videoId?: string, meta?: { title?: string; author?: string }, options?: { startTime?: number; endTime?: number }) => {
         setState((prev) => {
             const newState = { ...prev, isPlaying: true };
             if (videoId && videoId !== prev.videoId) {
@@ -85,6 +89,17 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
             if (meta) {
                 if (meta.title) newState.videoTitle = meta.title;
                 if (meta.author) newState.videoAuthor = meta.author;
+            }
+            if (options) {
+                newState.startTime = options.startTime;
+                newState.endTime = options.endTime;
+            } else {
+                // If checking a new video without options, reset bounds? 
+                // Or keep them? Usually reset.
+                if (videoId && videoId !== prev.videoId) {
+                    newState.startTime = undefined;
+                    newState.endTime = undefined;
+                }
             }
             return newState;
         });

@@ -46,16 +46,26 @@ export function FocusPlayer() {
     const displayTime = isDragging ? dragTime : currentTime;
     const progressPercent = duration > 0 ? (displayTime / duration) * 100 : 0;
 
+    const handleSkipBackward = () => {
+        const newTime = Math.max(0, currentTime - 10);
+        seekTo(newTime);
+    };
+
+    const handleSkipForward = () => {
+        const newTime = Math.min(duration, currentTime + 10);
+        seekTo(newTime);
+    };
+
     return (
-        <div className="fixed inset-0 z-[60] flex flex-col bg-paper-white text-preludio-black animate-in slide-in-from-bottom duration-300">
+        <div className="fixed inset-0 z-[60] flex flex-col bg-white/95 backdrop-blur-sm text-preludio-black animate-in slide-in-from-bottom duration-300">
             {/* Header: Minimize Button */}
             <div className="flex items-center justify-between px-6 py-8">
                 <button
                     onClick={() => setMode('mini')}
-                    className="p-2 text-2xl hover:text-classic-gold transition-colors"
+                    className="p-3 -ml-3 text-3xl text-gray-400 hover:text-preludio-black transition-colors rounded-full hover:bg-gray-100"
                     aria-label="Minimize Player"
                 >
-                    ⌄
+                    <span className="block transform rotate-180">⌃</span> {/* Clean minimize icon */}
                 </button>
                 <div className="text-sm font-bold tracking-widest uppercase text-gray-500">Now Playing</div>
                 <div className="w-8" /> {/* Spacer for balance */}
@@ -65,11 +75,11 @@ export function FocusPlayer() {
             <div className="flex-1 flex flex-col items-center justify-center gap-8 px-6">
                 {/* Artwork Placeholder - Dynamic shadow based on playing state */}
                 <div className={`
-                    w-64 h-64 sm:w-80 sm:h-80 bg-gray-200 rounded-lg shadow-2xl 
-                    transition-transform duration-700 ease-out
+                    w-64 h-64 sm:w-80 sm:h-80 bg-gray-100 rounded-2xl shadow-2xl 
+                    transition-transform duration-700 ease-out border border-gray-200
                     ${isPlaying ? 'scale-100' : 'scale-95 opacity-90'}
                 `}>
-                    <div className="w-full h-full flex items-center justify-center text-gray-400">
+                    <div className="w-full h-full flex items-center justify-center text-gray-300">
                         {/* Music Note Icon */}
                         <svg className="w-24 h-24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
@@ -112,8 +122,12 @@ export function FocusPlayer() {
 
                 {/* Buttons */}
                 <div className="flex items-center justify-center gap-12">
-                    <button className="text-4xl text-gray-400 hover:text-preludio-black transition-colors" aria-label="Previous">
-                        ⏮
+                    <button
+                        onClick={handleSkipBackward}
+                        className="text-4xl text-gray-400 hover:text-preludio-black transition-colors active:scale-95"
+                        aria-label="Skip Backward 10s"
+                    >
+                        ⏮ <span className="text-xs block text-center font-sans mt-1">-10s</span>
                     </button>
                     <button
                         onClick={togglePlay}
@@ -122,8 +136,12 @@ export function FocusPlayer() {
                     >
                         {isPlaying ? '⏸' : '▶'}
                     </button>
-                    <button className="text-4xl text-gray-400 hover:text-preludio-black transition-colors" aria-label="Next">
-                        ⏭
+                    <button
+                        onClick={handleSkipForward}
+                        className="text-4xl text-gray-400 hover:text-preludio-black transition-colors active:scale-95"
+                        aria-label="Skip Forward 10s"
+                    >
+                        ⏭ <span className="text-xs block text-center font-sans mt-1">+10s</span>
                     </button>
                 </div>
             </div>

@@ -9,7 +9,13 @@ export function TestPlayerTrigger() {
         // J.S. Bach - Prelude in C Major (BWV 846) - performed by Kimiko Ishizaka (Public Domain)
         // Video ID: gVah1cr3pU0 (Example ID: actually "S6tgXo91r9w" is a common one, let's use a very stable one)
         // Let's use Glenn Gould: gVah1cr3pU0
-        play('gVah1cr3pU0', { title: 'Prelude in C Major, BWV 846', author: 'J.S. Bach' });
+        play('gVah1cr3pU0', {
+            title: 'Prelude in C Major, BWV 846',
+            author: 'J.S. Bach'
+        }, {
+            startTime: 5,   // Skip first 5s (Silence/Intro)
+            endTime: 30     // Stop at 30s for testing
+        });
     };
 
     return (

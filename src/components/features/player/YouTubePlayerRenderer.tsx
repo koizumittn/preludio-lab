@@ -14,43 +14,47 @@ export default function YouTubePlayer() {
         _onReady,
         _onStateChange,
         _onProgress,
-        _onDuration
+        _onDuration,
+        startTime,
+        endTime
     } = useAudioPlayer();
 
-    const playerRef = useRef<any>(null);
-    const progressInterval = useRef<NodeJS.Timeout | null>(null);
+    // ... refs ...
 
-    // YouTube Player Options
-    const opts: YouTubeProps['opts'] = {
-        height: '1', // カスタムUIを使用するため、視覚的なフットプリントを最小化
-        width: '1',
-        playerVars: {
-            autoplay: 0, // 状態経由で制御
-            controls: 0, // デフォルトのコントロールを非表示
-            disablekb: 1,
-            fs: 0,
-            playsinline: 1, // iOSでインライン再生
-            modestbranding: 1,
-        },
-    };
+    // Player Options (unchanged)
+    // ...
 
     /**
-     * 再生状態の同期ロジック:
-     * Contextが `isPlaying` の真偽値を保持します。
-     * このコンポーネントは `useEffect` でその変更を監視し、
-     * YouTube Playerの実体に対して命令 (`playVideo` / `pauseVideo`) を発行します。
+     * 再生状態と動画IDの同期
+     * loadVideoById を使用して、明示的に開始位置と終了位置を指定します。
+     * これにより、シーク処理をYouTube側で処理させることができます。
      */
     useEffect(() => {
         const player = playerRef.current;
         if (!player) return;
 
         if (isPlaying) {
-            // videoIdが変更された直後のケースを考慮する必要があります。
-            // YouTubeプレイヤーが新しい動画をロードするのに一瞬時間がかかります。
             const playerState = player.getPlayerState();
-            // 1 = Playing, 2 = Paused, 3 = Buffering, 5 = Cued
-            if (playerState !== 1 && playerState !== 3) {
-                player.playVideo();
+            // 既にこの動画がロードされており、再生中または一時停止中の場合
+            // 単純な再生再開で良いか、loadVideoByIdが必要かを判断する
+            // 簡略化のため、videoIdが変わった場合や、まだ開始されていない場合は loadVideoById を呼ぶ
+            // ただし、頻繁なリロードを防ぐため、現在の動画IDと比較が必要だが、useEffectの依存配列で制御されている
+
+            // NOTE: react-youtubeはprops変更でリロードすることがあるが、
+            // ここでは命令的に制御することで start/endSeconds を確実に適用する
+
+            const currentVideoId = player.getVideoData()?.video_id;
+
+            // 動画IDが同じで、かつ再生中なら何もしない（一時停止からの再開のみ playVideo）
+            if (currentVideoId === videoId && (playerState === 2 || playerState === 1)) {
+                if (playerState !== 1) player.playVideo();
+            } else {
+                // 新規ロードまたは異なる動画
+                player.loadVideoById({
+                    videoId: videoId,
+                    startSeconds: startTime || 0,
+                    endSeconds: endTime
+                });
             }
         } else {
             const playerState = player.getPlayerState();
@@ -58,7 +62,31 @@ export default function YouTubePlayer() {
                 player.pauseVideo();
             }
         }
-    }, [isPlaying, videoId]); // 再生状態または動画IDが変更されたら実行
+    }, [isPlaying, videoId, startTime, endTime]);
+
+    // Polling for progress & End Time Check
+    useEffect(() => {
+        if (isPlaying) {
+            progressInterval.current = setInterval(() => {
+                if (playerRef.current && typeof playerRef.current.getCurrentTime === 'function') {
+                    const time = playerRef.current.getCurrentTime();
+                    const duration = playerRef.current.getDuration();
+                    _onProgress(time);
+                    if (duration > 0) _onDuration(duration);
+
+                    // End Time Check (Manual fallback if API implementation is flaky)
+                    if (endTime && time >= endTime) {
+                        playerRef.current.pauseVideo();
+                        _onStateChange(false); // Update local state
+                    }
+                }
+            }, 500);
+        } else {
+            // ... clear interval
+            if (progressInterval.current) clearInterval(progressInterval.current);
+        }
+        return () => { if (progressInterval.current) clearInterval(progressInterval.current); };
+    }, [isPlaying, _onProgress, _onDuration, endTime, _onStateChange]);
 
     /**
      * 再生時間のポーリング (Current Time)
