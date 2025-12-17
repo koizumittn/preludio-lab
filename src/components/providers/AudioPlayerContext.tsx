@@ -11,7 +11,8 @@ export interface PlayerState {
     videoId: string | null;
     mode: PlayerMode;
     videoTitle: string | null;
-    videoAuthor: string | null; // e.g., Composer or Channel Name
+    videoComposer: string | null; // e.g. "J.S. Bach"
+    videoPerformer: string | null; // e.g. "Glenn Gould"
     artworkSrc: string | null; // URL for the thumbnail/artwork
     platformUrl: string | null; // e.g. "https://youtube.com/..."
     platformLabel: string | null; // e.g. "Watch on YouTube"
@@ -28,7 +29,8 @@ export interface PlayerActions {
         videoId?: string,
         meta?: {
             title?: string;
-            author?: string;
+            composer?: string;
+            performer?: string;
             artworkSrc?: string;
             platformUrl?: string;
             platformLabel?: string;
@@ -67,7 +69,8 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
         videoId: null,
         mode: 'hidden',
         videoTitle: null,
-        videoAuthor: null,
+        videoComposer: null,
+        videoPerformer: null,
         artworkSrc: null,
         platformUrl: null,
         platformLabel: null,
@@ -101,7 +104,8 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
         videoId?: string,
         meta?: {
             title?: string;
-            author?: string;
+            composer?: string;
+            performer?: string;
             artworkSrc?: string;
             platformUrl?: string;
             platformLabel?: string;
@@ -119,7 +123,8 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
                 }
                 // Reset metadata if new video
                 newState.videoTitle = null;
-                newState.videoAuthor = null;
+                newState.videoComposer = null;
+                newState.videoPerformer = null;
                 newState.artworkSrc = null;
                 newState.platformUrl = null;
                 newState.platformLabel = null;
@@ -127,7 +132,8 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
             }
             if (meta) {
                 if (meta.title) newState.videoTitle = meta.title;
-                if (meta.author) newState.videoAuthor = meta.author;
+                if (meta.composer) newState.videoComposer = meta.composer;
+                if (meta.performer) newState.videoPerformer = meta.performer;
                 if (meta.artworkSrc) newState.artworkSrc = meta.artworkSrc;
                 if (meta.platformUrl) newState.platformUrl = meta.platformUrl;
                 if (meta.platformLabel) newState.platformLabel = meta.platformLabel;

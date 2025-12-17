@@ -112,6 +112,12 @@ d2f2a2d'2 d2f2a2d'2 | d2f2a2d'2 d2f2a2d'2 |
 `}
                                     audioMetadata={{
                                         videoId: 'gVah1cr3pU0',
+                                        title: 'Prelude in C Major, BWV 846',
+                                        composer: 'J.S. Bach',
+                                        performer: 'Glenn Gould',
+                                        platformUrl: 'https://www.youtube.com/watch?v=gVah1cr3pU0',
+                                        platformLabel: 'Watch on YouTube',
+                                        platformType: 'youtube',
                                         startTime: 0,
                                         endTime: 15
                                     }}

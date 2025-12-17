@@ -11,7 +11,8 @@ export function MiniPlayer() {
         mode,
         setMode,
         videoTitle,
-        videoAuthor,
+        videoComposer,
+        videoPerformer,
         artworkSrc,
         isPlaying,
         togglePlay,
@@ -46,7 +47,7 @@ export function MiniPlayer() {
     };
 
     return (
-        <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-gray-200 bg-paper-white/95 backdrop-blur-md transition-all duration-300 shadow-up">
+        <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-gray-200 bg-white/95 backdrop-blur-md transition-all duration-300 shadow-up">
             {/* Progress Bar */}
             <div className="h-1 w-full bg-gray-200 cursor-pointer group" onClick={() => setMode('focus')}>
                 <div
@@ -77,7 +78,7 @@ export function MiniPlayer() {
                             {videoTitle || 'Loading...'}
                         </div>
                         <div className="text-xs text-gray-500 truncate">
-                            {videoAuthor || 'Preludio Lab'}
+                            {videoComposer}{videoPerformer ? ` (${videoPerformer})` : ''}
                         </div>
                     </div>
                 </div>

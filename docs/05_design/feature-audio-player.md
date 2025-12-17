@@ -19,7 +19,7 @@ Preludio Labにおける「Audio Player」は、ユーザーが楽譜を閲覧�
 *   **Mini Player (常駐モード):**
     *   **再生/一時停止:** 中央のボタンでトグル操作。
     *   **拡大:** バー領域全体（またはExpandボタン）をクリックすると `Focus Mode` へ遷移。
-    *   **表示情報:** 曲名、作曲者名、簡易プログレスバー。
+    *   **表示情報:** 曲名、作曲者名 (Composer)、演奏者名 (Performer)、簡易プログレスバー。
 *   **Focus Player (全画面モード):**
     *   **シーク:** プログレスバーをドラッグして任意の位置へ移動。
     *   **最小化:** 「⌄」ボタンで `Mini Mode` へ戻る（再生は継続）。
@@ -77,6 +77,10 @@ graph TD
 | `duration` | `number` | 動画の総再生時間（秒）。 |
 | `mode` | `'hidden' \| 'mini' \| 'focus'` | プレイヤーの表示モード。 |
 | `volume` | `number` | 音量 (0-100)。 |
+| `videoTitle` | `string \| null` | 曲名。 |
+| `videoComposer` | `string \| null` | 作曲者名。 |
+| `videoPerformer` | `string \| null` | 演奏者名。 |
+| `artworkSrc` | `string \| null` | アートワーク画像URL。 |
 | `platformUrl` | `string \| null` | プラットフォーム（外部サイト）へのURL。 |
 | `platformLabel` | `string \| null` | リンクの表示ラベル (例: "Watch on YouTube")。 |
 | `platformType` | `'youtube' \| 'default'` | アイコン種別識別子。 |

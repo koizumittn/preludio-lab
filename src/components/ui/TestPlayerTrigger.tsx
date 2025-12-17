@@ -12,7 +12,8 @@ export function TestPlayerTrigger() {
         // Let's use Glenn Gould: gVah1cr3pU0
         play('gVah1cr3pU0', {
             title: 'Prelude in C Major, BWV 846',
-            author: 'J.S. Bach',
+            composer: 'J.S. Bach',
+            performer: 'Glenn Gould',
             artworkSrc: 'https://img.youtube.com/vi/gVah1cr3pU0/hqdefault.jpg',
             platformUrl: 'https://www.youtube.com/watch?v=gVah1cr3pU0',
             platformLabel: 'Watch on YouTube',
@@ -27,7 +28,8 @@ export function TestPlayerTrigger() {
         // Same video, but pretending it's from "Preludio Archives" (Non-YouTube source)
         play('gVah1cr3pU0', {
             title: 'Prelude in C Major (Archive)',
-            author: 'J.S. Bach',
+            composer: 'J.S. Bach',
+            performer: 'Unknown',
             artworkSrc: 'https://img.youtube.com/vi/gVah1cr3pU0/hqdefault.jpg',
             platformUrl: 'https://preludio.io/archives/bach',
             platformLabel: 'View in Archives',

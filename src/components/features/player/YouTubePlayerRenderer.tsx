@@ -36,7 +36,9 @@ export default function YouTubePlayer() {
             fs: 0,
             playsinline: 1, // iOSでインライン再生
             modestbranding: 1,
+            origin: typeof window !== 'undefined' ? window.location.origin : undefined, // Explicit origin
         },
+        host: 'https://www.youtube-nocookie.com', // Privacy-enhanced mode to reduce tracking/CORS noise
     };
 
     // Helper to safely call loadVideoById handling both Sync and Async errors
