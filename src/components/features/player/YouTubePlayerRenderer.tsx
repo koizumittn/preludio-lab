@@ -110,7 +110,15 @@ export default function YouTubePlayer() {
 
         // 必須チェック: すでに再生状態であるべきなら、即座に再生を開始する
         if (isPlaying) {
-            event.target.playVideo();
+            if (startTime) {
+                event.target.loadVideoById({
+                    videoId: videoId,
+                    startSeconds: startTime,
+                    endSeconds: endTime
+                });
+            } else {
+                event.target.playVideo();
+            }
         }
     };
 
