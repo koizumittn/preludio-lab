@@ -147,6 +147,25 @@ export default function YouTubePlayer() {
         handleClientError(error, 'YouTube Player Error occurred');
     };
 
+    // YouTube API (widgetapi) sometimes throws "Uncaught (in promise) Error: Invalid video id"
+    // that fails to trigger the standard onError callback. We catch it globally here.
+    useEffect(() => {
+        const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+            const reason = event.reason;
+            if (reason instanceof Error && reason.message.includes('Invalid video id')) {
+                console.log('[YouTubePlayerRenderer] Caught unhandled rejection:', reason);
+                handleClientError(reason, 'Video load failed: Invalid ID');
+                // Prevent the error from showing up as "Uncaught" in console
+                event.preventDefault();
+            }
+        };
+
+        window.addEventListener('unhandledrejection', handleUnhandledRejection);
+        return () => {
+            window.removeEventListener('unhandledrejection', handleUnhandledRejection);
+        };
+    }, []);
+
     if (!videoId) return null;
 
     return (
