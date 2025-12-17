@@ -19,10 +19,22 @@ export default function YouTubePlayer() {
         endTime
     } = useAudioPlayer();
 
-    // ... refs ...
+    const playerRef = useRef<any>(null);
+    const progressInterval = useRef<NodeJS.Timeout | null>(null);
 
-    // Player Options (unchanged)
-    // ...
+    // YouTube Player Options
+    const opts: YouTubeProps['opts'] = {
+        height: '1', // カスタムUIを使用するため、視覚的なフットプリントを最小化
+        width: '1',
+        playerVars: {
+            autoplay: 0, // 状態経由で制御
+            controls: 0, // デフォルトのコントロールを非表示
+            disablekb: 1,
+            fs: 0,
+            playsinline: 1, // iOSでインライン再生
+            modestbranding: 1,
+        },
+    };
 
     /**
      * 再生状態と動画IDの同期
@@ -37,11 +49,6 @@ export default function YouTubePlayer() {
             const playerState = player.getPlayerState();
             // 既にこの動画がロードされており、再生中または一時停止中の場合
             // 単純な再生再開で良いか、loadVideoByIdが必要かを判断する
-            // 簡略化のため、videoIdが変わった場合や、まだ開始されていない場合は loadVideoById を呼ぶ
-            // ただし、頻繁なリロードを防ぐため、現在の動画IDと比較が必要だが、useEffectの依存配列で制御されている
-
-            // NOTE: react-youtubeはprops変更でリロードすることがあるが、
-            // ここでは命令的に制御することで start/endSeconds を確実に適用する
 
             const currentVideoId = player.getVideoData()?.video_id;
 
@@ -64,7 +71,9 @@ export default function YouTubePlayer() {
         }
     }, [isPlaying, videoId, startTime, endTime]);
 
-    // Polling for progress & End Time Check
+    /**
+     * 再生時間のポーリング (Current Time) & End Time Check
+     */
     useEffect(() => {
         if (isPlaying) {
             progressInterval.current = setInterval(() => {
@@ -82,40 +91,12 @@ export default function YouTubePlayer() {
                 }
             }, 500);
         } else {
-            // ... clear interval
-            if (progressInterval.current) clearInterval(progressInterval.current);
+            if (progressInterval.current) {
+                clearInterval(progressInterval.current);
+            }
         }
         return () => { if (progressInterval.current) clearInterval(progressInterval.current); };
     }, [isPlaying, _onProgress, _onDuration, endTime, _onStateChange]);
-
-    /**
-     * 再生時間のポーリング (Current Time)
-     * YouTube APIにはHTML5 Audioのような "timeupdate" イベントがないため、
-     * `setInterval` を使用してポーリングする必要があります。
-     */
-    useEffect(() => {
-        if (isPlaying) {
-            progressInterval.current = setInterval(() => {
-                if (playerRef.current && typeof playerRef.current.getCurrentTime === 'function') {
-                    const time = playerRef.current.getCurrentTime();
-                    const duration = playerRef.current.getDuration();
-                    _onProgress(time);
-                    // 初期ロード時に取得できなかった場合に備えてdurationも更新
-                    if (duration > 0) _onDuration(duration);
-                }
-            }, 500); // 500msごとに更新
-        } else {
-            if (progressInterval.current) {
-                clearInterval(progressInterval.current);
-            }
-        }
-
-        return () => {
-            if (progressInterval.current) {
-                clearInterval(progressInterval.current);
-            }
-        };
-    }, [isPlaying, _onProgress, _onDuration]);
 
 
     const onReady = (event: YouTubeEvent) => {
