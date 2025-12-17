@@ -46,7 +46,7 @@ export default async function RootLayout({
 }) {
     const { lang } = await params;
     return (
-        <html lang={lang} className={`${inter.variable} ${notoSerif.variable}`}>
+        <html lang={lang} className={`${inter.variable} ${notoSerif.variable}`} suppressHydrationWarning>
             <body className="antialiased bg-paper text-primary font-sans">
                 <AppProviders>
                     <Header />
