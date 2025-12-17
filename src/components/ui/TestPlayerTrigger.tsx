@@ -13,7 +13,7 @@ export function TestPlayerTrigger() {
             title: 'Prelude in C Major, BWV 846',
             author: 'J.S. Bach'
         }, {
-            startTime: 5,   // Skip first 5s (Silence/Intro)
+            startTime: 10,  // Skip first 10s (Silence/Intro)
             // endTime: 30  // Removed endTime to allow testing of Seek without force-stopping
         });
     };
