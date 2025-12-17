@@ -22,36 +22,31 @@ export default function YouTubePlayer() {
 
     // YouTube Player Options
     const opts: YouTubeProps['opts'] = {
-        height: '1', // Minimize visual footprint as we use custom UI
+        height: '1', // カスタムUIを使用するため、視覚的なフットプリントを最小化
         width: '1',
         playerVars: {
-            autoplay: 0, // Controlled via state
-            controls: 0, // Hide default controls
+            autoplay: 0, // 状態経由で制御
+            controls: 0, // デフォルトのコントロールを非表示
             disablekb: 1,
             fs: 0,
-            playsinline: 1, // iOS inline playback
+            playsinline: 1, // iOSでインライン再生
             modestbranding: 1,
         },
     };
 
-    // Sync Play/Pause state with prop change is handled by react-youtube's internal logic?
-    // Actually no, react-youtube just initializes. We need to command it.
-    // BUT, react-youtube doesn't expose a "playing" prop easily to control the player.
-    // We used `setPlayerInstance` to pass the ref up to Context, so Context calls `.playVideo()` / `.pauseVideo()`.
-    // Wait, in Context I implemented `play` as just setting state `isPlaying: true`.
-    // I need to REACT to that state change here in a useEffect and call the player method.
-
-    // CORRECT APPROACH:
-    // Context holds `isPlaying`.
-    // This component `useEffect` listens to `isPlaying` and calls `player.playVideo()` or `player.pauseVideo()`.
-
+    /**
+     * 再生状態の同期ロジック:
+     * Contextが `isPlaying` の真偽値を保持します。
+     * このコンポーネントは `useEffect` でその変更を監視し、
+     * YouTube Playerの実体に対して命令 (`playVideo` / `pauseVideo`) を発行します。
+     */
     useEffect(() => {
         const player = playerRef.current;
         if (!player) return;
 
         if (isPlaying) {
-            // Need to handle the case where videoId just changed. 
-            // YouTube player takes a moment to load new video.
+            // videoIdが変更された直後のケースを考慮する必要があります。
+            // YouTubeプレイヤーが新しい動画をロードするのに一瞬時間がかかります。
             const playerState = player.getPlayerState();
             // 1 = Playing, 2 = Paused, 3 = Buffering, 5 = Cued
             if (playerState !== 1 && playerState !== 3) {
@@ -63,10 +58,13 @@ export default function YouTubePlayer() {
                 player.pauseVideo();
             }
         }
-    }, [isPlaying, videoId]); // Run when playing state or video ID changes
+    }, [isPlaying, videoId]); // 再生状態または動画IDが変更されたら実行
 
-    // Polling for progress (Current Time)
-    // YouTube API doesn't have a "timeupdate" event like HTML5 Audio. We must poll.
+    /**
+     * 再生時間のポーリング (Current Time)
+     * YouTube APIにはHTML5 Audioのような "timeupdate" イベントがないため、
+     * `setInterval` を使用してポーリングする必要があります。
+     */
     useEffect(() => {
         if (isPlaying) {
             progressInterval.current = setInterval(() => {
@@ -74,10 +72,10 @@ export default function YouTubePlayer() {
                     const time = playerRef.current.getCurrentTime();
                     const duration = playerRef.current.getDuration();
                     _onProgress(time);
-                    // Also update duration if it wasn't set correctly initially
+                    // 初期ロード時に取得できなかった場合に備えてdurationも更新
                     if (duration > 0) _onDuration(duration);
                 }
-            }, 500); // Update every 500ms
+            }, 500); // 500msごとに更新
         } else {
             if (progressInterval.current) {
                 clearInterval(progressInterval.current);
@@ -99,7 +97,7 @@ export default function YouTubePlayer() {
         const duration = event.target.getDuration();
         _onReady(duration);
 
-        // Required check: If we are supposed to be playing, start now.
+        // 必須チェック: すでに再生状態であるべきなら、即座に再生を開始する
         if (isPlaying) {
             event.target.playVideo();
         }
@@ -111,18 +109,18 @@ export default function YouTubePlayer() {
         const duration = event.target.getDuration();
         if (duration) _onDuration(duration);
 
-        if (state === 1) { // Playing
+        if (state === 1) { // 再生中
             _onStateChange(true);
-        } else if (state === 2) { // Paused
+        } else if (state === 2) { // 一時停止
             _onStateChange(false);
-        } else if (state === 0) { // Ended
+        } else if (state === 0) { // 終了
             _onStateChange(false);
         }
     };
 
     const onError = (error: any) => {
         console.error('YouTube Player Error:', error);
-        // Fallback or Toast could be triggered here via Context
+        // 必要に応じてContext経由でフォールバックやToastを表示可能
     };
 
     if (!videoId) return null;
