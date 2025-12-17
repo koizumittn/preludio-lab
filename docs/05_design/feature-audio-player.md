@@ -101,7 +101,10 @@ graph TD
 *   **UI Specs:**
     *   画面全体を覆うモーダル (`fixed inset-0`)。
     *   シークバー（スライダー）による任意位置へのジャンプ。
+    *   画面全体を覆うモーダル (`fixed inset-0`)。
+    *   シークバー（スライダー）による任意位置へのジャンプ。
     *   「最小化」ボタンで Mini Player に戻る。
+    *   **Trust & Attribution:** メタデータ付近に "Watch on YouTube" リンクを表示し、ソース元への透明性を確保する。
 
 ## 6. Integration (Root Layout)
 ページ遷移による再レンダリング（リセット）を防ぐため、`src/app/[lang]/layout.tsx` の最上位レベルに配置されています。
