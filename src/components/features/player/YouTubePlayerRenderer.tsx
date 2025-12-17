@@ -16,11 +16,13 @@ export default function YouTubePlayer() {
         _onProgress,
         _onDuration,
         startTime,
-        endTime
+        endTime,
+        playbackId
     } = useAudioPlayer();
 
     const playerRef = useRef<any>(null);
     const progressInterval = useRef<NodeJS.Timeout | null>(null);
+    const lastPlaybackIdRef = useRef<number | null>(null);
 
     // YouTube Player Options
     const opts: YouTubeProps['opts'] = {
@@ -46,17 +48,17 @@ export default function YouTubePlayer() {
         if (!player) return;
 
         if (isPlaying) {
-            const playerState = player.getPlayerState();
-            // 既にこの動画がロードされており、再生中または一時停止中の場合
-            // 単純な再生再開で良いか、loadVideoByIdが必要かを判断する
+            const isNewRequest = playbackId !== lastPlaybackIdRef.current;
+            lastPlaybackIdRef.current = playbackId;
 
+            const playerState = player.getPlayerState();
+            // 既にこの動画がロードされており、かつ新しい再生リクエストでない場合（一時停止解除など）
             const currentVideoId = player.getVideoData()?.video_id;
 
-            // 動画IDが同じで、かつ再生中なら何もしない（一時停止からの再開のみ playVideo）
-            if (currentVideoId === videoId && (playerState === 2 || playerState === 1)) {
+            if (!isNewRequest && currentVideoId === videoId && (playerState === 2 || playerState === 1)) {
                 if (playerState !== 1) player.playVideo();
             } else {
-                // 新規ロードまたは異なる動画
+                // 新規リクエスト、または動画変更、または未ロード状態
                 player.loadVideoById({
                     videoId: videoId,
                     startSeconds: startTime || 0,
@@ -69,7 +71,7 @@ export default function YouTubePlayer() {
                 player.pauseVideo();
             }
         }
-    }, [isPlaying, videoId, startTime, endTime]);
+    }, [isPlaying, videoId, startTime, endTime, playbackId]);
 
     /**
      * 再生時間のポーリング (Current Time) & End Time Check

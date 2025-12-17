@@ -14,8 +14,9 @@ export interface PlayerState {
     videoAuthor: string | null; // e.g., Composer or Channel Name
     isReady: boolean;
     volume: number;
-    startTime?: number; // Optional: playback start offset
-    endTime?: number;   // Optional: playback end offset
+    startTime?: number;
+    endTime?: number;
+    playbackId: number; // Increment on every explicit play request
 }
 
 export interface PlayerActions {
@@ -56,6 +57,7 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
         volume: 100,
         startTime: undefined,
         endTime: undefined,
+        playbackId: 0,
     });
 
     // NOTE: We need a mechanism to communicate with the YouTube Player instance.
@@ -78,7 +80,7 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
 
     const play = useCallback((videoId?: string, meta?: { title?: string; author?: string }, options?: { startTime?: number; endTime?: number }) => {
         setState((prev) => {
-            const newState = { ...prev, isPlaying: true };
+            const newState = { ...prev, isPlaying: true, playbackId: prev.playbackId + 1 };
             if (videoId && videoId !== prev.videoId) {
                 newState.videoId = videoId;
                 newState.currentTime = 0; // Reset time on new video
