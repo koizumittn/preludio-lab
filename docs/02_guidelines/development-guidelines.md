@@ -360,3 +360,8 @@ Next.js 15+ の Turbopack は Rust ベースの高速バンドラだが、一部
 *   **Exclusions:** Next.js アプリケーションの依存関係に含まれない独立したスクリプトディレクトリ（例: `agents/`）は、ルートの `tsconfig.json` の `exclude` に追加する。
     *   **Reason:** Next.js ビルドプロセスがそれらのファイルを型チェックしようとし、アプリ側の依存関係（`dotenv` 等）の欠落によりビルドエラーになるのを防ぐため。
 
+### 7.4. Preview Environment Strategy
+*   **Branch-based Previews:** VercelはPR作成有無にかかわらず、**Pushされた全てのブランチ**に対してプレビュー環境を構築する。
+    *   **Policy:** これを標準動作として受け入れる。「PR作成前の動作確認」が可能になるメリットを活かすため、特定のブランチのみにビルドを制限する設定は行わない。
+    *   **Cost:** Hobby Plan / Pro Plan 共に、アクセスされなければ課金（帯域・Function実行）対象にはならないため、デプロイ数が増えても問題ない。
+
