@@ -17,6 +17,7 @@
     *   **Summary:** 何をしたか。
     *   **Related Issues:** 関連するIssue番号 closes #123.
     *   **Verification:** どうやって動作確認したか（スクショ、動画、コマンド）。
+*   **Language:** 原則として日本語を使用する。タイトル、概要（Description）、コメント等は日本語で記述すること。
 *   **Review:** 最低1名の承認（Approve）を必須とする。
 *   **Merge Strategy:** **Squash & Merge** を原則とする。
     *   **Reason:** 開発中の試行錯誤（typo修正など）の履歴を1つのコミットにまとめ、`master` の履歴を「機能単位」でクリーンに保つため。
