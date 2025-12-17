@@ -39,10 +39,22 @@ export default function YouTubePlayer() {
         },
     };
 
+    // Helper to safely call loadVideoById handling both Sync and Async errors
+    const safeLoadVideo = (target: any, options: { videoId: string; startSeconds?: number; endSeconds?: number }) => {
+        try {
+            const result = target.loadVideoById(options);
+            // Handle if it returns a Promise (Async error)
+            if (result && typeof result.catch === 'function') {
+                result.catch((e: any) => handleClientError(e, 'Failed to load video (Async)'));
+            }
+        } catch (e) {
+            // Handle Sync error
+            handleClientError(e, 'Failed to load video (Sync)');
+        }
+    };
+
     /**
      * 再生状態と動画IDの同期
-     * loadVideoById を使用して、明示的に開始位置と終了位置を指定します。
-     * これにより、シーク処理をYouTube側で処理させることができます。
      */
     useEffect(() => {
         const player = playerRef.current;
@@ -60,15 +72,11 @@ export default function YouTubePlayer() {
                 if (playerState !== 1) player.playVideo();
             } else {
                 // 新規リクエスト、または動画変更、または未ロード状態
-                try {
-                    player.loadVideoById({
-                        videoId: videoId,
-                        startSeconds: startTime || 0,
-                        endSeconds: endTime
-                    });
-                } catch (e) {
-                    handleClientError(e, 'Failed to load video');
-                }
+                safeLoadVideo(player, {
+                    videoId: videoId || '',
+                    startSeconds: startTime || 0,
+                    endSeconds: endTime
+                });
             }
         } else {
             const playerState = player.getPlayerState();
@@ -82,6 +90,7 @@ export default function YouTubePlayer() {
      * 再生時間のポーリング (Current Time) & End Time Check
      */
     useEffect(() => {
+        // ... (No change to progress polling logic)
         if (isPlaying) {
             progressInterval.current = setInterval(() => {
                 if (playerRef.current && typeof playerRef.current.getCurrentTime === 'function') {
@@ -116,8 +125,8 @@ export default function YouTubePlayer() {
         // 必須チェック: すでに再生状態であるべきなら、即座に再生を開始する
         if (isPlaying) {
             if (startTime) {
-                event.target.loadVideoById({
-                    videoId: videoId,
+                safeLoadVideo(event.target, {
+                    videoId: videoId || '',
                     startSeconds: startTime,
                     endSeconds: endTime
                 });
@@ -145,42 +154,6 @@ export default function YouTubePlayer() {
     const onError = (error: any) => {
         handleClientError(error, 'YouTube Player Error occurred');
     };
-
-    // YouTube API (widgetapi) sometimes throws "Uncaught (in promise) Error: Invalid video id"
-    // that fails to trigger the standard onError callback. We catch it globally here.
-    useEffect(() => {
-        const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
-            const reason = event.reason;
-
-            // Debugging: Log the exact structure of the rejection reason
-            console.log('[YouTubePlayerRenderer] Debug - Rejection Reason:', reason);
-
-            let errorMessage = '';
-            if (reason instanceof Error) {
-                errorMessage = reason.message;
-            } else if (typeof reason === 'string') {
-                errorMessage = reason;
-            } else {
-                try {
-                    errorMessage = JSON.stringify(reason);
-                } catch (e) {
-                    errorMessage = String(reason);
-                }
-            }
-
-            if (errorMessage && errorMessage.includes('Invalid video id')) {
-                handleClientError(new Error(errorMessage), 'Video load failed: Invalid ID');
-                event.preventDefault();
-            }
-        };
-
-        // Use capture phase to ensure we catch it early
-        window.addEventListener('unhandledrejection', handleUnhandledRejection, true);
-
-        return () => {
-            window.removeEventListener('unhandledrejection', handleUnhandledRejection, true);
-        };
-    }, []);
 
     if (!videoId) return null;
 
