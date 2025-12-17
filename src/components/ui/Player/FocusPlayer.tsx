@@ -21,7 +21,9 @@ export function FocusPlayer() {
         togglePlay,
         currentTime,
         duration,
-        seekTo
+        seekTo,
+        startTime,
+        endTime
     } = useAudioPlayer();
 
     const [isDragging, setIsDragging] = useState(false);
@@ -29,30 +31,41 @@ export function FocusPlayer() {
 
     if (mode !== 'focus') return null;
 
+    // Virtual Timeline Calculations
+    const startOffset = startTime || 0;
+    const endCap = endTime || duration;
+    // Prevent negative duration if data isn't ready
+    const displayDuration = Math.max(0, endCap - startOffset);
+    // Clamp current time to 0 for UI (don't show negative if player is buffering before start)
+    const rawDisplayTime = Math.max(0, currentTime - startOffset);
+
+    // Use drag value if dragging, otherwise actual time
+    const currentUiTime = isDragging ? dragTime : rawDisplayTime;
+
     const handleSeekChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setDragTime(Number(e.target.value));
     };
 
     const handleSeekStart = () => {
         setIsDragging(true);
-        setDragTime(currentTime);
+        setDragTime(rawDisplayTime);
     };
 
     const handleSeekEnd = () => {
         setIsDragging(false);
-        seekTo(dragTime);
+        // Convert UI time back to absolute time
+        seekTo(dragTime + startOffset);
     };
 
-    const displayTime = isDragging ? dragTime : currentTime;
-    const progressPercent = duration > 0 ? (displayTime / duration) * 100 : 0;
-
     const handleSkipBackward = () => {
-        const newTime = Math.max(0, currentTime - 10);
+        // Skip -10s relative to absolute time, but clamped to startOffset
+        const newTime = Math.max(startOffset, currentTime - 10);
         seekTo(newTime);
     };
 
     const handleSkipForward = () => {
-        const newTime = Math.min(duration, currentTime + 10);
+        // Skip +10s relative to absolute time, but clamped to endCap
+        const newTime = Math.min(endCap, currentTime + 10);
         seekTo(newTime);
     };
 
@@ -105,8 +118,8 @@ export function FocusPlayer() {
                     <input
                         type="range"
                         min={0}
-                        max={duration || 100}
-                        value={displayTime}
+                        max={displayDuration || 100}
+                        value={currentUiTime}
                         onChange={handleSeekChange}
                         onMouseDown={handleSeekStart}
                         onMouseUp={handleSeekEnd}
@@ -115,8 +128,8 @@ export function FocusPlayer() {
                         className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-classic-gold"
                     />
                     <div className="flex justify-between text-xs font-mono text-gray-500">
-                        <span>{formatTimeHelper(displayTime)}</span>
-                        <span>{formatTimeHelper(duration)}</span>
+                        <span>{formatTimeHelper(currentUiTime)}</span>
+                        <span>{formatTimeHelper(displayDuration)}</span>
                     </div>
                 </div>
 

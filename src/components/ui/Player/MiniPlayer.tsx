@@ -16,22 +16,31 @@ export function MiniPlayer() {
         togglePlay,
         currentTime,
         duration,
-        seekTo
+        seekTo,
+        startTime,
+        endTime
     } = useAudioPlayer();
 
     if (mode === 'hidden' || mode === 'focus') return null;
 
-    const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
+    // Virtual Timeline Calculations
+    const startOffset = startTime || 0;
+    const endCap = endTime || duration;
+    const displayDuration = Math.max(0, endCap - startOffset);
+    const rawDisplayTime = Math.max(0, currentTime - startOffset);
+
+    // Progress % based on virtual range
+    const progressPercent = displayDuration > 0 ? (rawDisplayTime / displayDuration) * 100 : 0;
 
     const handleSkipBackward = (e: React.MouseEvent) => {
         e.stopPropagation();
-        const newTime = Math.max(0, currentTime - 10);
+        const newTime = Math.max(startOffset, currentTime - 10);
         seekTo(newTime);
     };
 
     const handleSkipForward = (e: React.MouseEvent) => {
         e.stopPropagation();
-        const newTime = Math.min(duration, currentTime + 10);
+        const newTime = Math.min(endCap, currentTime + 10);
         seekTo(newTime);
     };
 
