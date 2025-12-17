@@ -22,12 +22,35 @@ export function TestPlayerTrigger() {
         });
     };
 
+    const handlePlayMockArchive = () => {
+        // Same video, but pretending it's from "Preludio Archives" (Non-YouTube source)
+        play('gVah1cr3pU0', {
+            title: 'Prelude in C Major (Archive)',
+            author: 'J.S. Bach',
+            artworkSrc: 'https://img.youtube.com/vi/gVah1cr3pU0/hqdefault.jpg',
+            platformUrl: 'https://preludio.io/archives/bach',
+            platformLabel: 'View in Archives',
+            platformType: 'default' // This triggers the generic icon
+        }, {
+            startTime: 0,
+            endTime: 15
+        });
+    };
+
     return (
-        <button
-            onClick={handlePlay}
-            className="mt-4 rounded-full bg-blue-600 px-6 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
-        >
-            ▶ Test Play (BWV 846)
-        </button>
+        <div className="flex gap-2">
+            <button
+                onClick={handlePlay}
+                className="px-4 py-2 bg-preludio-black text-white text-sm font-bold rounded-full hover:bg-gray-800 transition-colors shadow-lg"
+            >
+                Test Play (YouTube)
+            </button>
+            <button
+                onClick={handlePlayMockArchive}
+                className="px-4 py-2 bg-white text-preludio-black border border-gray-200 text-sm font-bold rounded-full hover:bg-gray-50 transition-colors shadow-sm"
+            >
+                Test Play (Archive)
+            </button>
+        </div>
     );
 }
