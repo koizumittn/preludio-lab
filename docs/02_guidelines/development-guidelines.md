@@ -227,6 +227,18 @@ Next.js (App Router) における Hydration Mismatch を防ぐため、以下の
 | **エラーログのレベル** | 例外は **ERROR** レベルでログ出力し、`Sentry` に必ず送信する。開発時は `console.error` でスタックトレースを確認。 | 監視とデバッグの両立 |
 | **非同期 UI のローディング解除** | 例外が発生したら必ずローディング状態を解除し、ユーザーが再試行できるようにする。 | UI のハング防止 |
 
+#### E. Third-Party Library Reliability (Learning from Audio Player)
+外部ライブラリ（特にIFrameや非同期処理を多用するもの）は、アプリケーションの制御外でエラーを発生させる場合がある。
+安定性を確保するため、以下の戦略を推奨する。
+
+1.  **Manual Control over Auto-Magic:**
+    *   ライブラリが提供する便利な「自動制御機能（Prop変更だけで動作するなど）」が不安定な場合は、迷わず**手動制御（Imperative API）**に切り替える。
+    *   例: `react-youtube` の `videoId` Propによる自動ロードを使用せず、`player.loadVideoById()` を自前で呼び出し、戻り値の Promise を `.catch()` する。
+2.  **Assumption of Failure:**
+    *   「ライブラリは失敗しない」という前提を捨て、「失敗した場合にユーザーに何を伝えるか（Toast, Fallback UI）」を常に実装する。
+3.  **Strict Async Error Handling:**
+    *   外部API呼び出しは `try/catch` だけでなく、戻り値が Promise でないか確認し、必要であればチェーンで `.catch()` を接続する。Frameworkやライブラリによっては `await` してもエラーが補足できない実装（Fire-and-forget）があるため注意する。
+
 #### 例：クライアント側エラーハンドラ実装（`src/utils/client-error-handler.ts`）
 ```ts
 import * as Sentry from '@sentry/nextjs';
