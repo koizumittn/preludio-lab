@@ -152,7 +152,6 @@ graph TD
             2.  `FeatureClientWrapper.tsx`: `dynamic(() => import('./FeatureRenderer'), { ssr: false })` を行い、ローディング中のスケルトン（`loading`）を提供する。
             3.  `index.tsx`: **Wrapperをデフォルトエクスポート** する。
             *   **Rationale:** 利用側（Server Component）は `import Feature from '@/components/features/xxx'` とするだけで、CSR限定実行とLoading UIが自動的に適用され、安全かつクリーンに保たれる。
-            *   **Rationale:** 利用側（Server Component）は `import Feature from '@/components/features/xxx'` とするだけで、CSR限定実行とLoading UIが自動的に適用され、安全かつクリーンに保たれる。
 
 ### 2.2.2. Component Design & Contracts (Design First)
 UIコンポーネント間、あるいはロジックとUIをつなぐ重要なデータ構造（例: `AudioMetadata`や複雑なProps）は、実装に着手する前にDesign Doc等で**Interface定義**を行い、関係者（AI含む）間で合意（Contract）を形成する。
