@@ -51,7 +51,8 @@ Status: `[/]` 進行中
     - [x] 記事詳細ページのレイアウト確認 (Dummy Data + Skeleton)
     - [x] 楽譜・プレイヤーのプレースホルダー配置
 - [ ] **デプロイ・動作確認**
-    - [ ] Vercelへの初回デプロイ
+    - [x] Vercelへの初回デプロイ (Framework Preset, Pino Config Fixed)
+    - [x] サーバーサイドログ (Pino) の復旧と確認
     - [x] レスポンシブ挙動の確認
 
 ## Phase 1: コア機能開発 ("Lab" Components)
