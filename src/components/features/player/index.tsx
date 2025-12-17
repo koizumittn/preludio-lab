@@ -1,1 +1,1 @@
-export { default } from './YouTubePlayerClientWrapper';
+export { default as AudioPlayerFeature } from './YouTubePlayerClientWrapper';

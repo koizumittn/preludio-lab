@@ -80,8 +80,9 @@ graph TD
 
 ## 5. Component Specifications
 
-### 5.1. YouTubePlayer (`src/components/features/player/`)
+### 5.1. AudioPlayerFeature (`src/components/features/player/`)
 *   **Role:** 音声再生エンジン。画面上は 1px × 1px の不可視領域として存在します。
+*   **Implementation:** 内部的に `YouTubePlayer` をラップしていますが、責務は汎用的な「オーディオ再生機能」の提供です。
 *   **Behavior:**
     *   `Context.isPlaying` の変化を `useEffect` で監視し、APIに対して `playVideo()` / `pauseVideo()` を発行します。
     *   `setInterval` (500ms) で再生時間をポーリングし、Contextに通知します。
@@ -112,7 +113,7 @@ graph TD
     {/* ...Footer... */}
     
     {/* Global Persistent Components */}
-    <YouTubePlayer />
+    <AudioPlayerFeature />
     <MiniPlayer />
     <FocusPlayer />
 </AppProviders>
