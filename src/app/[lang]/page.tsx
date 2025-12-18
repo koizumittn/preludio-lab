@@ -22,6 +22,16 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         { id: 'eras', color: 'bg-rose-50 text-rose-700' },
     ];
 
+    // Featured Work Data (Mock)
+    const featuredWork = {
+        label: t('categories.works.name'), // Use category name from dictionary
+        title: 'Prelude in C Major, BWV 846',
+        description: lang === 'ja'
+            ? 'J.S.バッハ『平均律クラヴィーア曲集』第1巻より。機能和声の基礎と、アルペジオ（分散和音）の美しさを紐解く。'
+            : 'An in-depth analysis of Bach\'s masterpiece from The Well-Tempered Clavier. Understand functionality of harmony and the beauty of arpeggios.',
+        link: `/${lang}/works/prelude-c-major`
+    };
+
     return (
         <div className="flex flex-col items-center justify-center">
             {/* Hero Section */}
@@ -69,11 +79,11 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                     <h2 className="mb-12 text-center text-3xl font-bold text-preludio-black">{t('featured.title')}</h2>
                     <div className="mx-auto max-w-4xl overflow-hidden rounded-2xl bg-paper-white shadow-xl">
                         <div className="p-8 sm:p-12">
-                            <div className="mb-4 text-sm font-bold text-blue-600">{t('featured.label')}</div>
-                            <h3 className="mb-4 text-3xl font-bold text-gray-900">{t('featured.workTitle')}</h3>
-                            <p className="mb-6 text-gray-600">{t('featured.workDesc')}</p>
+                            <div className="mb-4 text-sm font-bold text-blue-600">{featuredWork.label}</div>
+                            <h3 className="mb-4 text-3xl font-bold text-gray-900">{featuredWork.title}</h3>
+                            <p className="mb-6 text-gray-600">{featuredWork.description}</p>
                             <div className="flex flex-wrap gap-4">
-                                <Link href={`/${lang}/works/prelude-c-major`} className="inline-flex items-center text-blue-600 hover:underline">
+                                <Link href={featuredWork.link} className="inline-flex items-center text-blue-600 hover:underline">
                                     {t('featured.readMore')} &rarr;
                                 </Link>
                             </div>

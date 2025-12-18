@@ -57,9 +57,6 @@
         },
         "featured": {
             "title": "Featured Work",
-            "label": "Work Analysis",
-            "workTitle": "Prelude in C Major, BWV 846",
-            "workDesc": "An in-depth analysis of Bach's masterpiece from The Well-Tempered Clavier. Understand functionality of harmony and the beauty of arpeggios.",
             "readMore": "Read Analysis"
         }
     },
