@@ -97,3 +97,41 @@ date: "2025-12-18"                 # 作成日
 ## 6. 今後の拡張性
 *   **MP3/Audio File Support:** 現在はYouTubeのみですが、ローカル音声ファイルへの対応もFrontmatterの拡張で可能です。
 *   **Dynamic OGP:** `ogp_excerpt` を使用したビルド時のOGP画像生成（`vercel/og` 利用）を予定しています。
+
+## 7. 複数楽譜・音声セグメント管理 (Multi-Score Strategy)
+
+一つの記事内に複数の譜例（Excerpts）が存在し、それぞれが異なる再生範囲を持つ場合に対応するため、**Cascading Audio Metadata** 戦略を採用します。
+
+### 7.1. 階層化されたメタデータ
+メタデータは以下の順序で解決（Merge）されます。**Level 2 (Excerpt)** の設定が優先されます。
+
+1.  **Level 1: Page Context (Frontmatter)**
+    *   **役割:** ページ全体の「正」となる情報源（Source of Truth）。
+    *   **定義項目:** `videoId` (必須), `performer`, `work`, 기본となる `startTime/endTime`.
+    *   **Use Case:** 記事全体で共通する演奏音源。
+
+2.  **Level 2: Excerpt Context (ABC Directives)**
+    *   **役割:** 個別の譜例に対する上書き設定。
+    *   **Time Reset Rule:** ABC側で `startTime` または `endTime` のいずれかが指定された場合、Frontmatterの `startTime/endTime` は**一切継承されず、リセットされます。**
+    *   **Video Context Reset Rule:** ABC側で `videoId` が指定された場合、**タイトル、作曲者、演奏者などの全メタデータも継承されません**。完全に独立した音源として扱われます。
+
+### 7.2. ABC記述構文 (Directives)
+ABC記法内のコメント行としてメタデータを埋め込みます。`ScoreRenderer` はこれを解析し、再生制御に使用します。
+
+```abc
+X:1
+T:Theme A (Measures 1-4)
+%%audio_videoId {id}     % Triggers Context Reset
+%%audio_title {text}
+%%audio_startTime 15
+%%audio_endTime 25
+...
+```
+
+*   `%%audio_startTime {seconds}`
+*   `%%audio_endTime {seconds}`
+*   `%%audio_videoId {id}`
+*   `%%audio_title {text}`
+*   `%%audio_composer {text}`
+*   `%%audio_performer {text}`
+*   `%%audio_artworkSrc {url}`

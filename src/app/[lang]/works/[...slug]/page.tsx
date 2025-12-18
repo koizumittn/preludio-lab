@@ -1,26 +1,32 @@
 import { MDXRemote } from 'next-mdx-remote/rsc';
-import { getPostBySlug, getAllPosts } from '@/lib/mdx';
 import { notFound } from 'next/navigation';
 import rehypeSlug from 'rehype-slug';
 import GithubSlugger from 'github-slugger';
-import { TableOfContents } from '@/components/mdx/TableOfContents';
-import { SeriesNavigation } from '@/components/mdx/SeriesNavigation';
+import { TableOfContents } from '@/components/features/content/TableOfContents';
+import { SeriesNavigation } from '@/components/features/content/SeriesNavigation';
 import ScoreRenderer from '@/components/features/score';
 import { MockPlayer } from '@/components/mock/MockPlayer';
 import { ListeningGuide } from '@/components/mock/ListeningGuide';
+// ... (imports remain)
+import { FsContentRepository } from '@/infrastructure/repositories/fs-content-repository';
+
+
 
 // Supported languages
 const languages = ['en', 'ja', 'es', 'de', 'fr', 'it', 'zh'];
 
 export async function generateStaticParams() {
     const params: { lang: string; slug: string[] }[] = [];
+    // Instantiate locally to avoid stale state if server runs long
+    const repository = new FsContentRepository();
 
     for (const lang of languages) {
-        const posts = await getAllPosts(lang, 'works');
-        for (const post of posts) {
+        // Use lightweight summary for build params
+        const contents = await repository.getAllContentSummaries(lang, 'works');
+        for (const content of contents) {
             params.push({
                 lang,
-                slug: post.slug.split('/'), // Convert "bach/prelude" -> ["bach", "prelude"]
+                slug: content.slug.split('/'),
             });
         }
     }
@@ -45,40 +51,45 @@ function extractHeadings(content: string) {
     return headings;
 }
 
-type Props = {
-    params: Promise<{
-        lang: string;
-        slug: string[];
-    }>;
-};
 
-export default async function WorkPage({ params }: Props) {
+// ... imports
+
+export default async function WorkPage({
+    params,
+}: {
+    params: Promise<{ lang: string; slug: string[] }>;
+}) {
+    const repository = new FsContentRepository();
     const { lang, slug } = await params;
-    const post = await getPostBySlug(lang, 'works', slug);
 
-    if (!post) {
+    // Fetch Content Detail
+    // content (body) is required for rendering MDX
+    const content = await repository.getContentDetailBySlug(lang, 'works', slug);
+
+    if (!content) {
         notFound();
     }
 
-    const toc = extractHeadings(post.content);
+    const toc = extractHeadings(content.body);
 
     // Series Navigation Logic
-    const allPosts = await getAllPosts(lang, 'works');
-    // Simple sort by title for now, or use frontmatter order if available
-    const sortedPosts = allPosts.sort((a, b) => a.frontmatter.title.localeCompare(b.frontmatter.title));
-    const currentIndex = sortedPosts.findIndex((p) => p.slug === post.slug);
-    const prevPost = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null;
-    const nextPost = currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null;
+    // Use metadata-only query for navigation finding (lighter)
+    const allContents = await repository.getAllContentSummaries(lang, 'works');
+    // Simple sort by title for now, or use metadata order if available
+    const sortedContents = allContents.sort((a, b) => a.metadata.title.localeCompare(b.metadata.title));
+    const currentIndex = sortedContents.findIndex((c) => c.slug === content.slug);
+    const prevContent = currentIndex > 0 ? sortedContents[currentIndex - 1] : null;
+    const nextContent = currentIndex < sortedContents.length - 1 ? sortedContents[currentIndex + 1] : null;
 
-    // Construct AudioMetadata from Frontmatter
-    const audioMetadata = post.frontmatter.videoId ? {
-        videoId: post.frontmatter.videoId,
-        title: post.frontmatter.title,
-        composer: post.frontmatter.composer,
-        performer: post.frontmatter.performer,
-        artworkSrc: post.frontmatter.artworkSrc,
-        startTime: post.frontmatter.startTime,
-        endTime: post.frontmatter.endTime,
+    // Construct AudioMetadata from Metadata
+    const audioMetadata = content.metadata.videoId ? {
+        videoId: content.metadata.videoId,
+        title: content.metadata.title,
+        composer: content.metadata.composer,
+        performer: content.metadata.performer,
+        artworkSrc: content.metadata.artworkSrc,
+        startTime: content.metadata.startTime,
+        endTime: content.metadata.endTime,
         platformType: 'youtube' as const,
     } : undefined;
 
@@ -113,7 +124,7 @@ export default async function WorkPage({ params }: Props) {
                 <span>/</span>
                 <a href={`/${lang}/works`} className="hover:text-primary transition-colors">Works</a>
                 <span>/</span>
-                <span className="text-primary font-medium truncate">{post.frontmatter.title}</span>
+                <span className="text-primary font-medium truncate">{content.metadata.title}</span>
             </nav>
 
             {/* Header (Full Width) */}
@@ -128,19 +139,19 @@ export default async function WorkPage({ params }: Props) {
 
                     {/* Title */}
                     <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-primary font-serif leading-tight max-w-4xl">
-                        {post.frontmatter.title}
+                        {content.metadata.title}
                     </h1>
 
                     {/* Metadata Row: Composer & Key */}
                     <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-lg text-neutral-700">
                         <div>
                             <span className="font-bold text-primary">Composer:</span>{' '}
-                            <span className="font-serif italic">{post.frontmatter.composer}</span>
+                            <span className="font-serif italic">{content.metadata.composer}</span>
                         </div>
-                        {post.frontmatter.key && (
+                        {content.metadata.key && (
                             <div>
                                 <span className="font-bold text-primary">Key:</span>{' '}
-                                <span>{post.frontmatter.key}</span>
+                                <span>{content.metadata.key}</span>
                             </div>
                         )}
                     </div>
@@ -148,12 +159,12 @@ export default async function WorkPage({ params }: Props) {
 
                 {/* Tags & Difficulty */}
                 <div className="flex flex-wrap gap-3 mt-6">
-                    {post.frontmatter.difficulty && (
+                    {content.metadata.difficulty && (
                         <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-neutral-100 text-neutral-700 border border-neutral-200 shadow-sm">
-                            {post.frontmatter.difficulty}
+                            {content.metadata.difficulty}
                         </span>
                     )}
-                    {post.frontmatter.tags?.map((tag) => (
+                    {content.metadata.tags?.map((tag) => (
                         <span key={tag} className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-neutral-100 text-neutral-500 border border-neutral-200">
                             #{tag}
                         </span>
@@ -184,7 +195,7 @@ export default async function WorkPage({ params }: Props) {
                     </div>
 
                     <MDXRemote
-                        source={post.content}
+                        source={content.body}
                         components={components}
                         options={{
                             mdxOptions: {
@@ -194,7 +205,7 @@ export default async function WorkPage({ params }: Props) {
                     />
 
                     <div className="mt-12 pt-8 border-t border-neutral-200">
-                        <SeriesNavigation prev={prevPost} next={nextPost} lang={lang} />
+                        <SeriesNavigation prev={prevContent} next={nextContent} lang={lang} />
                     </div>
                 </article>
 

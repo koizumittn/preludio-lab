@@ -1,9 +1,9 @@
 import Link from 'next/link';
-import { Post } from '@/lib/mdx';
+import { ContentSummary } from '@/domain/entities/content';
 
 type Props = {
-    prev: Post | null;
-    next: Post | null;
+    prev: ContentSummary | null;
+    next: ContentSummary | null;
     lang: string;
 };
 
@@ -22,7 +22,7 @@ export const SeriesNavigation: React.FC<Props> = ({ prev, next, lang }) => {
                             Previous
                         </div>
                         <div className="font-semibold text-primary group-hover:text-accent transition-colors font-serif">
-                            {prev.frontmatter.title}
+                            {prev.metadata.title}
                         </div>
                     </Link>
                 ) : (
@@ -38,7 +38,7 @@ export const SeriesNavigation: React.FC<Props> = ({ prev, next, lang }) => {
                             Next
                         </div>
                         <div className="font-semibold text-primary group-hover:text-accent transition-colors font-serif">
-                            {next.frontmatter.title}
+                            {next.metadata.title}
                         </div>
                     </Link>
                 ) : (

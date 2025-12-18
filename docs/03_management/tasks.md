@@ -132,3 +132,12 @@ Status: `[/]` 進行中
     - [ ] モバイルレスポンシブ確認
 - [ ] **ローンチ**
     - [ ] パブリックリリース
+
+## Backlog / Issues (Future Improvements)
+- [ ] **Score "Now Playing" Indicator**
+    - 楽譜をクリックしてMini Playerを再生した際、クリックした楽譜に「再生中」という状態表示（ボーダーやアイコン変化など）を追加する。
+- [ ] **Default YouTube Artwork**
+    - `artworkSrc` が未定義かつ `platformType=youtube` の場合、`https://img.youtube.com/vi/<video-id>/hqdefault.jpg` を自動的にデフォルト値として使用する。
+- [ ] **Sidebar Widget Implementation**
+    - 現在モックであるサイドバーの右側機能（YouTube Player, Listening Guide）を本実装する。
+    - Listening Guideのデータ構造設計とMDXへの統合を含む。

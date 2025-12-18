@@ -27,9 +27,12 @@
 */
 :root {
   /* Brand Colors */
-  --color-primary: #0F0F12; /* Ink Black */
-  --color-paper: #F6F5F2;   /* Paper White */
-  --color-accent: #C5A065;  /* Classic Gold */
+  --color-primary: #0F0F12;
+  /* Ink Black */
+  --color-paper: #F6F5F2;
+  /* Paper White */
+  --color-accent: #C5A065;
+  /* Classic Gold */
 
   /* Neutral Scale (Light Mode) */
   --color-neutral-50: #FAFAF9;
@@ -44,9 +47,12 @@
 @media (prefers-color-scheme: dark) {
   :root {
     /* Brand Colors (Dark Mode Inversion) */
-    --color-primary: #F6F5F2; /* Text becomes Light */
-    --color-paper: #0F0F12;   /* Bg becomes Dark */
-    --color-accent: #C5A065;  /* Gold stays same */
+    --color-primary: #F6F5F2;
+    /* Text becomes Light */
+    --color-paper: #0F0F12;
+    /* Bg becomes Dark */
+    --color-accent: #C5A065;
+    /* Gold stays same */
 
     /* Neutral Scale (Dark Mode) */
     --color-neutral-50: #0F0F12;
@@ -64,4 +70,13 @@ body {
   color: var(--color-primary);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Utilities */
+@layer components {
+
+  /* Tightly couple score titles (p) with the score itself */
+  .prose p:has(+ .score-wrapper) {
+    margin-bottom: 0.5rem !important;
+  }
 }
