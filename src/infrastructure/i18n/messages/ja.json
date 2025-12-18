@@ -1,4 +1,8 @@
 {
+    "Metadata": {
+        "title": "Preludio Lab | 没入型クラシック音楽分析",
+        "description": "インタラクティブな楽譜と深い分析で、クラシック音楽の構造を解き明かす。"
+    },
     "Common": {
         "loading": "読み込み中...",
         "error": "エラーが発生しました",

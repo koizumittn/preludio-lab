@@ -1,5 +1,6 @@
-import type { Metadata } from 'next';
-import { Inter, Noto_Serif_JP } from 'next/font/google';
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages, getTranslations } from 'next-intl/server';
+import { Inter, Playfair_Display, Noto_Sans_JP, Zen_Old_Mincho } from 'next/font/google';
 import '../globals.css';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
@@ -9,7 +10,7 @@ import { AudioPlayerFeature } from '@/components/features/player';
 import { AppProviders } from '@/components/providers/AppProviders';
 import { ConsentBanner } from '@/components/ui/ConsentBanner';
 import { Toaster } from 'react-hot-toast';
-import { SITE_NAME, SITE_DESCRIPTION } from '@/lib/constants';
+import { supportedLocales } from '@/domain/shared/locale';
 
 // Font Configuration
 const inter = Inter({
@@ -18,50 +19,84 @@ const inter = Inter({
     display: 'swap',
 });
 
-const notoSerif = Noto_Serif_JP({
-    weight: ['400', '600', '700'],
+const playfair = Playfair_Display({
     subsets: ['latin'],
-    variable: '--font-noto-serif',
+    variable: '--font-playfair',
     display: 'swap',
 });
 
-export const metadata: Metadata = {
-    title: SITE_NAME,
-    description: SITE_DESCRIPTION,
+const notoSansJP = Noto_Sans_JP({
+    weight: ['400', '500', '700'],
+    subsets: ['latin'],
+    variable: '--font-noto-sans-jp',
+    display: 'swap',
+});
+
+const zenOldMincho = Zen_Old_Mincho({
+    weight: ['400', '600', '700'],
+    subsets: ['latin'],
+    variable: '--font-zen-old-mincho',
+    display: 'swap',
+});
+
+type Props = {
+    children: React.ReactNode;
+    params: Promise<{ lang: string }>;
 };
 
-import { LOCALES } from '@/lib/constants';
+export async function generateMetadata({ params }: Props) {
+    const { lang } = await params;
+    const t = await getTranslations({ locale: lang, namespace: 'Metadata' });
+
+    return {
+        title: t('title'),
+        description: t('description'),
+        alternates: {
+            languages: {
+                'en': '/en',
+                'ja': '/ja',
+            },
+        },
+    };
+}
 
 // Explicitly define parameters for static generation
 export async function generateStaticParams() {
-    return LOCALES.map((lang) => ({ lang }));
+    return supportedLocales.map((lang) => ({ lang }));
 }
-
 
 export default async function RootLayout({
     children,
     params,
-}: {
-    children: React.ReactNode;
-    params: Promise<{ lang: string }>;
-}) {
+}: Props) {
     const { lang } = await params;
+    const messages = await getMessages();
+
+    // Determine font variables and base classes based on language
+    // Emotional Typography: Serif for EN (Elegant), Mincho for JA (Nostalgic)
+    const fontVariables = `${inter.variable} ${playfair.variable} ${notoSansJP.variable} ${zenOldMincho.variable}`;
+    const baseFontClass = lang === 'ja'
+        ? 'font-sans-ja text-primary bg-paper'
+        : 'font-sans-en text-primary bg-paper';
+
     return (
-        <html lang={lang} className={`${inter.variable} ${notoSerif.variable}`} suppressHydrationWarning>
-            <body className="antialiased bg-paper text-primary font-sans">
-                <AppProviders>
-                    <Header lang={lang} />
-                    <main className="min-h-screen pb-24">{children}</main>
-                    <Footer />
+        <html lang={lang} className={fontVariables} suppressHydrationWarning>
+            <body className={`${baseFontClass} antialiased`}>
+                <NextIntlClientProvider messages={messages}>
+                    <AppProviders>
+                        <Header lang={lang} />
+                        <main className="min-h-screen pb-24">{children}</main>
+                        <Footer />
 
-                    {/* Global Audio Player Components */}
-                    <AudioPlayerFeature />
-                    <MiniPlayer />
-                    <FocusPlayer />
+                        {/* Global Audio Player Components */}
+                        <AudioPlayerFeature />
+                        <MiniPlayer />
+                        <FocusPlayer />
 
-                    <ConsentBanner />
-                    <Toaster position="bottom-right" />
-                </AppProviders>
+                        <ConsentBanner />
+                        <Toaster position="bottom-right" />
+                    </AppProviders>
+                </NextIntlClientProvider>
             </body>
         </html>
     );

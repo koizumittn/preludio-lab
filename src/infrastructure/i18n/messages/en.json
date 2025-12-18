@@ -1,4 +1,8 @@
 {
+    "Metadata": {
+        "title": "Preludio Lab | Immersive Classical Music Analysis",
+        "description": "Discover the structure of classical music with interactive scores and deep analysis."
+    },
     "Common": {
         "loading": "Loading...",
         "error": "An error occurred",
