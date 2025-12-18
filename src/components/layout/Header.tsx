@@ -26,14 +26,14 @@ export const Header = async ({ lang }: HeaderProps) => {
                     <SearchBox />
                 </div>
 
-                <nav className="hidden md:flex w-[340px] gap-6 items-center justify-end justify-self-end">
-                    <Link href="/works" className="text-sm font-medium text-gray-700 hover:text-black">
+                <nav className="hidden md:flex w-[400px] gap-6 items-center justify-end justify-self-end whitespace-nowrap">
+                    <Link href="/works" className="text-sm font-medium text-gray-700 hover:text-black whitespace-nowrap">
                         {t('works')}
                     </Link>
-                    <Link href="/composers" className="text-sm font-medium text-gray-700 hover:text-black">
+                    <Link href="/composers" className="text-sm font-medium text-gray-700 hover:text-black whitespace-nowrap">
                         {t('composers')}
                     </Link>
-                    <Link href="/about" className="text-sm font-medium text-gray-700 hover:text-black">
+                    <Link href="/about" className="text-sm font-medium text-gray-700 hover:text-black whitespace-nowrap">
                         {t('about')}
                     </Link>
                     <div className="border-l pl-6 border-gray-200">

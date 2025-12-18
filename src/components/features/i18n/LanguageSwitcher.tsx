@@ -51,7 +51,7 @@ export function LanguageSwitcher() {
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
                 className={`
-                    flex items-center gap-2 rounded-full border bg-paper px-4 py-2 text-sm font-medium transition-all
+                    flex items-center gap-2 rounded-full border bg-paper px-4 py-2 text-sm font-medium transition-all whitespace-nowrap
                     ${isOpen
                         ? 'border-accent text-accent ring-1 ring-accent'
                         : 'border-neutral-200 text-primary hover:border-neutral-300 hover:bg-neutral-50'
@@ -61,7 +61,7 @@ export function LanguageSwitcher() {
                 aria-haspopup="listbox"
                 disabled={isPending}
             >
-                <span className="uppercase tracking-wide">{localeLabels[locale]}</span>
+                <span className="uppercase tracking-wide whitespace-nowrap">{localeLabels[locale]}</span>
                 <svg
                     className={`h-4 w-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
                     fill="none"
