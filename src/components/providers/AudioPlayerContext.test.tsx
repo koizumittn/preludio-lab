@@ -20,14 +20,15 @@ describe('AudioPlayerContext', () => {
         act(() => {
             result.current.play('test-video-id', {
                 title: 'Test Song',
-                author: 'Test Artist'
+                composer: 'Test Artist'
             });
         });
 
         expect(result.current.isPlaying).toBe(true);
         expect(result.current.videoId).toBe('test-video-id');
         expect(result.current.videoTitle).toBe('Test Song');
-        expect(result.current.videoAuthor).toBe('Test Artist');
+        expect(result.current.videoTitle).toBe('Test Song');
+        expect(result.current.videoComposer).toBe('Test Artist');
     });
 
     it('updates platform metadata on play()', () => {

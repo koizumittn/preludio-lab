@@ -3,12 +3,16 @@ import path from 'path';
 import matter from 'gray-matter';
 import { ContentDetail, ContentSummary, MetadataSchema } from '@/domain/entities/content';
 import { IContentRepository } from '@/domain/repositories/content-repository.interface';
+import { ILogger } from '@/domain/services/logger-interface';
+import { PinoLogger } from '@/infrastructure/logging/pino-logger';
 
 export class FsContentRepository implements IContentRepository {
     private readonly contentDirectory: string;
+    private readonly logger: ILogger;
 
     constructor() {
         this.contentDirectory = path.join(process.cwd(), 'content');
+        this.logger = new PinoLogger();
     }
 
     async getContentDetailBySlug(lang: string, category: string, slug: string[]): Promise<ContentDetail | null> {
@@ -17,6 +21,7 @@ export class FsContentRepository implements IContentRepository {
 
         try {
             if (!fs.existsSync(fullPath)) {
+                this.logger.warn(`File not found: ${fullPath}`, { context: 'FsContentRepository' });
                 return null;
             }
 
@@ -34,7 +39,7 @@ export class FsContentRepository implements IContentRepository {
                 body: content,
             };
         } catch (error) {
-            console.error(`Error loading markdown file ${fullPath}:`, error);
+            this.logger.error(`Error loading markdown file ${fullPath}`, error as Error, { context: 'FsContentRepository' });
             return null;
         }
     }
@@ -61,7 +66,7 @@ export class FsContentRepository implements IContentRepository {
                     body: content,
                 };
             } catch (e) {
-                console.warn(`Invalid metadata in ${filePath}`, e);
+                this.logger.warn(`Invalid metadata in ${filePath}`, { context: 'FsContentRepository', error: e });
                 return null;
             }
         })
@@ -93,7 +98,7 @@ export class FsContentRepository implements IContentRepository {
                     metadata,
                 };
             } catch (e) {
-                console.warn(`Invalid metadata in ${filePath}`, e);
+                this.logger.warn(`Invalid metadata in ${filePath}`, { context: 'FsContentRepository', error: e });
                 return null;
             }
         })
