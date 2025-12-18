@@ -161,7 +161,7 @@ Status: `[/]` 進行中
 - [ ] **6.3 コンテンツ量産体制の構築と実行 (Content Operations)**
     - [ ] **[仕様策定]** コンテンツ戦略とパイプライン定義
         - [ ] 初回リリース用コンテンツ選定 (Target: 10-20 articles for Launch)
-        - [ ] コンテントマップ作成 (Composers / Genres / Difficulty Matrix)
+        - [ ] コンテントマップ作成: Pillar Content (没入感), Guide Content (入門), Niche Content (専門性), Utility Content (実用) のバランス設計
     - [ ] **[実装]** パイロット・バッチ生成の実行
         - [ ] エージェントによるパイロット記事 5本生成
         - [ ] バッチ処理による記事大量生成
@@ -172,25 +172,42 @@ Status: `[/]` 進行中
     - [ ] **[リファクタリング]** プロセス改善とプロンプトチューニング
         - [ ] 修正フィードバックループの確立と次期バッチへの反映
 
-## Phase 7: ビジネス・成長施策 (Ref: `business-requirements.md`)
-- [ ] **7.1 SEO最適化** (Ref: `REQ-GOAL-001`)
-    - [ ] 動的メタデータ生成の実装
-    - [ ] サイトマップ & Robots.txt の生成
-    - [ ] RSSフィードの生成 (Ref: `REQ-TECH-SEO-001`)
-- [ ] **7.2 コンプライアンス**
-    - [x] Cookie同意バナー (GDPR Consent) の実装 (Ref: `REQ-UI-006-02`)
-- [ ] **7.3 マネタイズ実装**
-    - [ ] 楽譜アフィリエイトリンクの実装 (Ref: `REQ-BIZ-001`)
-    - [ ] 寄付/スポンサーボタンの実装 (Ref: `REQ-BIZ-002`)
-    - [ ] オリジナルコンテンツへの誘導実装 (Ref: `REQ-BIZ-003`)
+## Phase 7: Pre-Launch Marketing & Growth Foundation (Acquisition - Pre)
+- [ ] **7.1 Pre-Launch Asset Creation**
+    - [ ] **[実装]** シンプルなランディングページ (Teaser LP) の公開
+        - [ ] Vercel + Supabase Auth でメール登録フォーム（Waitlist）のみ機能するLPを作成し、ドメインのエイジングを開始する。
+    - [ ] **[実装]** SNS配信用アセットの自動生成パイプライン
+        - [ ] `abcjs` で描画された「美しい譜例」を画像化し、SNSでBuild in Publicを行うためのワークフロー整備。
 
-## Phase 8: 検証・ローンチ
-- [ ] **8.1 コンテンツ検証**
-    - [ ] パイロット記事（バッハの前奏曲など）3〜5本での検証
-    - [ ] クロスブラウザ確認
-    - [ ] モバイルレスポンシブ確認
-- [ ] **8.2 ローンチ**
-    - [ ] パブリックリリース
+- [ ] **7.2 Viral Mechanics Implementation**
+    - [ ] **[実装]** Dynamic OGP Generation (Shareability)
+        - [ ] 楽曲タイトル、作曲家、譜例の一部を合成したOGP画像を、各言語ごとに `@vercel/og` を用いて決定論的に自動生成する。
+    - [ ] **[実装]** 構造化データ (JSON-LD) の完全実装
+        - [ ] `MusicComposition`, `MusicRecording` スキーマを埋め込み、Googleのリッチリザルト表示を狙う。
+
+- [ ] **7.3 Technical SEO Foundation**
+    - [ ] **[実装]** sitemap.xml & Robots.txt の構成
+    - [ ] **[実装]** リンク切れ監視 (Dead Link Monitor) のセットアップ
+
+## Phase 8: 検証・ローンチ (Launch)
+- [ ] **8.1 最終検証**
+    - [ ] パイロット記事（Pillar Content）の実機検証
+    - [ ] クロスブラウザ確認 & モバイルレスポンシブ確認
+    - [ ] **[セキュリティ]** 脆弱性診断 (OWASP Top 10) の実施
+- [ ] **8.2 ローンチ実行**
+    - [ ] パブリックリリース (Vercel Production Deploy)
+    - [ ] Product Hunt, Hacker News, Reddit (r/classicalmusic) へのShowcase投稿
+
+## Phase 9: Post-Launch Growth & Monetization (Acquisition - Post)
+- [ ] **9.1 Community Engagement**
+    - [ ] **[実装]** User Features (Likes / Favorites / History)
+    - [ ] **[実装]** Translation Feedback Loop (誤訳報告機能)
+- [ ] **9.2 Social Viral Loops**
+    - [ ] **[運用]** "Today's Score" Bot の運用開始（日替わりで名曲の譜例を投稿）
+    - [ ] **[実装]** YouTube Shorts/TikTok 用の楽曲解説動画生成フローの検討
+- [ ] **9.3 Monetization & Business**
+    - [ ] **[実装]** Affiliate Links (Score/Audio) のコンテキスト配置
+    - [ ] **[実装]** KPI Monitoring Dashboard (Vercel Analytics / GSC) の構築
 
 ## Backlog / Issues (Future Improvements)
 - [ ] **Score "Now Playing" Indicator**
@@ -204,9 +221,6 @@ Status: `[/]` 進行中
 - [ ] **Player Componentization**
     - 現在 `ScoreRenderer` に結合されている Player をコンポーネント化し、一覧画面（試聴用）や Hero Section でも再利用可能な形に抽象化する。
 
-- [ ] **User Features & Database Design**
-    - お気に入り (Favorites)、いいね (Likes)、視聴履歴など、ユーザー固有のデータを活用した機能検討と、SupabaseのDBスキーマ設計（RLSポリシー含む）。
-
 - [ ] **ABC Notation Quality Improvement (MusicXML)**
     - 信頼できる MusicXML リポジトリ（MuseScore, IMSLP等）から ABC記法 への自動変換パイプラインを構築し、手動入力の手間を削減しつつ正確性を担保する。
 
@@ -219,26 +233,8 @@ Status: `[/]` 進行中
 - [ ] **Accessibility (A11y) Audit for Score & Player**
     - 視覚障害者ユーザー（Screen Reader利用）が、「楽曲の構造」や「現在再生位置」を把握できるか、WAI-ARIA 属性の適切性を検証・改善する。
 
-- [ ] **Automated Content Integrity Check (Dead Link Monitor)**
-    - GitHub Actionsで週に一度、全MDXに記載されたYouTube URLのステータスをチェックし、リンク切れがあればIssueを作成または代替動画を提案するワークフローを構築する。
-
-- [ ] **Structured Data (JSON-LD) Integration**
-    - `MusicComposition` や `MusicRecording` スキーマを各楽曲詳細ページに埋め込み、検索結果にリッチリザルト（作曲家、楽器、演奏時間など）を表示させ、SEO流入を最大化する。
-
-- [ ] **Dynamic OGP Generation for Each Work**
-    - 楽曲タイトル、作曲家、譜例の一部を合成したOGP画像を、各言語ごとに `@vercel/og` を用いて決定論的に自動生成し、SNS拡散力を強化する。
-
 - [ ] **Edge Config & Cache Strategy Optimization**
     - Supabaseのデータや翻訳辞書の取得において、Vercel Edge Configや`stale-while-revalidate` (SWR) パターンを適用し、グローバル規模での低遅延アクセス（瞬時の没入体験）を実現する。
 
-- [ ] **Community-driven Translation Feedback**
-    - ユーザーが誤訳を見つけた際、簡単に「報告」できるUIと、そのフィードバックをAIの知識ベース（辞書・プロンプト）に還流させるサイクルを構築する。
-
 - [ ] **Automated Highlight & Timestamp Extraction**
     - AIにより「楽曲の聴きどころ（Highlight）」とYouTube音源の対応するタイムスタンプを自動抽出し、コンテンツ制作（ドラフト）の効率を飛躍的に高める。
-
-- [ ] **Security Vulnerability Testing (OWASP Top 10)**
-    - サイトの信頼性を高めるため、XSSやインジェクションなどの一般的なリスクに対し、OWASP Top 10 リストに基づいた脆弱性スキャン・検証を実施する。
-
-- [ ] **KPI Monitoring System Implementation**
-    - リリース後のユーザー増加状況、サイトパフォーマンス、マネタイズ進捗を可視化するため、Vercel Analytics や Google Search Console API を統合したダッシュボード環境を整備する。
