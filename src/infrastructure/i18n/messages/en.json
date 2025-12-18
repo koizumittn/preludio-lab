@@ -20,39 +20,39 @@
         "categories": {
             "works": {
                 "name": "Works",
-                "desc": "Introductions to masterpieces"
+                "desc": "The stories behind masterpieces and moments that move you."
             },
             "composers": {
                 "name": "Composers",
-                "desc": "Lives and works of great musicians"
+                "desc": "The lives and passions of the musicians who colored their eras."
             },
             "theory": {
                 "name": "Theory",
-                "desc": "Understanding forms, harmony, and notation"
+                "desc": "Unlock the secrets of sound to enjoy listening even more."
             },
             "eras": {
                 "name": "Eras",
-                "desc": "Historical backgrounds and stylistic features"
+                "desc": "Feel the atmosphere of the times and bring music to life."
             },
             "instruments": {
                 "name": "Instruments",
-                "desc": "History, structure, and repertoire"
+                "desc": "History and charm of the partners that weave the sound."
             },
             "performers": {
                 "name": "Performers",
-                "desc": "Conductors, soloists, and orchestras"
+                "desc": "Records of soul-stirring performances and expressions."
             },
             "terminology": {
                 "name": "Terminology",
-                "desc": "Definitions and interpretations of musical terms"
+                "desc": "Messages from composers hidden within the score."
             },
             "columns": {
                 "name": "Columns",
-                "desc": "Essays, news, and special features"
+                "desc": "Diverse readings to color your musical life."
             },
             "originals": {
                 "name": "Originals",
-                "desc": "Original compositions by Preludio Lab"
+                "desc": "Original compositions presented by Preludio Lab."
             }
         },
         "featured": {

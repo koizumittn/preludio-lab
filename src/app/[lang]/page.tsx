@@ -14,16 +14,12 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
     const lang = (await params).lang;
 
     // Categories data with translations
+    // MVP: Priority display of Works, Composers, Theory, Eras
     const categories = [
         { id: 'works', color: 'bg-blue-50 text-blue-700' },
         { id: 'composers', color: 'bg-amber-50 text-amber-700' },
         { id: 'theory', color: 'bg-purple-50 text-purple-700' },
         { id: 'eras', color: 'bg-rose-50 text-rose-700' },
-        { id: 'instruments', color: 'bg-orange-50 text-orange-700' },
-        { id: 'performers', color: 'bg-cyan-50 text-cyan-700' },
-        { id: 'terminology', color: 'bg-teal-50 text-teal-700' },
-        { id: 'columns', color: 'bg-slate-50 text-slate-700' },
-        { id: 'originals', color: 'bg-emerald-50 text-emerald-700' },
     ];
 
     return (
