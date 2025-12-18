@@ -14,7 +14,7 @@ export function LanguageSwitcher() {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    // Close dropdown when clicking outside
+    // ドロップダウンの外側をクリックした時に閉じる
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -39,14 +39,14 @@ export function LanguageSwitcher() {
                 router.replace(pathname, { locale: nextLocale });
                 setIsOpen(false);
             } catch (error) {
-                handleClientError(error, 'Failed to switch language');
+                handleClientError(error, '言語の切り替えに失敗しました');
             }
         });
     };
 
     return (
         <div className="relative" ref={dropdownRef}>
-            {/* Trigger Button */}
+            {/* トリガーボタン */}
             <button
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
@@ -73,7 +73,7 @@ export function LanguageSwitcher() {
                 </svg>
             </button>
 
-            {/* Dropdown Menu */}
+            {/* ドロップダウンメニュー */}
             {isOpen && (
                 <div className="absolute right-0 top-full z-50 mt-2 w-40 min-w-max origin-top-right rounded-xl border border-neutral-100 bg-paper p-1 shadow-lg ring-1 ring-black/5">
                     <ul role="listbox">

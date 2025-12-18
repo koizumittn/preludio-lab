@@ -21,7 +21,7 @@ export const Header = async ({ lang }: HeaderProps) => {
                 <div className="hidden md:block w-full max-w-2xl px-8">
                     <SearchBox />
                 </div>
-                {/* Mobile Search - Visible only on small screens */}
+                {/* モバイル検索 - 小画面でのみ表示 */}
                 <div className="flex-1 px-4 md:hidden">
                     <SearchBox />
                 </div>
