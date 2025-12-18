@@ -92,7 +92,6 @@ date: "2025-12-18"                 # 作成日
 (Catch-all Segmentにより、`works/bach/prelude-1` のような深い階層に対応)
 
 ### Static Generation
-### Static Generation
 `generateStaticParams` 関数により、サポートされている全言語（7言語）× 全記事の組み合わせを事前に計算し、ビルド時にHTML化します。
 パフォーマンス最適化のため、全コンテンテンツ取得時には本文を含まない軽量な `getAllContentSummaries` メソッドを使用します。
 存在しない言語やスラッグへのアクセスは `404 Not Found` となります。
@@ -110,7 +109,7 @@ date: "2025-12-18"                 # 作成日
 
 1.  **Level 1: Page Context (Frontmatter)**
     *   **役割:** ページ全体の「正」となる情報源（Source of Truth）。
-    *   **定義項目:** `videoId` (必須), `performer`, `work`, 기본となる `startTime/endTime`.
+    *   **定義項目:** `videoId` (必須), `performer`, `work`, 基本となる `startTime/endTime`.
     *   **Use Case:** 記事全体で共通する演奏音源。
 
 2.  **Level 2: Excerpt Context (ABC Directives)**
@@ -131,10 +130,14 @@ T:Theme A (Measures 1-4)
 ...
 ```
 
-*   `%%audio_startTime {seconds}`
-*   `%%audio_endTime {seconds}`
-*   `%%audio_videoId {id}`
-*   `%%audio_title {text}`
-*   `%%audio_composer {text}`
-*   `%%audio_performer {text}`
-*   `%%audio_artworkSrc {url}`
+**利用可能なディレクティブ一覧:**
+
+| Directive | Description | Example |
+| :--- | :--- | :--- |
+| `%%audio_startTime` | 再生開始時間 (秒) | `%%audio_startTime 15` |
+| `%%audio_endTime` | 再生終了時間 (秒) | `%%audio_endTime 25` |
+| `%%audio_videoId` | 動画ID (Context Reset) | `%%audio_videoId gVah1cr3pU0` |
+| `%%audio_title` | 表示タイトル | `%%audio_title Theme A` |
+| `%%audio_composer` | 作曲者名 (Context Reset時用) | `%%audio_composer J.S. Bach` |
+| `%%audio_performer` | 演奏者名 (Context Reset時用) | `%%audio_performer Glenn Gould` |
+| `%%audio_artworkSrc`| アートワークURL | `%%audio_artworkSrc /images/...` |
