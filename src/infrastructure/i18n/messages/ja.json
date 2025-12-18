@@ -9,6 +9,40 @@
         "notFound": "ページが見つかりません",
         "backToHome": "ホームに戻る"
     },
+    "Home": {
+        "hero": {
+            "title": "聴く、その先へ。",
+            "description": "Beyond Listening. クラシック音楽を「構造」から理解する体験を。",
+            "explore": "作品を探す",
+            "about": "Preludio Labとは"
+        },
+        "discover": "コンテンツを探す",
+        "categories": {
+            "analysis": {
+                "name": "楽曲分析",
+                "desc": "名曲の構造を深く読み解く"
+            },
+            "composers": {
+                "name": "作曲家",
+                "desc": "偉大な音楽家たちの生涯と作品"
+            },
+            "theory": {
+                "name": "音楽理論",
+                "desc": "音楽の仕組みを理解する"
+            },
+            "originals": {
+                "name": "オリジナル作品",
+                "desc": "Preludio Labによる創作"
+            }
+        },
+        "featured": {
+            "title": "今週のピックアップ",
+            "label": "楽曲分析",
+            "workTitle": "プレリュード ハ長調 BWV 846",
+            "workDesc": "J.S.バッハ『平均律クラヴィーア曲集』第1巻より。機能和声の基礎と、アルペジオ（分散和音）の美しさを紐解く。",
+            "readMore": "分析を読む"
+        }
+    },
     "Navigation": {
         "home": "ホーム",
         "works": "作品一覧",
@@ -16,6 +50,7 @@
         "about": "Preludio Labについて"
     },
     "Footer": {
-        "copyright": "© {year} Preludio Lab. All rights reserved."
+        "copyright": "© {year} Preludio Lab. All rights reserved.",
+        "tagline": "Beyond Listening. クラシック音楽を「構造」から理解する体験を。"
     }
 }

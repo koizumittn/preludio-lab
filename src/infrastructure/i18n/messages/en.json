@@ -9,6 +9,40 @@
         "notFound": "Page Not Found",
         "backToHome": "Back to Home"
     },
+    "Home": {
+        "hero": {
+            "title": "Beyond Listening.",
+            "description": "Beyond Listening. Dive deeper into the classics.",
+            "explore": "Explore Works",
+            "about": "About Us"
+        },
+        "discover": "Discover",
+        "categories": {
+            "analysis": {
+                "name": "Work Analysis",
+                "desc": "Deep dive into masterpieces"
+            },
+            "composers": {
+                "name": "Composers",
+                "desc": "Lives and works"
+            },
+            "theory": {
+                "name": "Music Theory",
+                "desc": "Understanding the mechanics"
+            },
+            "originals": {
+                "name": "Originals",
+                "desc": "New compositions"
+            }
+        },
+        "featured": {
+            "title": "Featured Work",
+            "label": "Work Analysis",
+            "workTitle": "Prelude in C Major, BWV 846",
+            "workDesc": "An in-depth analysis of Bach's masterpiece from The Well-Tempered Clavier. Understand functionality of harmony and the beauty of arpeggios.",
+            "readMore": "Read Analysis"
+        }
+    },
     "Navigation": {
         "home": "Home",
         "works": "Works",
@@ -16,6 +50,7 @@
         "about": "About"
     },
     "Footer": {
-        "copyright": "© {year} Preludio Lab. All rights reserved."
+        "copyright": "© {year} Preludio Lab. All rights reserved.",
+        "tagline": "Beyond Listening. Dive deeper into the classics."
     }
 }
