@@ -7,6 +7,7 @@
         "loading": "Loading...",
         "error": "An error occurred",
         "notFound": "Page Not Found",
+        "notFoundDesc": "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.",
         "backToHome": "Back to Home"
     },
     "Home": {

@@ -7,6 +7,7 @@
         "loading": "Caricamento...",
         "error": "Si è verificato un errore",
         "notFound": "Pagina non trovata",
+        "notFoundDesc": "La pagina che cerchi potrebbe essere stata rimossa, rinominata o è temporaneamente non disponibile.",
         "backToHome": "Torna alla Home"
     },
     "Home": {

@@ -7,6 +7,7 @@
         "loading": "加载中...",
         "error": "发生错误",
         "notFound": "页面未找到",
+        "notFoundDesc": "您查找的页面可能已被删除、更名或暂时无法访问。",
         "backToHome": "返回首页"
     },
     "Home": {

@@ -1,6 +1,6 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
-import { Inter, Playfair_Display, Noto_Sans_JP, Zen_Old_Mincho } from 'next/font/google';
+import { Inter, Playfair_Display, Noto_Sans_JP, Zen_Old_Mincho, Noto_Sans_SC, Noto_Serif_SC } from 'next/font/google';
 import '../globals.css';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
@@ -39,6 +39,20 @@ const zenOldMincho = Zen_Old_Mincho({
     display: 'swap',
 });
 
+const notoSansSC = Noto_Sans_SC({
+    weight: ['400', '500', '700'],
+    subsets: ['latin'],
+    variable: '--font-noto-sans-sc',
+    display: 'swap',
+});
+
+const notoSerifSC = Noto_Serif_SC({
+    weight: ['400', '600', '700'],
+    subsets: ['latin'],
+    variable: '--font-noto-serif-sc',
+    display: 'swap',
+});
+
 type Props = {
     children: React.ReactNode;
     params: Promise<{ lang: string }>;
@@ -73,11 +87,18 @@ export default async function RootLayout({
     const messages = await getMessages();
 
     // 言語に基づいてフォント変数とベースクラスを決定
-    // 情緒的タイポグラフィ: 英語はSerif（エレガント）、日本語は明朝体（ノスタルジック）を採用
-    const fontVariables = `${inter.variable} ${playfair.variable} ${notoSansJP.variable} ${zenOldMincho.variable}`;
-    const baseFontClass = lang === 'ja'
-        ? 'font-sans-ja text-primary bg-paper'
-        : 'font-sans-en text-primary bg-paper';
+    const fontVariables = `${inter.variable} ${playfair.variable} ${notoSansJP.variable} ${zenOldMincho.variable} ${notoSansSC.variable} ${notoSerifSC.variable}`;
+
+    // Body Font Selection:
+    // - JA: Noto Sans JP
+    // - ZH: Noto Sans SC
+    // - Others (EN, DE, FR, IT, ES): Inter
+    let baseFontClass = 'font-sans-en text-primary bg-paper';
+    if (lang === 'ja') {
+        baseFontClass = 'font-sans-ja text-primary bg-paper';
+    } else if (lang === 'zh') {
+        baseFontClass = 'font-sans-zh text-primary bg-paper';
+    }
 
     return (
         <html lang={lang} className={fontVariables} suppressHydrationWarning>

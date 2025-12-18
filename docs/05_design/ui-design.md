@@ -161,5 +161,14 @@
 ### Sidebar Widgets
 *   **Sticky Positioning:** スクロール追従 (`top-24`).
 *   **Component Visuals:**
-    1.  **YouTube Player:** **Dark Theme Card** (Black bg). 映像エリアとして視覚的な重みを持たせる。
     2.  **Listening Guide:** **Light Theme Card** (Paper/White bg). テキスト情報として本文と馴染ませる。
+
+---
+
+## 9. Defensive Design for i18n (多言語対応のための防御的設計)
+言語によってテキストの長さは大きく異なる（日本語は短く、ドイツ語やフランス語は長くなる傾向がある）。レイアウト崩れを防ぐため、以下のルールを適用する。
+
+### [REQ-UI-I18N-001] Layout Stability
+*   **Grid over Flex for Layouts:** ヘッダーやナビゲーションなど、要素の幅が変わりうる場所では、Flexboxの「成り行き任せ」な配置よりも、Grid Layout (`grid-cols-[auto_1fr_auto]`) を使用して構造を固定することを推奨する。
+*   **Whitespace Control:** ボタンやナビゲーションリンク内のテキストは、意図しない改行を防ぐため `whitespace-nowrap` を適用する。
+*   **Min-Width Strategy:** 最も長い言語（例: ドイツ語）でも破綻しないだけの十分な余白または `min-width` を確保する。
