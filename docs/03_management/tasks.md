@@ -200,3 +200,21 @@ Status: `[/]` 進行中
 - [ ] **Sidebar Widget Implementation**
     - 現在モックであるサイドバーの右側機能（YouTube Player, Listening Guide）を本実装する。
     - Listening Guideのデータ構造設計とMDXへの統合を含む。
+
+- [ ] **Player Componentization**
+    - 現在 `ScoreRenderer` に結合されている Player をコンポーネント化し、一覧画面（試聴用）や Hero Section でも再利用可能な形に抽象化する。
+
+- [ ] **User Features & Database Design**
+    - お気に入り (Favorites)、いいね (Likes)、視聴履歴など、ユーザー固有のデータを活用した機能検討と、SupabaseのDBスキーマ設計（RLSポリシー含む）。
+
+- [ ] **ABC Notation Quality Improvement (MusicXML)**
+    - 信頼できる MusicXML リポジトリ（MuseScore, IMSLP等）から ABC記法 への自動変換パイプラインを構築し、手動入力の手間を削減しつつ正確性を担保する。
+
+- [ ] **Automated YouTube Curation Logic**
+    - サイトのコンセプト（構造分析に適した演奏、音質、没入感）に合致する動画の選定基準を策定し、YouTube Data API を用いて候補を自動収集・フィルタリングする仕組みを構築する。
+
+- [ ] **API Cost Circuit Breaker** (Ref: `REQ-SEC-003-02`)
+    - Gemini API および YouTube Data API の無料枠（Quota）使用量を監視し、上限に近づいた場合に自動的にエージェント活動を停止または遅延させる「ブレーカー」機能を実装する。
+
+- [ ] **Accessibility (A11y) Audit for Score & Player**
+    - 視覚障害者ユーザー（Screen Reader利用）が、「楽曲の構造」や「現在再生位置」を把握できるか、WAI-ARIA 属性の適切性を検証・改善する。
