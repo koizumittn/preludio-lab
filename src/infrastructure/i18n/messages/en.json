@@ -1,0 +1,17 @@
+{
+    "Common": {
+        "loading": "Loading...",
+        "error": "An error occurred",
+        "notFound": "Page Not Found",
+        "backToHome": "Back to Home"
+    },
+    "Navigation": {
+        "home": "Home",
+        "works": "Works",
+        "composers": "Composers",
+        "about": "About"
+    },
+    "Footer": {
+        "copyright": "© {year} Preludio Lab. All rights reserved."
+    }
+}

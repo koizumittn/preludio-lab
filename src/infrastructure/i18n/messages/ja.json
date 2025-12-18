@@ -1,0 +1,17 @@
+{
+    "Common": {
+        "loading": "読み込み中...",
+        "error": "エラーが発生しました",
+        "notFound": "ページが見つかりません",
+        "backToHome": "ホームに戻る"
+    },
+    "Navigation": {
+        "home": "ホーム",
+        "works": "作品一覧",
+        "composers": "作曲家",
+        "about": "Preludio Labについて"
+    },
+    "Footer": {
+        "copyright": "© {year} Preludio Lab. All rights reserved."
+    }
+}
