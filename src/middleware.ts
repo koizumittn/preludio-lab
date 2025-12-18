@@ -1,35 +1,18 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import createMiddleware from 'next-intl/middleware';
+import { defaultLocale, supportedLocales } from '@/domain/shared/locale';
 
-import { LOCALES } from '@/lib/constants';
-const locales = LOCALES;
-const defaultLocale = 'ja';
+export default createMiddleware({
+    // A list of all locales that are supported
+    locales: supportedLocales,
 
-export function middleware(request: NextRequest) {
-    const pathname = request.nextUrl.pathname;
+    // Used when no locale matches
+    defaultLocale: defaultLocale,
 
-    // Check if there is any supported locale in the pathname
-    const pathnameIsMissingLocale = locales.every(
-        (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
-    );
-
-    // Redirect if there is no locale
-    if (pathnameIsMissingLocale) {
-        // Assets and API calls should be ignored
-        if (pathname.startsWith('/_next') || pathname.startsWith('/api') || pathname.includes('.')) {
-            return;
-        }
-
-        const locale = defaultLocale;
-        return NextResponse.redirect(
-            new URL(`/${locale}${pathname.startsWith('/') ? '' : '/'}${pathname}`, request.url)
-        );
-    }
-}
+    // Always show the locale prefix for better SEO and consistency
+    localePrefix: 'always'
+});
 
 export const config = {
-    matcher: [
-        // Skip all internal paths (_next)
-        '/((?!_next|favicon.ico).*)',
-    ],
+    // Match only internationalized pathnames
+    matcher: ['/', '/(ja|en)/:path*']
 };
