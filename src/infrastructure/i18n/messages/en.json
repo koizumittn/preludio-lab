@@ -1,7 +1,7 @@
 {
     "Metadata": {
-        "title": "Preludio Lab | Immersive Classical Music Analysis",
-        "description": "Discover the structure of classical music with interactive scores and deep analysis."
+        "title": "Preludio Lab | Closer to the Classics, More Joy in Every Note",
+        "description": "Deepen that spark of 'I love this piece.' Through interactive scores and audio, we bring you an experience that touches the heart of masterpieces. Join us for enriching moments where classical music becomes a constant companion in your life."
     },
     "Common": {
         "loading": "Loading...",
@@ -11,8 +11,8 @@
     },
     "Home": {
         "hero": {
-            "title": "Beyond Listening.",
-            "description": "Beyond Listening. Dive deeper into the classics.",
+            "title": "Where You Find the Music You'll Love Forever.",
+            "description": "Discovering wonderful music is a treasure that gently colors your life. Trace the score and unravel the stories behind the sound. Preludio Lab is your guide to that 'perfect piece' that transforms your everyday life.",
             "explore": "Explore Works",
             "about": "About Us"
         },
