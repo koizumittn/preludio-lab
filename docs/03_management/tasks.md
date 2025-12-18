@@ -198,16 +198,16 @@ Status: `[/]` 進行中
     - [ ] パブリックリリース (Vercel Production Deploy)
     - [ ] Product Hunt, Hacker News, Reddit (r/classicalmusic) へのShowcase投稿
 
-## Phase 9: Post-Launch Growth & Monetization (Acquisition - Post)
-- [ ] **9.1 Community Engagement**
-    - [ ] **[実装]** User Features (Likes / Favorites / History)
-    - [ ] **[実装]** Translation Feedback Loop (誤訳報告機能)
-- [ ] **9.2 Social Viral Loops**
+## Phase 9: ローンチ後の成長と収益化 (Post-Launch Growth & Monetization)
+- [ ] **9.1 コミュニティ・エンゲージメント (Community Engagement)**
+    - [ ] **[実装]** ユーザー機能（いいね / お気に入り / 履歴）の実装
+    - [ ] **[実装]** 誤訳報告機能 (Translation Feedback Loop) の実装
+- [ ] **9.2 ソーシャル・バイラル施策 (Social Viral Loops)**
     - [ ] **[運用]** "Today's Score" Bot の運用開始（日替わりで名曲の譜例を投稿）
     - [ ] **[実装]** YouTube Shorts/TikTok 用の楽曲解説動画生成フローの検討
-- [ ] **9.3 Monetization & Business**
-    - [ ] **[実装]** Affiliate Links (Score/Audio) のコンテキスト配置
-    - [ ] **[実装]** KPI Monitoring Dashboard (Vercel Analytics / GSC) の構築
+- [ ] **9.3 マネタイズ・ビジネス (Monetization & Business)**
+    - [ ] **[実装]** アフィリエイトリンク (Score/Audio) のコンテキスト配置
+    - [ ] **[実装]** KPIモニタリングダッシュボード (Vercel Analytics / GSC) の構築
 
 ## Backlog / Issues (Future Improvements)
 - [ ] **Score "Now Playing" Indicator**
