@@ -330,6 +330,14 @@ export default function SomeComponent() {
 *   **Language:** コメントは原則として「日本語」で記述する。
 *   **What vs Why:** 「コードが何をしているか（What）」はコード自体で語る。「なぜそうしたか（Why）」や「注意点」を書く。
 
+### 2.5. Middleware & Routing Safety (i18n)
+*   **Matcher Configuration (Allow-list vs Deny-list):**
+    *   Next.js Middlewareの `matcher` 設定において、「特定のパス以外全て (`/((?!...))`)」という Deny-list 方式は便利だが、リスクを伴う。
+    *   **Rule:** `_vercel`, `_next`, `api` などのシステムパスを必ず除外リストに含めること。
+*   **Path Constraints:**
+    *   正規表現による除外（例: `.*\\..*` で静的ファイルを除外）を行う場合、**正当なコンテンツURL（Slug）にドットを含めない** という運用ルールとセットで設計すること。
+    *   この制約は `naming-conventions.md` に明記し、チーム全体で共有する。
+
 ## 3. Deployment & CI/CD
 **詳細なガイドラインは別紙参照:** [deployment-guidelines.md](./deployment-guidelines.md)
 (Git Branching Strategy, CI/CD Operations, Vercel Configuration)

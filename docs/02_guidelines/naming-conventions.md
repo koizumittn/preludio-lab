@@ -54,6 +54,9 @@
 
 ### Slug Rules (URL Optimization)
 *   **Format:** 英語小文字、ハイフン繋ぎ (`kebab-case`)。
+    *   **Constraint (No Dots):** URLパス内でドット (`.`) を使用してはならない。ミドルウェアの正規表現 (`matcher`) で静的ファイルとして除外されるため。
+    *   Bad: `works/beethoven/op.55`
+    *   Good: `works/beethoven/op-55`
 *   **Legibility:** 視認性とSEOを考慮し、**3〜5単語** 程度を目安とする。
 *   **Stop Words:** 意味の薄い単語 (`the`, `a`, `of`, `in`) は、文脈上必須でない限り省略する。
     *   Good: `bach-prelude-c-major`

@@ -1,35 +1,37 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import createMiddleware from 'next-intl/middleware';
+import { NextRequest, NextResponse } from 'next/server';
+import { routing } from './infrastructure/i18n/routing';
 
-import { LOCALES } from '@/lib/constants';
-const locales = LOCALES;
-const defaultLocale = 'ja';
+const intlMiddleware = createMiddleware(routing);
 
-export function middleware(request: NextRequest) {
-    const pathname = request.nextUrl.pathname;
+export default function middleware(req: NextRequest) {
+    const { pathname } = req.nextUrl;
 
-    // Check if there is any supported locale in the pathname
-    const pathnameIsMissingLocale = locales.every(
-        (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
-    );
+    // パスをセグメントに分割 ('/jaa/foo' -> ['', 'jaa', 'foo'])
+    const segments = pathname.split('/');
+    const firstSegment = segments[1];
 
-    // Redirect if there is no locale
-    if (pathnameIsMissingLocale) {
-        // Assets and API calls should be ignored
-        if (pathname.startsWith('/_next') || pathname.startsWith('/api') || pathname.includes('.')) {
-            return;
-        }
-
-        const locale = defaultLocale;
-        return NextResponse.redirect(
-            new URL(`/${locale}${pathname.startsWith('/') ? '' : '/'}${pathname}`, request.url)
-        );
+    // ルートパス、または有効なロケールの場合は next-intl に任せる
+    if (!firstSegment || routing.locales.includes(firstSegment as any)) {
+        return intlMiddleware(req);
     }
+
+    // 無効なロケール（例: /jaa）の場合、デフォルト言語（en）に置き換えてリダイレクト
+    // ユーザー要件: "言語パスに許容しない文字列がある場合、その文字列をデフォルト言語（en）に置き換える"
+
+    // パスの残りの部分を構築 (例: /jaa/works -> /en/works)
+    const restOfPath = segments.slice(2).join('/');
+    const newPath = `/${routing.defaultLocale}${restOfPath ? `/${restOfPath}` : ''}`;
+
+    const url = req.nextUrl.clone();
+    url.pathname = newPath;
+
+    return NextResponse.redirect(url);
 }
 
 export const config = {
-    matcher: [
-        // Skip all internal paths (_next)
-        '/((?!_next|favicon.ico).*)',
-    ],
+    // API, _next, _vercel, 静的ファイル(拡張子あり)を除外してすべてにマッチさせる
+    // Note: この設定により、URLパスに「.」を含むページ（例: /works/op.55）はミドルウェアの対象外となります。
+    // そのため、スラグには「.」を使用しない運用（kebab-case）を徹底してください。
+    matcher: ['/((?!api|_next|_vercel|.*\\..*).*)']
 };

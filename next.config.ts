@@ -1,4 +1,7 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from 'next-intl/plugin';
+
+const withNextIntl = createNextIntlPlugin('./src/infrastructure/i18n/config.ts');
 
 const nextConfig: NextConfig = {
   serverExternalPackages: ["pino", "pino-pretty", "thread-stream"],
@@ -8,4 +11,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withNextIntl(nextConfig);
