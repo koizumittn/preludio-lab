@@ -33,7 +33,7 @@
 *   **Props:** `{ content: MDXRemoteSerializeResult }`
 *   **Responsibility (責務):**
     *   MDXコンテンツのレンダリング。
-    *   MDXコンテンツのレンダリング。
+
     *   カスタムMDXコンポーネント（例: `<Score>` タグ）を `ScoreRenderer` にマッピングする。
 
 ### SeriesNavigation (Organisms)
