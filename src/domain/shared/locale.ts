@@ -8,17 +8,21 @@ export const AppLocale = {
     EN: 'en',
     /** 日本語 - 開発者の母国語であり、主要なターゲット */
     JA: 'ja',
-    // 将来的な拡張
-    // ES: 'es',
-    // DE: 'de',
-    // FR: 'fr',
-    // IT: 'it',
-    // ZH: 'zh',
+    /** スペイン語 */
+    ES: 'es',
+    /** ドイツ語 */
+    DE: 'de',
+    /** フランス語 */
+    FR: 'fr',
+    /** イタリア語 */
+    IT: 'it',
+    /** 中国語 */
+    ZH: 'zh',
 } as const;
 
 /**
  * アプリケーション内で使用可能な言語コードの型定義。
- * `typeof AppLocale` の値（'en' | 'ja'）のユニオン型です。
+ * `typeof AppLocale` の値のユニオン型です。
  */
 export type AppLocale = (typeof AppLocale)[keyof typeof AppLocale];
 
@@ -35,6 +39,11 @@ export const defaultLocale: AppLocale = AppLocale.EN;
 export const supportedLocales: AppLocale[] = [
     AppLocale.EN,
     AppLocale.JA,
+    AppLocale.ES,
+    AppLocale.DE,
+    AppLocale.FR,
+    AppLocale.IT,
+    AppLocale.ZH,
 ];
 
 /**
@@ -44,4 +53,9 @@ export const supportedLocales: AppLocale[] = [
 export const localeLabels: Record<AppLocale, string> = {
     [AppLocale.EN]: 'English',
     [AppLocale.JA]: '日本語',
+    [AppLocale.ES]: 'Español',
+    [AppLocale.DE]: 'Deutsch',
+    [AppLocale.FR]: 'Français',
+    [AppLocale.IT]: 'Italiano',
+    [AppLocale.ZH]: '中文',
 };
