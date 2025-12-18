@@ -18,21 +18,41 @@
         },
         "discover": "Discover",
         "categories": {
-            "analysis": {
-                "name": "Work Analysis",
-                "desc": "Deep dive into masterpieces"
+            "works": {
+                "name": "Works",
+                "desc": "Introductions to masterpieces"
             },
             "composers": {
                 "name": "Composers",
-                "desc": "Lives and works"
+                "desc": "Lives and works of great musicians"
             },
             "theory": {
-                "name": "Music Theory",
-                "desc": "Understanding the mechanics"
+                "name": "Theory",
+                "desc": "Understanding forms, harmony, and notation"
+            },
+            "eras": {
+                "name": "Eras",
+                "desc": "Historical backgrounds and stylistic features"
+            },
+            "instruments": {
+                "name": "Instruments",
+                "desc": "History, structure, and repertoire"
+            },
+            "performers": {
+                "name": "Performers",
+                "desc": "Conductors, soloists, and orchestras"
+            },
+            "terminology": {
+                "name": "Terminology",
+                "desc": "Definitions and interpretations of musical terms"
+            },
+            "columns": {
+                "name": "Columns",
+                "desc": "Essays, news, and special features"
             },
             "originals": {
                 "name": "Originals",
-                "desc": "New compositions"
+                "desc": "Original compositions by Preludio Lab"
             }
         },
         "featured": {

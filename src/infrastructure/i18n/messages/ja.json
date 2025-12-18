@@ -18,17 +18,37 @@
         },
         "discover": "コンテンツを探す",
         "categories": {
-            "analysis": {
-                "name": "楽曲分析",
-                "desc": "名曲の構造を深く読み解く"
+            "works": {
+                "name": "楽曲紹介",
+                "desc": "個別の楽曲の魅力紹介"
             },
             "composers": {
                 "name": "作曲家",
                 "desc": "偉大な音楽家たちの生涯と作品"
             },
             "theory": {
-                "name": "音楽理論",
-                "desc": "音楽の仕組みを理解する"
+                "name": "音楽の仕組み",
+                "desc": "形式、和声、記譜法などの理論解説"
+            },
+            "eras": {
+                "name": "時代様式",
+                "desc": "歴史的背景と様式の特徴"
+            },
+            "instruments": {
+                "name": "楽器",
+                "desc": "楽器の歴史、構造、レパートリー"
+            },
+            "performers": {
+                "name": "演奏家",
+                "desc": "指揮者、ソリスト、オーケストラの名演"
+            },
+            "terminology": {
+                "name": "用語集",
+                "desc": "楽語の意味と演奏上の解釈"
+            },
+            "columns": {
+                "name": "コラム",
+                "desc": "エッセイ、ニュース、特集記事"
             },
             "originals": {
                 "name": "オリジナル作品",
