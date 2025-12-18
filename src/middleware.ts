@@ -30,6 +30,8 @@ export default function middleware(req: NextRequest) {
 }
 
 export const config = {
-    // API, _next, 静的ファイルを除外してすべてにマッチさせる
-    matcher: ['/((?!api|_next|.*\\..*).*)']
+    // API, _next, _vercel, 静的ファイル(拡張子あり)を除外してすべてにマッチさせる
+    // Note: この設定により、URLパスに「.」を含むページ（例: /works/op.55）はミドルウェアの対象外となります。
+    // そのため、スラグには「.」を使用しない運用（kebab-case）を徹底してください。
+    matcher: ['/((?!api|_next|_vercel|.*\\..*).*)']
 };
