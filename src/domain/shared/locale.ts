@@ -37,13 +37,13 @@ export const defaultLocale: AppLocale = AppLocale.EN;
  * ルーティングやミドルウェアの設定で使用されます。
  */
 export const supportedLocales: AppLocale[] = [
-    AppLocale.EN,
-    AppLocale.JA,
-    AppLocale.ES,
-    AppLocale.DE,
-    AppLocale.FR,
-    AppLocale.IT,
-    AppLocale.ZH,
+    AppLocale.EN, // World Standard
+    AppLocale.DE, // Classical Music Major Power (Bach, Beethoven, etc.)
+    AppLocale.FR, // Classical Music Major Power
+    AppLocale.IT, // Origin of Musical Terms
+    AppLocale.ES, // Wide Global Reach
+    AppLocale.JA, // High Affinity Market (Developer Origin)
+    AppLocale.ZH, // Growing Market
 ];
 
 /**
@@ -52,10 +52,10 @@ export const supportedLocales: AppLocale[] = [
  */
 export const localeLabels: Record<AppLocale, string> = {
     [AppLocale.EN]: 'English',
-    [AppLocale.JA]: '日本語',
-    [AppLocale.ES]: 'Español',
     [AppLocale.DE]: 'Deutsch',
     [AppLocale.FR]: 'Français',
     [AppLocale.IT]: 'Italiano',
+    [AppLocale.ES]: 'Español',
+    [AppLocale.JA]: '日本語',
     [AppLocale.ZH]: '中文',
 };
