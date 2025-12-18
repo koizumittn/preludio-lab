@@ -5,5 +5,5 @@ export default createMiddleware(routing);
 
 export const config = {
     // 国際化されたパス名のみにマッチさせる
-    matcher: ['/', '/(ja|en)/:path*']
+    matcher: ['/', '/(ja|en|es|de|fr|it|zh)/:path*']
 };
