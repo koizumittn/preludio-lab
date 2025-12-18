@@ -37,13 +37,13 @@ export const defaultLocale: AppLocale = AppLocale.EN;
  * ルーティングやミドルウェアの設定で使用されます。
  */
 export const supportedLocales: AppLocale[] = [
-    AppLocale.EN, // World Standard
-    AppLocale.DE, // Classical Music Major Power (Bach, Beethoven, etc.)
-    AppLocale.FR, // Classical Music Major Power
-    AppLocale.IT, // Origin of Musical Terms
-    AppLocale.ES, // Wide Global Reach
-    AppLocale.JA, // High Affinity Market (Developer Origin)
-    AppLocale.ZH, // Growing Market
+    AppLocale.EN, // 世界標準
+    AppLocale.DE, // クラシック音楽の主要国 (バッハ、ベートーヴェン等)
+    AppLocale.FR, // クラシック音楽の主要国
+    AppLocale.IT, // 音楽用語の起源
+    AppLocale.ES, // 世界的な広がり
+    AppLocale.JA, // 親和性の高い市場 (開発者の拠点)
+    AppLocale.ZH, // 成長市場
 ];
 
 /**
