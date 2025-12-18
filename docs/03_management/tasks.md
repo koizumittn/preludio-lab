@@ -133,42 +133,44 @@ Status: `[/]` 進行中
 
 ## Phase 6: AIエージェント開発 ("Brain") & コンテンツ量産
 - [ ] **6.1 音楽学者エージェント (Musicologist Agent)**
-    - [ ] **Prompt Design:**
-        - [ ] 楽曲構造分析プロンプトの設計 (Music Theory)
-        - [ ] ABC譜面生成プロンプトの設計 (Notation Rules)
-    - [ ] **Implementation:**
+    - [ ] **[仕様策定]** 分析・生成プロンプトの要件定義
+        - [ ] 楽曲構造分析およびABC譜面生成のプロンプト設計要件 (Music Theory & Notation Rules)
+    - [ ] **[実装]** プロンプト設計とエージェント実装
         - [ ] Tool実装: `src/tools/youtube.ts` (YouTube Data API 検索)
         - [ ] Orchestrator実装: `agents/src/index.ts` (Gemini API呼び出し制御)
-    - [ ] **Verification:**
+    - [ ] **[テスト・動作検証]** 生成品質の検証
         - [ ] テスト: バッハ「平均律第1番」での生成品質検証 (Ref: `REQ-TECH-AGENT-003`)
+    - [ ] **[リファクタリング]** プロンプトとツールの最適化
+        - [ ] 生成精度向上に向けたプロンプトチューニングと再利用性の向上
 
 - [ ] **6.2 翻訳エージェント (Translator Agent)**
-    - [ ] **Prompt Design:**
-        - [ ] 多言語翻訳プロンプトの設計 (Tone & Style Guide)
-    - [ ] **Implementation (Core):**
+    - [ ] **[仕様策定]** 翻訳ルールとトーン＆マナーの定義
+        - [ ] 多言語翻訳プロンプトの要件 (Tone & Style Guide) および用語集の整備
+    - [ ] **[実装]** 翻訳プロンプトとオーケストレーター実装
         - [ ] 翻訳Orchestratorの実装 (Parallel Execution)
-    - [ ] **Implementation & Verification (Per Language):**
+    - [ ] **[テスト・動作検証]** 各言語の翻訳品質検証
         - [ ] 英語 (EN) の出力検証
         - [ ] スペイン語 (ES) の出力検証
         - [ ] ドイツ語 (DE) の出力検証
         - [ ] フランス語 (FR) の出力検証
         - [ ] イタリア語 (IT) の出力検証
         - [ ] 中国語 (ZH) の出力検証
+    - [ ] **[リファクタリング]** 翻訳精度の向上とプロンプト改善
+        - [ ] 文脈維持能力の強化とエラーハンドリングの改善
 
 - [ ] **6.3 コンテンツ量産体制の構築と実行 (Content Operations)**
-    - [ ] **Strategy:**
+    - [ ] **[仕様策定]** コンテンツ戦略とパイプライン定義
         - [ ] 初回リリース用コンテンツ選定 (Target: 10-20 articles for Launch)
         - [ ] コンテントマップ作成 (Composers / Genres / Difficulty Matrix)
-    - [ ] **Execution (Pilot):**
+    - [ ] **[実装]** パイロット・バッチ生成の実行
         - [ ] エージェントによるパイロット記事 5本生成
-        - [ ] 人手による品質レビュー (Music Theory, Notation, Translation Checks)
-        - [ ] 修正フィードバックループの確立 (Prompt Tuning based on feedback)
-    - [ ] **Execution (Batch):**
         - [ ] バッチ処理による記事大量生成
         - [ ] 画像・メディアアセットの半自動生成 (OGP, Analysis Diagrams)
-    - [ ] **QA & Publication:**
+    - [ ] **[テスト・動作検証]** 品質レビューと公開前チェック
+        - [ ] 人手による品質レビュー (Music Theory, Notation, Translation Checks)
         - [ ] リンク切れ・レイアウト崩れの最終チェック
-        - [ ] 公開スケジュール策定
+    - [ ] **[リファクタリング]** プロセス改善とプロンプトチューニング
+        - [ ] 修正フィードバックループの確立と次期バッチへの反映
 
 ## Phase 7: ビジネス・成長施策 (Ref: `business-requirements.md`)
 - [ ] **7.1 SEO最適化** (Ref: `REQ-GOAL-001`)
