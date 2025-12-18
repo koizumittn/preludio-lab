@@ -12,7 +12,7 @@ import { ConsentBanner } from '@/components/ui/ConsentBanner';
 import { Toaster } from 'react-hot-toast';
 import { supportedLocales } from '@/domain/shared/locale';
 
-// Font Configuration
+// フォント設定
 const inter = Inter({
     subsets: ['latin'],
     variable: '--font-inter',
@@ -60,7 +60,7 @@ export async function generateMetadata({ params }: Props) {
     };
 }
 
-// Explicitly define parameters for static generation
+// 静的生成（SSG）のためのパラメータを明示的に定義
 export async function generateStaticParams() {
     return supportedLocales.map((lang) => ({ lang }));
 }
@@ -72,8 +72,8 @@ export default async function RootLayout({
     const { lang } = await params;
     const messages = await getMessages();
 
-    // Determine font variables and base classes based on language
-    // Emotional Typography: Serif for EN (Elegant), Mincho for JA (Nostalgic)
+    // 言語に基づいてフォント変数とベースクラスを決定
+    // 情緒的タイポグラフィ: 英語はSerif（エレガント）、日本語は明朝体（ノスタルジック）を採用
     const fontVariables = `${inter.variable} ${playfair.variable} ${notoSansJP.variable} ${zenOldMincho.variable}`;
     const baseFontClass = lang === 'ja'
         ? 'font-sans-ja text-primary bg-paper'

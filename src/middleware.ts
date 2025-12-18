@@ -4,6 +4,6 @@ import { routing } from './infrastructure/i18n/routing';
 export default createMiddleware(routing);
 
 export const config = {
-    // Match only internationalized pathnames
+    // 国際化されたパス名のみにマッチさせる
     matcher: ['/', '/(ja|en)/:path*']
 };
