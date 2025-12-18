@@ -19,8 +19,9 @@ MDX (Markdown JSX) を採用することで、記事コンテンツ内にReact�
 2.  **Build Time:**
     *   Next.jsがファイルシステムからMDXを読み込み。
     *   Frontmatterを検証し、メタデータを抽出。
-    *   `src/app/[lang]/works/[slug]/page.tsx` が各記事をHTMLとして静的生成。
-    *   `src/lib/mdx.ts` がプラグイン (`rehype-slug`) を適用し、見出しIDを付与。
+    *   `src/app/[lang]/works/[...slug]/page.tsx` が各記事をHTMLとして静的生成。
+    *   `FsContentRepository` (Infrastructure) がMDXファイルを読み込み、`src/domain/entities/content.ts` (Domain) のZod Schemaで検証。
+    *   `rehype-slug` が見出しIDを付与。
     *   ビルド完了後、`postbuild` スクリプトが `Pagefind` を実行し、生成されたHTMLから検索インデックスを作成。
 3.  **Run Time:**
     *   ユーザーはCDNから静的HTML（キャッシュ）を取得。
@@ -50,7 +51,7 @@ content/
 ```
 
 ### Frontmatter Schema
-記事のメタデータは厳格に型定義 (`src/lib/mdx.ts`) されています。
+記事のメタデータは厳格に型定義 (`src/domain/entities/content.ts`) されてます。
 
 ```yaml
 ---
@@ -91,7 +92,9 @@ date: "2025-12-18"                 # 作成日
 (Catch-all Segmentにより、`works/bach/prelude-1` のような深い階層に対応)
 
 ### Static Generation
+### Static Generation
 `generateStaticParams` 関数により、サポートされている全言語（7言語）× 全記事の組み合わせを事前に計算し、ビルド時にHTML化します。
+パフォーマンス最適化のため、全コンテンテンツ取得時には本文を含まない軽量な `getAllContentSummaries` メソッドを使用します。
 存在しない言語やスラッグへのアクセスは `404 Not Found` となります。
 
 ## 6. 今後の拡張性

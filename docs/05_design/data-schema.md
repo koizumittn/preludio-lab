@@ -68,3 +68,22 @@ content/
 
 ## 3. Taxonomy (分類)
 詳細は `content-requirements.md` の [REQ-CONT-TAX-XXX] を参照。
+
+## 4. TypeScript型定義 (Domain Entities)
+アプリケーション内部では、以下の型定義 (`src/domain/entities/content.ts`) を使用してデータを扱う。
+
+*   **`ContentSummary`**: 一覧表示、ナビゲーション、サイトマップ生成用。`body` (本文) を含まない軽量オブジェクト。
+*   **`ContentDetail`**: 詳細ページ表示用。`ContentSummary` を継承し、`body` (MDX生テキスト) を含む。
+
+```typescript
+export type ContentSummary = {
+    slug: string;
+    lang: string;
+    category: string;
+    metadata: Metadata; // Zod Schema
+};
+
+export type ContentDetail = ContentSummary & {
+    body: string;
+};
+```
