@@ -1,5 +1,5 @@
 import { Link } from '@/infrastructure/i18n/navigation';
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import { SITE_NAME } from '@/lib/constants';
 import { SearchBox } from '@/components/features/search/SearchBox';
 import { LanguageSwitcher } from '@/components/features/i18n/LanguageSwitcher';
@@ -8,8 +8,8 @@ interface HeaderProps {
     lang?: string;
 }
 
-export const Header = ({ lang }: HeaderProps) => {
-    const t = useTranslations('Navigation');
+export const Header = async ({ lang }: HeaderProps) => {
+    const t = await getTranslations('Navigation');
 
     return (
         <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/80 backdrop-blur-md">

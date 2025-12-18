@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { LOCALES } from '@/lib/constants';
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 
 // Explicitly define parameters for static generation
 export async function generateStaticParams() {
@@ -10,7 +10,7 @@ export async function generateStaticParams() {
 export default async function Home({ params }: { params: Promise<{ lang: string }> }) {
     // Note: In client components we use `useParams` or simple props, but in server components
     // we can use `useTranslations` directly.
-    const t = useTranslations('Home');
+    const t = await getTranslations('Home');
     const lang = (await params).lang;
 
     // Categories data with translations

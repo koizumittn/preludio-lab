@@ -1,8 +1,8 @@
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import { SITE_NAME } from '@/lib/constants';
 
-export const Footer = () => {
-    const t = useTranslations('Footer');
+export const Footer = async () => {
+    const t = await getTranslations('Footer');
 
     return (
         <footer className="border-t border-gray-200 bg-white py-12">
