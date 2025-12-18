@@ -218,3 +218,27 @@ Status: `[/]` 進行中
 
 - [ ] **Accessibility (A11y) Audit for Score & Player**
     - 視覚障害者ユーザー（Screen Reader利用）が、「楽曲の構造」や「現在再生位置」を把握できるか、WAI-ARIA 属性の適切性を検証・改善する。
+
+- [ ] **Automated Content Integrity Check (Dead Link Monitor)**
+    - GitHub Actionsで週に一度、全MDXに記載されたYouTube URLのステータスをチェックし、リンク切れがあればIssueを作成または代替動画を提案するワークフローを構築する。
+
+- [ ] **Structured Data (JSON-LD) Integration**
+    - `MusicComposition` や `MusicRecording` スキーマを各楽曲詳細ページに埋め込み、検索結果にリッチリザルト（作曲家、楽器、演奏時間など）を表示させ、SEO流入を最大化する。
+
+- [ ] **Dynamic OGP Generation for Each Work**
+    - 楽曲タイトル、作曲家、譜例の一部を合成したOGP画像を、各言語ごとに `@vercel/og` を用いて決定論的に自動生成し、SNS拡散力を強化する。
+
+- [ ] **Edge Config & Cache Strategy Optimization**
+    - Supabaseのデータや翻訳辞書の取得において、Vercel Edge Configや`stale-while-revalidate` (SWR) パターンを適用し、グローバル規模での低遅延アクセス（瞬時の没入体験）を実現する。
+
+- [ ] **Community-driven Translation Feedback**
+    - ユーザーが誤訳を見つけた際、簡単に「報告」できるUIと、そのフィードバックをAIの知識ベース（辞書・プロンプト）に還流させるサイクルを構築する。
+
+- [ ] **Automated Highlight & Timestamp Extraction**
+    - AIにより「楽曲の聴きどころ（Highlight）」とYouTube音源の対応するタイムスタンプを自動抽出し、コンテンツ制作（ドラフト）の効率を飛躍的に高める。
+
+- [ ] **Security Vulnerability Testing (OWASP Top 10)**
+    - サイトの信頼性を高めるため、XSSやインジェクションなどの一般的なリスクに対し、OWASP Top 10 リストに基づいた脆弱性スキャン・検証を実施する。
+
+- [ ] **KPI Monitoring System Implementation**
+    - リリース後のユーザー増加状況、サイトパフォーマンス、マネタイズ進捗を可視化するため、Vercel Analytics や Google Search Console API を統合したダッシュボード環境を整備する。
