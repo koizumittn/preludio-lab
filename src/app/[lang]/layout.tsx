@@ -50,7 +50,7 @@ export default async function RootLayout({
         <html lang={lang} className={`${inter.variable} ${notoSerif.variable}`} suppressHydrationWarning>
             <body className="antialiased bg-paper text-primary font-sans">
                 <AppProviders>
-                    <Header />
+                    <Header lang={lang} />
                     <main className="min-h-screen pb-24">{children}</main>
                     <Footer />
 

@@ -8,7 +8,9 @@
 *   `features/` (Organisms/Templates): ドメイン固有の複雑なコンポーネント。
     *   `score/`: ScoreRenderer
     *   `audio/`: AudioPlayer
-    *   `article/`: ArticleBody, TOC
+    *   `score/`: ScoreRenderer
+    *   `audio/`: AudioPlayer
+    *   `content/`: TableOfContents, SeriesNavigation (MDX関連)
 
 ## 2. 主要コンポーネント (Key Components)
 
@@ -32,6 +34,12 @@
 *   **Responsibility (責務):**
     *   MDXコンテンツのレンダリング。
     *   カスタムMDXコンポーネント（例: `<Score>` タグ）を `ScoreRenderer` にマッピングする。
+
+### SeriesNavigation (Organisms)
+*   **Props:** `{ prev: ContentSummary | null; next: ContentSummary | null; lang: string }`
+*   **Responsibility (責務):**
+*   同一カテゴリ内の前後の記事へのナビゲーションリンクを表示する。
+*   `ContentSummary` 型（メタデータのみ）を使用し、軽量に動作する。
 
 ## 3. UIライブラリ (Atoms)
 スタイリング要件に基づき、以下を実装する：

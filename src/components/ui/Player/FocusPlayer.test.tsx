@@ -12,7 +12,8 @@ const mockContextValue = (overrides = {}) => ({
     volume: 100,
     mode: 'focus' as const,
     videoTitle: 'Test Title',
-    videoAuthor: 'Test Author',
+    videoComposer: 'Test Composer',
+    videoPerformer: 'Test Performer',
     artworkSrc: null,
     platformUrl: null,
     platformLabel: null,
@@ -41,7 +42,8 @@ describe('FocusPlayer', () => {
             </AudioPlayerContext.Provider>
         );
         expect(screen.getByText('Test Title')).toBeInTheDocument();
-        expect(screen.getByText('Test Author')).toBeInTheDocument();
+        expect(screen.getByText('Test Title')).toBeInTheDocument();
+        expect(screen.getByText('Test Composer')).toBeInTheDocument();
     });
 
     it('renders "Watch on YouTube" link when platform data is provided', () => {

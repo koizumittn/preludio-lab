@@ -28,6 +28,7 @@ Preludio Labにおける「Audio Player」は、ユーザーが楽譜を閲覧�
 ### 2.3. ページ遷移時の挙動 (Persistence)
 *   **シームレスな再生:** ユーザーがサイト内を回遊（例: 楽曲ページ → トップページ → Aboutページ）しても、プレイヤーは途切れずに再生を続けます。
 *   **状態維持:** プレイヤーのモード（Mini/Focus）や音量は、ページ遷移後も保持されます。
+*   **例外（言語切り替え）:** 言語コンテキスト（`en` ⇔ `ja`）を跨ぐ遷移が行われた場合、プレイヤーの状態はリセットされます。これは、メタデータ（曲名など）の言語一貫性を保ち、アーキテクチャ上の責務分離（言語ごとのLayout再構築）に従うための仕様です。
 
 ## 3. Architecture Pattern (Headless UI & Wrapper)
 
@@ -135,7 +136,7 @@ interface AudioMetadata {
     *   **Trust & Attribution:** `platformUrl` が存在する場合、そのリンクを表示する。テキストは `platformLabel` (例: "Watch on YouTube") を使用し、アイコンは `platformType` に応じて切り替える。UIはテキストやURLの生成ロジックを持たず、渡されたデータをそのまま表示する。
 
 ## 6. Integration (Root Layout)
-ページ遷移による再レンダリング（リセット）を防ぐため、`src/app/[lang]/layout.tsx` の最上位レベルに配置されています。
+ページ遷移による再レンダリング（リセット）を防ぐため、`src/app/[lang]/layout.tsx` の最上位レベルに配置されています。このLayoutは同一言語ルート内 (`/[lang]/*`) で永続化されます。
 
 ```tsx
 <AppProviders>

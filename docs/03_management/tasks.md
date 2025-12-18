@@ -66,13 +66,13 @@ Status: `[/]` 進行中
     - [x] `AudioPlayer` コンポーネントの実装 (YouTube IFrame API)
     - [x] UIモード実装: Mini Player (Footer) & Focus Mode (Ref: `REQ-UI-004-02`)
     - [x] 楽譜との同期ロジックの実装（Click to Play / StartTime指定の実装）
-- [ ] **多言語MDXシステム & コンテンツフロー**
-    - [ ] MDXディレクトリ構成の設計 (`content/[lang]/...`)
-    - [ ] MDX Loader / Parser の実装
-    - [ ] Pagefind 検索の実装 (Ref: `technology-requirements`)
-    - [ ] 目次 (TOC) 自動生成機能の実装 (Ref: `REQ-UI-005-02`)
-    - [ ] シリーズナビゲーション (Previous/Next/Index) の実装 (Ref: `REQ-CONT-SERIES`)
-    - [ ] コンテンツパイプラインの定義: Agent出力(MDX) -> Git PR -> Deployの流れを検証
+- [x] **多言語MDXシステム & コンテンツフロー**
+    - [x] MDXディレクトリ構成の設計 (`content/[lang]/...`)
+    - [x] MDX Loader / Parser の実装
+    - [x] Pagefind 検索の実装 (Ref: `technology-requirements`)
+    - [x] 目次 (TOC) 自動生成機能の実装 (Ref: `REQ-UI-005-02`)
+    - [x] シリーズナビゲーション (Previous/Next/Index) の実装 (Ref: `REQ-CONT-SERIES`)
+    - [x] コンテンツパイプラインの定義: Agent出力(MDX) -> Git PR -> Deployの流れを検証 (Manual Build Verified)
 
 ## Phase 2: AIエージェント開発 ("Brain") & コンテンツ量産
 - [ ] **音楽学者エージェント (Musicologist Agent)**
@@ -132,3 +132,12 @@ Status: `[/]` 進行中
     - [ ] モバイルレスポンシブ確認
 - [ ] **ローンチ**
     - [ ] パブリックリリース
+
+## Backlog / Issues (Future Improvements)
+- [ ] **Score "Now Playing" Indicator**
+    - 楽譜をクリックしてMini Playerを再生した際、クリックした楽譜に「再生中」という状態表示（ボーダーやアイコン変化など）を追加する。
+- [ ] **Default YouTube Artwork**
+    - `artworkSrc` が未定義かつ `platformType=youtube` の場合、`https://img.youtube.com/vi/<video-id>/hqdefault.jpg` を自動的にデフォルト値として使用する。
+- [ ] **Sidebar Widget Implementation**
+    - 現在モックであるサイドバーの右側機能（YouTube Player, Listening Guide）を本実装する。
+    - Listening Guideのデータ構造設計とMDXへの統合を含む。
