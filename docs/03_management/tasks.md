@@ -78,10 +78,11 @@ Status: `[/]` 進行中
 - [ ] **5.1 多言語対応の実装 (i18n UI/UX)**
     - [ ] **[準備]** 検証用ダミーデータの用意
         - [ ] i18n動作確認用の多言語MDX記事（日・英・他）を作成し配置
-    - [ ] **[仕様策定]** 多言語ルーティング・辞書スキーマ・**SEO (`hreflang`)** の定義
+    - [ ] **[仕様策定]** 多言語ルーティング・辞書スキーマ・**SEO (`hreflang`/JSON-LD)** の定義
         - [ ] URL構造（`/[lang]/...`）の決定と、辞書ファイル（JSON）の型定義（TypeScript）
         - [ ] 言語切り替えUI (Language Switcher) の配置とインタラクション設計
-    - [ ] **多言語ルーティングとUIの実装**
+        - [ ] 構造化データ（JSON-LD）の共通スキーマ設計
+    - [ ] **[実装]** 多言語ルーティングとUIの実装
         - [ ] Middlewareによる言語検出とリダイレクトの実装
         - [ ] ヘッダーへの `LanguageSwitcher` コンポーネントの実装
         - [ ] UI共通パーツ（ナビゲーション、ボタン等）の翻訳対応
@@ -90,12 +91,26 @@ Status: `[/]` 進行中
     - [ ] **[リファクタリング]** i18nロジックの共通化
         - [ ] `getDictionary` 関数の最適化、翻訳漏れを検知する静的チェックの導入
 
-- [ ] **5.2 ホームページの実装 (Dynamic Homepage)**
-    - [ ] **[仕様策定]** ホームページ・データフェッチ戦略の策定
-        - [ ] "Featured Work" の選定基準（Frontmatterのフラグ）と、各セクションのデータ取得範囲の定義
+- [ ] **5.2 オーディオプレイヤーのコンポーネント化 (Player Componentization)**
+    - [ ] **[仕様策定]** プレイヤー抽象化レイヤーの定義
+        - [ ] `ScoreRenderer` からの分離方針と、`AudioManager` (Context) の設計
+        - [ ] Props設計: `src`, `startTime`, `onTimeUpdate` などのインターフェース定義
+    - [ ] **[実装]** `AudioPlayer` コンポーネントの独立化
+        - [ ] Shared Component への移動 (`src/components/features/player/`)
+        - [ ] Mini Player (Footer) との連携ロジックの再実装
+    - [ ] **[テスト・動作検証]** 独立再生と同期再生の検証
+        - [ ] 楽譜連動モードと、単独再生モード（BGM）の動作確認
+    - [ ] **[リファクタリング]** 既存コードへの適用
+        - [ ] `ScoreRenderer` 内のプレイヤー呼び出しを新コンポーネントへ置き換え
+
+- [ ] **5.3 ホームページの実装 (Dynamic Homepage)**
+    - [ ] **[仕様策定]** データフェッチ戦略とサイドバー構造の定義
+        - [ ] "Featured Work" の選定基準とデータ取得範囲
+        - [ ] サイドバー（Listening Guide/Player Widget）の配置設計とMDX連携仕様
         - [ ] 各セクションのUIレイアウトおよびスクロール演出（Framer Motion）の設計
-    - [ ] **動的コンテンツの実装**
+    - [ ] **[実装]** 動的コンテンツとサイドバーの実装
         - [ ] `Featured Work` セクションへの最新MDXデータの流し込み
+        - [ ] サイドバーウィジェット（Listening Guideプレビュー等）の実装
         - [ ] Discoverカテゴリ（Analysis, Composers等）への遷移ロジック
         - [ ] スクロールアニメーション（Framer Motion等）による没入感の演出
     - [ ] **[テスト・動作検証]** 表示パフォーマンスとレスポンシブの検証
@@ -103,27 +118,27 @@ Status: `[/]` 進行中
     - [ ] **[リファクタリング]** ホームページ専用コンポーネントのクリーン化
         - [ ] 巨大になりがちな `page.tsx` の Organisms 単位への分割
 
-- [ ] **5.3 一覧ページの実装 (Works / Composers Index)**
+- [ ] **5.4 一覧ページの実装 (Works / Composers Index)**
     - [ ] **[仕様策定]** フィルタリング・ソート仕様の策定
         - [ ] 難易度、時代、楽器などのフィルター項目と、URLクエリパラメータとの連動設計
         - [ ] 一覧グリッドおよびフィルターパネルのレスポンシブUI/UX設計
         - [ ] **空状態 (Empty State)** のUI定義（検索ヒット0件時の表示）
-        - [ ] **AI抽出メタデータ** の再確認（演奏時間、形式などをフィルターに使えるか検討）
-    - [ ] **一覧ページの実装**
-        - [ ] `Works` 一覧：グリッドレイアウトとフィルタリング機能
-        - [ ] `Composers` 一覧：アルファベット/時代別ソート機能
+        - [ ] **サムネイル自動解決ロジック** の定義（YouTubeサムネのフォールバック仕様）
+    - [ ] **[実装]** 一覧ページと自動サムネイル
+        - [ ] `Works`/`Composers` 一覧のグリッドレイアウト実装
+        - [ ] **Default YouTube Artwork** ロジックの実装（`hqdefault.jpg` 自動適用）
         - [ ] ローディング中のスケルトン表示の実装
     - [ ] **[テスト・動作検証]** 大量データ時の挙動確認
         - [ ] 100件以上の記事がある想定でのスクロール挙動、フィルタリングの正確性検証
     - [ ] **[リファクタリング]** フィルターロジックの分離
         - [ ] 検索・絞り込みロジックを Custom Hook（`useFilter`）へ抽出し、保守性を向上
 
-- [ ] **5.4 検索機能の実装 (Pagefind Integration)**
+- [ ] **5.5 検索機能の実装 (Pagefind Integration)**
     - [ ] **[仕様策定]** 検索UI/UXとインデックス範囲の定義
         - [ ] Pagefindの日本語トークナイザー設定、検索対象フィールド（タイトル、本文、タグ）の優先順位付け
         - [ ] 検索モーダル（Cmd+K）の外観と操作フロー（キーボード操作含む）の詳細UI設計
         - [ ] **インデックス更新タイミング** の定義（ビルドフロー内での実行順序）
-    - [ ] **検索機能の統合**
+    - [ ] **[実装]** 検索機能の統合
         - [ ] 検索モーダル（Cmd+K対応）のデザインと実装
         - [ ] `Pagefind` ライブラリのセットアップとGitHub Actionsでのビルド設定
     - [ ] **[テスト・動作検証]** 検索精度の検証
@@ -138,6 +153,7 @@ Status: `[/]` 進行中
     - [ ] **[実装]** プロンプト設計とエージェント実装
         - [ ] Tool実装: `src/tools/youtube.ts` (YouTube Data API 検索)
         - [ ] Orchestrator実装: `agents/src/index.ts` (Gemini API呼び出し制御)
+        - [ ] **API Cost Circuit Breaker** の実装 (Quota監視・自動停止機能)
     - [ ] **[テスト・動作検証]** 生成品質の検証
         - [ ] テスト: バッハ「平均律第1番」での生成品質検証 (Ref: `REQ-TECH-AGENT-003`)
     - [ ] **[リファクタリング]** プロンプトとツールの最適化
@@ -212,23 +228,12 @@ Status: `[/]` 進行中
 ## Backlog / Issues (Future Improvements)
 - [ ] **Score "Now Playing" Indicator**
     - 楽譜をクリックしてMini Playerを再生した際、クリックした楽譜に「再生中」という状態表示（ボーダーやアイコン変化など）を追加する。
-- [ ] **Default YouTube Artwork**
-    - `artworkSrc` が未定義かつ `platformType=youtube` の場合、`https://img.youtube.com/vi/<video-id>/hqdefault.jpg` を自動的にデフォルト値として使用する。
-- [ ] **Sidebar Widget Implementation**
-    - 現在モックであるサイドバーの右側機能（YouTube Player, Listening Guide）を本実装する。
-    - Listening Guideのデータ構造設計とMDXへの統合を含む。
-
-- [ ] **Player Componentization**
-    - 現在 `ScoreRenderer` に結合されている Player をコンポーネント化し、一覧画面（試聴用）や Hero Section でも再利用可能な形に抽象化する。
 
 - [ ] **ABC Notation Quality Improvement (MusicXML)**
     - 信頼できる MusicXML リポジトリ（MuseScore, IMSLP等）から ABC記法 への自動変換パイプラインを構築し、手動入力の手間を削減しつつ正確性を担保する。
 
 - [ ] **Automated YouTube Curation Logic**
     - サイトのコンセプト（構造分析に適した演奏、音質、没入感）に合致する動画の選定基準を策定し、YouTube Data API を用いて候補を自動収集・フィルタリングする仕組みを構築する。
-
-- [ ] **API Cost Circuit Breaker** (Ref: `REQ-SEC-003-02`)
-    - Gemini API および YouTube Data API の無料枠（Quota）使用量を監視し、上限に近づいた場合に自動的にエージェント活動を停止または遅延させる「ブレーカー」機能を実装する。
 
 - [ ] **Accessibility (A11y) Audit for Score & Player**
     - 視覚障害者ユーザー（Screen Reader利用）が、「楽曲の構造」や「現在再生位置」を把握できるか、WAI-ARIA 属性の適切性を検証・改善する。
