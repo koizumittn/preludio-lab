@@ -27,6 +27,7 @@
 | :--- | :--- | :--- | :--- |
 | **Action Functions** | `camelCase` + Action | `registerUserAction` | エクスポートする関数名。 |
 | **Variables** | `camelCase` | `isValid` | |
+| **Repo Methods** | `verb` + `Type` + `ByKey` | `getContentDetailBySlug` | 戻り値の型名を明示する (Ubiquitous Language)。 |
 
 ### Content Files (MDX) (Ref: `content-requirements.md`)
 記事MDXファイルの配置と命名は、カテゴリ (`REQ-CONT-TAX`) に従う。

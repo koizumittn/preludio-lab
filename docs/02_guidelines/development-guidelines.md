@@ -17,6 +17,8 @@ src/
 │   ├── _actions/             # Server Actions (Controller / Entry Point)
 │   └── (routes)/             # 各画面のルーティング
 ├── components/               # [UI Layer] React Components (Pure View)
+│   ├── ui/                   # 汎用 UI コンポーネント (Button, Card)
+│   └── features/             # [Feature Layer] 特定ドメイン機能に結合したコンポーネント (ScoreRenderer)
 │
 ├── domain/                   # [Domain Layer] ★最重要・外部依存ゼロ
 │   ├── entities/             # 型定義・データ構造 (User, Score)
@@ -41,6 +43,8 @@ src/
 *   **役割:** ビジネスの「用語」「ルール」「契約（インターフェース）」を定義する。
 *   **ルール:** 他のいかなる層（Application, Infra, UI）にも依存してはならない。
 *   **実装のポイント:** 「まずは技術詳細を無視して、TypeScriptの型とInterfaceだけ定義する」
+*   **Performance Pattern:** 大きなデータ（本文など）を持つEntityは、一覧取得時のパフォーマンス劣化を防ぐため、**Summary型（軽量）**と**Detail型（重量）**に分割定義することを推奨する。
+    *   Example: `ContentSummary` (Metadata only) vs `ContentDetail` (extends Summary + Body)
 
 
 
@@ -144,6 +148,10 @@ graph TD
     *   データフェッチは Server Component で行う。
         *   **Reason:** クライアントへAPIキーやDB接続情報を露出させないため（Security）、およびJSバンドルサイズを削減するため（Performance）。VercelなどのServerless環境でも動作する。
     *   `use client` はツリーの末端（Leaf）で使用し、サーバーレンダリングの恩恵を最大化する。
+    *   **Async Params (Next.js 15+):**
+        *   Pageコンポーネントの `params` および `searchParams` は **Pomise** として提供されるため、必ず `await` してからアクセスする。
+        *   Bad: `const slug = params.slug;`
+        *   Good: `const { slug } = await params;`
     *   Image Optimization: `next/image` を使用し、レイアウトシフト（CLS）を防ぐ。
     *   **Client-Only Library Integration (The Wrapper Pattern):**
         *   **Context:** `window` / `document` に依存するライブラリ（例: `abcjs`, `leaflet`）をServer Componentから直接インポートするとビルドエラーになる。
