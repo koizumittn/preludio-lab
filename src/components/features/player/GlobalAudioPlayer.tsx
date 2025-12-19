@@ -17,6 +17,7 @@ import { AudioPlayer } from './AudioPlayer';
 export default function GlobalAudioPlayer() {
     const {
         src,
+        platform,
         isPlaying,
         volume,
         setPlayerInstance,
@@ -87,7 +88,7 @@ export default function GlobalAudioPlayer() {
     return (
         <AudioPlayer
             src={src}
-            platform="youtube"
+            platform={platform || 'youtube'}
             isPlaying={isPlaying}
             volume={volume}
             startTime={startSeconds} // Adapter uses generic name, mapping from Context's startSeconds
