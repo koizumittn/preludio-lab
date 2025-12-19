@@ -72,15 +72,18 @@ export default function ScoreClientWrapper({ abc, audioMetadata }: ScoreClientWr
 
             switch (key) {
                 case '%%audio_startTime':
+                case '%%audio_startSeconds':
                     const start = parseFloat(valueStr);
-                    if (!isNaN(start)) directives.startTime = start;
+                    if (!isNaN(start)) directives.startSeconds = start;
                     break;
                 case '%%audio_endTime':
+                case '%%audio_endSeconds':
                     const end = parseFloat(valueStr);
-                    if (!isNaN(end)) directives.endTime = end;
+                    if (!isNaN(end)) directives.endSeconds = end;
                     break;
                 case '%%audio_videoId':
-                    if (valueStr) directives.videoId = valueStr;
+                case '%%audio_src':
+                    if (valueStr) directives.src = valueStr;
                     break;
                 case '%%audio_title':
                     if (valueStr) directives.title = valueStr;
@@ -105,6 +108,10 @@ export default function ScoreClientWrapper({ abc, audioMetadata }: ScoreClientWr
         return directives;
     };
 
+    const directivesContainsTime = (d: any) =>
+        d.startSeconds !== undefined || d.startTime !== undefined ||
+        d.endSeconds !== undefined || d.endTime !== undefined;
+
     const abcDirectives = parseAudioDirectives(abc);
 
     // Merge Logic
@@ -121,12 +128,13 @@ export default function ScoreClientWrapper({ abc, audioMetadata }: ScoreClientWr
     } else if (audioMetadata) {
         // [標準的な継承と時間リセット]
         // 同一ビデオソースの場合はメタデータを継承しますが、時間が指定されている場合はリセットします。
-        const hasAbcTime = abcDirectives.startTime !== undefined || abcDirectives.endTime !== undefined;
+        // Check for either legacy (startTime) or new (startSeconds) keys in directives (parser normalizes to startSeconds/endSeconds but let's be safe)
+        const hasAbcTime = directivesContainsTime(abcDirectives);
         effectiveMetadata = {
             ...audioMetadata,
             ...abcDirectives,
-            startSeconds: hasAbcTime ? abcDirectives.startTime : (audioMetadata.startSeconds || audioMetadata.startTime),
-            endSeconds: hasAbcTime ? abcDirectives.endTime : (audioMetadata.endSeconds || audioMetadata.endTime)
+            startSeconds: hasAbcTime ? (abcDirectives.startSeconds ?? abcDirectives.startTime) : (audioMetadata.startSeconds ?? audioMetadata.startTime),
+            endSeconds: hasAbcTime ? (abcDirectives.endSeconds ?? abcDirectives.endTime) : (audioMetadata.endSeconds ?? audioMetadata.endTime)
         };
     }
 
@@ -148,8 +156,8 @@ export default function ScoreClientWrapper({ abc, audioMetadata }: ScoreClientWr
                         platform: (effectiveMetadata.platform as PlayerPlatformType) || (effectiveMetadata.platformType as PlayerPlatformType) || PlayerPlatform.YOUTUBE,
                     },
                     {
-                        startSeconds: effectiveMetadata.startSeconds || effectiveMetadata.startTime, // Support both for now
-                        endSeconds: effectiveMetadata.endSeconds || effectiveMetadata.endTime
+                        startSeconds: effectiveMetadata.startSeconds ?? effectiveMetadata.startTime,
+                        endSeconds: effectiveMetadata.endSeconds ?? effectiveMetadata.endTime
                     }
                 );
             }

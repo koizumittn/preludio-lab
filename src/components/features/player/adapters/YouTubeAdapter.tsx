@@ -77,11 +77,12 @@ export function YouTubeAdapter({
             if (isNewRequest || currentVideoId !== src) {
                 // 新しい動画をロード
                 lastPlaybackIdRef.current = playbackId;
-                safeLoadVideo(player, {
+                const loadOpts: any = {
                     videoId: src,
                     startSeconds: startTime || 0,
-                    endSeconds: endTime
-                });
+                };
+                if (endTime) loadOpts.endSeconds = endTime;
+                safeLoadVideo(player, loadOpts);
             } else {
                 // 既存の動画を再開
                 const playerState = player.getPlayerState();
@@ -153,11 +154,14 @@ export function YouTubeAdapter({
 
         // 初期ロード制御（srcがある場合）
         if (src) {
+            const loadOpts: any = { videoId: src, startSeconds: startTime || 0 };
+            if (endTime) loadOpts.endSeconds = endTime;
+
             // 準備完了時点ですぐに操作可能になるよう調整
             if (isPlaying) {
-                safeLoadVideo(event.target, { videoId: src, startSeconds: startTime || 0, endSeconds: endTime });
+                safeLoadVideo(event.target, loadOpts);
             } else {
-                event.target.cueVideoById({ videoId: src, startSeconds: startTime || 0, endSeconds: endTime });
+                event.target.cueVideoById(loadOpts);
             }
         }
     };
