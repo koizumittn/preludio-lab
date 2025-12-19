@@ -1,20 +1,20 @@
-import Link from 'next/link';
+import { Link } from '@/infrastructure/i18n/navigation';
 import { LOCALES } from '@/lib/constants';
 import { getTranslations } from 'next-intl/server';
 
-// Explicitly define parameters for static generation
+// 静的生成（SSG）のためのパラメータを明示的に定義
 export async function generateStaticParams() {
     return LOCALES.map((lang) => ({ lang }));
 }
 
 export default async function Home({ params }: { params: Promise<{ lang: string }> }) {
-    // Note: In client components we use `useParams` or simple props, but in server components
-    // we can use `useTranslations` directly.
+    // メモ: クライアントコンポーネントでは `useParams` や props を使用しますが、
+    // サーバーコンポーネントでは `useTranslations` を直接使用できます。
     const t = await getTranslations('Home');
     const lang = (await params).lang;
 
-    // Categories data with translations
-    // MVP: Priority display of Works, Composers, Theory, Eras
+    // カテゴリデータ (翻訳付き)
+    // MVP: 作品、作曲家、理論、時代 の優先表示
     const categories = [
         { id: 'works', color: 'bg-blue-50 text-blue-700' },
         { id: 'composers', color: 'bg-amber-50 text-amber-700' },
@@ -22,14 +22,14 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         { id: 'eras', color: 'bg-rose-50 text-rose-700' },
     ];
 
-    // Featured Work Data (Mock)
+    // おすすめ作品データ (モック)
     const featuredWork = {
         label: t('categories.works.name'), // Use category name from dictionary
         title: 'Prelude in C Major, BWV 846',
         description: lang === 'ja'
             ? 'J.S.バッハ『平均律クラヴィーア曲集』第1巻より。機能和声の基礎と、アルペジオ（分散和音）の美しさを紐解く。'
             : 'An in-depth analysis of Bach\'s masterpiece from The Well-Tempered Clavier. Understand functionality of harmony and the beauty of arpeggios.',
-        link: `/${lang}/works/prelude-c-major`
+        link: '/works/bach/prelude-1' // next-intl Link に合わせた相対パス
     };
 
     return (
@@ -45,13 +45,13 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                     </p>
                     <div className="flex justify-center gap-4">
                         <Link
-                            href={`/${lang}/works`}
+                            href="/works"
                             className="rounded-full bg-preludio-black px-8 py-3 text-sm font-semibold text-paper-white shadow-lg transition hover:bg-gray-800"
                         >
                             {t('hero.explore')}
                         </Link>
                         <Link
-                            href={`/${lang}/about`}
+                            href="/about"
                             className="rounded-full bg-paper-white px-8 py-3 text-sm font-semibold text-preludio-black shadow-sm ring-1 ring-inset ring-gray-300 transition hover:bg-gray-50"
                         >
                             {t('hero.about')}
@@ -65,7 +65,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                 <h2 className="mb-12 text-center text-3xl font-bold text-preludio-black">{t('discover')}</h2>
                 <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
                     {categories.map((cat) => (
-                        <Link key={cat.id} href={`/${lang}/${cat.id}`} className={`group relative block overflow-hidden rounded-2xl p-8 transition hover:shadow-md ${cat.color}`}>
+                        <Link key={cat.id} href={`/${cat.id}`} className={`group relative block overflow-hidden rounded-2xl p-8 transition hover:shadow-md ${cat.color}`}>
                             <h3 className="mb-2 text-xl font-bold">{t(`categories.${cat.id}.name`)}</h3>
                             <p className="text-sm opacity-80">{t(`categories.${cat.id}.desc`)}</p>
                         </Link>

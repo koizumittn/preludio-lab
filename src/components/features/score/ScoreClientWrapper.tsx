@@ -42,16 +42,16 @@ interface ScoreClientWrapperProps {
 /**
  * [REQ-UI-SCORE-WRAPPER] Score Client Wrapper
  * 
- * Wraps the ScoreRenderer with interactive features (Play Button).
- * Handles parsing of ABC directives for per-excerpt audio metadata.
+ * ScoreRenderer をラップし、インタラクティブ機能（再生ボタンなど）を提供します。
+ * ABC記法のディレクティブを解析し、抜粋ごとのオーディオメタデータを処理します。
  */
 export default function ScoreClientWrapper({ abc, audioMetadata }: ScoreClientWrapperProps) {
     const { play } = useAudioPlayer();
 
     /**
-     * Parses custom ABC directives (%%audio_*) to override metadata.
-     * @param abcContent - The raw ABC string
-     * @returns Parsed directives object
+     * カスタム ABC ディレクティブ (%%audio_*) を解析し、メタデータをオーバーライドします。
+     * @param abcContent - 生の ABC 文字列
+     * @returns 解析されたディレクティブ・オブジェクト
      */
     const parseAudioDirectives = (abcContent: string) => {
         const directives: any = {};
@@ -106,17 +106,16 @@ export default function ScoreClientWrapper({ abc, audioMetadata }: ScoreClientWr
     let effectiveMetadata = null;
 
     if (abcDirectives.videoId) {
-        // [Video Context Reset Rule]
-        // If ABC specifies a Video ID, we treat it as a completely new source.
-        // We do NOT inherit any metadata from Frontmatter to avoid mixing contexts 
-        // (e.g. displaying "Lang Lang" for a "Glenn Gould" video ref).
+        // [動画コンテキストのリセットルール]
+        // ABC指定でビデオIDがある場合、完全に新しいソースとして扱います。
+        // Frontmatterからのメタデータ継承は行わず、コンテキストの混在（例: グールドの動画再生中にラン・ランのメタデータが表示される等）を防ぎます。
         effectiveMetadata = {
             ...abcDirectives
-            // Note: startTime/endTime from directives are used directly here.
+            // メモ: directivesからの startTime/endTime はここで直接使用されます
         };
     } else if (audioMetadata) {
-        // [Standard Inheritance with Time Reset]
-        // Same video source, inheriting metadata BUT resetting time if overridden.
+        // [標準的な継承と時間リセット]
+        // 同一ビデオソースの場合はメタデータを継承しますが、時間が指定されている場合はリセットします。
         const hasAbcTime = abcDirectives.startTime !== undefined || abcDirectives.endTime !== undefined;
         effectiveMetadata = {
             ...audioMetadata,
@@ -156,10 +155,10 @@ export default function ScoreClientWrapper({ abc, audioMetadata }: ScoreClientWr
             <ScoreRenderer abc={abc} />
 
             {effectiveMetadata && effectiveMetadata.videoId && (
-                <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                <div className="absolute top-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity z-10 m-1">
                     <button
                         onClick={handlePlay}
-                        className="flex items-center gap-2 rounded-full bg-gray-900 text-white px-4 py-2 shadow-md hover:bg-black hover:scale-105 transition-all text-sm font-medium"
+                        className="flex items-center gap-1.5 rounded-full bg-gray-900/90 text-white px-3 py-1.5 shadow-sm hover:bg-black hover:scale-105 transition-all text-xs font-medium backdrop-blur-sm"
                     >
                         <span>▶ Play Audio</span>
                     </button>
