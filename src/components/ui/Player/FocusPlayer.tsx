@@ -2,6 +2,7 @@
 
 import React, { useRef, useState } from 'react';
 import { useAudioPlayer } from '@/components/providers/AudioPlayerContext';
+import { PlayerPlatform } from '@/domain/player/constants';
 // Helper for time formatting if not available
 const formatTimeHelper = (seconds: number) => {
     if (!seconds || isNaN(seconds)) return '00:00';
@@ -137,7 +138,7 @@ export function FocusPlayer() {
                                 className="inline-flex items-center gap-1.5 mt-2 px-3 py-1 rounded-full text-xs font-medium text-gray-400 border border-gray-200 hover:text-preludio-black hover:border-gray-400 transition-all group"
                             >
                                 {/* Icon Switcher based on platform */}
-                                {platform === 'youtube' ? (
+                                {platform === PlayerPlatform.YOUTUBE ? (
                                     <svg className="w-3 h-3 transition-colors group-hover:text-[#FF0000]" fill="currentColor" viewBox="0 0 24 24">
                                         <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
                                     </svg>
@@ -157,7 +158,7 @@ export function FocusPlayer() {
                         ) : (
                             <div className="inline-flex items-center gap-1.5 mt-2 px-3 py-1 rounded-full text-xs font-medium text-gray-400 border border-gray-200">
                                 {/* Icon Switcher based on platform */}
-                                {platform === 'youtube' ? (
+                                {platform === PlayerPlatform.YOUTUBE ? (
                                     <svg className="w-3 h-3 text-[#FF0000]" fill="currentColor" viewBox="0 0 24 24">
                                         <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
                                     </svg>

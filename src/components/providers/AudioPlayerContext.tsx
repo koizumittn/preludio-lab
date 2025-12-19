@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useCallback, useMemo, useRef } from 'react';
+import { PlayerPlatform, PlayerPlatformType } from '@/domain/player/constants';
 
 export type PlayerMode = 'hidden' | 'mini' | 'focus';
 
@@ -39,7 +40,7 @@ export interface PlayerState {
     /** プラットフォームの表示ラベル (例: "Watch on YouTube") */
     platformLabel: string | null;
     /** プラットフォーム種別 (将来的な拡張用) */
-    platform: 'youtube' | 'default' | null;
+    platform: PlayerPlatformType | null;
     /** プレイヤーの準備が完了したか */
     isReady: boolean;
     /** 音量 (0-100) */

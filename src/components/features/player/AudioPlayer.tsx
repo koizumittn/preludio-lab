@@ -2,11 +2,12 @@
 
 import React from 'react';
 import { YouTubeAdapter } from './adapters/YouTubeAdapter';
+import { PlayerPlatform, PlayerPlatformType } from '@/domain/player/constants';
 
 export interface AudioPlayerProps {
     // State (データ)
     src: string; // 動画ID または URL
-    platform?: 'youtube' | 'default'; // 将来的な拡張用、現状は youtube のみ実装
+    platform?: PlayerPlatformType; // 将来的な拡張用、現状は youtube のみ実装
 
     // Control State (制御状態)
     isPlaying: boolean;
@@ -34,9 +35,9 @@ export interface AudioPlayerProps {
  * `platform` プロパティに基づいて適切なアダプター（現在は YouTubeAdapter のみ）を選択してレンダリングします。
  */
 export function AudioPlayer(props: AudioPlayerProps) {
-    const { platform = 'youtube' } = props;
+    const { platform = PlayerPlatform.YOUTUBE } = props;
 
-    if (platform !== 'youtube') {
+    if (platform !== PlayerPlatform.YOUTUBE) {
         return <div className="hidden">Unsupported Platform</div>;
     }
 

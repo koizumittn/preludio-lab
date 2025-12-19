@@ -3,6 +3,7 @@
 import { Skeleton } from '@/components/ui/Skeleton';
 import dynamic from 'next/dynamic';
 import { useAudioPlayer } from '@/components/providers/AudioPlayerContext';
+import { PlayerPlatform, PlayerPlatformType } from '@/domain/player/constants';
 import { handleClientError } from '@/utils/client-error-handler';
 
 const ScoreRenderer = dynamic(
@@ -34,7 +35,7 @@ interface ScoreClientWrapperProps {
         artworkSrc?: string;
         platformUrl?: string; // e.g. "https://youtube.com/..."
         platformLabel?: string; // e.g. "Watch on YouTube"
-        platform?: 'youtube' | 'default';
+        platform?: PlayerPlatformType;
         startSeconds?: number;
         endSeconds?: number;
         // Legacy support
@@ -144,7 +145,7 @@ export default function ScoreClientWrapper({ abc, audioMetadata }: ScoreClientWr
                         artworkSrc: effectiveMetadata.artworkSrc,
                         platformUrl: effectiveMetadata.platformUrl || (effectiveMetadata.videoId ? `https://www.youtube.com/watch?v=${effectiveMetadata.videoId}` : undefined),
                         platformLabel: effectiveMetadata.platformLabel || 'Watch on YouTube',
-                        platform: effectiveMetadata.platform || effectiveMetadata.platformType || 'youtube',
+                        platform: (effectiveMetadata.platform as PlayerPlatformType) || (effectiveMetadata.platformType as PlayerPlatformType) || PlayerPlatform.YOUTUBE,
                     },
                     {
                         startSeconds: effectiveMetadata.startSeconds || effectiveMetadata.startTime, // Support both for now
