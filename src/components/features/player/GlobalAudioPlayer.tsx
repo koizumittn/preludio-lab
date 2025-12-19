@@ -98,6 +98,7 @@ export default function GlobalAudioPlayer() {
             seekTo={seekTrigger}
             onReady={handleReady}
             onProgress={handleProgress}
+            onDuration={_onDuration}
             onEnded={handleEnded}
             onError={handleError}
             onStateChange={handleStateChange}

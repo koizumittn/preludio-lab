@@ -22,6 +22,7 @@ export interface AudioPlayerProps {
     // Events (イベント)
     onReady: (duration: number) => void;
     onProgress: (currentTime: number) => void;
+    onDuration?: (duration: number) => void;
     onEnded: () => void;
     onError: (error: any) => void;
     onStateChange?: (isPlaying: boolean) => void;

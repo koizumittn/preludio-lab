@@ -20,6 +20,7 @@ export function YouTubeAdapter({
     playbackId,
     onReady,
     onProgress,
+    onDuration,
     onEnded,
     onError,
     onStateChange
@@ -172,6 +173,7 @@ export function YouTubeAdapter({
         const duration = event.target.getDuration();
         if (duration > 0) {
             // 必要に応じてDurationを更新（ライブ配信やロード完了時など）
+            if (onDuration) onDuration(duration);
         }
 
         if (state === 1) { // 再生中
