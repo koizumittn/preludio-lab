@@ -1,54 +1,108 @@
 'use client';
 
-import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
+import React, { createContext, useContext, useState, useCallback, useMemo, useRef } from 'react';
 
 export type PlayerMode = 'hidden' | 'mini' | 'focus';
 
+// Define a type for the player instance proxy
+// This should match the methods available on the actual player object (e.g., YouTube Player API)
+export interface PlayerInstanceProxy {
+    seekTo: (time: number, allowSeekAhead: boolean) => void;
+    setVolume: (volume: number) => void;
+    // Add other methods as needed, e.g., playVideo, pauseVideo, etc.
+}
+
 export interface PlayerState {
+    /** 再生中かどうか */
     isPlaying: boolean;
+    /** 現在の再生時間 (秒) */
     currentTime: number;
+    /** メディアの総再生時間 (秒) */
     duration: number;
-    videoId: string | null;
+    /**
+     * メディアソースの識別子 (旧 videoId)
+     * YouTubeの場合はVideo ID、その他はURLなど
+     */
+    src: string | null;
+    /** プレイヤーの表示モード (hidden: 非表示, mini: ミニプレイヤー, focus: フォーカスモード) */
     mode: PlayerMode;
-    videoTitle: string | null;
-    videoComposer: string | null; // e.g. "J.S. Bach"
-    videoPerformer: string | null; // e.g. "Glenn Gould"
-    artworkSrc: string | null; // URL for the thumbnail/artwork
-    platformUrl: string | null; // e.g. "https://youtube.com/..."
-    platformLabel: string | null; // e.g. "Watch on YouTube"
-    platformType: 'youtube' | 'default' | null;
+    /** 楽曲タイトル */
+    title: string | null;
+    /** 作曲者名 (例: "J.S. Bach") */
+    composer: string | null;
+    /** 演奏者名 (例: "Glenn Gould") */
+    performer: string | null;
+    /** アートワーク画像のURL */
+    artworkSrc: string | null;
+    /** プラットフォームの元リンクURL (例: YouTubeの動画ページURL) */
+    platformUrl: string | null;
+    /** プラットフォームの表示ラベル (例: "Watch on YouTube") */
+    platformLabel: string | null;
+    /** プラットフォーム種別 (将来的な拡張用) */
+    platform: 'youtube' | 'default' | null;
+    /** プレイヤーの準備が完了したか */
     isReady: boolean;
+    /** 音量 (0-100) */
     volume: number;
-    startTime?: number;
-    endTime?: number;
-    playbackId: number; // Increment on every explicit play request
+    /** 再生開始位置 (秒) - 指定された場合、この時間より前にはシークできない等の制限に使われる */
+    startSeconds?: number;
+    /** 再生終了位置 (秒) - 指定された場合、この時間で停止する */
+    endSeconds?: number;
+    /** 再生リクエストの度にインクリメントされるID (useEffectのトリガー用) */
+    playbackId: number;
 }
 
 export interface PlayerActions {
+    /**
+     * 再生を開始する
+     * @param src メディアソースID (YouTube ID等)
+     * @param metadata 楽曲メタデータ (タイトル、作曲者等)
+     * @param options 再生オプション (開始・終了時間等)
+     */
     play: (
-        videoId?: string,
-        meta?: {
+        src?: string,
+        metadata?: {
             title?: string;
             composer?: string;
             performer?: string;
             artworkSrc?: string;
             platformUrl?: string;
             platformLabel?: string;
-            platformType?: 'youtube' | 'default';
+            platform?: 'youtube' | 'default';
         },
-        options?: { startTime?: number; endTime?: number }
+        options?: { startSeconds?: number; endSeconds?: number }
     ) => void;
+    /** 一時停止する */
     pause: () => void;
+    /** 再生/一時停止を切り替える */
     togglePlay: () => void;
+    /**
+     * 指定した時間にシークする
+     * @param time 秒単位の時間
+     */
     seekTo: (time: number) => void;
+    /**
+     * 音量を設定する
+     * @param volume 0-100の数値
+     */
     setVolume: (volume: number) => void;
+    /** 表示モードを設定する */
     setMode: (mode: PlayerMode) => void;
+    /**
+     * 内部プレイヤーインスタンスを設定する (GlobalAudioPlayer等のSmart Componentから呼ばれる)
+     * @param instance プレイヤー操作用プロキシオブジェクト
+     */
+    setPlayerInstance: (instance: PlayerInstanceProxy | null) => void;
 
-    // Internal use by YouTubePlayer component
+    // Internal callbacks (used by player component)
+    /** 内部用: プレイヤー準備完了コールバック */
     _onReady: (duration: number) => void;
-    _onProgress: (currentTime: number) => void;
-    _onDuration: (duration: number) => void;
+    /** 内部用: 再生状態変更コールバック */
     _onStateChange: (isPlaying: boolean) => void;
+    /** 内部用: 再生進捗コールバック */
+    _onProgress: (currentTime: number) => void;
+    /** 内部用: 再生時間更新コールバック */
+    _onDuration: (duration: number) => void;
 }
 
 export const AudioPlayerContext = createContext<(PlayerState & PlayerActions) | null>(null);
@@ -66,88 +120,110 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
         isPlaying: false,
         currentTime: 0,
         duration: 0,
-        videoId: null,
+        src: null,
         mode: 'hidden',
-        videoTitle: null,
-        videoComposer: null,
-        videoPerformer: null,
+        title: null,
+        composer: null,
+        performer: null,
         artworkSrc: null,
         platformUrl: null,
         platformLabel: null,
-        platformType: null,
+        platform: null,
         isReady: false,
         volume: 100,
-        startTime: undefined,
-        endTime: undefined,
+        startSeconds: undefined,
+        endSeconds: undefined,
         playbackId: 0,
     });
 
-    // NOTE: We need a mechanism to communicate with the YouTube Player instance.
-    // In a cleaner architecture, we might use a ref exposed by the player,
-    // but since the Player component is likely a sibling, we might need an Event Bus or 
-    // simply expose 'requests' in the state that the player listens to.
-    // simpler approach for now: The Context holds the "Truth", the Player component listens to it.
-    // HOWEVER, `seekTo` is imperative.
-    // Let's use a Mutable Ref for imperative commands to avoid re-renders or complex state flags for "seek request".
+    // NOTE: YouTube Playerインスタンスと通信する仕組みが必要です。
+    // よりクリーンなアーキテクチャでは、プレイヤーが公開するRefを使用する手もありますが、
+    // Playerコンポーネントは（Contextの）兄弟要素になる可能性が高いため、Event Busを使うか、
+    // あるいはプレイヤーが監視する「リクエスト」をステートとして公開する必要があります。
+    // 現時点でのシンプルなアプローチ: Contextが「正（Source of Truth）」を持ち、Playerコンポーネントがそれを監視します。
+    // ただし、`seekTo` は命令的な操作です。
+    // 再レンダリングや「シークリクエスト」等の複雑なステートフラグを避けるため、
+    // 命令的なコマンドには Mutable Ref を使用することにします。
 
-    // Actually, for React wrapper of Youtube, checking props change is enough for Play/Pause/VideoId.
-    // But SeekTo usually requires calling an instance method.
-    // Let's add a "seekRequest" timestamp/value to state? 
-    // Or better, expose a registration callback for the player.
-    const playerRef = React.useRef<any>(null); // Holds the YouTube Player object
+    // 実際、YouTubeのReactラッパー等は、Play/Pause/VideoId についてはPropsの変更検知で十分です。
+    // しかし、SeekTo は通常、インスタンスメソッドの呼び出しが必要です。
+    // ステートに "seekRequest" を追加する案もありますが、
+    // ここではプレイヤー側から登録するためのコールバックを公開する方がスマートでしょう。
+    const playerRef = useRef<PlayerInstanceProxy | null>(null); // Holds the YouTube Player object
 
-    const setPlayerInstance = useCallback((player: any) => {
-        playerRef.current = player;
+    const setPlayerInstance = useCallback((instance: PlayerInstanceProxy | null) => {
+        playerRef.current = instance;
+    }, []);
+
+    // --- Internal Callbacks from Player Component ---
+
+    const _onReady = useCallback((duration: number) => {
+        setState((prev) => ({ ...prev, isReady: true, duration }));
+    }, []);
+
+    const _onProgress = useCallback((currentTime: number) => {
+        setState((prev) => ({ ...prev, currentTime }));
+    }, []);
+
+    const _onStateChange = useCallback((isPlaying: boolean) => {
+        // Only update if different to avoid loops, though likely fine
+        setState((prev) => {
+            if (prev.isPlaying === isPlaying) return prev;
+            return { ...prev, isPlaying };
+        });
+    }, []);
+
+    const _onDuration = useCallback((duration: number) => {
+        setState((prev) => ({ ...prev, duration }));
     }, []);
 
     const play = useCallback((
-        videoId?: string,
-        meta?: {
+        src?: string,
+        metadata?: {
             title?: string;
             composer?: string;
             performer?: string;
             artworkSrc?: string;
             platformUrl?: string;
             platformLabel?: string;
-            platformType?: 'youtube' | 'default';
+            platform?: 'youtube' | 'default';
         },
-        options?: { startTime?: number; endTime?: number }
+        options?: { startSeconds?: number; endSeconds?: number }
     ) => {
         setState((prev) => {
             const newState = { ...prev, isPlaying: true, playbackId: prev.playbackId + 1 };
-            if (videoId && videoId !== prev.videoId) {
-                newState.videoId = videoId;
-                newState.currentTime = 0; // Reset time on new video
+            if (src && src !== prev.src) {
+                newState.src = src;
+                newState.currentTime = 0; // Reset time on new source
                 if (prev.mode === 'hidden') {
                     newState.mode = 'mini';
                 }
-                // Reset metadata if new video
-                newState.videoTitle = null;
-                newState.videoComposer = null;
-                newState.videoPerformer = null;
+                // Reset metadata if new source
+                newState.title = null;
+                newState.composer = null;
+                newState.performer = null;
                 newState.artworkSrc = null;
                 newState.platformUrl = null;
                 newState.platformLabel = null;
-                newState.platformType = null;
+                newState.platform = null;
             }
-            if (meta) {
-                if (meta.title) newState.videoTitle = meta.title;
-                if (meta.composer) newState.videoComposer = meta.composer;
-                if (meta.performer) newState.videoPerformer = meta.performer;
-                if (meta.artworkSrc) newState.artworkSrc = meta.artworkSrc;
-                if (meta.platformUrl) newState.platformUrl = meta.platformUrl;
-                if (meta.platformLabel) newState.platformLabel = meta.platformLabel;
-                if (meta.platformType) newState.platformType = meta.platformType;
+            if (metadata) {
+                if (metadata.title) newState.title = metadata.title;
+                if (metadata.composer) newState.composer = metadata.composer;
+                if (metadata.performer) newState.performer = metadata.performer;
+                if (metadata.artworkSrc) newState.artworkSrc = metadata.artworkSrc;
+                if (metadata.platformUrl) newState.platformUrl = metadata.platformUrl;
+                if (metadata.platformLabel) newState.platformLabel = metadata.platformLabel;
+                if (metadata.platform) newState.platform = metadata.platform;
             }
             if (options) {
-                newState.startTime = options.startTime;
-                newState.endTime = options.endTime;
+                newState.startSeconds = options.startSeconds;
+                newState.endSeconds = options.endSeconds;
             } else {
-                // If checking a new video without options, reset bounds? 
-                // Or keep them? Usually reset.
-                if (videoId && videoId !== prev.videoId) {
-                    newState.startTime = undefined;
-                    newState.endTime = undefined;
+                // If checking a new source without options, reset bounds? 
+                if (src && src !== prev.src) {
+                    newState.startSeconds = undefined;
+                    newState.endSeconds = undefined;
                 }
             }
             return newState;
@@ -180,27 +256,7 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
         setState((prev) => ({ ...prev, mode }));
     }, []);
 
-    // --- Internal Callbacks from Player Component ---
 
-    const _onReady = useCallback((duration: number) => {
-        setState((prev) => ({ ...prev, isReady: true, duration }));
-    }, []);
-
-    const _onProgress = useCallback((currentTime: number) => {
-        setState((prev) => ({ ...prev, currentTime }));
-    }, []);
-
-    const _onDuration = useCallback((duration: number) => {
-        setState((prev) => ({ ...prev, duration }));
-    }, []);
-
-    const _onStateChange = useCallback((isPlaying: boolean) => {
-        // Only update if different to avoid loops, though likely fine
-        setState((prev) => {
-            if (prev.isPlaying === isPlaying) return prev;
-            return { ...prev, isPlaying };
-        });
-    }, []);
 
     const value = useMemo(() => ({
         ...state,
@@ -227,6 +283,6 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
 // Extend the interface to include the internal setter
 declare module './AudioPlayerContext' {
     interface PlayerActions {
-        setPlayerInstance: (player: any) => void;
+        setPlayerInstance: (instance: PlayerInstanceProxy | null) => void;
     }
 }

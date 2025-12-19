@@ -16,7 +16,7 @@ import { AudioPlayer } from './AudioPlayer';
  */
 export default function GlobalAudioPlayer() {
     const {
-        videoId,
+        src,
         isPlaying,
         volume,
         setPlayerInstance,
@@ -24,8 +24,8 @@ export default function GlobalAudioPlayer() {
         _onStateChange,
         _onProgress,
         _onDuration,
-        startTime,
-        endTime,
+        startSeconds,
+        endSeconds,
         playbackId,
         seekTo, // Context上は関数だが、Dumb Componentへは値として渡す必要がある
         // メモ: 現在のContext実装は `playerRef.current.seekTo` を直接操作する命令的な設計になっている。
@@ -82,16 +82,16 @@ export default function GlobalAudioPlayer() {
         _onStateChange(playing);
     }, [_onStateChange]);
 
-    if (!videoId) return null;
+    if (!src) return null;
 
     return (
         <AudioPlayer
-            src={videoId}
+            src={src}
             platform="youtube"
             isPlaying={isPlaying}
             volume={volume}
-            startTime={startTime}
-            endTime={endTime}
+            startTime={startSeconds} // Adapter uses generic name, mapping from Context's startSeconds
+            endTime={endSeconds}
             playbackId={playbackId}
             seekTo={seekTrigger}
             onReady={handleReady}

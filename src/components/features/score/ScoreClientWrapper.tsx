@@ -26,14 +26,18 @@ const ScoreRenderer = dynamic(
 interface ScoreClientWrapperProps {
     abc: string;
     audioMetadata?: {
-        videoId: string;
+        videoId?: string; // Legacy support (mapped to src)
+        src?: string;     // New generic field
         title?: string;
         composer?: string;
         performer?: string;
         artworkSrc?: string;
         platformUrl?: string; // e.g. "https://youtube.com/..."
         platformLabel?: string; // e.g. "Watch on YouTube"
-        platformType?: 'youtube' | 'default';
+        platform?: 'youtube' | 'default';
+        startSeconds?: number;
+        endSeconds?: number;
+        // Legacy support
         startTime?: number;
         endTime?: number;
     };
@@ -120,28 +124,31 @@ export default function ScoreClientWrapper({ abc, audioMetadata }: ScoreClientWr
         effectiveMetadata = {
             ...audioMetadata,
             ...abcDirectives,
-            startTime: hasAbcTime ? abcDirectives.startTime : audioMetadata.startTime,
-            endTime: hasAbcTime ? abcDirectives.endTime : audioMetadata.endTime
+            startSeconds: hasAbcTime ? abcDirectives.startTime : (audioMetadata.startSeconds || audioMetadata.startTime),
+            endSeconds: hasAbcTime ? abcDirectives.endTime : (audioMetadata.endSeconds || audioMetadata.endTime)
         };
     }
 
     const handlePlay = () => {
         try {
-            if (effectiveMetadata && effectiveMetadata.videoId) {
+            // Map legacy videoId to src if needed
+            const src = effectiveMetadata?.src || effectiveMetadata?.videoId;
+
+            if (effectiveMetadata && src) {
                 play(
-                    effectiveMetadata.videoId,
+                    src,
                     {
                         title: effectiveMetadata.title || 'Audio Recording',
                         composer: effectiveMetadata.composer,
                         performer: effectiveMetadata.performer,
                         artworkSrc: effectiveMetadata.artworkSrc,
-                        platformUrl: effectiveMetadata.platformUrl || `https://www.youtube.com/watch?v=${effectiveMetadata.videoId}`,
+                        platformUrl: effectiveMetadata.platformUrl || (effectiveMetadata.videoId ? `https://www.youtube.com/watch?v=${effectiveMetadata.videoId}` : undefined),
                         platformLabel: effectiveMetadata.platformLabel || 'Watch on YouTube',
-                        platformType: effectiveMetadata.platformType || 'youtube',
+                        platform: effectiveMetadata.platform || effectiveMetadata.platformType || 'youtube',
                     },
                     {
-                        startTime: effectiveMetadata.startTime,
-                        endTime: effectiveMetadata.endTime
+                        startSeconds: effectiveMetadata.startSeconds || effectiveMetadata.startTime, // Support both for now
+                        endSeconds: effectiveMetadata.endSeconds || effectiveMetadata.endTime
                     }
                 );
             }

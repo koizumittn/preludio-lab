@@ -10,24 +10,24 @@ export function MiniPlayer() {
     const {
         mode,
         setMode,
-        videoTitle,
-        videoComposer,
-        videoPerformer,
+        title,
+        composer,
+        performer,
         artworkSrc,
         isPlaying,
         togglePlay,
         currentTime,
         duration,
         seekTo,
-        startTime,
-        endTime
+        startSeconds,
+        endSeconds
     } = useAudioPlayer();
 
     if (mode === 'hidden' || mode === 'focus') return null;
 
     // Virtual Timeline Calculations
-    const startOffset = startTime || 0;
-    const endCap = endTime || duration;
+    const startOffset = startSeconds || 0;
+    const endCap = endSeconds || duration;
     const displayDuration = Math.max(0, endCap - startOffset);
     const rawDisplayTime = Math.max(0, currentTime - startOffset);
 
@@ -67,7 +67,7 @@ export function MiniPlayer() {
                     {/* Artwork */}
                     <div className={`h-10 w-10 bg-gray-300 rounded-md flex-shrink-0 overflow-hidden relative ${isPlaying ? 'animate-pulse-slow' : ''}`}>
                         {artworkSrc ? (
-                            <img src={artworkSrc} alt={videoTitle || 'Artwork'} className="w-full h-full object-cover" />
+                            <img src={artworkSrc} alt={title || 'Artwork'} className="w-full h-full object-cover" />
                         ) : (
                             <div className="w-full h-full bg-gray-300" />
                         )}
@@ -75,10 +75,10 @@ export function MiniPlayer() {
 
                     <div className="min-w-0 pr-4">
                         <div className="text-sm font-bold text-preludio-black truncate">
-                            {videoTitle || 'Loading...'}
+                            {title || 'Loading...'}
                         </div>
                         <div className="text-xs text-gray-500 truncate">
-                            {videoComposer}{videoPerformer ? ` (${videoPerformer})` : ''}
+                            {composer}{performer ? ` (${performer})` : ''}
                         </div>
                     </div>
                 </div>

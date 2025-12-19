@@ -15,20 +15,20 @@ export function FocusPlayer() {
     const {
         mode,
         setMode,
-        videoTitle,
-        videoComposer,
-        videoPerformer,
+        title,
+        composer,
+        performer,
         artworkSrc,
-        platformUrl,
         platformLabel,
-        platformType,
+        platformUrl,
+        platform,
         isPlaying,
         togglePlay,
         currentTime,
         duration,
         seekTo,
-        startTime,
-        endTime
+        startSeconds,
+        endSeconds
     } = useAudioPlayer();
 
     const [isDragging, setIsDragging] = useState(false);
@@ -37,8 +37,8 @@ export function FocusPlayer() {
     if (mode !== 'focus') return null;
 
     // Virtual Timeline Calculations
-    const startOffset = startTime || 0;
-    const endCap = endTime || duration;
+    const startOffset = startSeconds || 0;
+    const endCap = endSeconds || duration;
     // Prevent negative duration if data isn't ready
     const displayDuration = Math.max(0, endCap - startOffset);
     // Clamp current time to 0 for UI (don't show negative if player is buffering before start)
@@ -98,7 +98,7 @@ export function FocusPlayer() {
                     ${isPlaying ? 'scale-100' : 'scale-95 opacity-90'}
                 `}>
                     {artworkSrc ? (
-                        <img src={artworkSrc} alt={videoTitle || 'Artwork'} className="w-full h-full object-cover" />
+                        <img src={artworkSrc} alt={title || 'Artwork'} className="w-full h-full object-cover" />
                     ) : (
                         <div className="w-full h-full flex items-center justify-center text-gray-300">
                             {/* Music Note Icon */}
@@ -112,50 +112,68 @@ export function FocusPlayer() {
                 {/* Metadata */}
                 <div className="text-center space-y-2 flex flex-col items-center">
                     <h2 className="text-2xl font-serif font-bold text-preludio-black leading-tight max-w-md mx-auto">
-                        {videoTitle || 'Unknown Title'}
+                        {title || 'Unknown Title'}
                     </h2>
                     <p className="text-lg text-classic-gold font-medium">
-                        {videoComposer || 'Unknown Composer'}
+                        {composer || 'Unknown Composer'}
                     </p>
-                    {videoPerformer && (
+                    {performer && (
                         <p className="text-sm text-gray-500 font-medium">
-                            {videoPerformer}
+                            {performer}
                         </p>
                     )}
 
                     {/* Attribution Link */}
-                    {platformUrl && platformLabel && (
-                        <a
-                            href={platformUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={() => {
-                                if (isPlaying) togglePlay();
-                            }}
-                            className="inline-flex items-center gap-1.5 mt-2 px-3 py-1 rounded-full text-xs font-medium text-gray-400 border border-gray-200 hover:text-preludio-black hover:border-gray-400 transition-all group"
-                        >
-                            {/* Icon Switcher based on platformType */}
-                            {platformType === 'youtube' ? (
-                                <svg className="w-3 h-3 transition-colors group-hover:text-[#FF0000]" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-                                </svg>
-                            ) : (
-                                /* Default External Link Icon */
-                                <svg className="w-3 h-3 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    {platformLabel && (
+                        platformUrl ? (
+                            <a
+                                href={platformUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (isPlaying) togglePlay();
+                                }}
+                                className="inline-flex items-center gap-1.5 mt-2 px-3 py-1 rounded-full text-xs font-medium text-gray-400 border border-gray-200 hover:text-preludio-black hover:border-gray-400 transition-all group"
+                            >
+                                {/* Icon Switcher based on platform */}
+                                {platform === 'youtube' ? (
+                                    <svg className="w-3 h-3 transition-colors group-hover:text-[#FF0000]" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                                    </svg>
+                                ) : (
+                                    /* Default External Link Icon */
+                                    <svg className="w-3 h-3 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                    </svg>
+                                )}
+
+                                <span>{platformLabel}</span>
+                                <span className="w-px h-3 bg-gray-300 mx-1"></span>
+                                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                                 </svg>
-                            )}
-
-                            <span>{platformLabel}</span>
-
-                            <span className="w-px h-3 bg-gray-300 mx-1"></span>
-                            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                            </svg>
-                        </a>
+                            </a>
+                        ) : (
+                            <div className="inline-flex items-center gap-1.5 mt-2 px-3 py-1 rounded-full text-xs font-medium text-gray-400 border border-gray-200">
+                                {/* Icon Switcher based on platform */}
+                                {platform === 'youtube' ? (
+                                    <svg className="w-3 h-3 text-[#FF0000]" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                                    </svg>
+                                ) : (
+                                    /* Default External Link Icon */
+                                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                    </svg>
+                                )}
+                                <span>{platformLabel}</span>
+                            </div>
+                        )
                     )}
                 </div>
             </div>
+
 
             {/* Controls */}
             <div className="px-6 py-12 sm:px-12 max-w-3xl mx-auto w-full space-y-6">
@@ -204,6 +222,6 @@ export function FocusPlayer() {
                     </button>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }

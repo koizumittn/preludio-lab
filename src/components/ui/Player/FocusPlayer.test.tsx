@@ -6,18 +6,18 @@ import { AudioPlayerContext } from '../../providers/AudioPlayerContext';
 // Mock context value helper
 const mockContextValue = (overrides = {}) => ({
     isPlaying: false,
-    videoId: null,
+    src: null,
     currentTime: 0,
     duration: 0,
     volume: 100,
     mode: 'focus' as const,
-    videoTitle: 'Test Title',
-    videoComposer: 'Test Composer',
-    videoPerformer: 'Test Performer',
+    title: 'Test Title',
+    composer: 'Test Composer',
+    performer: 'Test Performer',
     artworkSrc: null,
     platformUrl: null,
     platformLabel: null,
-    platformType: null,
+    platform: null,
     isReady: true,
     play: vi.fn(),
     pause: vi.fn(),
@@ -30,6 +30,8 @@ const mockContextValue = (overrides = {}) => ({
     _onStateChange: vi.fn(),
     _onProgress: vi.fn(),
     _onDuration: vi.fn(),
+    startSeconds: undefined,
+    endSeconds: undefined,
     playbackId: 0,
     ...overrides,
 });
@@ -51,7 +53,7 @@ describe('FocusPlayer', () => {
             <AudioPlayerContext.Provider value={mockContextValue({
                 platformUrl: 'https://youtube.com/watch?v=123',
                 platformLabel: 'Watch on YouTube',
-                platformType: 'youtube'
+                platform: 'youtube'
             })}>
                 <FocusPlayer />
             </AudioPlayerContext.Provider>
