@@ -1,5 +1,6 @@
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { notFound } from 'next/navigation';
+import Link from 'next/link';
 import rehypeSlug from 'rehype-slug';
 import GithubSlugger from 'github-slugger';
 import { TableOfContents } from '@/components/content/TableOfContents';
@@ -97,6 +98,33 @@ export default async function WorkPage({
 
     // Custom components for MDX (defined here to capture audioMetadata)
     const components = {
+        a: (props: any) => {
+            const href = props.href;
+            const isInternal = href && (href.startsWith('/') || href.startsWith('#'));
+
+            if (isInternal) {
+                // Determine normalized href
+                // If it's a hash link, keep it as is
+                // If it's a root link (/foo), prepend lang if needed?
+                // Actually, user writes content like [Home](/) or [Works](/works). 
+                // We should prepend `/${lang}` unless it already has it (unlikely in pure content).
+
+                let finalHref = href;
+                if (href.startsWith('/') && !href.startsWith('#')) {
+                    // Simple heuristic: if it doesn't start with /en, /ja etc, prepend.
+                    // But we have `lang` variable available here.
+                    finalHref = `/${lang}${href === '/' ? '' : href}`;
+                }
+
+                return (
+                    <Link href={finalHref} className={props.className} {...props}>
+                        {props.children}
+                    </Link>
+                );
+            }
+
+            return <a target="_blank" rel="noopener noreferrer" {...props} />;
+        },
         pre: (props: any) => {
             // Check if the child is a code element with language-abc class
             const codeProps = props.children?.props;
