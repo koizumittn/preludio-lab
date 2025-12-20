@@ -1,1 +1,1 @@
-export { default as AudioPlayerFeature } from './GlobalAudioPlayerClientWrapper';
+export { default as AudioPlayerFeature } from './AudioPlayerFeature';
