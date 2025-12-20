@@ -2,9 +2,9 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 import { notFound } from 'next/navigation';
 import rehypeSlug from 'rehype-slug';
 import GithubSlugger from 'github-slugger';
-import { TableOfContents } from '@/components/features/content/TableOfContents';
-import { SeriesNavigation } from '@/components/features/content/SeriesNavigation';
-import ScoreRenderer from '@/components/features/score';
+import { TableOfContents } from '@/components/content/TableOfContents';
+import { SeriesNavigation } from '@/components/content/SeriesNavigation';
+import ScoreRenderer from '@/components/score';
 import { MockPlayer } from '@/components/mock/MockPlayer';
 import { ListeningGuide } from '@/components/mock/ListeningGuide';
 // ... (imports remain)

@@ -18,7 +18,9 @@ src/
 │   └── (routes)/             # 各画面のルーティング
 ├── components/               # [UI Layer] React Components (Pure View)
 │   ├── ui/                   # 汎用 UI コンポーネント (Button, Card)
-│   └── features/             # [Feature Layer] 特定ドメイン機能に結合したコンポーネント (ScoreRenderer)
+│   ├── player/               # [Feature Layer] Player機能コンポーネント
+│   ├── content/              # [Feature Layer] Content機能コンポーネント
+│   └── score/                # [Feature Layer] Score機能コンポーネント
 │
 ├── domain/                   # [Domain Layer] ★最重要・外部依存ゼロ
 │   ├── [feature]/            # 機能単位でカプセル化 (例: player, content)

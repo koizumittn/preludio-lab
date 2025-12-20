@@ -4,9 +4,9 @@ import { Inter, Playfair_Display, Noto_Sans_JP, Zen_Old_Mincho, Noto_Sans_SC, No
 import '../globals.css';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { MiniPlayer } from '@/components/features/player/components/MiniPlayer';
-import { FocusPlayer } from '@/components/features/player/components/FocusPlayer';
-import { AudioPlayerFeature } from '@/components/features/player';
+import { MiniPlayer } from '@/components/player/MiniPlayer';
+import { FocusPlayer } from '@/components/player/FocusPlayer';
+import { AudioPlayerFeature } from '@/components/player';
 import { AppProviders } from '@/components/providers/AppProviders';
 import { ConsentBanner } from '@/components/ui/ConsentBanner';
 import { Toaster } from 'react-hot-toast';

@@ -1,8 +1,8 @@
 import { Link } from '@/infrastructure/i18n/navigation';
 import { getTranslations } from 'next-intl/server';
 import { SITE_NAME } from '@/lib/constants';
-import { SearchBox } from '@/components/features/search/SearchBox';
-import { LanguageSwitcher } from '@/components/features/i18n/LanguageSwitcher';
+import { SearchBox } from '@/components/search/SearchBox';
+import { LanguageSwitcher } from '@/components/i18n/LanguageSwitcher';
 
 interface HeaderProps {
     lang?: string;
