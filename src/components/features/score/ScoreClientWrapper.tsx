@@ -3,7 +3,7 @@
 import { Skeleton } from '@/components/ui/Skeleton';
 import dynamic from 'next/dynamic';
 import { useAudioPlayer } from '@/components/providers/AudioPlayerContext';
-import { PlayerPlatform, PlayerPlatformType } from '@/domain/player/constants';
+import { PlayerPlatform, PlayerPlatformType } from '@/domain/player/PlayerConstants';
 import { handleClientError } from '@/utils/client-error-handler';
 
 const ScoreRenderer = dynamic(

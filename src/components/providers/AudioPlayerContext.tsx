@@ -1,8 +1,8 @@
 'use client';
 
 import React, { createContext, useContext, useState, useCallback, useMemo, useRef } from 'react';
-import { PlayerPlatform, PlayerPlatformType } from '@/domain/player/constants';
-import { PlayRequestSchema } from '@/domain/player/schema';
+import { PlayerPlatform, PlayerPlatformType } from '@/domain/player/PlayerConstants';
+import { PlayRequestSchema } from '@/domain/player/Player';
 import { handleClientError } from '@/utils/client-error-handler';
 
 export type PlayerMode = 'hidden' | 'mini' | 'focus';

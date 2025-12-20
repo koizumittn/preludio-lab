@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { PlayerPlatform } from './constants';
+import { PlayerPlatform } from './PlayerConstants';
 
 /**
  * プレイヤー共有のバリデーションスキーマ定義

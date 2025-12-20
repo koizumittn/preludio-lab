@@ -1,5 +1,5 @@
 import pino from 'pino';
-import { ILogger } from '@/domain/shared/logger';
+import { ILogger } from '@/domain/shared/Logger';
 
 /**
  * Infrastructure Implementation: Pino Logger

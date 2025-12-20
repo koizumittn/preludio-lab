@@ -2,7 +2,7 @@
 
 import React, { useRef, useState } from 'react';
 import { useAudioPlayer } from '@/components/providers/AudioPlayerContext';
-import { PlayerPlatform } from '@/domain/player/constants';
+import { PlayerPlatform } from '@/domain/player/PlayerConstants';
 // Helper for time formatting if not available
 const formatTimeHelper = (seconds: number) => {
     if (!seconds || isNaN(seconds)) return '00:00';

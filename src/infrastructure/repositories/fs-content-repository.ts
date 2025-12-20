@@ -1,9 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
-import { ContentDetail, ContentSummary, MetadataSchema } from '@/domain/content/models';
-import { IContentRepository } from '@/domain/content/repository';
-import { ILogger } from '@/domain/shared/logger';
+import { ContentDetail, ContentSummary, MetadataSchema } from '@/domain/content/Content';
+import { IContentRepository } from '@/domain/content/ContentRepository';
+import { ILogger } from '@/domain/shared/Logger';
 import { PinoLogger } from '@/infrastructure/logging/pino-logger';
 
 export class FsContentRepository implements IContentRepository {

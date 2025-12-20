@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { YouTubeAdapter } from './adapters/YouTubeAdapter';
-import { PlayerPlatform, PlayerPlatformType } from '@/domain/player/constants';
+import { PlayerPlatform, PlayerPlatformType } from '@/domain/player/PlayerConstants';
 
 export interface AudioPlayerProps {
     // State (データ)
