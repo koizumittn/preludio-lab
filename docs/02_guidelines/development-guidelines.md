@@ -21,9 +21,11 @@ src/
 │   └── features/             # [Feature Layer] 特定ドメイン機能に結合したコンポーネント (ScoreRenderer)
 │
 ├── domain/                   # [Domain Layer] ★最重要・外部依存ゼロ
-│   ├── entities/             # 型定義・データ構造 (User, Score)
-│   ├── services/             # 純粋なドメインロジック (計算・判定)
-│   └── repositories/         # リポジトリのインターフェース定義 (IUserRepository)
+│   ├── [feature]/            # 機能単位でカプセル化 (例: player, content)
+│   │   ├── models.ts         # 型定義・Entity
+│   │   ├── schema.ts         # バリデーションルール (Zod)
+│   │   └── repository.ts     # リポジトリIF
+│   └── shared/               # 汎用定義 (Logger, Shared Types)
 │
 ├── application/              # [Use Case Layer] アプリケーションの機能単位
 │   ├── use-cases/            # 実処理クラス (RegisterUserUseCase)
@@ -41,10 +43,13 @@ src/
 
 #### Domain Layer (`src/domain/`)
 *   **役割:** ビジネスの「用語」「ルール」「契約（インターフェース）」を定義する。
+*   **アーキテクチャ:** **Package by Feature (機能単位)** を採用する。技術的なレイヤー分け（Entity, Repository）ではなく、ビジネス機能（Player, Content）でフォルダを分け、凝集度を高める。
 *   **ルール:** 他のいかなる層（Application, Infra, UI）にも依存してはならない。
-*   **実装のポイント:** 「まずは技術詳細を無視して、TypeScriptの型とInterfaceだけ定義する」
-*   **Performance Pattern:** 大きなデータ（本文など）を持つEntityは、一覧取得時のパフォーマンス劣化を防ぐため、**Summary型（軽量）**と**Detail型（重量）**に分割定義することを推奨する。
-    *   Example: `ContentSummary` (Metadata only) vs `ContentDetail` (extends Summary + Body)
+*   **構成例 (`src/domain/content/`):**
+    *   `models.ts`: データ構造 (Entity, Value Object)
+    *   `schema.ts`: バリデーションルール (Zod Schema)
+    *   `repository.ts`: データアクセスのインターフェース (Repository Interface)
+*   **Performance Pattern:** 大きなデータを持つEntityは、一覧取得時のパフォーマンス劣化を防ぐため、**Summary型（軽量）**と**Detail型（重量）**に分割定義することを推奨する。
 
 
 
