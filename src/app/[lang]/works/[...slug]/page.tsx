@@ -125,9 +125,9 @@ export default async function WorkPage({
         <div className="container mx-auto px-4 py-8 lg:py-12 max-w-6xl">
             {/* Breadcrumbs */}
             <nav className="text-sm text-neutral-500 mb-8 flex items-center gap-2">
-                <a href={`/${lang}`} className="hover:text-primary transition-colors">Home</a>
+                <Link href={`/${lang}`} className="hover:text-primary transition-colors">Home</Link>
                 <span>/</span>
-                <a href={`/${lang}/works`} className="hover:text-primary transition-colors">Works</a>
+                <Link href={`/${lang}/works`} className="hover:text-primary transition-colors">Works</Link>
                 <span>/</span>
                 <span className="text-primary font-medium truncate">{content.metadata.title}</span>
             </nav>
