@@ -5,7 +5,7 @@ import '../globals.css';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { AudioPlayerFeature } from '@/components/player';
-import { AppProviders } from '@/components/providers/AppProviders';
+import { AudioPlayerProvider } from '@/components/player/AudioPlayerContext';
 import { ConsentBanner } from '@/components/layout/ConsentBanner';
 import { Toaster } from 'react-hot-toast';
 import { supportedLocales } from '@/domain/shared/locale';
@@ -102,7 +102,7 @@ export default async function RootLayout({
         <html lang={lang} className={fontVariables} suppressHydrationWarning>
             <body className={`${baseFontClass} antialiased`}>
                 <NextIntlClientProvider messages={messages}>
-                    <AppProviders>
+                    <AudioPlayerProvider>
                         <Header lang={lang} />
                         <main className="min-h-screen pb-24">{children}</main>
                         <Footer />
@@ -112,7 +112,7 @@ export default async function RootLayout({
 
                         <ConsentBanner />
                         <Toaster position="bottom-right" />
-                    </AppProviders>
+                    </AudioPlayerProvider>
                 </NextIntlClientProvider>
             </body>
         </html>
