@@ -1,4 +1,5 @@
-import { Link } from '@/infrastructure/i18n/navigation';
+// Replace next-intl Link with next/link for predictable soft navigation
+import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { SITE_NAME } from '@/lib/constants';
 import { SearchBox } from '@/components/search/SearchBox';
@@ -10,11 +11,12 @@ interface HeaderProps {
 
 export const Header = async ({ lang }: HeaderProps) => {
     const t = await getTranslations('Navigation');
+    const homeHref = `/${lang}`;
 
     return (
         <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/80 backdrop-blur-md">
             <div className="container mx-auto flex h-16 items-center justify-between px-4 md:grid md:grid-cols-[auto_1fr_auto] md:gap-4">
-                <Link href="/" className="flex items-center gap-2 justify-self-start">
+                <Link href={homeHref} className="flex items-center gap-2 justify-self-start">
                     <span className="text-xl font-bold tracking-tight text-gray-900">{SITE_NAME}</span>
                 </Link>
 
@@ -27,13 +29,13 @@ export const Header = async ({ lang }: HeaderProps) => {
                 </div>
 
                 <nav className="hidden md:flex w-[400px] gap-6 items-center justify-end justify-self-end whitespace-nowrap">
-                    <Link href="/works" className="text-sm font-medium text-gray-700 hover:text-black whitespace-nowrap">
+                    <Link href={`/${lang}/works`} className="text-sm font-medium text-gray-700 hover:text-black whitespace-nowrap">
                         {t('works')}
                     </Link>
-                    <Link href="/composers" className="text-sm font-medium text-gray-700 hover:text-black whitespace-nowrap">
+                    <Link href={`/${lang}/composers`} className="text-sm font-medium text-gray-700 hover:text-black whitespace-nowrap">
                         {t('composers')}
                     </Link>
-                    <Link href="/about" className="text-sm font-medium text-gray-700 hover:text-black whitespace-nowrap">
+                    <Link href={`/${lang}/about`} className="text-sm font-medium text-gray-700 hover:text-black whitespace-nowrap">
                         {t('about')}
                     </Link>
                     <div className="border-l pl-6 border-gray-200">
