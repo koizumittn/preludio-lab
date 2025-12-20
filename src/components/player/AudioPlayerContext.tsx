@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useCallback, useMemo, useRef } from 'react';
+import React, { createContext, useContext, useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { PlayerPlatform, PlayerPlatformType } from '@/domain/player/PlayerConstants';
 import { PlayRequestSchema } from '@/domain/player/Player';
 import { handleClientError } from '@/utils/client-error-handler';
@@ -118,6 +118,8 @@ export function useAudioPlayer() {
     return context;
 }
 
+const STORAGE_KEY = 'preludio_player_state';
+
 export function AudioPlayerProvider({ children }: { children: React.ReactNode }) {
     const [state, setState] = useState<PlayerState>({
         isPlaying: false,
@@ -138,6 +140,60 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
         endSeconds: undefined,
         playbackId: 0,
     });
+
+    // Load state from localStorage on mount (Client-side only)
+    useEffect(() => {
+        try {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                // Validate parsed data structure partially if needed, or just merge
+                // Force isPlaying to false to prevent auto-start policy issues on reload, 
+                // unless we implement specific "resume" logic interaction. 
+                // For now, let's keep isPlaying false but restore everything else (metadata, progress).
+                setState(prev => ({
+                    ...prev,
+                    ...parsed,
+                    isPlaying: false, // Resume paused
+                    isReady: false,   // Player needs to re-initialize
+                    playbackId: prev.playbackId + 1 // Force update hooks
+                }));
+            }
+        } catch (e) {
+            console.error('Failed to load player state', e);
+        }
+    }, []);
+
+    // Save state to localStorage on change
+    useEffect(() => {
+        // Only save minimal data needed for restoration
+        // Avoid saving 'isReady', 'isPlaying' (handled separately), etc.
+        if (state.mode === 'hidden' && !state.src) {
+            // If player is effectively cleared, clear storage
+            localStorage.removeItem(STORAGE_KEY);
+            return;
+        }
+
+        const stateToSave = {
+            currentTime: state.currentTime,
+            duration: state.duration,
+            src: state.src,
+            mode: state.mode,
+            title: state.title,
+            composer: state.composer,
+            performer: state.performer,
+            artworkSrc: state.artworkSrc,
+            platformUrl: state.platformUrl,
+            platformLabel: state.platformLabel,
+            platform: state.platform,
+            volume: state.volume,
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
+    }, [
+        state.currentTime, state.duration, state.src, state.mode,
+        state.title, state.composer, state.performer, state.artworkSrc,
+        state.platformUrl, state.platformLabel, state.platform, state.volume
+    ]);
 
     // NOTE: YouTube Playerインスタンスと通信する仕組みが必要です。
     // よりクリーンなアーキテクチャでは、プレイヤーが公開するRefを使用する手もありますが、
