@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { YouTubeAdapter } from './adapters/YouTubeAdapter';
+import { YouTubeAdapter } from '@/infrastructure/player/adapters/YouTubeAdapter';
 import { PlayerPlatform, PlayerPlatformType } from '@/domain/player/PlayerConstants';
 
 export interface AudioPlayerProps {

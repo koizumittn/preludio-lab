@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import YouTube, { YouTubeProps, YouTubeEvent } from 'react-youtube';
-import { AudioPlayerProps } from '../AudioPlayer';
+import { AudioPlayerProps } from '@/components/features/player/AudioPlayer';
 
 /**
  * [INFRASTRUCTURE] YouTube Adapter
