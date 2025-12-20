@@ -22,9 +22,9 @@ src/
 │
 ├── domain/                   # [Domain Layer] ★最重要・外部依存ゼロ
 │   ├── [feature]/            # 機能単位でカプセル化 (例: player, content)
-│   │   ├── models.ts         # 型定義・Entity
-│   │   ├── schema.ts         # バリデーションルール (Zod)
-│   │   └── repository.ts     # リポジトリIF
+│   │   ├── [Feature].ts     # 型定義・Schema (例: Content.ts)
+│   │   ├── [Feature]Repository.ts # リポジトリIF (例: ContentRepository.ts)
+│   │   └── [Feature]Constants.ts  # 定数 (例: PlayerConstants.ts)
 │   └── shared/               # 汎用定義 (Logger, Shared Types)
 │
 ├── application/              # [Use Case Layer] アプリケーションの機能単位
@@ -46,9 +46,9 @@ src/
 *   **アーキテクチャ:** **Package by Feature (機能単位)** を採用する。技術的なレイヤー分け（Entity, Repository）ではなく、ビジネス機能（Player, Content）でフォルダを分け、凝集度を高める。
 *   **ルール:** 他のいかなる層（Application, Infra, UI）にも依存してはならない。
 *   **構成例 (`src/domain/content/`):**
-    *   `models.ts`: データ構造 (Entity, Value Object)
-    *   `schema.ts`: バリデーションルール (Zod Schema)
-    *   `repository.ts`: データアクセスのインターフェース (Repository Interface)
+    *   `Content.ts`: データ構造 (Entity, Value Object) と バリデーションルール (Zod Schema) を**同じファイルに定義**（Colocation）。
+    *   `ContentRepository.ts`: データアクセスのインターフェース (Repository Interface)
+    *   **命名規則:** `models.ts` などの汎用名ではなく、`Feature.ts` (機能名そのもの) を使用する。検索性と文脈理解を優先するため。
 *   **Performance Pattern:** 大きなデータを持つEntityは、一覧取得時のパフォーマンス劣化を防ぐため、**Summary型（軽量）**と**Detail型（重量）**に分割定義することを推奨する。
 
 
