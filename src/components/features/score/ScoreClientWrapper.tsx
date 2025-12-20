@@ -117,7 +117,7 @@ export default function ScoreClientWrapper({ abc, audioMetadata }: ScoreClientWr
     // Merge Logic
     let effectiveMetadata = null;
 
-    if (abcDirectives.videoId) {
+    if (abcDirectives.videoId || abcDirectives.src) {
         // [動画コンテキストのリセットルール]
         // ABC指定でビデオIDがある場合、完全に新しいソースとして扱います。
         // Frontmatterからのメタデータ継承は行わず、コンテキストの混在（例: グールドの動画再生中にラン・ランのメタデータが表示される等）を防ぎます。
@@ -151,7 +151,7 @@ export default function ScoreClientWrapper({ abc, audioMetadata }: ScoreClientWr
                         composer: effectiveMetadata.composer,
                         performer: effectiveMetadata.performer,
                         artworkSrc: effectiveMetadata.artworkSrc,
-                        platformUrl: effectiveMetadata.platformUrl || (effectiveMetadata.videoId ? `https://www.youtube.com/watch?v=${effectiveMetadata.videoId}` : undefined),
+                        platformUrl: effectiveMetadata.platformUrl || ((effectiveMetadata.videoId || effectiveMetadata.src) ? `https://www.youtube.com/watch?v=${effectiveMetadata.videoId || effectiveMetadata.src}` : undefined),
                         platformLabel: effectiveMetadata.platformLabel || 'Watch on YouTube',
                         platform: (effectiveMetadata.platform as PlayerPlatformType) || (effectiveMetadata.platformType as PlayerPlatformType) || PlayerPlatform.YOUTUBE,
                     },
@@ -170,7 +170,7 @@ export default function ScoreClientWrapper({ abc, audioMetadata }: ScoreClientWr
         <div className="relative group score-wrapper mt-0">
             <ScoreRenderer abc={abc} />
 
-            {effectiveMetadata && effectiveMetadata.videoId && (
+            {effectiveMetadata && (effectiveMetadata.src || effectiveMetadata.videoId) && (
                 <div className="absolute top-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity z-10 m-1">
                     <button
                         onClick={handlePlay}
