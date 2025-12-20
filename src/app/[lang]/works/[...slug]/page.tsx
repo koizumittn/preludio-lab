@@ -5,8 +5,8 @@ import GithubSlugger from 'github-slugger';
 import { TableOfContents } from '@/components/content/TableOfContents';
 import { SeriesNavigation } from '@/components/content/SeriesNavigation';
 import ScoreRenderer from '@/components/score';
-import { WorkPlayerPlaceholder } from '@/components/work/WorkPlayerPlaceholder';
-import { ListeningGuide } from '@/components/work/ListeningGuide';
+import { WorkPlayerPlaceholder } from '@/components/content/work/WorkPlayerPlaceholder';
+import { ListeningGuide } from '@/components/content/work/ListeningGuide';
 // ... (imports remain)
 import { FsContentRepository } from '@/infrastructure/content/FsContentRepository';
 
