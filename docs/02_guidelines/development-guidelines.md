@@ -156,6 +156,17 @@ graph TD
 - ファイル数が増え、役割が曖昧になり始めた場合に導入する。
 - 小規模な機能では標準名（Suffixなし）で開始して良い。
 
+### 2.7. Naming Scope Policy (Package vs Component)
+**「フォルダ名（Package）は広く、ファイル名（Component）は具体的に」** という方針を採用する。
+
+*   **Package Name (Folder):** 将来的な拡張性（Extensibility）を考慮し、**広義のドメイン名**を採用する。
+    *   Good: `src/components/player/` (将来 `VideoPlayer` や `ScorePlayer` が増えても格納できる)
+    *   Bad: `src/components/audio-player/` (音声専用に限定され、構成変更に弱くなる)
+*   **Component Name (File):** 役割を明確にするため（Specificity）、**具体的かつ詳細な名前**を採用する。
+    *   Good: `AudioPlayerController.tsx` (「音声」プレイヤーであることが自明)
+    *   Bad: `PlayerController.tsx` (何のプレイヤーか文脈依存になる)
+
+
 ### 2.1. TypeScript & JavaScript
 *   **TypeScript:** `strict: true` を必須とする。`any` 型の使用は原則禁止（`unknown` を使用し、型ガードを行う）。
 *   **Immutability:** 変数は可能な限り `const` を使用し、再代入可能な `let` の使用を避ける。
