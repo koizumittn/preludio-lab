@@ -12,7 +12,7 @@ const formatTimeHelper = (seconds: number) => {
     return `${m}:${s.toString().padStart(2, '0')}`;
 };
 
-export function FocusPlayer() {
+export function FocusAudioPlayer() {
     const {
         mode,
         setMode,

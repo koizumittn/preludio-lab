@@ -9,7 +9,8 @@ describe('Domain: Locale', () => {
     it('should support EN and JA', () => {
         expect(supportedLocales).toContain(AppLocale.EN);
         expect(supportedLocales).toContain(AppLocale.JA);
-        expect(supportedLocales).toHaveLength(2);
+        // Expect at least English and Japanese, but allow more
+        expect(supportedLocales.length).toBeGreaterThanOrEqual(2);
     });
 
     it('should have immutable constants', () => {

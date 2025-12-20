@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import { FocusPlayer } from './FocusPlayer';
+import { FocusAudioPlayer } from './FocusAudioPlayer';
 import { AudioPlayerContext } from '@/components/providers/AudioPlayerContext';
 
 // Mock context value helper
@@ -36,14 +36,13 @@ const mockContextValue = (overrides = {}) => ({
     ...overrides,
 });
 
-describe('FocusPlayer', () => {
+describe('FocusAudioPlayer', () => {
     it('renders metadata correctly', () => {
         render(
             <AudioPlayerContext.Provider value={mockContextValue()}>
-                <FocusPlayer />
+                <FocusAudioPlayer />
             </AudioPlayerContext.Provider>
         );
-        expect(screen.getByText('Test Title')).toBeInTheDocument();
         expect(screen.getByText('Test Title')).toBeInTheDocument();
         expect(screen.getByText('Test Composer')).toBeInTheDocument();
     });
@@ -55,7 +54,7 @@ describe('FocusPlayer', () => {
                 platformLabel: 'Watch on YouTube',
                 platform: 'youtube'
             })}>
-                <FocusPlayer />
+                <FocusAudioPlayer />
             </AudioPlayerContext.Provider>
         );
 
@@ -69,7 +68,7 @@ describe('FocusPlayer', () => {
             <AudioPlayerContext.Provider value={mockContextValue({
                 platformUrl: null
             })}>
-                <FocusPlayer />
+                <FocusAudioPlayer />
             </AudioPlayerContext.Provider>
         );
 

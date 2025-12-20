@@ -6,7 +6,7 @@ import { useAudioPlayer } from '@/components/providers/AudioPlayerContext';
  * [REQ-UI-004-02] Mini Player
  * Persistent audio player bar fixed at the bottom.
  */
-export function MiniPlayer() {
+export function MiniAudioPlayer() {
     const {
         mode,
         setMode,
