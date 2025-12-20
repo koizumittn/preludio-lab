@@ -21,9 +21,9 @@ export const MetadataSchema = z.object({
     /** アルバムアートワークのパス */
     artworkSrc: z.string().optional(),
     /** 再生開始位置 (秒) */
-    startTime: z.number().optional(),
+    startSeconds: z.number().optional(),
     /** 再生終了位置 (秒) */
-    endTime: z.number().optional(),
+    endSeconds: z.number().optional(),
     /** OGP画像生成用の抜粋テキスト (指定がない場合は本文冒頭が使われる想定) */
     ogp_excerpt: z.string().optional(),
     /** 記事の公開日または更新日 (YYYY-MM-DD) */

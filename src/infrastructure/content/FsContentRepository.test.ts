@@ -35,6 +35,8 @@ describe('FsContentRepository', () => {
 title: "Test Title"
 date: "2024-01-01"
 category: "Introduction"
+startSeconds: 10
+endSeconds: 60
 ---
 # Content Body`;
 
@@ -60,6 +62,7 @@ category: "Introduction"
             expect(result).not.toBeNull();
             expect(result?.metadata.title).toBe('Test Title');
             expect(result?.body).toContain('# Content Body');
+            expect(result?.metadata.startSeconds).toBe(10);
             expect(result?.slug).toBe('valid');
         });
     });

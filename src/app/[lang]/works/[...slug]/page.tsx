@@ -88,8 +88,10 @@ export default async function WorkPage({
         composer: content.metadata.composer,
         performer: content.metadata.performer,
         artworkSrc: content.metadata.artworkSrc,
-        startTime: content.metadata.startTime,
-        endTime: content.metadata.endTime,
+        startSeconds: content.metadata.startSeconds,
+        endSeconds: content.metadata.endSeconds,
+        // Legacy (optional mapping if wrapper needs it, but wrapper prefers startSeconds now)
+        // startTime: content.metadata.startSeconds,
         platformType: 'youtube' as const,
     } : undefined;
 
