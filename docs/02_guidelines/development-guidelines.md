@@ -28,13 +28,15 @@ src/
 │   └── shared/               # 汎用定義 (Logger, Shared Types)
 │
 ├── application/              # [Use Case Layer] アプリケーションの機能単位
-│   ├── use-cases/            # 実処理クラス (RegisterUserUseCase)
-│   └── dtos/                 # 入出力データ定義 (RegisterUserInput)
+│   ├── [feature]/            # 機能単位でカプセル化 (例: player, content)
+│   │   ├── [Feature]UseCase.ts
+│   │   └── [Feature]Dto.ts
 │
 ├── infrastructure/           # [Infra Layer] 技術的詳細・外部連携
-│   ├── database/             # Supabase Client, Prismaなど
-│   ├── repositories/         # Domain層IFの実装 (SupabaseUserRepository)
-│   └── external/             # 外部APIクライアント (Stripe, Geminiなど)
+│   ├── [feature]/            # 機能単位 (例: content)
+│   │   └── Fs[Feature]Repository.ts # 実装クラス
+│   ├── database/             # 共有DB接続 (Supabase Client, Prisma)
+│   └── external/             # 外部APIクライアント (Stripe, Gemini)
 │
 └── lib/                      # [Shared] 汎用ユーティリティ
 ```
@@ -55,13 +57,14 @@ src/
 
 #### Application Layer (`src/application/`)
 *   **役割:** ユーザーが「何をしたいか（ユースケース）」を表現する。
-*   **構成:**
-    *   **Use Case:** ドメイン層のInterfaceを使って処理フローを記述する。具体的なDB操作は知らなくて良い。
-    *   **DTO:** UI層とやり取りするための単純なデータ型。
+*   **アーキテクチャ:** **Package by Feature (機能単位)** を採用する。
+*   **構成例 (`src/application/content/`):**
+    *   `GetContentDetailUseCase.ts`: ドメイン層のInterfaceを使って処理フローを記述する。
+    *   `ContentDto.ts`: UI層とやり取りするための単純なデータ型 (Zod Schema含む)。
 *   **実装のポイント:** 「Repository Interfaceを使って、〇〇を行うビジネスロジックを実装する」
     *   **Validation Rule:** DTOの定義には必ず **Zod Schema** を併記し、型定義は `z.infer` から生成する。
         ```ts
-        // src/application/dtos/user.dto.ts
+        // src/application/user/UserDto.ts
         import { z } from 'zod';
         export const UserSchema = z.object({ name: z.string().min(1) });
         export type UserDto = z.infer<typeof UserSchema>;
@@ -69,6 +72,9 @@ src/
 
 #### Infrastructure Layer (`src/infrastructure/`)
 *   **役割:** ドメイン層で定義されたInterfaceを、具体的な技術（Supabase, API）で実装する。
+*   **アーキテクチャ:** **Package by Feature (機能単位)** を採用する。ただし、DB接続設定や共通外部APIクライアントは `database/` や `external/` に配置する。
+*   **構成例 (`src/infrastructure/content/`):**
+    *   `FsContentRepository.ts`: `IContentRepository` のファイルシステム実装。
 *   **ルール:** ここを変更しても、DomainやApplication層のコードを変えてはならない。
 *   **実装のポイント:** 「Supabaseを使って `IUserRepository` の実体クラスを作成する」
 
