@@ -1,14 +1,16 @@
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { notFound } from 'next/navigation';
+import Link from 'next/link';
 import rehypeSlug from 'rehype-slug';
 import GithubSlugger from 'github-slugger';
-import { TableOfContents } from '@/components/features/content/TableOfContents';
-import { SeriesNavigation } from '@/components/features/content/SeriesNavigation';
-import ScoreRenderer from '@/components/features/score';
-import { MockPlayer } from '@/components/mock/MockPlayer';
-import { ListeningGuide } from '@/components/mock/ListeningGuide';
+import { MdxLink } from '@/components/mdx/MdxLink';
+import { TableOfContents } from '@/components/content/TableOfContents';
+import { SeriesNavigation } from '@/components/content/SeriesNavigation';
+import ScoreRenderer from '@/components/score';
+import { WorkPlayerPlaceholder } from '@/components/content/work/WorkPlayerPlaceholder';
+import { ListeningGuide } from '@/components/content/work/ListeningGuide';
 // ... (imports remain)
-import { FsContentRepository } from '@/infrastructure/repositories/fs-content-repository';
+import { FsContentRepository } from '@/infrastructure/content/FsContentRepository';
 
 
 
@@ -88,13 +90,16 @@ export default async function WorkPage({
         composer: content.metadata.composer,
         performer: content.metadata.performer,
         artworkSrc: content.metadata.artworkSrc,
-        startTime: content.metadata.startTime,
-        endTime: content.metadata.endTime,
+        startSeconds: content.metadata.startSeconds,
+        endSeconds: content.metadata.endSeconds,
+        // Legacy (optional mapping if wrapper needs it, but wrapper prefers startSeconds now)
+        // startTime: content.metadata.startSeconds,
         platformType: 'youtube' as const,
     } : undefined;
 
     // Custom components for MDX (defined here to capture audioMetadata)
     const components = {
+        a: MdxLink,
         pre: (props: any) => {
             // Check if the child is a code element with language-abc class
             const codeProps = props.children?.props;
@@ -120,9 +125,9 @@ export default async function WorkPage({
         <div className="container mx-auto px-4 py-8 lg:py-12 max-w-6xl">
             {/* Breadcrumbs */}
             <nav className="text-sm text-neutral-500 mb-8 flex items-center gap-2">
-                <a href={`/${lang}`} className="hover:text-primary transition-colors">Home</a>
+                <Link href={`/${lang}`} className="hover:text-primary transition-colors">Home</Link>
                 <span>/</span>
-                <a href={`/${lang}/works`} className="hover:text-primary transition-colors">Works</a>
+                <Link href={`/${lang}/works`} className="hover:text-primary transition-colors">Works</Link>
                 <span>/</span>
                 <span className="text-primary font-medium truncate">{content.metadata.title}</span>
             </nav>
@@ -177,7 +182,7 @@ export default async function WorkPage({
                 <article className="lg:col-span-7 prose prose-lg prose-slate dark:prose-invert">
                     {/* Mobile Sidebar (Visible < lg) */}
                     <div className="lg:hidden mb-12 space-y-8">
-                        <MockPlayer />
+                        <WorkPlayerPlaceholder />
 
                         <details className="group bg-neutral-50 rounded-xl overflow-hidden border border-neutral-200">
                             <summary className="flex items-center justify-between p-4 font-medium text-primary cursor-pointer list-none hover:bg-neutral-100 transition-colors">
@@ -213,7 +218,7 @@ export default async function WorkPage({
                 <aside className="hidden lg:block lg:col-span-4 lg:col-start-9">
                     <div className="sticky top-24 space-y-8">
                         <div>
-                            <MockPlayer />
+                            <WorkPlayerPlaceholder />
                             <ListeningGuide />
                         </div>
                         <div>

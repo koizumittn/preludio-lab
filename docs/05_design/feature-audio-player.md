@@ -6,6 +6,10 @@
 Preludio Labにおける「Audio Player」は、ユーザーが楽譜を閲覧しながら直感的に演奏を確認できる学習支援機能です。
 ページ遷移しても再生が途切れない「Persistent Player（常駐型プレイヤー）」として設計されています。
 
+**Design Goal:**
+`ScoreRenderer` や `MiniPlayer` から、オーディオ再生機能（YouTube IFrame API等）を分離し、**Clean Architecture** に基づいた「機能コンポーネント (Feature Component)」として再構築することを目的としています。
+これにより、将来的な「異なるオーディオソース（MP3, SoundCloudなど）」への対応や、「再生制御ロジックのみのテスト」を容易にします。
+
 ## 2. User Interaction & UX
 
 ユーザー視点での操作フローと挙動の定義。
@@ -34,6 +38,9 @@ Preludio Labにおける「Audio Player」は、ユーザーが楽譜を閲覧�
 
 実装とUIを完全に分離するため、**Headless UI** パターンと **Wrapper Pattern** を採用しています。
 
+### 3.1. Clean Architecture & Component Separation
+実装の保守性とテスト容易性を高めるため、**Clean Architecture** の原則に基づき、以下の3層構造に分離しています。
+
 ```mermaid
 graph TD
     subgraph UI_Layer [UI Layer]
@@ -43,8 +50,8 @@ graph TD
     end
 
     subgraph Feature_Layer [Feature Layer]
-        Wrapper[YouTubePlayerClientWrapper<br>(SSR Guard)]
-        Renderer[YouTubePlayerRenderer<br>(Logic Implementation)]
+        Container[GlobalAudioPlayer<br>(Smart Component)]
+        Player[AudioPlayer<br>(Dumb Component)]
     end
 
     subgraph Infrastructure [Infrastructure]
@@ -55,16 +62,17 @@ graph TD
     %% Flow
     Context <-->|Sync State| Mini
     Context <-->|Sync State| Focus
-    Context <-->|Control / Events| Renderer
+    Context <-->|Control / Events| Container
     
-    Wrapper --> Renderer
-    Renderer --> Lib
+    Container -->|Props| Player
+    Player -->|Events| Container
+    Player --> Lib
     Lib --> API
 ```
 
-### 3.1. Wrapper Pattern
+### 3.2. Wrapper Pattern (SSR Guard)
 `react-youtube` などの外部ライブラリは `window` オブジェクトに依存するため、そのままServer Componentで使用するとビルドエラーになります。
-これを防ぐため、`YouTubePlayerClientWrapper` で `next/dynamic` (`ssr: false`) を使用し、クライアントサイドでの実行を保証しています。
+これを防ぐため、`GlobalAudioPlayer` の呼び出し元 (`ClientWrapper`) で `next/dynamic` (`ssr: false`) を使用し、クライアントサイドでの実行を保証しています。
 
 ## 4. State Management (AudioPlayerContext)
 
@@ -108,16 +116,51 @@ interface AudioMetadata {
 
 ## 5. Component Specifications
 
-### 5.1. AudioPlayerFeature (`src/components/features/player/`)
-*   **Role:** 音声再生エンジン。画面上は 1px × 1px の不可視領域として存在します。
-*   **Implementation:** 内部的に `YouTubePlayer` をラップしていますが、責務は汎用的な「オーディオ再生機能」の提供です。
+### 5.1. AudioPlayer Feature (`src/components/features/player/`)
+
+#### A. `AudioPlayer` (Dumb Component)
+*   **Role:** 特定のプラットフォーム（YouTube等）をラップし、統一されたインターフェースを提供する純粋なUIコンポーネント。
+*   **Props:**
+    *   `src`: 動画IDまたはURL。
+    *   `isPlaying`: 再生状態（boolean）。
+    *   `volume`: 音量 (0-100)。
+    *   `seekTo`: シーク命令（timestamp）。
+    *   `onReady`, `onProgress`, `onEnded`, `onError`: イベントハンドラ。
+*   **Implementation:**
+    *   `react-youtube` を内部で使用。
+    *   `useEffect` で props (`isPlaying`, `seekTo`) の変化を監視し、命令的にAPIを操作する。
+
+#### B. `GlobalAudioPlayer` (Smart Component / Container)
+*   **Role:** `AudioPlayerContext` と `AudioPlayer` の仲介役（Connector）。以前の `YouTubePlayerRenderer` に相当。
+*   **Responsibilities:**
+    *   Contextから状態 (`videoId`, `isPlaying` 等) を取得し、`AudioPlayer` にPropsとして渡す。
+    *   `AudioPlayer` からのイベントを受け取り、Contextの状態を更新する。
+    *   **Error Handling:** 再生エラーを捕捉し、ユーザーへの通知（Toast）と監視システム（Sentry）への報告を行う。
 *   **Reliability Strategy (Manual Load):**
-    *   `react-youtube` のデフォルト動作（Prop変更による自動ロード）を無効化し、`safeLoadVideo` ヘルパー経由での手動ロードを強制しています。
-    *   これにより、非同期的に発生するYouTube APIエラー（Promise Rejection）を確実に捕捉し、Sentryへの通知とユーザーへのトーストフィードバックを実現しています。
-*   **Behavior:**
-    *   `Context.isPlaying` の変化を `useEffect` で監視し、APIに対して `playVideo()` / `pauseVideo()` を発行します。
-    *   `setInterval` (500ms) で再生時間をポーリングし、Contextに通知します。
-    *   YouTube APIのイベント (`onReady`, `onStateChange`) をフックし、動画のロード完了や終了をContextに伝えます。
+    *   自動再生（AutoPlay）に依存せず、Contextの状態遷移に基づいて明示的にロード制御を行うことで、競合状態を防ぐ。
+
+#### C. Integration with Other Components (e.g., Score, Images)
+他のコンポーネント（楽譜、画像など）は、直接 `AudioPlayer` を操作するのではなく、**`AudioPlayerContext` を介して** 再生をリクエストします。
+
+*   **Action Flow:**
+    1.  **Trigger:** ユーザーが楽譜上の「Play」ボタンをクリック。
+    2.  **Dispatch:** `ScoreClientWrapper` が `play(metadata)` アクションをコールし、楽曲情報 (`videoId`, `startTime` 等) をContextに送信。
+    3.  **State Update:** `AudioPlayerContext` が状態 (`isPlaying: true`, `videoId: ...`) を更新。
+    4.  **Reaction:** `GlobalAudioPlayer` が状態変化を検知し、`AudioPlayer` に再生指示を送る。
+*   **Decoupling:** これにより、楽譜コンポーネントは「どのプレイヤーで再生されるか」を知る必要がなく、純粋に「再生リクエスト」のみに関心を持つことができます。
+
+## 6. Error Handling & Logging Strategy
+
+### 6.1. Error Handling Policy
+*   **Player Load Failure:** ネットワークエラーや動画削除などで再生できない場合。
+    *   **Action:** `handleClientError` を呼び出し、Sentryへ通知 + ユーザーにToast ("再生できませんでした") を表示。
+    *   **Recovery:** プレイヤーの状態を `paused` に戻し、無限ロードや不正な状態を回避する。
+
+### 6.2. Logging (Observability)
+重要イベント発生時にログを出力し、デバッグと監視を容易にする。
+*   **Events:**
+    *   `PLAYER_READY`: 再生準備完了 (Duration含む)。
+    *   `PLAYER_ERROR`: エラー発生 (Error Code含む)。
 
 ### 5.2. MiniPlayer (`src/components/ui/Player/MiniPlayer.tsx`)
 *   **Role:** 常駐型の簡易コントローラー。
@@ -145,7 +188,7 @@ interface AudioMetadata {
     {/* ...Footer... */}
     
     {/* Global Persistent Components */}
-    <AudioPlayerFeature />
+    <GlobalAudioPlayer />
     <MiniPlayer />
     <FocusPlayer />
 </AppProviders>

@@ -4,11 +4,9 @@ import { Inter, Playfair_Display, Noto_Sans_JP, Zen_Old_Mincho, Noto_Sans_SC, No
 import '../globals.css';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { MiniPlayer } from '@/components/ui/Player/MiniPlayer';
-import { FocusPlayer } from '@/components/ui/Player/FocusPlayer';
-import { AudioPlayerFeature } from '@/components/features/player';
-import { AppProviders } from '@/components/providers/AppProviders';
-import { ConsentBanner } from '@/components/ui/ConsentBanner';
+import { AudioPlayerFeature } from '@/components/player';
+import { AudioPlayerProvider } from '@/components/player/AudioPlayerContext';
+import { ConsentBanner } from '@/components/layout/ConsentBanner';
 import { Toaster } from 'react-hot-toast';
 import { supportedLocales } from '@/domain/shared/locale';
 
@@ -104,19 +102,17 @@ export default async function RootLayout({
         <html lang={lang} className={fontVariables} suppressHydrationWarning>
             <body className={`${baseFontClass} antialiased`}>
                 <NextIntlClientProvider messages={messages}>
-                    <AppProviders>
+                    <AudioPlayerProvider>
                         <Header lang={lang} />
                         <main className="min-h-screen pb-24">{children}</main>
                         <Footer />
 
                         {/* Global Audio Player Components */}
                         <AudioPlayerFeature />
-                        <MiniPlayer />
-                        <FocusPlayer />
 
                         <ConsentBanner />
                         <Toaster position="bottom-right" />
-                    </AppProviders>
+                    </AudioPlayerProvider>
                 </NextIntlClientProvider>
             </body>
         </html>

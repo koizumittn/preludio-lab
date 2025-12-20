@@ -17,22 +17,29 @@ src/
 │   ├── _actions/             # Server Actions (Controller / Entry Point)
 │   └── (routes)/             # 各画面のルーティング
 ├── components/               # [UI Layer] React Components (Pure View)
-│   ├── ui/                   # 汎用 UI コンポーネント (Button, Card)
-│   └── features/             # [Feature Layer] 特定ドメイン機能に結合したコンポーネント (ScoreRenderer)
+│   ├── ui/                   # [Generic] 汎用 UI (Button, Card, Skeleton) - ロジック/依存なし
+│   ├── layout/               # [Structure] アプリ固有レイアウト (Header, Footer) - Auth/Lang依存あり
+│   ├── player/               # [Feature Layer] Player機能コンポーネント
+│   ├── content/              # [Feature Layer] Content機能コンポーネント
+│   └── score/                # [Feature Layer] Score機能コンポーネント
 │
 ├── domain/                   # [Domain Layer] ★最重要・外部依存ゼロ
-│   ├── entities/             # 型定義・データ構造 (User, Score)
-│   ├── services/             # 純粋なドメインロジック (計算・判定)
-│   └── repositories/         # リポジトリのインターフェース定義 (IUserRepository)
+│   ├── [feature]/            # 機能単位でカプセル化 (例: player, content)
+│   │   ├── [Feature].ts     # 型定義・Schema (例: Content.ts)
+│   │   ├── [Feature]Repository.ts # リポジトリIF (例: ContentRepository.ts)
+│   │   └── [Feature]Constants.ts  # 定数 (例: PlayerConstants.ts)
+│   └── shared/               # 汎用定義 (Logger, Shared Types)
 │
 ├── application/              # [Use Case Layer] アプリケーションの機能単位
-│   ├── use-cases/            # 実処理クラス (RegisterUserUseCase)
-│   └── dtos/                 # 入出力データ定義 (RegisterUserInput)
+│   ├── [feature]/            # 機能単位でカプセル化 (例: player, content)
+│   │   ├── [Feature]UseCase.ts
+│   │   └── [Feature]Dto.ts
 │
 ├── infrastructure/           # [Infra Layer] 技術的詳細・外部連携
-│   ├── database/             # Supabase Client, Prismaなど
-│   ├── repositories/         # Domain層IFの実装 (SupabaseUserRepository)
-│   └── external/             # 外部APIクライアント (Stripe, Geminiなど)
+│   ├── [feature]/            # 機能単位 (例: content)
+│   │   └── Fs[Feature]Repository.ts # 実装クラス
+│   ├── database/             # 共有DB接続 (Supabase Client, Prisma)
+│   └── external/             # 外部APIクライアント (Stripe, Gemini)
 │
 └── lib/                      # [Shared] 汎用ユーティリティ
 ```
@@ -41,22 +48,26 @@ src/
 
 #### Domain Layer (`src/domain/`)
 *   **役割:** ビジネスの「用語」「ルール」「契約（インターフェース）」を定義する。
+*   **アーキテクチャ:** **Package by Feature (機能単位)** を採用する。技術的なレイヤー分け（Entity, Repository）ではなく、ビジネス機能（Player, Content）でフォルダを分け、凝集度を高める。
 *   **ルール:** 他のいかなる層（Application, Infra, UI）にも依存してはならない。
-*   **実装のポイント:** 「まずは技術詳細を無視して、TypeScriptの型とInterfaceだけ定義する」
-*   **Performance Pattern:** 大きなデータ（本文など）を持つEntityは、一覧取得時のパフォーマンス劣化を防ぐため、**Summary型（軽量）**と**Detail型（重量）**に分割定義することを推奨する。
-    *   Example: `ContentSummary` (Metadata only) vs `ContentDetail` (extends Summary + Body)
+*   **構成例 (`src/domain/content/`):**
+    *   `Content.ts`: データ構造 (Entity, Value Object) と バリデーションルール (Zod Schema) を**同じファイルに定義**（Colocation）。
+    *   `ContentRepository.ts`: データアクセスのインターフェース (Repository Interface)
+    *   **命名規則:** `models.ts` などの汎用名ではなく、`Feature.ts` (機能名そのもの) を使用する。検索性と文脈理解を優先するため。
+*   **Performance Pattern:** 大きなデータを持つEntityは、一覧取得時のパフォーマンス劣化を防ぐため、**Summary型（軽量）**と**Detail型（重量）**に分割定義することを推奨する。
 
 
 
 #### Application Layer (`src/application/`)
 *   **役割:** ユーザーが「何をしたいか（ユースケース）」を表現する。
-*   **構成:**
-    *   **Use Case:** ドメイン層のInterfaceを使って処理フローを記述する。具体的なDB操作は知らなくて良い。
-    *   **DTO:** UI層とやり取りするための単純なデータ型。
+*   **アーキテクチャ:** **Package by Feature (機能単位)** を採用する。
+*   **構成例 (`src/application/content/`):**
+    *   `GetContentDetailUseCase.ts`: ドメイン層のInterfaceを使って処理フローを記述する。
+    *   `ContentDto.ts`: UI層とやり取りするための単純なデータ型 (Zod Schema含む)。
 *   **実装のポイント:** 「Repository Interfaceを使って、〇〇を行うビジネスロジックを実装する」
     *   **Validation Rule:** DTOの定義には必ず **Zod Schema** を併記し、型定義は `z.infer` から生成する。
         ```ts
-        // src/application/dtos/user.dto.ts
+        // src/application/user/UserDto.ts
         import { z } from 'zod';
         export const UserSchema = z.object({ name: z.string().min(1) });
         export type UserDto = z.infer<typeof UserSchema>;
@@ -64,6 +75,9 @@ src/
 
 #### Infrastructure Layer (`src/infrastructure/`)
 *   **役割:** ドメイン層で定義されたInterfaceを、具体的な技術（Supabase, API）で実装する。
+*   **アーキテクチャ:** **Package by Feature (機能単位)** を採用する。ただし、DB接続設定や共通外部APIクライアントは `database/` や `external/` に配置する。
+*   **構成例 (`src/infrastructure/content/`):**
+    *   `FsContentRepository.ts`: `IContentRepository` のファイルシステム実装。
 *   **ルール:** ここを変更しても、DomainやApplication層のコードを変えてはならない。
 *   **実装のポイント:** 「Supabaseを使って `IUserRepository` の実体クラスを作成する」
 
@@ -126,8 +140,41 @@ graph TD
 3.  **Phase 3: Infrastructure Implementation** (`src/infrastructure` DB/API Adapter)
 4.  **Phase 4: UI Connection** (`src/app` Server Action & View)
 
+### 1.6. Component Categorization (UI vs Layout)
+`src/components` 内のフォルダ分けにおいて、特に混同しやすい `ui` と `layout` の境界を以下のように定義する。
+
+| フォルダ | 役割・定義 | 特徴 (Criteria) | 例 |
+| :--- | :--- | :--- | :--- |
+| **ui/** | **Generic Atoms (汎用部品)**<br>プロジェクトに依存しない、純粋なUIパーツ。他プロジェクトへのコピー＆ペーストが可能。 | ・**No Domain Logic:** ビジネスロジックを持たない<br>・**No Auth:** 認証状態を知らない<br>・**No Fetch:** データ取得を行わない | `Button`, `Card`, `Skeleton`, `Dialog` |
+| **layout/** | **Structure (構造部品)**<br>アプリの骨格を成す部分。特定のドメインや状態に依存する。 | ・**Context Aware:** ユーザー情報や言語設定(`lang`)に依存する<br>・**Business Logic:** ナビゲーションの制御などを含む | `Header`, `Footer`, `Sidebar`, `ConsentBanner` |
+
 ## 2. Coding Standards
 **Google TypeScript Style Guide** をベースとし、以下の独自ルールを追加適用する。
+
+### 2.6. Feature Component Patterns (Role-based Naming)
+「Package by Feature」構成内で、コンポーネントの役割（責務）を明確にするため、以下の命名規則を推奨する。
+
+| 役割 (Role) | 責務・定義 | 命名規則 (Suffix) | 例 (Player) |
+| :--- | :--- | :--- | :--- |
+| **View (UI)** | **[Default]**<br>ユーザーが見て操作するもの。<br>ロジックを持たず、Props/Contextの命令を呼ぶのみ。 | **なし**<br>(標準) | `FocusAudioPlayer.tsx`<br>`MiniAudioPlayer.tsx` |
+| **Controller** | **[Headless]**<br>画面を持たない（`null`を返す）。<br>ContextとView、View同士の調整、ライフサイクル管理を行う。 | **Controller** | `AudioPlayerController.tsx` |
+| **Adapter** | **[Interface]**<br>外部ライブラリやInfrastracture層との接続口。<br>アプリ内のProps体系を外部サービス仕様に変換する。 | **Adapter** | `AudioPlayerAdapter.tsx` |
+| **Feature** | **[Entry Point]**<br>機能の公開エントリーポイント。<br>実装詳細（Client Wrapper等）を隠蔽し、使いやすいIFを提供する。 | **Feature** | `AudioPlayerFeature.tsx` |
+
+**適用ルール:**
+- ファイル数が増え、役割が曖昧になり始めた場合に導入する。
+- 小規模な機能では標準名（Suffixなし）で開始して良い。
+
+### 2.7. Naming Scope Policy (Package vs Component)
+**「フォルダ名（Package）は広く、ファイル名（Component）は具体的に」** という方針を採用する。
+
+*   **Package Name (Folder):** 将来的な拡張性（Extensibility）を考慮し、**広義のドメイン名**を採用する。
+    *   Good: `src/components/player/` (将来 `VideoPlayer` や `ScorePlayer` が増えても格納できる)
+    *   Bad: `src/components/audio-player/` (音声専用に限定され、構成変更に弱くなる)
+*   **Component Name (File):** 役割を明確にするため（Specificity）、**具体的かつ詳細な名前**を採用する。
+    *   Good: `AudioPlayerController.tsx` (「音声」プレイヤーであることが自明)
+    *   Bad: `PlayerController.tsx` (何のプレイヤーか文脈依存になる)
+
 
 ### 2.1. TypeScript & JavaScript
 *   **TypeScript:** `strict: true` を必須とする。`any` 型の使用は原則禁止（`unknown` を使用し、型ガードを行う）。
