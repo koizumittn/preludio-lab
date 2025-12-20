@@ -17,7 +17,8 @@ src/
 │   ├── _actions/             # Server Actions (Controller / Entry Point)
 │   └── (routes)/             # 各画面のルーティング
 ├── components/               # [UI Layer] React Components (Pure View)
-│   ├── ui/                   # 汎用 UI コンポーネント (Button, Card)
+│   ├── ui/                   # [Generic] 汎用 UI (Button, Card, Skeleton) - ロジック/依存なし
+│   ├── layout/               # [Structure] アプリ固有レイアウト (Header, Footer) - Auth/Lang依存あり
 │   ├── player/               # [Feature Layer] Player機能コンポーネント
 │   ├── content/              # [Feature Layer] Content機能コンポーネント
 │   └── score/                # [Feature Layer] Score機能コンポーネント
@@ -138,6 +139,14 @@ graph TD
 2.  **Phase 2: Use Case Implementation** (`src/application` Business Logic)
 3.  **Phase 3: Infrastructure Implementation** (`src/infrastructure` DB/API Adapter)
 4.  **Phase 4: UI Connection** (`src/app` Server Action & View)
+
+### 1.6. Component Categorization (UI vs Layout)
+`src/components` 内のフォルダ分けにおいて、特に混同しやすい `ui` と `layout` の境界を以下のように定義する。
+
+| フォルダ | 役割・定義 | 特徴 (Criteria) | 例 |
+| :--- | :--- | :--- | :--- |
+| **ui/** | **Generic Atoms (汎用部品)**<br>プロジェクトに依存しない、純粋なUIパーツ。他プロジェクトへのコピー＆ペーストが可能。 | ・**No Domain Logic:** ビジネスロジックを持たない<br>・**No Auth:** 認証状態を知らない<br>・**No Fetch:** データ取得を行わない | `Button`, `Card`, `Skeleton`, `Dialog` |
+| **layout/** | **Structure (構造部品)**<br>アプリの骨格を成す部分。特定のドメインや状態に依存する。 | ・**Context Aware:** ユーザー情報や言語設定(`lang`)に依存する<br>・**Business Logic:** ナビゲーションの制御などを含む | `Header`, `Footer`, `Sidebar`, `ConsentBanner` |
 
 ## 2. Coding Standards
 **Google TypeScript Style Guide** をベースとし、以下の独自ルールを追加適用する。
