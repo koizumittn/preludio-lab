@@ -150,6 +150,7 @@ graph TD
 | **View (UI)** | **[Default]**<br>ユーザーが見て操作するもの。<br>ロジックを持たず、Props/Contextの命令を呼ぶのみ。 | **なし**<br>(標準) | `FocusPlayer.tsx`<br>`MiniPlayer.tsx` |
 | **Controller** | **[Headless]**<br>画面を持たない（`null`を返す）。<br>ContextとView、View同士の調整、ライフサイクル管理を行う。 | **Controller** | `AudioPlayerController.tsx` |
 | **Adapter** | **[Interface]**<br>外部ライブラリやInfrastracture層との接続口。<br>アプリ内のProps体系を外部サービス仕様に変換する。 | **Adapter** | `AudioPlayerAdapter.tsx` |
+| **Feature** | **[Entry Point]**<br>機能の公開エントリーポイント。<br>実装詳細（Client Wrapper等）を隠蔽し、使いやすいIFを提供する。 | **Feature** | `AudioPlayerFeature.tsx` |
 
 **適用ルール:**
 - ファイル数が増え、役割が曖昧になり始めた場合に導入する。
