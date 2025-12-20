@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useCallback, useState } from 'react';
-import { useAudioPlayer } from '@/components/providers/AudioPlayerContext';
+import { useAudioPlayer } from './AudioPlayerContext';
 import { PlayerPlatform } from '@/domain/player/PlayerConstants';
 import { handleClientError } from '@/utils/client-error-handler';
 import { AudioPlayerAdapter } from './AudioPlayerAdapter';

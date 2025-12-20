@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useState } from 'react';
-import { useAudioPlayer } from '@/components/providers/AudioPlayerContext';
+import { useAudioPlayer } from './AudioPlayerContext';
 import { PlayerPlatform } from '@/domain/player/PlayerConstants';
 // Helper for time formatting if not available
 const formatTimeHelper = (seconds: number) => {

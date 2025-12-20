@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { FocusAudioPlayer } from './FocusAudioPlayer';
-import { AudioPlayerContext } from '@/components/providers/AudioPlayerContext';
+import { AudioPlayerContext } from './AudioPlayerContext';
 
 // Mock context value helper
 const mockContextValue = (overrides = {}) => ({

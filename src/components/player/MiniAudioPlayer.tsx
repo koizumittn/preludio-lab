@@ -1,6 +1,6 @@
 'use client';
 
-import { useAudioPlayer } from '@/components/providers/AudioPlayerContext';
+import { useAudioPlayer } from './AudioPlayerContext';
 
 /**
  * [REQ-UI-004-02] Mini Player
