@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { AudioPlayer } from './AudioPlayer';
+import { AudioPlayerAdapter } from './AudioPlayerAdapter';
 
 // Mock react-youtube
 vi.mock('react-youtube', () => {
@@ -28,7 +28,7 @@ vi.mock('react-youtube', () => {
     };
 });
 
-describe('AudioPlayer Component', () => {
+describe('AudioPlayerAdapter Component', () => {
     const mockOnReady = vi.fn();
     const mockOnProgress = vi.fn();
     const mockOnEnded = vi.fn();
@@ -51,12 +51,12 @@ describe('AudioPlayer Component', () => {
     });
 
     it('renders without crashing', () => {
-        render(<AudioPlayer {...defaultProps} />);
+        render(<AudioPlayerAdapter {...defaultProps} />);
         expect(screen.getByTestId('youtube-mock')).toBeDefined();
     });
 
     it('calls onReady when player is ready', async () => {
-        render(<AudioPlayer {...defaultProps} />);
+        render(<AudioPlayerAdapter {...defaultProps} />);
         // Wait for usage of setTimeout in mock
         await new Promise(resolve => setTimeout(resolve, 10));
         expect(mockOnReady).toHaveBeenCalled();

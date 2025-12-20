@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import YouTube, { YouTubeProps, YouTubeEvent } from 'react-youtube';
-import { AudioPlayerProps } from '@/components/player/AudioPlayer';
+import { AudioPlayerAdapterProps } from '@/components/player/AudioPlayerAdapter';
 
 /**
  * [INFRASTRUCTURE] YouTube Adapter
@@ -24,7 +24,7 @@ export function YouTubeAdapter({
     onEnded,
     onError,
     onStateChange
-}: AudioPlayerProps) {
+}: AudioPlayerAdapterProps) {
     const playerRef = useRef<any>(null);
     const progressInterval = useRef<NodeJS.Timeout | null>(null);
     const lastPlaybackIdRef = useRef<number | undefined>(undefined);

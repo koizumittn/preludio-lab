@@ -4,18 +4,18 @@ import React, { useCallback, useState } from 'react';
 import { useAudioPlayer } from '@/components/providers/AudioPlayerContext';
 import { PlayerPlatform } from '@/domain/player/PlayerConstants';
 import { handleClientError } from '@/utils/client-error-handler';
-import { AudioPlayer } from './AudioPlayer';
+import { AudioPlayerAdapter } from './AudioPlayerAdapter';
 
 /**
- * [REQ-UI-GLOBAL-PLAYER] Global Audio Player (Smart Container)
+ * [REQ-UI-GLOBAL-PLAYER] Audio Player Controller (Smart Container)
  * 
- * グローバルな AudioPlayerContext を、Dumb Component である AudioPlayer に接続します。
+ * グローバルな AudioPlayerContext を、Dumb Component である AudioPlayerAdapter に接続します。
  * 担当:
  * - 状態の同期 (Context -> Props)
  * - イベントのハンドリング (Props -> Context)
  * - エラー報告 (Sentry/Toast)
  */
-export default function GlobalAudioPlayer() {
+export default function AudioPlayerController() {
     const {
         src,
         platform,
@@ -36,15 +36,15 @@ export default function GlobalAudioPlayer() {
         // `setPlayerInstance` に登録するアプローチをとる。
     } = useAudioPlayer();
 
-    // Context からの命令的 seekTo 呼び出しを、AudioPlayer の props 変更(seekTo) に変換するためのローカルステート
+    // Context からの命令的 seekTo 呼び出しを、AudioPlayerAdapter の props 変更(seekTo) に変換するためのローカルステート
     const [seekTrigger, setSeekTrigger] = useState<number | null>(null);
 
     // Context に登録するためのプロキシインスタンスを作成
     // Context が `instance.seekTo(time)` を呼ぶと、ローカルステート `seekTrigger` が更新される
-    // AudioPlayer は `seekTo` prop の変更を検知してシークする
+    // AudioPlayerAdapter は `seekTo` prop の変更を検知してシークする
     const proxyInstance = React.useMemo(() => ({
         seekTo: (time: number, allowSeekAhead: boolean) => {
-            console.debug('[GlobalAudioPlayer] Contextからのシーク要求:', time);
+            console.debug('[AudioPlayerController] Contextからのシーク要求:', time);
             setSeekTrigger(time);
         },
         setVolume: (vol: number) => {
@@ -63,7 +63,7 @@ export default function GlobalAudioPlayer() {
 
     const handleReady = useCallback((duration: number) => {
         _onReady(duration);
-        console.log('[GlobalAudioPlayer] Ready. Duration:', duration);
+        console.log('[AudioPlayerController] Ready. Duration:', duration);
     }, [_onReady]);
 
     const handleError = useCallback((error: any) => {
@@ -87,7 +87,7 @@ export default function GlobalAudioPlayer() {
     if (!src) return null;
 
     return (
-        <AudioPlayer
+        <AudioPlayerAdapter
             src={src}
             platform={platform || PlayerPlatform.YOUTUBE}
             isPlaying={isPlaying}

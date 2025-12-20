@@ -4,7 +4,7 @@ import React from 'react';
 import { YouTubeAdapter } from '@/infrastructure/player/adapters/YouTubeAdapter';
 import { PlayerPlatform, PlayerPlatformType } from '@/domain/player/PlayerConstants';
 
-export interface AudioPlayerProps {
+export interface AudioPlayerAdapterProps {
     // State (データ)
     src: string; // 動画ID または URL
     platform?: PlayerPlatformType; // 将来的な拡張用、現状は youtube のみ実装
@@ -30,12 +30,12 @@ export interface AudioPlayerProps {
 
 
 /**
- * [REQ-UI-AUDIO-PLAYER] Audio Player (Dumb Component)
+ * [REQ-UI-AUDIO-PLAYER] Audio Player Adapter (Dumb Component / Interface)
  * 
  * 下位のプレイヤーライブラリを抽象化し、統一された Props 駆動のインターフェースを提供します。
  * `platform` プロパティに基づいて適切なアダプター（現在は YouTubeAdapter のみ）を選択してレンダリングします。
  */
-export function AudioPlayer(props: AudioPlayerProps) {
+export function AudioPlayerAdapter(props: AudioPlayerAdapterProps) {
     const { platform = PlayerPlatform.YOUTUBE } = props;
 
     if (platform !== PlayerPlatform.YOUTUBE) {

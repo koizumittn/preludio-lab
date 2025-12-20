@@ -142,6 +142,19 @@ graph TD
 ## 2. Coding Standards
 **Google TypeScript Style Guide** をベースとし、以下の独自ルールを追加適用する。
 
+### 2.6. Feature Component Patterns (Role-based Naming)
+「Package by Feature」構成内で、コンポーネントの役割（責務）を明確にするため、以下の命名規則を推奨する。
+
+| 役割 (Role) | 責務・定義 | 命名規則 (Suffix) | 例 (Player) |
+| :--- | :--- | :--- | :--- |
+| **View (UI)** | **[Default]**<br>ユーザーが見て操作するもの。<br>ロジックを持たず、Props/Contextの命令を呼ぶのみ。 | **なし**<br>(標準) | `FocusPlayer.tsx`<br>`MiniPlayer.tsx` |
+| **Controller** | **[Headless]**<br>画面を持たない（`null`を返す）。<br>ContextとView、View同士の調整、ライフサイクル管理を行う。 | **Controller** | `AudioPlayerController.tsx` |
+| **Adapter** | **[Interface]**<br>外部ライブラリやInfrastracture層との接続口。<br>アプリ内のProps体系を外部サービス仕様に変換する。 | **Adapter** | `AudioPlayerAdapter.tsx` |
+
+**適用ルール:**
+- ファイル数が増え、役割が曖昧になり始めた場合に導入する。
+- 小規模な機能では標準名（Suffixなし）で開始して良い。
+
 ### 2.1. TypeScript & JavaScript
 *   **TypeScript:** `strict: true` を必須とする。`any` 型の使用は原則禁止（`unknown` を使用し、型ガードを行う）。
 *   **Immutability:** 変数は可能な限り `const` を使用し、再代入可能な `let` の使用を避ける。
