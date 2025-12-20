@@ -5,8 +5,8 @@ import GithubSlugger from 'github-slugger';
 import { TableOfContents } from '@/components/content/TableOfContents';
 import { SeriesNavigation } from '@/components/content/SeriesNavigation';
 import ScoreRenderer from '@/components/score';
-import { MockPlayer } from '@/components/mock/MockPlayer';
-import { ListeningGuide } from '@/components/mock/ListeningGuide';
+import { WorkPlayerPlaceholder } from '@/components/work/WorkPlayerPlaceholder';
+import { ListeningGuide } from '@/components/work/ListeningGuide';
 // ... (imports remain)
 import { FsContentRepository } from '@/infrastructure/content/FsContentRepository';
 
@@ -179,7 +179,7 @@ export default async function WorkPage({
                 <article className="lg:col-span-7 prose prose-lg prose-slate dark:prose-invert">
                     {/* Mobile Sidebar (Visible < lg) */}
                     <div className="lg:hidden mb-12 space-y-8">
-                        <MockPlayer />
+                        <WorkPlayerPlaceholder />
 
                         <details className="group bg-neutral-50 rounded-xl overflow-hidden border border-neutral-200">
                             <summary className="flex items-center justify-between p-4 font-medium text-primary cursor-pointer list-none hover:bg-neutral-100 transition-colors">
@@ -215,7 +215,7 @@ export default async function WorkPage({
                 <aside className="hidden lg:block lg:col-span-4 lg:col-start-9">
                     <div className="sticky top-24 space-y-8">
                         <div>
-                            <MockPlayer />
+                            <WorkPlayerPlaceholder />
                             <ListeningGuide />
                         </div>
                         <div>

@@ -6,7 +6,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { AudioPlayerFeature } from '@/components/player';
 import { AppProviders } from '@/components/providers/AppProviders';
-import { ConsentBanner } from '@/components/ui/ConsentBanner';
+import { ConsentBanner } from '@/components/layout/ConsentBanner';
 import { Toaster } from 'react-hot-toast';
 import { supportedLocales } from '@/domain/shared/locale';
 

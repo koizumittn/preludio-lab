@@ -1,4 +1,4 @@
-export const MockPlayer = () => {
+export const WorkPlayerPlaceholder = () => {
     return (
         <div className="bg-black text-white rounded-xl p-6 flex flex-col items-center justify-center text-center aspect-video shadow-lg mb-6">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 mb-3 text-white">
