@@ -1,4 +1,4 @@
-import { ContentDetail, ContentSummary } from '@/domain/entities/content';
+import { ContentDetail, ContentSummary } from '@/domain/content/models';
 
 /**
  * コンテンツデータへのアクセスを抽象化するリポジトリインターフェース

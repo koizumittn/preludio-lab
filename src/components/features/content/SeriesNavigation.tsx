@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ContentSummary } from '@/domain/entities/content';
+import { ContentSummary } from '@/domain/content/models';
 
 type Props = {
     prev: ContentSummary | null;
