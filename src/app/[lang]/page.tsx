@@ -1,4 +1,4 @@
-import { Link } from '@/infrastructure/i18n/navigation';
+import Link from 'next/link';
 import { LOCALES } from '@/lib/constants';
 import { getTranslations } from 'next-intl/server';
 
@@ -45,13 +45,13 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                     </p>
                     <div className="flex justify-center gap-4">
                         <Link
-                            href="/works"
+                            href={`/${lang}/works`}
                             className="rounded-full bg-preludio-black px-8 py-3 text-sm font-semibold text-paper-white shadow-lg transition hover:bg-gray-800"
                         >
                             {t('hero.explore')}
                         </Link>
                         <Link
-                            href="/about"
+                            href={`/${lang}/about`}
                             className="rounded-full bg-paper-white px-8 py-3 text-sm font-semibold text-preludio-black shadow-sm ring-1 ring-inset ring-gray-300 transition hover:bg-gray-50"
                         >
                             {t('hero.about')}
@@ -65,7 +65,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                 <h2 className="mb-12 text-center text-3xl font-bold text-preludio-black">{t('discover')}</h2>
                 <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
                     {categories.map((cat) => (
-                        <Link key={cat.id} href={`/${cat.id}`} className={`group relative block overflow-hidden rounded-2xl p-8 transition hover:shadow-md ${cat.color}`}>
+                        <Link key={cat.id} href={`/${lang}/${cat.id}`} className={`group relative block overflow-hidden rounded-2xl p-8 transition hover:shadow-md ${cat.color}`}>
                             <h3 className="mb-2 text-xl font-bold">{t(`categories.${cat.id}.name`)}</h3>
                             <p className="text-sm opacity-80">{t(`categories.${cat.id}.desc`)}</p>
                         </Link>
@@ -83,7 +83,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                             <h3 className="mb-4 text-3xl font-bold text-gray-900">{featuredWork.title}</h3>
                             <p className="mb-6 text-gray-600">{featuredWork.description}</p>
                             <div className="flex flex-wrap gap-4">
-                                <Link href={featuredWork.link} className="inline-flex items-center text-blue-600 hover:underline">
+                                <Link href={`/${lang}${featuredWork.link}`} className="inline-flex items-center text-blue-600 hover:underline">
                                     {t('featured.readMore')} &rarr;
                                 </Link>
                             </div>
