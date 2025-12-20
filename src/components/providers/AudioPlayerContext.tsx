@@ -2,6 +2,8 @@
 
 import React, { createContext, useContext, useState, useCallback, useMemo, useRef } from 'react';
 import { PlayerPlatform, PlayerPlatformType } from '@/domain/player/constants';
+import { PlayRequestSchema } from '@/domain/player/schema';
+import { handleClientError } from '@/utils/client-error-handler';
 
 export type PlayerMode = 'hidden' | 'mini' | 'focus';
 
@@ -191,6 +193,16 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
         },
         options?: { startSeconds?: number; endSeconds?: number }
     ) => {
+        // [DOMAIN VALIDATION]
+        const validationResult = PlayRequestSchema.safeParse({ src, metadata, options });
+        if (!validationResult.success) {
+            console.error('[AudioPlayerContext] Validation Error:', validationResult.error);
+            // 本番ではユーザーに通知するか、エラーハンドリングポリシーに従う
+            // ここではコンソールエラーのみとし、処理は継続させない（安全策）
+            handleClientError(new Error(`Invalid play request: ${validationResult.error.message}`), '再生リクエストが無効です');
+            return;
+        }
+
         setState((prev) => {
             const newState = { ...prev, isPlaying: true, playbackId: prev.playbackId + 1 };
             if (src && src !== prev.src) {
