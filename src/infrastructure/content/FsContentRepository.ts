@@ -3,7 +3,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import { ContentDetail, ContentSummary, MetadataSchema } from '@/domain/content/Content';
 import { IContentRepository } from '@/domain/content/ContentRepository';
-import { ILogger } from '@/domain/shared/Logger';
+import { ILogger } from '@/domain/shared/logger';
 import { PinoLogger } from '@/infrastructure/logging/pino-logger';
 
 export class FsContentRepository implements IContentRepository {
