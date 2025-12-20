@@ -8,7 +8,7 @@ import ScoreRenderer from '@/components/features/score';
 import { MockPlayer } from '@/components/mock/MockPlayer';
 import { ListeningGuide } from '@/components/mock/ListeningGuide';
 // ... (imports remain)
-import { FsContentRepository } from '@/infrastructure/repositories/fs-content-repository';
+import { FsContentRepository } from '@/infrastructure/content/FsContentRepository';
 
 
 

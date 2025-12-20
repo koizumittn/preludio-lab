@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { FsContentRepository } from './fs-content-repository';
+import { FsContentRepository } from './FsContentRepository';
 import fs from 'fs';
 import path from 'path';
 
