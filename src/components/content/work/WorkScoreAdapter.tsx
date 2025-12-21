@@ -3,7 +3,7 @@
 import { useAudioPlayer } from '@/components/player/AudioPlayerContext';
 import ScoreFeature, { ScoreAudioMetadata } from '@/components/score';
 import { PlayerPlatform, PlayerPlatformType } from '@/domain/player/PlayerConstants';
-import { generatePlatformUrl } from '@/domain/player/PlayerUtils';
+import { generateWatchUrl } from '@/components/player/player-utils';
 
 interface WorkScoreAdapterProps {
     abc: string;
@@ -30,8 +30,8 @@ export function WorkScoreAdapter({ abc, baseAudioMetadata }: WorkScoreAdapterPro
         let platformLabel = meta.platformLabel;
 
         if (!platformUrl) {
-            // Use Domain Utility to generate URL (Decoupled from specific provider knowledge)
-            platformUrl = generatePlatformUrl(platform, meta.src) || undefined;
+            // Use UI Utility to generate user-facing Watch URL
+            platformUrl = generateWatchUrl(platform, meta.src) || undefined;
         }
         if (platform === PlayerPlatform.YOUTUBE && !platformLabel) {
             platformLabel = 'Watch on YouTube';

@@ -3,7 +3,12 @@
 import React, { useEffect, useRef } from 'react';
 import YouTube, { YouTubeProps, YouTubeEvent } from 'react-youtube';
 import { AudioPlayerAdapterProps } from '@/components/player/AudioPlayerAdapter';
-import { YOUTUBE_HOST } from '@/domain/player/PlayerConstants';
+
+/**
+ * [INFRASTRUCTURE] YouTube Host Configuration
+ * Defined here as it's an implementation detail of the adapter.
+ */
+const YOUTUBE_EMBED_HOST = 'https://www.youtube-nocookie.com';
 
 /**
  * [INFRASTRUCTURE] YouTube Adapter
@@ -44,7 +49,7 @@ export function YouTubeAdapter({
             modestbranding: 1,
             origin: typeof window !== 'undefined' ? window.location.origin : undefined,
         },
-        host: YOUTUBE_HOST,
+        host: YOUTUBE_EMBED_HOST,
     };
 
     // loadVideoById を安全に呼び出すヘルパー関数
