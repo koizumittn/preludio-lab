@@ -88,7 +88,6 @@ export function ScoreFeature({ abc, baseAudioMetadata, onPlayRequest }: ScoreFea
                     const end = parseFloat(valueStr);
                     if (!isNaN(end)) directives.endSeconds = end;
                     break;
-                case '%%audio_videoId':
                 case '%%audio_src':
                     if (valueStr) directives.src = valueStr;
                     break;
