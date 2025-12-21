@@ -3,11 +3,11 @@ import { IScoreRenderer, Score, ScoreFormat } from '@/domain/score/Score';
 
 /**
  * AbcjsScoreRenderer
- * Infrastructure implementation of IScoreRenderer using the 'abcjs' library.
+ * IScoreRenderer の 'abcjs' ライブラリを使用したインフラストラクチャ実装です。
  */
 export class AbcjsScoreRenderer implements IScoreRenderer {
     /**
-     * Renders the score into the provided element.
+     * 指定された要素にスコアをレンダリングします。
      */
     async render(score: Score, element: HTMLElement): Promise<void> {
         if (score.format !== ScoreFormat.ABC) {
@@ -21,29 +21,29 @@ export class AbcjsScoreRenderer implements IScoreRenderer {
         }
 
         try {
-            // Render options for responsive layout (Encapsulated from Domain)
+            // レスポンシブレイアウト用のレンダリングオプション (ドメインからカプセル化)
             const renderOptions: abcjs.AbcVisualParams = {
-                responsive: 'resize', // Auto-resize on window change
-                add_classes: true,    // Add classes to elements for styling
+                responsive: 'resize', // ウィンドウ変更時に自動サイズ調整
+                add_classes: true,    // スタイリング用に要素へクラスを追加
                 paddingtop: 20,
                 paddingbottom: 20,
                 paddingleft: 0,
                 paddingright: 0,
-                // staffwidth will be auto-calculated by 'responsive: resize'
+                // staffwidth は 'responsive: resize' により自動計算されます
             };
 
-            // If a custom title is provided in metadata, we might want to inject it or handle it.
-            // For now, abcjs renders title from ABC string. 
-            // If we wanted to override, we would need to manipulate the ABC string or use visual options.
-            // Current requirement implies just rendering what is given.
+            // メタデータでカスタムタイトルが提供されている場合、それを注入または処理したい場合があります。
+            // 現状では、abcjs は ABC 文字列からタイトルをレンダリングします。
+            // 上書きしたい場合は、ABC 文字列を操作するか、visual options を使用する必要があります。
+            // 現在の要件では、与えられたものをそのままレンダリングすることを意味しています。
 
             abcjs.renderAbc(element, score.data, renderOptions);
 
         } catch (error) {
-            // Re-throw so the UI layer/controller can handle it (e.g., show toast) or log it here.
-            // Since this is Infra, capturing exception here is good for debugging, but we should let upper layer know it failed?
-            // "handleClientError" is a utility often used in UI. 
-            // For now, let's throw a standardized error or just simple Error.
+            // UI層/コントローラーが処理 (例: トースト表示) できるように再スローします。
+            // インフラ層なので、ここでの例外捕捉はデバッグに有用ですが、失敗したことは上位層に知らせるべきです。
+            // "handleClientError" はUIでよく使用されるユーティリティです。
+            // ここでは標準的なエラー、または単純な Error をスローすることにします。
             throw new Error(`Failed to render ABC score: ${error instanceof Error ? error.message : String(error)}`);
         }
     }

@@ -3,8 +3,9 @@
 import dynamic from 'next/dynamic';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { Score, ScoreFormat } from '@/domain/score/Score';
-// We avoid importing Player types to keep Domain Decoupling.
-// Instead we define what this feature produces/consumes.
+
+// ドメインの結合度を下げるため、Playerの型をインポートすることは避けます。
+// 代わりに、この機能が生成/消費するものを定義します。
 
 const ScoreView = dynamic(
     () => import('./Score').then(mod => mod.Score),
@@ -28,7 +29,7 @@ export interface ScoreAudioMetadata {
     title?: string;
     composer?: string;
     performer?: string;
-    src?: string; // Generic source identifier (url or videoId)
+    src?: string; // 汎用的なソース識別子 (url または videoId)
     platform?: string; // 'youtube', 'file', etc.
     platformUrl?: string;
     platformLabel?: string;
@@ -40,30 +41,30 @@ export interface ScoreAudioMetadata {
 interface ScoreFeatureProps {
     abc: string;
     /**
-     * External metadata provided by the parent (e.g. from MDX Frontmatter)
+     * 親コンポーネントから提供される外部メタデータ (例: MDX Frontmatter から)
      */
     baseAudioMetadata?: ScoreAudioMetadata;
     /**
-     * Callback when the user requests to play the audio associated with this score.
-     * The metadata passed here is a merge of baseMetadata and directives found in ABC.
+     * ユーザーがこのスコアに関連付けられたオーディオの再生をリクエストした際のコールバック。
+     * ここで渡されるメタデータは、baseMetadata と ABC 内で見つかったディレクティブのマージ結果です。
      */
     onPlayRequest?: (metadata: ScoreAudioMetadata) => void;
 }
 
 /**
  * ScoreFeature
- * The main entry point for the Score functionality.
- * Responsibilities:
- * 1. Parse ABC directives (%%audio_*) to extract embedded metadata.
- * 2. Merge with external metadata.
- * 3. transform raw string to Score Entity.
- * 4. Render the purely visual Score component.
- * 5. Handle "Play" interaction by notifying the parent (Decoupled form Player implementation).
+ * Score機能のメインエントリーポイントです。
+ * 責務:
+ * 1. ABCディレクティブ (%%audio_*) を解析して埋め込みメタデータを抽出する。
+ * 2. 外部メタデータとマージする。
+ * 3. 生の文字列を Score Entity に変換する。
+ * 4. 純粋な視覚コンポーネントである Score をレンダリングする。
+ * 5. 親に通知することで「再生」インタラクションを処理する (Player実装からの分離)。
  */
 export function ScoreFeature({ abc, baseAudioMetadata, onPlayRequest }: ScoreFeatureProps) {
 
     /**
-     * Parses custom ABC directives (%%audio_*)
+     * カスタムABCディレクティブ (%%audio_*) を解析します
      */
     const parseAudioDirectives = (abcContent: string): Partial<ScoreAudioMetadata> => {
         const directives: any = {};
@@ -119,7 +120,7 @@ export function ScoreFeature({ abc, baseAudioMetadata, onPlayRequest }: ScoreFea
 
     const abcDirectives = parseAudioDirectives(abc);
 
-    // Logic to determine if time override is present
+    // 時間の上書きが存在するか判定するロジック
     const directivesContainsTime =
         abcDirectives.startSeconds !== undefined || abcDirectives.endSeconds !== undefined;
 
@@ -127,12 +128,12 @@ export function ScoreFeature({ abc, baseAudioMetadata, onPlayRequest }: ScoreFea
     let effectiveMetadata: ScoreAudioMetadata | null = null;
 
     if (abcDirectives.src) {
-        // ABC dictates a new source -> Reset context
+        // ABCが新しいソースを指示している場合 -> コンテキストをリセット
         effectiveMetadata = {
             ...abcDirectives
         };
     } else if (baseAudioMetadata) {
-        // Inherit from base, but override time if present in ABC
+        // ベースから継承するが、ABC内に時間指定があれば上書きする
         effectiveMetadata = {
             ...baseAudioMetadata,
             ...abcDirectives,
@@ -141,7 +142,7 @@ export function ScoreFeature({ abc, baseAudioMetadata, onPlayRequest }: ScoreFea
         };
     }
 
-    // Construct Score Entity
+    // Score Entity の構築
     const scoreEntity: Score = {
         format: ScoreFormat.ABC,
         data: abc,

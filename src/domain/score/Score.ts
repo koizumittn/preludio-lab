@@ -1,37 +1,38 @@
 /**
  * Score Format Constants
- * Defines supported notation formats.
+ * サポートされている記法フォーマットを定義します。
  */
 export const ScoreFormat = {
     ABC: 'abc',
-    MUSICXML: 'musicxml', // Future support
+    MUSICXML: 'musicxml', // 将来的なサポート
 } as const;
 
 export type ScoreFormatType = typeof ScoreFormat[keyof typeof ScoreFormat];
 
 /**
  * Score Entity
- * Represents a musical score agnostic of the specific notation format.
+ * 特定の記法フォーマットに依存しない、音楽スコアを表すエンティティです。
  */
 export interface Score {
     format: ScoreFormatType;
-    data: string; // The raw string content (ABC string, XML string, etc.)
+    data: string; // 生の文字列コンテンツ (ABC文字列, XML文字列など)
 
     // Metadata (Optional)
-    // Used when metadata is not included in the raw data or needs to be overridden/supplemented by the application.
+    // 生データ(data)にメタデータが含まれていない場合、
+    // またはアプリケーション側でメタデータを上書き/補完する必要がある場合に使用します。
     title?: string;
 }
 
 /**
  * IScoreRenderer Interface
- * Abstract interface for a score rendering engine.
- * Implementations in the Infrastructure layer will handle specific libraries (e.g., abcjs).
+ * スコアレンダリングエンジンの抽象インターフェースです。
+ * インフラストラクチャ層の実装が具体的なライブラリ (例: abcjs) を処理します。
  */
 export interface IScoreRenderer {
     /**
-     * Renders the score into the provided HTML element.
-     * @param score The score entity to render.
-     * @param element The container HTML element.
+     * 指定されたHTML要素にスコアをレンダリングします。
+     * @param score レンダリング対象のスコアエンティティ
+     * @param element コンテナとなるHTML要素
      */
     render(score: Score, element: HTMLElement): Promise<void>;
 }

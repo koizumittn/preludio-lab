@@ -6,13 +6,13 @@ import { useScoreRenderer } from './useScoreRenderer';
 
 interface ScoreProps {
     score: Score;
-    className?: string; // Allow external styling
+    className?: string; // 外部からのスタイリングを許可
 }
 
 /**
  * Score View Component
- * A pure view component that renders a musical score.
- * It uses the 'useScoreRenderer' hook to handle the actual rendering logic.
+ * 音楽スコアをレンダリングする純粋なビューコンポーネントです。
+ * 実際のレンダリングロジックは 'useScoreRenderer' フックを使用して処理します。
  */
 export function ScoreComponent({ score, className }: ScoreProps) {
     const uniqueId = `score-${useId()}`;
@@ -29,5 +29,5 @@ export function ScoreComponent({ score, className }: ScoreProps) {
     );
 }
 
-// Named export to match guideline
+// ガイドラインに従い Named Export を使用
 export { ScoreComponent as Score };

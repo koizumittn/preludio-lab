@@ -5,14 +5,14 @@ import { handleClientError } from '@/utils/client-error-handler';
 
 /**
  * useScoreRenderer
- * Custom hook to handle score rendering logic.
- * It manages the lifecycle of the renderer and the DOM element.
+ * スコアレンダリングロジックを扱うカスタムフックです。
+ * レンダラーのライフサイクルとDOM要素を管理します。
  */
 export function useScoreRenderer(score: Score) {
     const elementRef = useRef<HTMLDivElement>(null);
 
-    // Dependency Injection (simplified)
-    // Memoize the renderer to ensure stable reference across renders
+    // 依存性の注入 (簡易版)
+    // レンダラーをメモ化し、レンダリング間で参照を安定させます
     const renderer = useRef(new AbcjsScoreRenderer()).current;
 
     useEffect(() => {
