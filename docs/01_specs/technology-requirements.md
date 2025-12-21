@@ -15,11 +15,11 @@
 | :--- | :--- | :--- | :--- |
 | **REQ-TECH-STACK-001** | **Frontend** | **Next.js 15 (App Router)** | パフォーマンス、SEO、Vercelとの親和性を重視。 |
 | **REQ-TECH-STACK-002** | **Language** | **TypeScript** | 型安全性により、AIによるコード生成の精度と保守性を向上。 |
-| **REQ-TECH-STACK-003** | **Hosting** | **Vercel** | Hobby Plan (Free)。サーバーレス、グローバルCDN。 |
-| **REQ-TECH-STACK-004** | **Content Mgt** | **GitHub + MDX** | コンテンツのバージョン管理。**AIエージェントの作業場**として機能する。 |
+| **REQ-TECH-STACK-003** | **Hosting** | **Vercel + Cloudflare** | **Hybrid CDN.** Vercel (HTML/ISR) + Cloudflare (Assets/Security) の役割分担でコストゼロと高性能を両立。 |
+| **REQ-TECH-STACK-004** | **Content Mgt** | **GitHub (Master) + Supabase (Index)** | MDXはGitで管理し、メタデータ/ベクトルはSupabaseに同期するハイブリッド構成。 |
 | **REQ-TECH-STACK-005** | **User DB / Auth** | **Supabase** | **(Free Tier & SSO Only)** メール/パスワード認証は無効化。OAuth連携のみ使用。 |
-| **REQ-TECH-STACK-006** | **Search** | **Pagefind** | 静的サイト内検索。サーバーレス・コストゼロ。 |
-| **REQ-TECH-STACK-007** | **Media (Score)** | **react-abc / verovio** | テキスト（ABC記法）からSVG楽譜をクライアント描画。 |
+| **REQ-TECH-STACK-006** | **Search** | **Supabase Hybrid Search** | 全文検索(FTS)とベクトル検索(Embedding)のハイブリッド。セマンティック検索を実現。 |
+| **REQ-TECH-STACK-007** | **Media (Score)** | **react-abc / verovio** | API不要のクライアント描画。**SSR不可**のため `useEffect` での制御を必須とする。 |
 | **REQ-TECH-STACK-008** | **Media (Audio)** | **YouTube IFrame API** | 外部プレーヤー制御。コストゼロで音源再生。 |
 | **REQ-TECH-STACK-009** | **AI Model** | **Gemini 3.0** | **Google AI Studio API**経由で利用。無料枠（Free Tier）を使用。 |
 | **REQ-TECH-STACK-010** | **Agent Runner** | **GitHub Actions** | **(Changed)** AIエージェントの実行環境。Cron定期実行や手動トリガーでスクリプトを起動し、コストゼロで計算リソースを確保。 |
@@ -51,9 +51,12 @@ Google Generative AI SDK for Node.js を使用したカスタムスクリプト�
 4.  **[REQ-TECH-AGENT-005] Translator Script:** (Ref: [REQ-GOAL-003-03])
     *   **Trigger:** `Musicologist` による記事生成PRのマージ（またはドラフト完成）。
     *   **Process:** マスター記事（JA）を読み込み、他6言語（EN/ES/DE/ZH/FR/IT）へ並列翻訳を実行。
-    *   **Output:** 各言語ディレクトリにMDXを生成し、一括でPRを作成。人間によるレビューは行わない。
-5.  **[REQ-TECH-AGENT-006] Coder Script:** コンポーネント修正、Lint修正など。
-6.  **[REQ-TECH-AGENT-007] Designer Script:** (Ref: [REQ-UI-PROCESS-001])
+    *   **Output:** 各言語ディレクトリにMDXを生成。
+5.  **[REQ-TECH-AGENT-006] Validator Script (Quality Gate):**
+    *   **Role:** 音楽専門用語の翻訳品質を担保する「AI検閲官」。
+    *   **Process:** 翻訳されたMDXを「多言語音楽用語辞書」と照合し、不自然な訳（例: Minor→未成年）を検知して自動修正する。
+6.  **[REQ-TECH-AGENT-007] Coder Script:** コンポーネント修正、Lint修正など。
+7.  **[REQ-TECH-AGENT-008] Designer Script:** (Ref: [REQ-UI-PROCESS-001])
     *   **Role:** デザインシステム（Tokens/CSS）の構築と保守、およびUI実装の品質管理。
     *   **Tasks:** UIコンポーネントの作成、Tailwind Configの更新、Visual Regression Testingによる見た目の崩れ検知。
 
@@ -166,7 +169,9 @@ SaaSの標準機能を最大限活用し、追加開発コストをかけずに�
 
 ### [REQ-NFR-002] Performance
 *   **[REQ-NFR-002-01] Core Web Vitals:** Googleの提唱する指標（LCP, CLS, INP）において、モバイル/デスクトップ共に "Good" (緑) スコアを維持する。
-*   **[REQ-NFR-002-02] Edge Caching:** 静的コンテンツ（MDX生成されたHTML、画像、楽譜SVG）はVercel Edge Networkでキャッシュし、オリジン到達を最小化する。
+*   **[REQ-NFR-002-02] Hybrid Edge Caching:**
+    *   **Static Assets:** 画像、フォント、楽譜SVGは **Cloudflare (Cache Everything)** で1年間キャッシュし、帯域コストをゼロにする。
+    *   **HTML (ISR):** Next.jsのISR整合性を保つため、HTML配信は **Vercel Edge** に任せ、Cloudflare側ではHTMLをキャッシュしない（バイパスする）。
 *   **[REQ-NFR-002-03] User Perceived Latency:**
     *   **Page Transition:** ページ遷移ごとの反応速度を 200ms 以内とする（SPA/Soft Navigationの利点を活かす）。
     *   **Score Rendering:** クライアントサイドでの楽譜描画完了時間を **1.5秒以内 (Mobile)** に抑え、待機中はSkeleton UIを表示して離脱を防ぐ。
@@ -182,6 +187,8 @@ SaaSの標準機能を最大限活用し、追加開発コストをかけずに�
 想定されるデータ量とアクセス規模に対し、性能劣化を起こさない設計とする。
 *   **[REQ-NFR-005-01] Traffic Volume:** ビジネス要件 [REQ-GOAL-001-01] にある **100万人/月 (MAU)** のアクセスに耐えうるアーキテクチャとする（Vercel CDN / Serverless Functionsの自動スケールにより担保）。
 *   **[REQ-NFR-005-02] Content Volume:** 記事数が **1,000件** を超えても、以下の性能を維持する。
-    *   **Search:** Pagefind インデックス分割により、検索応答速度を一定（100ms以下）に保つ。
-    *   **Build:** 増分ビルド（Incremental Static Regeneration）または分割ビルドを活用し、デプロイ時間を15分以内に抑える。
-    *   **Navigation:** 記事数増加によるルーティング解決の遅延を発生させない（Dynamic Routes + ISR）。
+    *   **Search:** Supabase Hybrid Search (Vector + FTS) により、数十万件規模でも高速なクエリ応答を実現する。
+    *   **Build:** **Hybrid ISR Strategy** を採用。
+        *   **Top 500:** アクセスの多い主要コンテンツのみビルド時に静的生成（SSG）。
+        *   **Others:** ロングテールコンテンツはリクエスト時に生成（ISR）し、Vercel Edge Networkにキャッシュする。これによりビルド時間制限（45分）を回避する。
+    *   **Navigation:** `generateStaticParams` をDBクエリで最適化し、動的ルーティングを高速化する。
