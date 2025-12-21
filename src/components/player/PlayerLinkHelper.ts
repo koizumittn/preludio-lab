@@ -1,6 +1,11 @@
 import { PlayerPlatform, PlayerPlatformType } from '@/domain/player/PlayerConstants';
 
 /**
+ * [UI CONSTANTS] User-facing Platform Hosts
+ */
+const YOUTUBE_WATCH_HOST = 'https://www.youtube.com';
+
+/**
  * [UI HELPER] Player URL Generator
  * 
  * Generates user-facing URLs for external platforms.
@@ -12,7 +17,7 @@ export const generateWatchUrl = (platform: PlayerPlatformType, src: string): str
 
     switch (platform) {
         case PlayerPlatform.YOUTUBE:
-            return `https://www.youtube.com/watch?v=${src}`;
+            return `${YOUTUBE_WATCH_HOST}/watch?v=${src}`;
         default:
             return null;
     }

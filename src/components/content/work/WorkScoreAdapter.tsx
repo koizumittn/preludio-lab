@@ -3,7 +3,7 @@
 import { useAudioPlayer } from '@/components/player/AudioPlayerContext';
 import ScoreFeature, { ScoreAudioMetadata } from '@/components/score';
 import { PlayerPlatform, PlayerPlatformType } from '@/domain/player/PlayerConstants';
-import { generateWatchUrl } from '@/components/player/player-utils';
+import { generateWatchUrl } from '@/components/player/PlayerLinkHelper';
 
 interface WorkScoreAdapterProps {
     abc: string;
