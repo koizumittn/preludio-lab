@@ -47,16 +47,21 @@ export function AudioPlayerBinder({ source, format, playRequest: propRequest, ch
         // プロパティとマージ (抽出されたメタデータを優先)
         // ページレベルのメタデータ(propRequest)は「デフォルト値」として扱い、
         // コンテンツ固有のメタデータ(extracted)がある場合はそれを優先します。
+
+        // ソースが明示的に指定されている場合、時間は継承しません (新しいコンテキストとみなす)
+        const isExplicitSource = !!extracted.src;
+        const extractedOptions = extracted.options || {};
+        const propOptions = propRequest?.options || {};
+
         return {
             src: extracted.src || propRequest?.src,
             metadata: {
                 ...propRequest?.metadata,
                 ...extracted.metadata
             },
-            options: {
-                ...propRequest?.options,
-                ...extracted.options
-            }
+            options: isExplicitSource
+                ? extractedOptions
+                : { ...propOptions, ...extractedOptions }
         };
     }, [source, format, propRequest]);
 
