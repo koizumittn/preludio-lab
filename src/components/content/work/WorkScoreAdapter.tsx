@@ -15,19 +15,19 @@ interface WorkScoreAdapterProps {
 
 /**
  * WorkScoreAdapter
- * Integrates the independent ScoreFeature with the applications AudioPlayer.
- * This adapter lives in the 'content/work' feature (or app layer), keeping 'components/score' generic and dependency-free.
- * It is responsible for parsing the specific format (ABC) and preparing generic data for the ScoreFeature.
+ * 独立した ScoreFeature をアプリケーションの AudioPlayer と統合します。
+ * このアダプターは 'content/work' 機能 (またはアプリ層) に属し、'components/score' を汎用的かつ依存関係のない状態に保ちます。
+ * 特定のフォーマット (ABC) のパースと、ScoreFeature 用の汎用データの準備を担当します。
  */
 export function WorkScoreAdapter({ abc, baseAudioMetadata }: WorkScoreAdapterProps) {
     const { play } = useAudioPlayer();
 
-    // Parse logic (moved from ScoreFeature)
+    // パースロジック (ScoreFeature から移動)
     const { score, audioMetadata } = useMemo(() => {
-        // Use Infrastructure Parser to get raw directives
+        // インフラストラクチャのパーサーを使用して生のディレクティブを取得
         const directives = new AbcMetadataParser().parseDirectives(abc);
 
-        // Map raw directives to ScoreAudioMetadata
+        // 生のディレクティブを ScoreAudioMetadata にマッピング
         const abcAudioMetadata: Partial<ScoreAudioMetadata> = {};
 
         if (directives.audio_src) abcAudioMetadata.src = directives.audio_src;
@@ -48,20 +48,20 @@ export function WorkScoreAdapter({ abc, baseAudioMetadata }: WorkScoreAdapterPro
             if (!isNaN(val)) abcAudioMetadata.endSeconds = val;
         }
 
-        // Logic to determine if time override is present
+        // 時間の上書きが存在するか判定するロジック
         const directivesContainsTime =
             abcAudioMetadata.startSeconds !== undefined || abcAudioMetadata.endSeconds !== undefined;
 
-        // Merge Logic
+        // マージロジック
         let effectiveMetadata: ScoreAudioMetadata | undefined = undefined;
 
         if (abcAudioMetadata.src) {
-            // ABC dictates a new source -> Reset context
+            // ABCが新しいソースを指示している場合 -> コンテキストをリセット
             effectiveMetadata = {
                 ...abcAudioMetadata
             };
         } else if (baseAudioMetadata) {
-            // Inherit from base, but override time if present in ABC
+            // ベースから継承するが、ABC内に時間指定があれば上書きする
             effectiveMetadata = {
                 ...baseAudioMetadata,
                 ...abcAudioMetadata,
@@ -70,7 +70,7 @@ export function WorkScoreAdapter({ abc, baseAudioMetadata }: WorkScoreAdapterPro
             };
         }
 
-        // Construct Score Entity
+        // Score Entity の構築
         const scoreEntity: Score = {
             format: ScoreFormat.ABC,
             data: abc,
@@ -81,18 +81,18 @@ export function WorkScoreAdapter({ abc, baseAudioMetadata }: WorkScoreAdapterPro
     }, [abc, baseAudioMetadata]);
 
     const handlePlayRequest = (meta: ScoreAudioMetadata) => {
-        // Map ScoreAudioMetadata to AudioPlayer's expected format
-        if (!meta.src) { // src is standardized in ScoreAudioMetadata (ScoreFeature logic uses src)
+        // ScoreAudioMetadata を AudioPlayer が期待する形式にマッピング
+        if (!meta.src) { // src は ScoreAudioMetadata で標準化されています (ScoreFeature ロジックは src を使用)
             return;
         }
 
-        // Determine Platform & Defaults
+        // プラットフォームとデフォルト値の決定
         const platform = (meta.platform as PlayerPlatformType) || PlayerPlatform.YOUTUBE;
         let platformUrl = meta.platformUrl;
         let platformLabel = meta.platformLabel;
 
         if (!platformUrl) {
-            // Use UI Utility to generate user-facing Watch URL
+            // UIユーティリティを使用してユーザー向け Watch URL を生成
             platformUrl = generateWatchUrl(platform, meta.src) || undefined;
         }
         if (platform === PlayerPlatform.YOUTUBE && !platformLabel) {

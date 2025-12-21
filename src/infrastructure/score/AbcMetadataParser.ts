@@ -1,12 +1,12 @@
 /**
  * AbcMetadataParser
- * Infrastructure service to parse metadata and directives from ABC notation strings.
- * This encapsulates the knowledge of the ABC text format.
+ * ABC記法の文字列からメタデータとディレクティブを解析するインフラストラクチャサービス。
+ * ABCテキストフォーマットに関する知識をここにカプセル化します。
  */
 export class AbcMetadataParser {
     /**
-     * Parses custom directives (lines starting with %%) from ABC content.
-     * Returns a key-value map of directives to identify arbitrary metadata.
+     * ABCコンテンツからカスタムディレクティブ (%% で始まる行) を解析します。
+     * 任意のメタデータを識別するためのキーと値のマップを返します。
      * 
      * Example:
      * %%audio_src v123
@@ -18,15 +18,15 @@ export class AbcMetadataParser {
 
         lines.forEach(line => {
             const trimmed = line.trim();
-            // Parse lines starting with %% as directives
+            // %% で始まる行をディレクティブとして解析
             if (!trimmed.startsWith('%%')) return;
 
-            // Remove the '%%' prefix for easier key handling, or keep it.
-            // Keeping it provides clearer context that it was a directive.
-            // Let's strip '%%' to make keys cleaner: "audio_src"
+            // キーの扱いを容易にするため '%%' 接頭辞を削除します。
+            // 保持することでディレクティブであることを明確にする選択肢もありますが、
+            // ここではキーをクリーンにするために '%%' を削除します: "audio_src"
             const content = trimmed.substring(2);
 
-            // Split by first whitespace
+            // 最初の空白で分割
             const parts = content.split(/\s+/);
             const key = parts[0];
             const value = parts.slice(1).join(' ');

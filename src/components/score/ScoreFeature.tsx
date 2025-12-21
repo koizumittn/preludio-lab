@@ -42,22 +42,22 @@ export interface ScoreAudioMetadata {
 export interface ScoreFeatureProps {
     score: Score;
     /**
-     * Associated audio metadata for playback.
-     * If provided, a Play button will be rendered.
+     * 再生用の関連オーディオメタデータ。
+     * 提供された場合、再生ボタンがレンダリングされます。
      */
     audioMetadata?: ScoreAudioMetadata;
     /**
-     * Callback when the user requests to play the audio.
+     * ユーザーがオーディオの再生をリクエストした際のコールバック。
      */
     onPlayRequest?: (metadata: ScoreAudioMetadata) => void;
 }
 
 /**
  * ScoreFeature
- * The main entry point for the Score functionality.
- * Responsibilities:
- * 1. Render the purely visual Score component (generic format).
- * 2. Handle "Play" interaction by notifying the parent (Decoupled from Player implementation).
+ * Score機能のメインエントリーポイントです。
+ * 責務:
+ * 1. 純粋に視覚的なScoreコンポーネントをレンダリングする (フォーマット汎用)。
+ * 2. 親に通知することで「再生」インタラクションを処理する (Player実装からの分離)。
  */
 export function ScoreFeature({ score, audioMetadata, onPlayRequest }: ScoreFeatureProps) {
 
