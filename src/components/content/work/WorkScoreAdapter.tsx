@@ -2,7 +2,7 @@
 
 import { useAudioPlayer } from '@/components/player/AudioPlayerContext';
 import ScoreFeature, { ScoreAudioMetadata } from '@/components/score';
-import { PlayerPlatform } from '@/domain/player/PlayerConstants';
+import { PlayerPlatform, PlayerPlatformType } from '@/domain/player/PlayerConstants';
 
 interface WorkScoreAdapterProps {
     abc: string;
@@ -23,6 +23,18 @@ export function WorkScoreAdapter({ abc, baseAudioMetadata }: WorkScoreAdapterPro
             return;
         }
 
+        // Determine Platform & Defaults
+        const platform = (meta.platform as PlayerPlatformType) || PlayerPlatform.YOUTUBE;
+        let platformUrl = meta.platformUrl;
+        let platformLabel = meta.platformLabel;
+
+        if (platform === PlayerPlatform.YOUTUBE && !platformUrl) {
+            platformUrl = `https://www.youtube.com/watch?v=${meta.src}`;
+        }
+        if (platform === PlayerPlatform.YOUTUBE && !platformLabel) {
+            platformLabel = 'Watch on YouTube';
+        }
+
         play(
             meta.src,
             {
@@ -30,10 +42,9 @@ export function WorkScoreAdapter({ abc, baseAudioMetadata }: WorkScoreAdapterPro
                 composer: meta.composer,
                 performer: meta.performer,
                 artworkSrc: meta.artworkSrc,
-                platformUrl: meta.platformUrl,
-                platformLabel: meta.platformLabel,
-                // Simple mapping fallback. 
-                platform: (meta.platform as any) || PlayerPlatform.YOUTUBE,
+                platformUrl,
+                platformLabel,
+                platform,
             },
             {
                 startSeconds: meta.startSeconds,
