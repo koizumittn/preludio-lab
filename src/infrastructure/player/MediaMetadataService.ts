@@ -11,6 +11,10 @@ export class MediaMetadataService {
      * @param format フォーマット識別子 ('abc' など)
      */
     public parse(content: string, format: string): Partial<PlayRequest> {
+        if (typeof content !== 'string') {
+            return {};
+        }
+
         switch (format.toLowerCase()) {
             case 'abc':
                 return this.parseAbc(content);

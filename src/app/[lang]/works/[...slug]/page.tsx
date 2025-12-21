@@ -106,7 +106,18 @@ export default async function WorkPage({
             const className = codeProps?.className || '';
 
             if (className.includes('language-abc')) {
-                const abcContent = codeProps.children;
+                // Ensure content is string to avoid SSR errors if children is mixed content
+                let abcContent = codeProps.children;
+                if (typeof abcContent !== 'string') {
+                    // Fallback: try to stringify or just invalid
+                    // If it's an array, join it? MDX sometimes passes arrays of strings
+                    if (Array.isArray(abcContent)) {
+                        abcContent = abcContent.join('');
+                    } else {
+                        abcContent = String(abcContent || '');
+                    }
+                }
+
                 return (
                     <div className="my-10 not-prose p-6 bg-neutral-100 rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
                         <AudioPlayerBinder
