@@ -1,3 +1,5 @@
+'use client';
+
 import { ReactNode, useMemo } from 'react';
 import { PlayerPlatform, PlayerPlatformType } from '@/domain/player/PlayerConstants';
 import { PlayRequest } from '@/domain/player/Player';
