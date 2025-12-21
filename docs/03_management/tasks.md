@@ -100,17 +100,17 @@ Status: `[/]` 進行中
     - [x] **[リファクタリング]** i18nロジックの共通化
         - [x] `getDictionary` 関数の最適化、翻訳漏れを検知する静的チェックの導入
 
-- [ ] **5.2 オーディオプレイヤーのコンポーネント化 (Player Componentization)**
-    - [ ] **[仕様策定]** プレイヤー抽象化レイヤーの定義
-        - [ ] `ScoreRenderer` からの分離方針と、`AudioManager` (Context) の設計
-        - [ ] Props設計: `src`, `startTime`, `onTimeUpdate` などのインターフェース定義
-    - [ ] **[実装]** `AudioPlayer` コンポーネントの独立化
-        - [ ] Shared Component への移動 (`src/components/features/player/`)
-        - [ ] Mini Player (Footer) との連携ロジックの再実装
-    - [ ] **[テスト・動作検証]** 独立再生と同期再生の検証
-        - [ ] 楽譜連動モードと、単独再生モード（BGM）の動作確認
-    - [ ] **[リファクタリング]** 既存コードへの適用
-        - [ ] `ScoreRenderer` 内のプレイヤー呼び出しを新コンポーネントへ置き換え
+- [x] **5.2 オーディオプレイヤーのコンポーネント化 (Player Componentization)**
+    - [x] **[仕様策定]** プレイヤー抽象化レイヤーの定義
+        - [x] `ScoreRenderer` からの分離方針と、`AudioManager` (Context) の設計
+        - [x] Props設計: `src`, `startTime`, `onTimeUpdate` などのインターフェース定義
+    - [x] **[実装]** `AudioPlayer` コンポーネントの独立化
+        - [x] Shared Component への移動 (`src/components/features/player/`)
+        - [x] Mini Player (Footer) との連携ロジックの再実装
+    - [x] **[テスト・動作検証]** 独立再生と同期再生の検証
+        - [x] 楽譜連動モードと、単独再生モード（BGM）の動作確認
+    - [x] **[リファクタリング]** 既存コードへの適用
+        - [x] `ScoreRenderer` 内のプレイヤー呼び出しを新コンポーネントへ置き換え
 
 - [ ] **5.3 ホームページの実装 (Dynamic Homepage)**
     - [ ] **[仕様策定]** データフェッチ戦略とサイドバー構造の定義
