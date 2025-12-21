@@ -6,7 +6,7 @@ import GithubSlugger from 'github-slugger';
 import { MdxLink } from '@/components/mdx/MdxLink';
 import { TableOfContents } from '@/components/content/TableOfContents';
 import { SeriesNavigation } from '@/components/content/SeriesNavigation';
-import ScoreRenderer from '@/components/score';
+import { WorkScoreAdapter } from '@/components/content/work/WorkScoreAdapter';
 import { WorkPlayerPlaceholder } from '@/components/content/work/WorkPlayerPlaceholder';
 import { ListeningGuide } from '@/components/content/work/ListeningGuide';
 // ... (imports remain)
@@ -108,9 +108,9 @@ export default async function WorkPage({
             if (className.includes('language-abc')) {
                 return (
                     <div className="my-10 not-prose p-6 bg-neutral-100 rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
-                        <ScoreRenderer
+                        <WorkScoreAdapter
                             abc={codeProps.children}
-                            audioMetadata={audioMetadata}
+                            baseAudioMetadata={audioMetadata}
                         />
                     </div>
                 );
@@ -118,7 +118,7 @@ export default async function WorkPage({
 
             return <pre {...props} />;
         },
-        ScoreRenderer,
+        ScoreRenderer: WorkScoreAdapter, // Alias for direct usage if any
     };
 
     return (
