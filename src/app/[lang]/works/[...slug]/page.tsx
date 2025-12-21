@@ -85,16 +85,16 @@ export default async function WorkPage({
 
     // Construct AudioMetadata from Metadata
     const audioMetadata = content.metadata.videoId ? {
-        videoId: content.metadata.videoId,
+        // videoId: content.metadata.videoId, // Cleanup: Remove videoId if generic ScoreAudioMetadata doesn't use it, but keeping it won't hurt if typed looser.
+        // Actually, let's map to 'src' as ScoreAudioMetadata expects.
+        src: content.metadata.videoId,
         title: content.metadata.title,
         composer: content.metadata.composer,
         performer: content.metadata.performer,
         artworkSrc: content.metadata.artworkSrc,
         startSeconds: content.metadata.startSeconds,
         endSeconds: content.metadata.endSeconds,
-        // Legacy (optional mapping if wrapper needs it, but wrapper prefers startSeconds now)
-        // startTime: content.metadata.startSeconds,
-        platformType: 'youtube' as const,
+        platform: 'youtube', // 'platformType' was used before, Score uses 'platform'
     } : undefined;
 
     // Custom components for MDX (defined here to capture audioMetadata)
