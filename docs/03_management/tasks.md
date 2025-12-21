@@ -73,6 +73,15 @@ Status: `[/]` 進行中
     - [x] 目次 (TOC) 自動生成機能の実装 (Ref: `REQ-UI-005-02`)
     - [x] シリーズナビゲーション (Previous/Next/Index) の実装 (Ref: `REQ-CONT-SERIES`)
     - [x] コンテンツパイプラインの定義: Agent出力(MDX) -> Git PR -> Deployの流れを検証 (Manual Build Verified)
+- [x] **4.4 アーキテクチャ・リファクタリング (Architecture Refactoring)**
+    - [x] **Score機能のClean Architecture化**
+        - [x] Domain (Score entity), Infra (AbcMetadataParser), UI (ScoreFeature) の責務分離
+        - [x] `ScoreComponent` の純粋化（ABC依存の排除）および `WorkScoreAdapter` へのロジック移動
+    - [x] **メタデータ構造の刷新**
+        - [x] `videoId` 依存の廃止と汎用 `src` への移行
+        - [x] 全MDXコンテンツのフォーマット更新 (`%%audio_src`)
+    - [x] **プレイヤーURL生成ロジックの整理**
+        - [x] `YouTubeAdapter` (Embed) と `PlayerLinkHelper` (Watch URL) の分離
 
 ## Phase 5: アプリケーション機能実装と詳細化 (Web Application Implementation)
 - [x] **5.1 多言語対応の実装 (i18n UI/UX)**
