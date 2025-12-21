@@ -43,7 +43,15 @@ Ref: [Strategy: AI Agent Strategy](ai-agent-strategy.md)
 *   **Role:** 多言語展開。
 *   **Input:** `master_ja.md` (from Git Branch)
 *   **Strategy:** **Decoupled Batch Worklow.** 言語ごとに独立したジョブとして、時間差で実行する。
-*   **Output:** `draft_[lang].md` (Commit to Branch)
+*   **Output:** `draft_[lang].md` (Trigger Validator)
+
+#### [AGENT-VALIDATOR] Validator (Quality Gate)
+*   **Role:** 音楽専門用語のバリデーション・自動修正。
+*   **Input:** `draft_[lang].md`
+*   **Action:**
+    1.  「多言語音楽用語辞書」および「理論ソース」に基づき、誤訳（例: Key→鍵、Note→メモ）を検閲する。
+    2.  誤りがある場合、修正案を生成してファイルを更新する（Auto-fix）。
+*   **Output:** `verified_[lang].md` (Commit to Branch)
 
 #### [AGENT-REVIEWER] Chief Editor (Reviewer)
 *   **Role:** 品質管理。

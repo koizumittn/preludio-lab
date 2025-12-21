@@ -52,7 +52,20 @@
 
 ### 設定
 - **Production Domain:** `preludiolab.com`
-- **DNS Records:** A/CNAME to `Vercel IP` (Proxy Status: `DNS Only`)
+- **DNS Records:** A/CNAME to `Vercel IP` (Proxy Status: **Proxied / Orange Cloud**)
+    - ※Vercel公式は "DNS Only" を推奨するが、帯域コスト削減のため **Proxy Mode** を採用する。
+
+### [REQ-INFRA-CLOUDFLARE] Page Rules Configuration
+VercelのISRと共存させるため、キャッシュルールを厳格に分離する。
+
+1.  **Rule 1: Static Assets (Cache Everything)**
+    - **URL:** `*.preludiolab.com/_next/static/*`
+    - **Setting:** `Cache Level: Cache Everything`, `Edge Cache TTL: 1 Year`
+    - **Purpose:** 帯域を大量に消費するJS/CSS/FontをCloudflareで完全にキャッシュし、Vercelの帯域を守る。
+2.  **Rule 2: HTML Pages (Bypass / Standard)**
+    - **URL:** `*.preludiolab.com/*`
+    - **Setting:** `Cache Level: Standard` (Respect Origin Headers)
+    - **Purpose:** HTMLのキャッシュ制御はVercel (Origin) に一任する。これにより、ISRによる記事更新が即座に反映されない問題を回避する。
 
 ### セキュリティ対策 (Security Measures)
 - **Account Security:** Cloudflareアカウントへの **2要素認証 (2FA)** を必須化。
@@ -60,8 +73,8 @@
 
 ---
 
-## 4. CDN (Vercel Edge Network)
-コンテンツ配信ネットワーク（CDN）には、ホスティングに付帯する **Vercel Edge Network** を利用します。
+## 4. CDN (Hybrid Strategy)
+**Cloudflare + Vercel Edge Network** の2層構造とする。
 
 ### 設定
 - **Cache Policy:** 静的アセットおよびISRページのキャッシュ。
@@ -87,6 +100,17 @@
   - **Self-Managed Backup:**
       1.  **Seed Data:** 復旧可能なマスタデータはGit管理する。
       2.  **pg_dump:** (Option) GitHub Actions定期実行により、主要データをダンプして外部ストレージ（Artifacts等）に退避するフローを検討する。
+
+### [REQ-INFRA-DB-SEARCH] Search Infrastructure (Hybrid)
+Pure Static (Pagefind) から **Supabase Hybrid Search** へ移行し、検索品質とスケーラビリティを確保する。
+
+- **Extensions:**
+    - `vector`: AI Embeddings (Gemini) の格納・検索用。
+    - `pg_trgm` / `fuzzystrmatch`: 曖昧検索用（必要に応じて）。
+- **Index Structure:**
+    - **`embeddings` table:** `(content_id, vector, language)` を保持し、HNSWインデックスで高速化する。
+    - **`metadata` table:** フィルタリング用（時代、楽器、作曲家）。
+- **Performance:** 10万件規模でも `rpc` 呼び出しにより 100ms 以内の応答速度を維持する。
 
 ---
 
