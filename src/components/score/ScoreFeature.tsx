@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { Score, ScoreFormat } from '@/domain/score/Score';
+import { AbcMetadataParser } from '@/infrastructure/score/AbcMetadataParser';
 
 // ドメインの結合度を下げるため、Playerの型をインポートすることは避けます。
 // 代わりに、この機能が生成/消費するものを定義します。
@@ -63,82 +64,51 @@ interface ScoreFeatureProps {
  */
 export function ScoreFeature({ abc, baseAudioMetadata, onPlayRequest }: ScoreFeatureProps) {
 
-    /**
-     * カスタムABCディレクティブ (%%audio_*) を解析します
-     */
-    const parseAudioDirectives = (abcContent: string): Partial<ScoreAudioMetadata> => {
-        const directives: any = {};
-        const lines = abcContent.split('\n');
+    // Use Infrastructure Parser to get raw directives
+    // In a full DI setup, this parser could be injected, but instantiating here is acceptable for Feature components.
+    const directives = new AbcMetadataParser().parseDirectives(abc);
 
-        lines.forEach(line => {
-            const trimmed = line.trim();
-            if (!trimmed.startsWith('%%audio_')) return;
+    // Map raw directives to ScoreAudioMetadata (Adapter Logic)
+    // This logic resides here (Integration Layer) to bridge generic Score directives to Player requirements.
+    const abcAudioMetadata: Partial<ScoreAudioMetadata> = {};
 
-            const parts = trimmed.split(/\s+/);
-            const key = parts[0];
-            const valueStr = parts.slice(1).join(' ');
+    if (directives.audio_src) abcAudioMetadata.src = directives.audio_src;
+    if (directives.audio_title) abcAudioMetadata.title = directives.audio_title;
+    if (directives.audio_composer) abcAudioMetadata.composer = directives.audio_composer;
+    if (directives.audio_performer) abcAudioMetadata.performer = directives.audio_performer;
+    if (directives.audio_artworkSrc) abcAudioMetadata.artworkSrc = directives.audio_artworkSrc;
+    if (directives.audio_platform) abcAudioMetadata.platform = directives.audio_platform;
+    if (directives.audio_platformUrl) abcAudioMetadata.platformUrl = directives.audio_platformUrl;
+    if (directives.audio_platformLabel) abcAudioMetadata.platformLabel = directives.audio_platformLabel;
 
-            switch (key) {
-                case '%%audio_startTime':
-                case '%%audio_startSeconds':
-                    const start = parseFloat(valueStr);
-                    if (!isNaN(start)) directives.startSeconds = start;
-                    break;
-                case '%%audio_endTime':
-                case '%%audio_endSeconds':
-                    const end = parseFloat(valueStr);
-                    if (!isNaN(end)) directives.endSeconds = end;
-                    break;
-                case '%%audio_src':
-                    if (valueStr) directives.src = valueStr;
-                    break;
-                case '%%audio_title':
-                    if (valueStr) directives.title = valueStr;
-                    break;
-                case '%%audio_composer':
-                    if (valueStr) directives.composer = valueStr;
-                    break;
-                case '%%audio_performer':
-                    if (valueStr) directives.performer = valueStr;
-                    break;
-                case '%%audio_artworkSrc':
-                    if (valueStr) directives.artworkSrc = valueStr;
-                    break;
-                case '%%audio_platform':
-                    if (valueStr) directives.platform = valueStr;
-                    break;
-                case '%%audio_platformUrl':
-                    if (valueStr) directives.platformUrl = valueStr;
-                    break;
-                case '%%audio_platformLabel':
-                    if (valueStr) directives.platformLabel = valueStr;
-                    break;
-            }
-        });
-        return directives;
-    };
+    if (directives.audio_startTime || directives.audio_startSeconds) {
+        const val = parseFloat(directives.audio_startTime || directives.audio_startSeconds);
+        if (!isNaN(val)) abcAudioMetadata.startSeconds = val;
+    }
+    if (directives.audio_endTime || directives.audio_endSeconds) {
+        const val = parseFloat(directives.audio_endTime || directives.audio_endSeconds);
+        if (!isNaN(val)) abcAudioMetadata.endSeconds = val;
+    }
 
-    const abcDirectives = parseAudioDirectives(abc);
-
-    // 時間の上書きが存在するか判定するロジック
+    // Logic to determine if time override is present
     const directivesContainsTime =
-        abcDirectives.startSeconds !== undefined || abcDirectives.endSeconds !== undefined;
+        abcAudioMetadata.startSeconds !== undefined || abcAudioMetadata.endSeconds !== undefined;
 
     // Merge Logic
     let effectiveMetadata: ScoreAudioMetadata | null = null;
 
-    if (abcDirectives.src) {
-        // ABCが新しいソースを指示している場合 -> コンテキストをリセット
+    if (abcAudioMetadata.src) {
+        // ABC dictates a new source -> Reset context
         effectiveMetadata = {
-            ...abcDirectives
+            ...abcAudioMetadata
         };
     } else if (baseAudioMetadata) {
-        // ベースから継承するが、ABC内に時間指定があれば上書きする
+        // Inherit from base, but override time if present in ABC
         effectiveMetadata = {
             ...baseAudioMetadata,
-            ...abcDirectives,
-            startSeconds: directivesContainsTime ? abcDirectives.startSeconds : baseAudioMetadata.startSeconds,
-            endSeconds: directivesContainsTime ? abcDirectives.endSeconds : baseAudioMetadata.endSeconds
+            ...abcAudioMetadata,
+            startSeconds: directivesContainsTime ? abcAudioMetadata.startSeconds : baseAudioMetadata.startSeconds,
+            endSeconds: directivesContainsTime ? abcAudioMetadata.endSeconds : baseAudioMetadata.endSeconds
         };
     }
 
