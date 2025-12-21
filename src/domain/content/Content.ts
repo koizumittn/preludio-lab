@@ -14,8 +14,8 @@ export const MetadataSchema = z.object({
     difficulty: z.enum(['Beginner', 'Intermediate', 'Advanced']).optional(),
     /** 検索用タグの配列 */
     tags: z.array(z.string()).optional(),
-    /** 音源再生に使用するYouTube動画ID */
-    videoId: z.string().optional(),
+    /** 音源ソース (例: YouTube Video ID, URL) */
+    src: z.string().optional(),
     /** 演奏者名 (例: Glenn Gould)。指定がない場合は動画タイトル等から推測されない */
     performer: z.string().optional(),
     /** アルバムアートワークのパス */

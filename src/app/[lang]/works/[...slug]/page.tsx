@@ -84,17 +84,15 @@ export default async function WorkPage({
     const nextContent = currentIndex < sortedContents.length - 1 ? sortedContents[currentIndex + 1] : null;
 
     // Construct AudioMetadata from Metadata
-    const audioMetadata = content.metadata.videoId ? {
-        // videoId: content.metadata.videoId, // Cleanup: Remove videoId if generic ScoreAudioMetadata doesn't use it, but keeping it won't hurt if typed looser.
-        // Actually, let's map to 'src' as ScoreAudioMetadata expects.
-        src: content.metadata.videoId,
+    const audioMetadata = content.metadata.src ? {
+        src: content.metadata.src,
         title: content.metadata.title,
         composer: content.metadata.composer,
         performer: content.metadata.performer,
         artworkSrc: content.metadata.artworkSrc,
         startSeconds: content.metadata.startSeconds,
         endSeconds: content.metadata.endSeconds,
-        platform: 'youtube', // 'platformType' was used before, Score uses 'platform'
+        platform: 'youtube', // Defaulting to YouTube relative to current content assumption, can be expanded later.
     } : undefined;
 
     // Custom components for MDX (defined here to capture audioMetadata)
