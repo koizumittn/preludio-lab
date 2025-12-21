@@ -44,18 +44,18 @@ export function AudioPlayerBinder({ source, format, playRequest: propRequest, ch
             extracted = new MediaMetadataService().parse(source, format);
         }
 
-        // プロパティとマージ (プロパティ優先)
-        // Deep merge is needed for metadata/options?
-        // Simple spread for now: src override, metadata override, options override
+        // プロパティとマージ (抽出されたメタデータを優先)
+        // ページレベルのメタデータ(propRequest)は「デフォルト値」として扱い、
+        // コンテンツ固有のメタデータ(extracted)がある場合はそれを優先します。
         return {
-            src: propRequest?.src || extracted.src,
+            src: extracted.src || propRequest?.src,
             metadata: {
-                ...extracted.metadata,
-                ...propRequest?.metadata
+                ...propRequest?.metadata,
+                ...extracted.metadata
             },
             options: {
-                ...extracted.options,
-                ...propRequest?.options
+                ...propRequest?.options,
+                ...extracted.options
             }
         };
     }, [source, format, propRequest]);
