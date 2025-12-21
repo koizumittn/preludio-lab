@@ -6,7 +6,8 @@ import GithubSlugger from 'github-slugger';
 import { MdxLink } from '@/components/mdx/MdxLink';
 import { TableOfContents } from '@/components/content/TableOfContents';
 import { SeriesNavigation } from '@/components/content/SeriesNavigation';
-import { WorkScoreAdapter } from '@/components/content/work/WorkScoreAdapter';
+import { AudioPlayerBinder } from '@/components/player/AudioPlayerBinder';
+import ScoreRenderer from '@/components/score';
 import { WorkPlayerPlaceholder } from '@/components/content/work/WorkPlayerPlaceholder';
 import { ListeningGuide } from '@/components/content/work/ListeningGuide';
 // ... (imports remain)
@@ -84,6 +85,7 @@ export default async function WorkPage({
     const nextContent = currentIndex < sortedContents.length - 1 ? sortedContents[currentIndex + 1] : null;
 
     // Construct AudioMetadata from Metadata
+    // This is a temporary flat object used to construct PlayRequest later
     const audioMetadata = content.metadata.src ? {
         src: content.metadata.src,
         title: content.metadata.title,
@@ -92,7 +94,7 @@ export default async function WorkPage({
         artworkSrc: content.metadata.artworkSrc,
         startSeconds: content.metadata.startSeconds,
         endSeconds: content.metadata.endSeconds,
-        platform: 'youtube', // Defaulting to YouTube relative to current content assumption, can be expanded later.
+        platform: 'youtube',
     } : undefined;
 
     // Custom components for MDX (defined here to capture audioMetadata)
@@ -104,19 +106,36 @@ export default async function WorkPage({
             const className = codeProps?.className || '';
 
             if (className.includes('language-abc')) {
+                const abcContent = codeProps.children;
                 return (
                     <div className="my-10 not-prose p-6 bg-neutral-100 rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
-                        <WorkScoreAdapter
-                            abc={codeProps.children}
-                            baseAudioMetadata={audioMetadata}
-                        />
+                        <AudioPlayerBinder
+                            source={abcContent}
+                            format="abc"
+                            playRequest={audioMetadata ? {
+                                src: audioMetadata.src,
+                                metadata: {
+                                    title: audioMetadata.title,
+                                    composer: audioMetadata.composer,
+                                    performer: audioMetadata.performer,
+                                    artworkSrc: audioMetadata.artworkSrc,
+                                    platform: audioMetadata.platform as any, // Cast or validate if needed
+                                },
+                                options: {
+                                    startSeconds: audioMetadata.startSeconds,
+                                    endSeconds: audioMetadata.endSeconds,
+                                }
+                            } : undefined}
+                        >
+                            <ScoreRenderer score={{ format: 'abc', data: abcContent }} />
+                        </AudioPlayerBinder>
                     </div>
                 );
             }
 
             return <pre {...props} />;
         },
-        ScoreRenderer: WorkScoreAdapter, // Alias for direct usage if any
+        ScoreRenderer: ScoreRenderer, // Alias for direct usage if any
     };
 
     return (

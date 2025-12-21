@@ -1,2 +1,2 @@
-export { ScoreFeature as default } from './ScoreFeature';
-export type { ScoreAudioMetadata } from './ScoreFeature';
+export { ScoreRenderer as default } from './ScoreRenderer';
+export type { ScoreRendererProps } from './ScoreRenderer';
