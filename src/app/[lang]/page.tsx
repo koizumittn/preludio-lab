@@ -1,11 +1,27 @@
 import Link from 'next/link';
 import { LOCALES } from '@/lib/constants';
 import { getTranslations } from 'next-intl/server';
+import { FsContentRepository } from '@/infrastructure/content/FsContentRepository';
+import { GetFeaturedContentUseCase } from '@/application/content/GetFeaturedContentUseCase';
+import { FeaturedSection } from '@/components/content/FeaturedSection';
+import { ContentCategory } from '@/domain/content/ContentConstants';
+
+// ホーム画面のDiscoverセクションに表示するカテゴリ
+const HOME_DISPLAY_CATEGORIES: ContentCategory[] = [
+    'works',
+    'composers',
+    'theory',
+    'eras'
+];
 
 // 静的生成（SSG）のためのパラメータを明示的に定義
 export async function generateStaticParams() {
     return LOCALES.map((lang) => ({ lang }));
 }
+
+// ISR: 1日 (86400秒) キャッシュ
+// 裏側での再計算はNext.jsが自動的に行う
+export const revalidate = 86400;
 
 export default async function Home({ params }: { params: Promise<{ lang: string }> }) {
     // メモ: クライアントコンポーネントでは `useParams` や props を使用しますが、
@@ -13,23 +29,18 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
     const t = await getTranslations('Home');
     const lang = (await params).lang;
 
-    // カテゴリデータ (翻訳付き)
-    // MVP: 作品、作曲家、理論、時代 の優先表示
-    const categories = [
-        { id: 'works', color: 'bg-blue-50 text-blue-700' },
-        { id: 'composers', color: 'bg-amber-50 text-amber-700' },
-        { id: 'theory', color: 'bg-purple-50 text-purple-700' },
-        { id: 'eras', color: 'bg-rose-50 text-rose-700' },
-    ];
+    // UseCaseの実行
+    const repository = new FsContentRepository();
+    const getFeaturedContent = new GetFeaturedContentUseCase(repository);
+    const featuredContent = await getFeaturedContent.execute({ lang, criteria: 'latest' });
 
-    // おすすめ作品データ (モック)
-    const featuredWork = {
-        label: t('categories.works.name'), // Use category name from dictionary
-        title: 'Prelude in C Major, BWV 846',
-        description: lang === 'ja'
-            ? 'J.S.バッハ『平均律クラヴィーア曲集』第1巻より。機能和声の基礎と、アルペジオ（分散和音）の美しさを紐解く。'
-            : 'An in-depth analysis of Bach\'s masterpiece from The Well-Tempered Clavier. Understand functionality of harmony and the beauty of arpeggios.',
-        link: '/works/bach/prelude-1' // next-intl Link に合わせた相対パス
+    // ホーム画面のDiscoverセクションに表示するカテゴリ
+    // HOME_DISPLAY_CATEGORIES に基づいて表示
+    const categoryColors: Partial<Record<ContentCategory, string>> = {
+        [ContentCategory.WORKS]: 'bg-blue-50 text-blue-700',
+        [ContentCategory.COMPOSERS]: 'bg-amber-50 text-amber-700',
+        [ContentCategory.THEORY]: 'bg-purple-50 text-purple-700',
+        [ContentCategory.ERAS]: 'bg-rose-50 text-rose-700',
     };
 
     return (
@@ -60,37 +71,25 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                 </div>
             </section>
 
-            {/* Categories */}
+            {/* Categories (Discover) */}
             <section className="container mx-auto py-20 px-4">
                 <h2 className="mb-12 text-center text-3xl font-bold text-preludio-black">{t('discover')}</h2>
                 <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-                    {categories.map((cat) => (
-                        <Link key={cat.id} href={`/${lang}/${cat.id}`} className={`group relative block overflow-hidden rounded-2xl p-8 transition hover:shadow-md ${cat.color}`}>
-                            <h3 className="mb-2 text-xl font-bold">{t(`categories.${cat.id}.name`)}</h3>
-                            <p className="text-sm opacity-80">{t(`categories.${cat.id}.desc`)}</p>
+                    {HOME_DISPLAY_CATEGORIES.map((catId) => (
+                        <Link
+                            key={catId}
+                            href={`/${lang}/${catId}`}
+                            className={`group relative block overflow-hidden rounded-2xl p-8 transition hover:shadow-md ${categoryColors[catId] ?? 'bg-gray-50 text-gray-700'}`}
+                        >
+                            <h3 className="mb-2 text-xl font-bold">{t(`categories.${catId}.name`)}</h3>
+                            <p className="text-sm opacity-80">{t(`categories.${catId}.desc`)}</p>
                         </Link>
                     ))}
                 </div>
             </section>
 
-            {/* Featured Article (Dummy) */}
-            <section className="w-full bg-gray-100 py-20">
-                <div className="container mx-auto px-4">
-                    <h2 className="mb-12 text-center text-3xl font-bold text-preludio-black">{t('featured.title')}</h2>
-                    <div className="mx-auto max-w-4xl overflow-hidden rounded-2xl bg-paper-white shadow-xl">
-                        <div className="p-8 sm:p-12">
-                            <div className="mb-4 text-sm font-bold text-blue-600">{featuredWork.label}</div>
-                            <h3 className="mb-4 text-3xl font-bold text-gray-900">{featuredWork.title}</h3>
-                            <p className="mb-6 text-gray-600">{featuredWork.description}</p>
-                            <div className="flex flex-wrap gap-4">
-                                <Link href={`/${lang}${featuredWork.link}`} className="inline-flex items-center text-blue-600 hover:underline">
-                                    {t('featured.readMore')} &rarr;
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            {/* Featured Article */}
+            <FeaturedSection contents={featuredContent} />
         </div>
     );
 }
