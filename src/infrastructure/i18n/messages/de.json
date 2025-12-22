@@ -58,7 +58,8 @@
         },
         "featured": {
             "title": "Vorgestelltes Werk",
-            "readMore": "Artikel lesen"
+            "readMore": "Artikel lesen",
+            "defaultDescription": "Ein Werk von {composer}."
         }
     },
     "Navigation": {

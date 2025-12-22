@@ -30,7 +30,7 @@ export async function FeaturedSection({ contents }: FeaturedSectionProps) {
     const categoryLabel = t.has(categoryKey) ? t(categoryKey) : category.toUpperCase();
 
     // 説明文の構築 (OGP Excerpt > Description fallback)
-    const description = metadata.ogp_excerpt || `${metadata.composer}の作品。`;
+    const description = metadata.ogp_excerpt || t('featured.defaultDescription', { composer: metadata.composer || '' });
 
     return (
         <section className="w-full bg-gray-100 py-20">

@@ -58,7 +58,8 @@
         },
         "featured": {
             "title": "Featured Work",
-            "readMore": "Read Article"
+            "readMore": "Read Article",
+            "defaultDescription": "A work by {composer}."
         }
     },
     "Navigation": {

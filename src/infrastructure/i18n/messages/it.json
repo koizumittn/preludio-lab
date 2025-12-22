@@ -58,7 +58,8 @@
         },
         "featured": {
             "title": "Opera in evidenza",
-            "readMore": "Leggi l'articolo"
+            "readMore": "Leggi l'articolo",
+            "defaultDescription": "Un'opera di {composer}."
         }
     },
     "Navigation": {
