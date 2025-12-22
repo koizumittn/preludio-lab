@@ -54,6 +54,15 @@ export async function FeaturedSection({ contents }: FeaturedSectionProps) {
                     transition={{ duration: 0.8, delay: 0.2 }}
                 >
                     <div className="p-8 sm:p-12">
+                        {metadata.thumbnail && (
+                            <div className="mb-6 overflow-hidden rounded-lg shadow-sm">
+                                <img
+                                    src={metadata.thumbnail}
+                                    alt={metadata.title}
+                                    className="h-auto w-full object-cover"
+                                />
+                            </div>
+                        )}
                         <div className="mb-4 text-sm font-bold text-blue-600">{categoryLabel}</div>
                         <h3 className="mb-4 text-3xl font-bold text-gray-900">{metadata.title}</h3>
                         <p className="mb-6 text-gray-600">{description}</p>

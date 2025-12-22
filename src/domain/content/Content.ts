@@ -14,12 +14,14 @@ export const MetadataSchema = z.object({
     difficulty: z.enum(['Beginner', 'Intermediate', 'Advanced']).optional(),
     /** 検索用タグの配列 */
     tags: z.array(z.string()).optional(),
-    /** 音源ソース (例: YouTube Video ID, URL) */
-    src: z.string().optional(),
+    /** 音源ソース (例: YouTube ID) */
+    audioSrc: z.string().optional(),
     /** 演奏者名 (例: Glenn Gould)。指定がない場合は動画タイトル等から推測されない */
     performer: z.string().optional(),
     /** アルバムアートワークのパス */
     artworkSrc: z.string().optional(),
+    /** コンテンツのサムネイル画像URL (Hero/List表示用) */
+    thumbnail: z.string().optional(),
     /** 再生開始位置 (秒) */
     startSeconds: z.number().optional(),
     /** 再生終了位置 (秒) */

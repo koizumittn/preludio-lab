@@ -86,8 +86,8 @@ export default async function WorkPage({
 
     // Construct AudioMetadata from Metadata
     // This is a temporary flat object used to construct PlayRequest later
-    const audioMetadata = content.metadata.src ? {
-        src: content.metadata.src,
+    const audioMetadata = content.metadata.audioSrc ? {
+        src: content.metadata.audioSrc,
         title: content.metadata.title,
         composer: content.metadata.composer,
         performer: content.metadata.performer,
