@@ -52,39 +52,6 @@ export class FsContentRepository implements IContentRepository {
         }
     }
 
-    /**
-     * 指定されたカテゴリの全コンテンツ詳細（本文含む）を取得する
-     */
-    async getContentDetailsByCategory(lang: string, category: string): Promise<ContentDetail[]> {
-        const categoryPath = path.join(this.contentDirectory, lang, category);
-        const files = this.getMdxFiles(categoryPath);
-
-        const contents = files.map((filePath) => {
-            const fileContents = fs.readFileSync(filePath, 'utf8');
-            const { data, content } = matter(fileContents);
-
-            // カテゴリルートからの相対パスに基づいてスラグを算出
-            const relativePath = path.relative(categoryPath, filePath);
-            const slug = relativePath.replace(/\.mdx$/, '');
-
-            try {
-                const metadata = MetadataSchema.parse(data);
-                return {
-                    slug,
-                    lang,
-                    category,
-                    metadata,
-                    body: content,
-                };
-            } catch (e) {
-                this.logger.warn(`Invalid metadata in ${filePath}`, { context: 'FsContentRepository', error: e });
-                return null;
-            }
-        })
-            .filter((content): content is ContentDetail => content !== null);
-
-        return contents;
-    }
 
     /**
      * 指定されたカテゴリの全コンテンツ概要（本文なし）を取得する

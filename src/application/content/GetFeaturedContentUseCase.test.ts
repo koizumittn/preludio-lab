@@ -9,7 +9,6 @@ const mockRepo = {
     getLatestContentSummariesByCategory: vi.fn(),
     getLatestContentSummaries: vi.fn(), // Global
     getContentDetailBySlug: vi.fn(),
-    getContentDetailsByCategory: vi.fn(),
 } as unknown as IContentRepository;
 
 describe('GetFeaturedContentUseCase', () => {
