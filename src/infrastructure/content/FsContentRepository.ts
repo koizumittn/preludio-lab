@@ -97,7 +97,6 @@ export class FsContentRepository implements IContentRepository {
                     lang,
                     category,
                     metadata,
-                    body: content,
                 };
             } catch (e) {
                 this.logger.warn(`Invalid metadata in ${filePath}`, { context: 'FsContentRepository', error: e });
@@ -146,7 +145,10 @@ export class FsContentRepository implements IContentRepository {
     }
 
     private getMdxFiles(dir: string): string[] {
-        if (!fs.existsSync(dir)) return [];
+        if (!fs.existsSync(dir)) {
+            // console.log(`[FsContentRepository] Directory not found: ${dir}`);
+            return [];
+        }
         const entries = fs.readdirSync(dir, { withFileTypes: true });
         const files = entries.map((entry) => {
             const res = path.resolve(dir, entry.name);
