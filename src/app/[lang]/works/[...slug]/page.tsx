@@ -25,7 +25,7 @@ export async function generateStaticParams() {
 
     for (const lang of languages) {
         // Use lightweight summary for build params
-        const contents = await repository.getAllContentSummaries(lang, 'works');
+        const contents = await repository.getContentSummariesByCategory(lang, 'works');
         for (const content of contents) {
             params.push({
                 lang,
@@ -77,7 +77,7 @@ export default async function WorkPage({
 
     // Series Navigation Logic
     // Use metadata-only query for navigation finding (lighter)
-    const allContents = await repository.getAllContentSummaries(lang, 'works');
+    const allContents = await repository.getContentSummariesByCategory(lang, 'works');
     // Simple sort by title for now, or use metadata order if available
     const sortedContents = allContents.sort((a, b) => a.metadata.title.localeCompare(b.metadata.title));
     const currentIndex = sortedContents.findIndex((c) => c.slug === content.slug);
