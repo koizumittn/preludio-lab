@@ -1,0 +1,57 @@
+import Link from 'next/link';
+import { ContentSummary } from '@/domain/content/Content';
+import * as motion from 'framer-motion/client';
+
+export interface ContentHeroCardProps {
+    content: ContentSummary;
+    description: string;
+    readMoreLabel: string;
+    categoryLabel?: string;
+}
+
+/**
+ * 注目記事（Featured）に使用する大型のヒーローカードコンポーネント
+ */
+export function ContentHeroCard({
+    content,
+    description,
+    readMoreLabel,
+    categoryLabel
+}: ContentHeroCardProps) {
+    const { lang, category, slug, metadata } = content;
+
+    return (
+        <motion.div
+            className="mx-auto mb-12 max-w-4xl overflow-hidden rounded-2xl bg-paper-white shadow-xl"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+        >
+            <div className="p-8 sm:p-12">
+                {metadata.thumbnail && (
+                    <div className="mb-6 overflow-hidden rounded-lg shadow-sm">
+                        <img
+                            src={metadata.thumbnail}
+                            alt={metadata.title}
+                            className="h-auto w-full object-cover"
+                        />
+                    </div>
+                )}
+                <div className="mb-4 text-sm font-bold text-blue-600">
+                    {categoryLabel || category.toUpperCase()}
+                </div>
+                <h3 className="mb-4 text-3xl font-bold text-gray-900">{metadata.title}</h3>
+                <p className="mb-6 text-gray-600">{description}</p>
+                <div className="flex flex-wrap gap-4">
+                    <Link
+                        href={`/${lang}/${category}/${slug}`}
+                        className="inline-flex items-center text-blue-600 hover:underline"
+                    >
+                        {readMoreLabel} &rarr;
+                    </Link>
+                </div>
+            </div>
+        </motion.div>
+    );
+}
