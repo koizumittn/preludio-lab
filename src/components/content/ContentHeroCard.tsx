@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { ContentSummary } from '@/domain/content/Content';
 import * as motion from 'framer-motion/client';
 
