@@ -36,10 +36,24 @@ export interface AudioPlayerAdapterProps {
  * `platform` プロパティに基づいて適切なアダプター（現在は YouTubeAdapter のみ）を選択してレンダリングします。
  */
 export function AudioPlayerAdapter(props: AudioPlayerAdapterProps) {
-    const { platform = PlayerPlatform.YOUTUBE } = props;
+    const { platform = PlayerPlatform.YOUTUBE, isPlaying } = props;
+    const [hasStarted, setHasStarted] = React.useState(false);
+
+    // Strict Lazy Loading:
+    // YouTubeのアダプター（iframe等）は、最初の再生リクエストがあるまでマウントしない。
+    // これにより、初期ロード時の巨大なリソース読み込み (base.js, videoplayback等) を回避する。
+    React.useEffect(() => {
+        if (isPlaying && !hasStarted) {
+            setHasStarted(true);
+        }
+    }, [isPlaying, hasStarted]);
 
     if (platform !== PlayerPlatform.YOUTUBE) {
         return <div className="hidden">Unsupported Platform</div>;
+    }
+
+    if (!hasStarted) {
+        return null; // まだ再生されていない場合は何もレンダリングしない
     }
 
     return (

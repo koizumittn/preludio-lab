@@ -58,7 +58,8 @@
         },
         "featured": {
             "title": "ピックアップ",
-            "readMore": "記事を読む"
+            "readMore": "記事を読む",
+            "defaultDescription": "{composer}の作品。"
         }
     },
     "Navigation": {

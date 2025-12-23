@@ -12,32 +12,40 @@ import { WorkPlayerPlaceholder } from '@/components/content/work/WorkPlayerPlace
 import { ListeningGuide } from '@/components/content/work/ListeningGuide';
 // ... (imports remain)
 import { FsContentRepository } from '@/infrastructure/content/FsContentRepository';
+import { ContentDetail, ContentSummary } from '@/domain/content/Content';
 
 
 
 // Supported languages
-const languages = ['en', 'ja', 'es', 'de', 'fr', 'it', 'zh'];
+import { supportedLocales } from '@/domain/i18n/Locale';
 
 export async function generateStaticParams() {
     const params: { lang: string; slug: string[] }[] = [];
     // Instantiate locally to avoid stale state if server runs long
     const repository = new FsContentRepository();
 
-    for (const lang of languages) {
-        // Use lightweight summary for build params
-        const contents = await repository.getAllContentSummaries(lang, 'works');
-        for (const content of contents) {
-            params.push({
-                lang,
-                slug: content.slug.split('/'),
-            });
+    try {
+        for (const lang of supportedLocales) {
+            // Use lightweight summary for build params
+            const contents = await repository.getContentSummariesByCategory(lang, 'works');
+            for (const content of contents) {
+                params.push({
+                    lang,
+                    slug: content.slug.split('/'),
+                });
+            }
         }
+    } catch (error) {
+        const { handleError } = await import('@/utils/errorHandler');
+        handleError(error, 'WorkPage:generateStaticParams');
     }
 
     return params;
 }
 
-// Utility to extract headings
+/**
+ * Utility to extract headings from MDX content for TOC
+ */
 function extractHeadings(content: string) {
     const slugger = new GithubSlugger();
     const headingRegex = /^(#{2,3})\s+(.+)$/gm;
@@ -54,9 +62,6 @@ function extractHeadings(content: string) {
     return headings;
 }
 
-
-// ... imports
-
 export default async function WorkPage({
     params,
 }: {
@@ -65,9 +70,22 @@ export default async function WorkPage({
     const repository = new FsContentRepository();
     const { lang, slug } = await params;
 
-    // Fetch Content Detail
-    // content (body) is required for rendering MDX
-    const content = await repository.getContentDetailBySlug(lang, 'works', slug);
+    let content: ContentDetail | null = null;
+    let allContents: ContentSummary[] = [];
+    try {
+        // Fetch Content Detail
+        // content (body) is required for rendering MDX
+        content = await repository.getContentDetailBySlug(lang, 'works', slug);
+
+        if (content) {
+            // Series Navigation Logic
+            // Use metadata-only query for navigation finding (lighter)
+            allContents = await repository.getContentSummariesByCategory(lang, 'works');
+        }
+    } catch (error) {
+        const { handleError } = await import('@/utils/errorHandler');
+        handleError(error, 'WorkPage:FetchData');
+    }
 
     if (!content) {
         notFound();
@@ -75,9 +93,6 @@ export default async function WorkPage({
 
     const toc = extractHeadings(content.body);
 
-    // Series Navigation Logic
-    // Use metadata-only query for navigation finding (lighter)
-    const allContents = await repository.getAllContentSummaries(lang, 'works');
     // Simple sort by title for now, or use metadata order if available
     const sortedContents = allContents.sort((a, b) => a.metadata.title.localeCompare(b.metadata.title));
     const currentIndex = sortedContents.findIndex((c) => c.slug === content.slug);
@@ -86,8 +101,8 @@ export default async function WorkPage({
 
     // Construct AudioMetadata from Metadata
     // This is a temporary flat object used to construct PlayRequest later
-    const audioMetadata = content.metadata.src ? {
-        src: content.metadata.src,
+    const audioMetadata = content.metadata.audioSrc ? {
+        src: content.metadata.audioSrc,
         title: content.metadata.title,
         composer: content.metadata.composer,
         performer: content.metadata.performer,

@@ -58,7 +58,8 @@
         },
         "featured": {
             "title": "Obra destacada",
-            "readMore": "Leer artículo"
+            "readMore": "Leer artículo",
+            "defaultDescription": "Una obra de {composer}."
         }
     },
     "Navigation": {

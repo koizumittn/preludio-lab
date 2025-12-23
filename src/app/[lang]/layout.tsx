@@ -6,9 +6,11 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { AudioPlayerFeature } from '@/components/player';
 import { AudioPlayerProvider } from '@/components/player/AudioPlayerContext';
+// Instead we import our new config
+import { LazyMotionConfig } from '@/components/ui/LazyMotionConfig';
 import { ConsentBanner } from '@/components/layout/ConsentBanner';
 import { Toaster } from 'react-hot-toast';
-import { supportedLocales } from '@/domain/shared/locale';
+import { supportedLocales, AppLocale } from '@/domain/i18n/Locale';
 
 // フォント設定
 const inter = Inter({
@@ -25,30 +27,30 @@ const playfair = Playfair_Display({
 
 const notoSansJP = Noto_Sans_JP({
     weight: ['400', '500', '700'],
-    subsets: ['latin'],
     variable: '--font-noto-sans-jp',
     display: 'swap',
+    preload: false,
 });
 
 const zenOldMincho = Zen_Old_Mincho({
     weight: ['400', '600', '700'],
-    subsets: ['latin'],
     variable: '--font-zen-old-mincho',
     display: 'swap',
+    preload: false,
 });
 
 const notoSansSC = Noto_Sans_SC({
     weight: ['400', '500', '700'],
-    subsets: ['latin'],
     variable: '--font-noto-sans-sc',
     display: 'swap',
+    preload: false,
 });
 
 const notoSerifSC = Noto_Serif_SC({
     weight: ['400', '600', '700'],
-    subsets: ['latin'],
     variable: '--font-noto-serif-sc',
     display: 'swap',
+    preload: false,
 });
 
 type Props = {
@@ -85,17 +87,20 @@ export default async function RootLayout({
     const messages = await getMessages();
 
     // 言語に基づいてフォント変数とベースクラスを決定
-    const fontVariables = `${inter.variable} ${playfair.variable} ${notoSansJP.variable} ${zenOldMincho.variable} ${notoSansSC.variable} ${notoSerifSC.variable}`;
-
-    // Body Font Selection:
-    // - JA: Noto Sans JP
-    // - ZH: Noto Sans SC
-    // - Others (EN, DE, FR, IT, ES): Inter
+    // 最適化: 必要な言語のフォント変数のみを注入し、不要なフォントのプリロードを防ぐ
+    let fontVariables = `${inter.variable} ${playfair.variable}`;
     let baseFontClass = 'font-sans-en text-primary bg-paper';
-    if (lang === 'ja') {
+
+    if (lang === AppLocale.JA) {
+        // 日本語: Noto Sans JP + Zen Old Mincho
+        fontVariables += ` ${notoSansJP.variable} ${zenOldMincho.variable}`;
         baseFontClass = 'font-sans-ja text-primary bg-paper';
-    } else if (lang === 'zh') {
+    } else if (lang === AppLocale.ZH) {
+        // 中国語: Noto Sans SC + Noto Serif SC
+        fontVariables += ` ${notoSansSC.variable} ${notoSerifSC.variable}`;
         baseFontClass = 'font-sans-zh text-primary bg-paper';
+    } else {
+        // その他 (欧文): 追加フォントなし (Inter/Playfairのみ)
     }
 
     return (
@@ -103,15 +108,17 @@ export default async function RootLayout({
             <body className={`${baseFontClass} antialiased`}>
                 <NextIntlClientProvider messages={messages}>
                     <AudioPlayerProvider>
-                        <Header lang={lang} />
-                        <main className="min-h-screen pb-24">{children}</main>
-                        <Footer />
+                        <LazyMotionConfig>
+                            <Header lang={lang} />
+                            <main className="min-h-screen pb-24">{children}</main>
+                            <Footer />
 
-                        {/* Global Audio Player Components */}
-                        <AudioPlayerFeature />
+                            {/* Global Audio Player Components */}
+                            <AudioPlayerFeature />
 
-                        <ConsentBanner />
-                        <Toaster position="bottom-right" />
+                            <ConsentBanner />
+                            <Toaster position="bottom-right" />
+                        </LazyMotionConfig>
                     </AudioPlayerProvider>
                 </NextIntlClientProvider>
             </body>

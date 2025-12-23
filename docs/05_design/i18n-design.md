@@ -11,7 +11,7 @@
 
 | Layer | Path | Component | Responsibility |
 | :--- | :--- | :--- | :--- |
-| **Domain** | `src/domain/shared/locale.ts` | **Shared Kernel** | アプリケーションがサポートする言語（`AppLocale`）とデフォルト言語の定義。**外部ライブラリ（next-intl等）への依存は厳禁**。純粋な TypeScript 型として定義する。 |
+| **Domain** | `src/domain/i18n/Locale.ts` | **Shared Kernel** | アプリケーションがサポートする言語（`AppLocale`）とデフォルト言語の定義。**外部ライブラリ（next-intl等）への依存は厳禁**。純粋な TypeScript 型として定義する。 |
 | **Infrastructure** | `src/middleware.ts` | **Driver** | Next.js のエントリーポイント。HTTPリクエストを傍受し、ロケール判定とリダイレクトを行う。具体的処理は `next-intl` に委譲。 |
 | **Infrastructure** | `src/infrastructure/i18n/` | **Adapter** | `next-intl` の設定 (`config.ts`)、ナビゲーションラッパー (`navigation.ts`)、および辞書ファイル (`messages/*.json`) の配置。 |
 | **UI** | `src/components/features/i18n/` | **Presenter** | `LanguageSwitcher` 等のUIコンポーネント。Infra層の `navigation` アダプタを利用して遷移する。 |
@@ -31,7 +31,7 @@ graph TD
     end
 
     subgraph Domain [Domain Layer (Shared)]
-        Locale[shared/locale.ts]
+        Locale[i18n/Locale.ts]
     end
 
     %% Dependencies
@@ -87,7 +87,7 @@ Google などの検索エンジンに対し、各言語のページが「同じ�
     *   `font-sans-ja`: *Noto Sans JP*, sans-serif
 
 ## 6. Implementation Roadmap
-1.  **Domain Definition**: `src/domain/shared/locale.ts` の作成。
+1.  **Domain Definition**: `src/domain/i18n/Locale.ts` の作成。
 2.  **Infrastructure Setup**: `next-intl` のインストールと `middleware.ts`, `config.ts`, `navigation.ts` の実装。
 3.  **UI Setup**: フォント定義 (`tailwind.config.ts`) と `RootLayout` への組み込み。
 4.  **Component**: `LanguageSwitcher` の実装。

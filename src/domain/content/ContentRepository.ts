@@ -11,16 +11,22 @@ export interface IContentRepository {
      */
     getContentDetailBySlug(lang: string, category: string, slug: string[]): Promise<ContentDetail | null>;
 
-    /**
-     * 指定された言語・カテゴリのコンテンツ詳細一覧（body含む）を取得する
-     * ※要注意: 全ファイルの本文を読み込むため、大規模なデータセットではパフォーマンスに影響する可能性がある。
-     * 通常は getAllContentSummaries を使用すること。
-     */
-    getAllContentDetails(lang: string, category: string): Promise<ContentDetail[]>;
 
     /**
      * 指定された言語・カテゴリのコンテンツ概要一覧（メタデータのみ）を取得する
      * 本文(body)は含まれない。一覧表示やナビゲーション生成などの軽量な処理に使用する。
      */
-    getAllContentSummaries(lang: string, category: string): Promise<ContentSummary[]>;
+    getContentSummariesByCategory(lang: string, category: string): Promise<ContentSummary[]>;
+
+    /**
+     * 指定された言語・カテゴリの最新コンテンツ概要を指定件数分取得する (Scoped)
+     * @param limit 取得件数
+     */
+    getLatestContentSummariesByCategory(lang: string, category: string, limit: number): Promise<ContentSummary[]>;
+
+    /**
+     * 全カテゴリから最新コンテンツ概要を指定件数分取得する (Global)
+     * @param limit 取得件数
+     */
+    getLatestContentSummaries(lang: string, limit: number): Promise<ContentSummary[]>;
 }

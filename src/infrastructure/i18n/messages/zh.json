@@ -58,7 +58,8 @@
         },
         "featured": {
             "title": "精选作品",
-            "readMore": "阅读文章"
+            "readMore": "阅读文章",
+            "defaultDescription": "{composer}的作品。"
         }
     },
     "Navigation": {

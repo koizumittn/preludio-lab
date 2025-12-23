@@ -112,20 +112,20 @@ Status: `[/]` 進行中
     - [x] **[リファクタリング]** 既存コードへの適用
         - [x] `ScoreRenderer` 内のプレイヤー呼び出しを新コンポーネントへ置き換え
 
-- [ ] **5.3 ホームページの実装 (Dynamic Homepage)**
-    - [ ] **[仕様策定]** データフェッチ戦略とサイドバー構造の定義
-        - [ ] "Featured Work" の選定基準とデータ取得範囲
-        - [ ] サイドバー（Listening Guide/Player Widget）の配置設計とMDX連携仕様
-        - [ ] 各セクションのUIレイアウトおよびスクロール演出（Framer Motion）の設計
-    - [ ] **[実装]** 動的コンテンツとサイドバーの実装
-        - [ ] `Featured Work` セクションへの最新MDXデータの流し込み
-        - [ ] サイドバーウィジェット（Listening Guideプレビュー等）の実装
-        - [ ] Discoverカテゴリ（Analysis, Composers等）への遷移ロジック
-        - [ ] スクロールアニメーション（Framer Motion等）による没入感の演出
-    - [ ] **[テスト・動作検証]** 表示パフォーマンスとレスポンシブの検証
-        - [ ] LCP（Largest Contentful Paint）の計測、モバイル実機での「Discover」カードの操作性確認
-    - [ ] **[リファクタリング]** ホームページ専用コンポーネントのクリーン化
-        - [ ] 巨大になりがちな `page.tsx` の Organisms 単位への分割
+- [x] **5.3 ホームページの実装 (Dynamic Homepage)**
+    - [x] **[仕様策定]** データフェッチ戦略とサイドバー構造の定義
+        - [x] "Featured Work" の選定基準とデータ取得範囲
+        - [x] サイドバー（Listening Guide/Player Widget）の配置設計とMDX連携仕様
+        - [x] 各セクションのUIレイアウトおよびスクロール演出（Framer Motion）の設計
+    - [x] **[実装]** 動的コンテンツとサイドバーの実装
+        - [x] `Featured Work` セクションへの最新MDXデータの流し込み
+        - [x] サイドバーウィジェット（Listening Guideプレビュー等）の実装
+        - [x] Discoverカテゴリ（Analysis, Composers等）への遷移ロジック
+        - [x] スクロールアニメーション（Framer Motion等）による没入感の演出
+    - [x] **[テスト・動作検証]** 表示パフォーマンスとレスポンシブの検証
+        - [x] LCP（Largest Contentful Paint）の計測、モバイル実機での「Discover」カードの操作性確認
+    - [x] **[リファクタリング]** ホームページ専用コンポーネントのクリーン化
+        - [x] 巨大になりがちな `page.tsx` の Organisms 単位への分割
 
 - [ ] **5.4 一覧ページの実装 (Works / Composers Index)**
     - [ ] **[仕様策定]** フィルタリング・ソート仕様の策定
@@ -142,31 +142,39 @@ Status: `[/]` 進行中
     - [ ] **[リファクタリング]** フィルターロジックの分離
         - [ ] 検索・絞り込みロジックを Custom Hook（`useFilter`）へ抽出し、保守性を向上
 
-- [ ] **5.5 検索機能の実装 (Pagefind Integration)**
-    - [ ] **[仕様策定]** 検索UI/UXとインデックス範囲の定義
-        - [ ] Pagefindの日本語トークナイザー設定、検索対象フィールド（タイトル、本文、タグ）の優先順位付け
-        - [ ] 検索モーダル（Cmd+K）の外観と操作フロー（キーボード操作含む）の詳細UI設計
-        - [ ] **インデックス更新タイミング** の定義（ビルドフロー内での実行順序）
-    - [ ] **[実装]** 検索機能の統合
-        - [ ] 検索モーダル（Cmd+K対応）のデザインと実装
-        - [ ] `Pagefind` ライブラリのセットアップとGitHub Actionsでのビルド設定
+- [ ] **5.5 コンテンツ管理のSupabase移行 (Supabase Content Management)**
+    - [ ] **[環境構築]** Supabaseプロジェクト設計とセットアップ
+        - [ ] 環境定義: Production (Main) と Staging/Verify (Branch/Preview) の2環境構成を無料枠内で設計
+        - [ ] Supabaseプロジェクトの作成とAPIキー管理（Vercel環境変数への連携）
+    - [ ] **[仕様策定]** DBスキーマとHybrid Content Model
+        - [ ] Master: MDX / Index & Vector: Supabase という役割分担の定義
+        - [ ] テーブル設計 (`works`, `composers`, `embeddings`)
+    - [ ] **[実装]** MDX同期パイプライン (Script-based Sync)
+        - [ ] `scripts/sync-supabase.ts` の実装（MDXパース -> DB Upsert）。**※AIエージェント(Phase 6)とは切り離し、単純なデータ同期スクリプトとして実装する**
+        - [ ] コンテンツ埋め込み (Embeddings) 生成処理の実装（同期スクリプト内でOpenAI/Gemini APIをコール）
+        - [ ] GitHub Actionsによる自動同期フロー (`content-sync.yml`) の構築
+    - [ ] **[検証]** データ整合性確認
+        - [ ] ローカル環境での同期テストとSupabase Dashboardでのデータ確認
+
+- [ ] **5.6 検索機能の実装 (Supabase Hybrid Search)**
+    - [ ] **[仕様策定]** ハイブリッド検索仕様の策定
+        - [ ] Full Text Search (pg_trgm) と Vector Search (pgvector) の重み付け設計
+        - [ ] 検索モーダル（Cmd+K）のUI設計
+    - [ ] **[実装]** 検索機能の実装
+        - [ ] Supabase RPC (PostgreSQL Function) によるハイブリッド検索ロジック実装
+        - [ ] クライアントサイド検索UIの実装（`useSearch` Hook）
     - [ ] **[テスト・動作検証]** 検索精度の検証
-        - [ ] 日本語キーワード（例：「バッハ 前奏曲」）でのヒット率、検索結果の表示速度確認
-    - [ ] **[リファクタリング]** 検索結果UIの最適化
-        - [ ] 検索結果のハイライト表示（Snippets）のスタイリング、不要なインデックスデータの除外
+        - [ ] 日本語キーワードおよび意味検索（Semantic Search）の精度確認
 
 ## Phase 6: AIエージェント開発 ("Brain") & コンテンツ量産
 - [ ] **6.1 音楽学者エージェント (Musicologist Agent)**
     - [ ] **[仕様策定]** 分析・生成プロンプトの要件定義
-        - [ ] 楽曲構造分析およびABC譜面生成のプロンプト設計要件 (Music Theory & Notation Rules)
+        - [ ] 楽曲構造分析およびテキスト解説生成のプロンプト設計要件
     - [ ] **[実装]** プロンプト設計とエージェント実装
-        - [ ] Tool実装: `src/tools/youtube.ts` (YouTube Data API 検索)
         - [ ] Orchestrator実装: `agents/src/index.ts` (Gemini API呼び出し制御)
-        - [ ] **API Cost Circuit Breaker** の実装 (Quota監視・自動停止機能)
+        - [ ] **API Cost Circuit Breaker** の実装
     - [ ] **[テスト・動作検証]** 生成品質の検証
-        - [ ] テスト: バッハ「平均律第1番」での生成品質検証 (Ref: `REQ-TECH-AGENT-003`)
-    - [ ] **[リファクタリング]** プロンプトとツールの最適化
-        - [ ] 生成精度向上に向けたプロンプトチューニングと再利用性の向上
+        - [ ] テスト: バッハ「平均律第1番」での解説テキスト生成品質検証
 
 - [ ] **6.2 翻訳エージェント (Translator Agent)**
     - [ ] **[仕様策定]** 翻訳ルールとトーン＆マナーの定義
@@ -174,25 +182,37 @@ Status: `[/]` 進行中
     - [ ] **[実装]** 翻訳プロンプトとオーケストレーター実装
         - [ ] 翻訳Orchestratorの実装 (Parallel Execution)
     - [ ] **[テスト・動作検証]** 各言語の翻訳品質検証
-        - [ ] 英語 (EN) の出力検証
-        - [ ] スペイン語 (ES) の出力検証
-        - [ ] ドイツ語 (DE) の出力検証
-        - [ ] フランス語 (FR) の出力検証
-        - [ ] イタリア語 (IT) の出力検証
-        - [ ] 中国語 (ZH) の出力検証
-    - [ ] **[リファクタリング]** 翻訳精度の向上とプロンプト改善
-        - [ ] 文脈維持能力の強化とエラーハンドリングの改善
+        - [ ] 主要言語 (EN, ES, DE, FR, IT, ZH) の出力検証
 
-- [ ] **6.3 コンテンツ量産体制の構築と実行 (Content Operations)**
+- [ ] **6.3 譜例コンテンツ生成パイプライン (Score Snippet System)**
+    - [ ] **[仕様策定]** 譜例生成要件の定義
+        - [ ] **Score Snippet Generation**: 分析結果に基づき、解説に必要な「譜例 (ABC Notation)」を安定的かつ効率的に生成するプロンプトパターンの確立
+    - [ ] **[実装]** 生成・検証システムの構築
+        - [ ] **Visual Verification**: 生成されたABC譜面を画像化/レンダリングして即座に品質確認できるフローの構築
+        - [ ] エラー修正ループ（Self-Correction）のプロンプト実装
+    - [ ] **[検証]** 複雑な楽曲での生成テスト
+        - [ ] 構造が複雑な楽曲（フーガ等）での譜面生成精度検証
+
+- [ ] **6.4 音源選定ロジックと自動化 (Audio Curation System)**
+    - [ ] **[仕様策定]** 音源選定基準の定義
+        - [ ] "High Quality" の定義（演奏の質、録音状態、構造の聴き取りやすさ）
+        - [ ] 自動収集検索クエリ（YouTube Data API）の設計
+    - [ ] **[実装]** 選定支援ツールの実装
+        - [ ] `src/tools/youtube.ts` の拡張: 候補動画のメタデータ取得とフィルタリング
+        - [ ] **Human-in-the-Loop選定フロー**: AIが推奨リストを出し、人間が最終承認する管理画面またはCLIツールの整備
+    - [ ] **[検証]** 選定精度の確認
+        - [ ] 意図しない動画（BGM集、リアクション動画等）の排除率確認
+
+- [ ] **6.5 コンテンツ量産体制の構築と実行 (Content Operations)**
     - [ ] **[仕様策定]** コンテンツ戦略とパイプライン定義
         - [ ] 初回リリース用コンテンツ選定 (Target: 10-20 articles for Launch)
         - [ ] コンテントマップ作成: Pillar Content (没入感), Guide Content (入門), Niche Content (専門性), Utility Content (実用) のバランス設計
     - [ ] **[実装]** パイロット・バッチ生成の実行
-        - [ ] エージェントによるパイロット記事 5本生成
+        - [ ] エージェントによるパイロット記事 5本生成（統合テスト）
         - [ ] バッチ処理による記事大量生成
         - [ ] 画像・メディアアセットの半自動生成 (OGP, Analysis Diagrams)
     - [ ] **[テスト・動作検証]** 品質レビューと公開前チェック
-        - [ ] 人手による品質レビュー (Music Theory, Notation, Translation Checks)
+        - [ ] 人手による品質レビュー (Music Theory, Notation, Translation, Audio Checks)
         - [ ] リンク切れ・レイアウト崩れの最終チェック
     - [ ] **[リファクタリング]** プロセス改善とプロンプトチューニング
         - [ ] 修正フィードバックループの確立と次期バッチへの反映
@@ -249,9 +269,18 @@ Status: `[/]` 進行中
 
 - [ ] **Edge Config & Cache Strategy Optimization**
     - Supabaseのデータや翻訳辞書の取得において、Vercel Edge Configや`stale-while-revalidate` (SWR) パターンを適用し、グローバル規模での低遅延アクセス（瞬時の没入体験）を実現する。
+    - **重要なページだけ事前ビルドする仕組み**: 全7万件規模のコンテンツに備え、`generateStaticParams` で「最新記事」や「人気記事」のみを事前ビルド（SSG）の対象とし、残りはオンデマンド生成（ISR）にする制御ロジックを実装する。
+    - **コンテンツのISRとキャッシュ戦略の検討と実装**: 大量コンテンツの更新頻度に応じた再検証（Revalidation）間隔の定義と、グローバルなCDNキャッシュ最適化。
 
 - [ ] **Automated Highlight & Timestamp Extraction**
     - AIにより「楽曲の聴きどころ（Highlight）」とYouTube音源の対応するタイムスタンプを自動抽出し、コンテンツ制作（ドラフト）の効率を飛躍的に高める。
 
 - [ ] **Dynamic Language Sorting by Browser Locale**
     - ブラウザ言語による動的な並び替え: 技術スタック（Next.js）を活かし、**「基本はこの順序だが、ユーザーのブラウザ言語を検知して、その言語を最上位にプロモートする」**というロジックを組むと、グローバルな没入感がさらに高まります。
+
+- [ ] **Content Component Evolution & Layout Strategy**
+    - **`ContentCard` の拡張**: `variant` プロパティ (`'vertical'` / `'horizontal'`) を追加し、サイドバーやリスト形式など、コンテキストに応じた表示切替をサポートする。
+    - **`ContentGrid` の柔軟性向上**: PC表示時のカラム数を `maxColumns` プロパティに加えて、より詳細なレスポンシブ制御を可能にする。
+    - **ページ特性に応じた使い分け**: 
+        - Landing/Topページ: `HeroCard` + `Card` で情報の強弱をつける。
+        - Search/Archivesページ: 均一なグリッド表示（`Card` のみ）で一覧性と検索性を優先する。

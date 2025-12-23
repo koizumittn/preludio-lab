@@ -37,7 +37,7 @@ describe('AudioPlayerAdapter Component', () => {
 
     const defaultProps = {
         src: 'initial-video-id',
-        isPlaying: false,
+        isPlaying: true, // Set to true to bypass lazy loading for tests
         volume: 80,
         onReady: mockOnReady,
         onProgress: mockOnProgress,
@@ -50,8 +50,10 @@ describe('AudioPlayerAdapter Component', () => {
         vi.clearAllMocks();
     });
 
-    it('renders without crashing', () => {
+    it('renders without crashing', async () => {
         render(<AudioPlayerAdapter {...defaultProps} />);
+        // Wait for lazy load state update
+        await screen.findByTestId('youtube-mock');
         expect(screen.getByTestId('youtube-mock')).toBeDefined();
     });
 

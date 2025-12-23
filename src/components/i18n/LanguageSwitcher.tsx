@@ -2,7 +2,7 @@
 
 import { useLocale } from 'next-intl';
 import { usePathname, useRouter } from '@/infrastructure/i18n/navigation';
-import { AppLocale, supportedLocales, localeLabels } from '@/domain/shared/locale';
+import { AppLocale, supportedLocales, localeLabels } from '@/domain/i18n/Locale';
 import { useTransition, useState, useEffect, useRef } from 'react';
 import { handleClientError } from '@/utils/client-error-handler';
 
