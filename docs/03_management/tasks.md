@@ -143,12 +143,15 @@ Status: `[/]` 進行中
         - [ ] 検索・絞り込みロジックを Custom Hook（`useFilter`）へ抽出し、保守性を向上
 
 - [ ] **5.5 コンテンツ管理のSupabase移行 (Supabase Content Management)**
-    - [ ] **[仕様策定]** DBスキーマと同期戦略の定義
-        - [ ] Hybrid Content Modelの設計 (Master: MDX / Index & Vector: Supabase)
-        - [ ] MDXメタデータとSupabaseテーブル (`works`, `composers`) のマッピング定義
-    - [ ] **[実装]** 同期パイプラインの実装
-        - [ ] `scripts/sync-supabase.ts` の実装（MDXパース -> DB Upsert）
-        - [ ] OpenAI/Gemini APIを用いたEmbedding生成処理の実装
+    - [ ] **[環境構築]** Supabaseプロジェクト設計とセットアップ
+        - [ ] 環境定義: Production (Main) と Staging/Verify (Branch/Preview) の2環境構成を無料枠内で設計
+        - [ ] Supabaseプロジェクトの作成とAPIキー管理（Vercel環境変数への連携）
+    - [ ] **[仕様策定]** DBスキーマとHybrid Content Model
+        - [ ] Master: MDX / Index & Vector: Supabase という役割分担の定義
+        - [ ] テーブル設計 (`works`, `composers`, `embeddings`)
+    - [ ] **[実装]** MDX同期パイプライン (Script-based Sync)
+        - [ ] `scripts/sync-supabase.ts` の実装（MDXパース -> DB Upsert）。**※AIエージェント(Phase 6)とは切り離し、単純なデータ同期スクリプトとして実装する**
+        - [ ] コンテンツ埋め込み (Embeddings) 生成処理の実装（同期スクリプト内でOpenAI/Gemini APIをコール）
         - [ ] GitHub Actionsによる自動同期フロー (`content-sync.yml`) の構築
     - [ ] **[検証]** データ整合性確認
         - [ ] ローカル環境での同期テストとSupabase Dashboardでのデータ確認
@@ -166,13 +169,16 @@ Status: `[/]` 進行中
 ## Phase 6: AIエージェント開発 ("Brain") & コンテンツ量産
 - [ ] **6.1 音楽学者エージェント (Musicologist Agent)**
     - [ ] **[仕様策定]** 分析・生成プロンプトの要件定義
-        - [ ] 楽曲構造分析およびABC譜面生成のプロンプト設計要件 (Music Theory & Notation Rules)
+        - [ ] 楽曲構造分析およびABC譜面生成のプロンプト設計要件
     - [ ] **[実装]** プロンプト設計とエージェント実装
         - [ ] Tool実装: `src/tools/youtube.ts` (YouTube Data API 検索)
         - [ ] Orchestrator実装: `agents/src/index.ts` (Gemini API呼び出し制御)
-        - [ ] **API Cost Circuit Breaker** の実装 (Quota監視・自動停止機能)
+        - [ ] **API Cost Circuit Breaker** の実装
+    - [ ] **[機能追加]** 譜例コンテンツの効率的な生成パイプライン
+        - [ ] **Score Snippet Generation**: 分析結果に基づき、解説に必要な「譜例 (ABC Notation)」を安定的かつ効率的に生成するプロンプトパターンの確立
+        - [ ] **Visual Verification**: 生成された譜面を画像化/レンダリングして即座に品質確認できるフローの構築
     - [ ] **[テスト・動作検証]** 生成品質の検証
-        - [ ] テスト: バッハ「平均律第1番」での生成品質検証 (Ref: `REQ-TECH-AGENT-003`)
+        - [ ] テスト: バッハ「平均律第1番」での生成品質検証
     - [ ] **[リファクタリング]** プロンプトとツールの最適化
         - [ ] 生成精度向上に向けたプロンプトチューニングと再利用性の向上
 
