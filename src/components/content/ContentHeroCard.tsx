@@ -22,7 +22,7 @@ export function ContentHeroCard({
 
     return (
         <motion.div
-            className="mx-auto mb-12 max-w-4xl overflow-hidden rounded-2xl bg-paper-white shadow-xl"
+            className="mx-auto mb-12 max-w-4xl overflow-hidden rounded-2xl bg-paper-white shadow-xl transition-shadow duration-300 hover:shadow-2xl"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
