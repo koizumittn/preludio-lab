@@ -217,40 +217,63 @@ Status: `[/]` 進行中
     - [ ] **[リファクタリング]** プロセス改善とプロンプトチューニング
         - [ ] 修正フィードバックループの確立と次期バッチへの反映
 
-## Phase 7: Pre-Launch Marketing & Growth Foundation (Acquisition - Pre)
-- [ ] **7.1 Pre-Launch Asset Creation**
+## Phase 7: ローンチに向けた機能拡充とリファクタリング
+- [ ] **7.1 E2Eテストの導入と実装**
+- [ ] **7.2 シリーズ機能の開発**
+    - [ ] 複数コンテンツをまとめた特集機能
+    - [ ] 各コンテンツページに、前後コンテンツを表示させるナビゲーション
+- [ ] **7.3 関連コンテンツ表示機能**
+    - [ ] コンテンツページに関連するコンテンツをレコメンド表示する
+- [ ] **7.4 ユーザーインタラクション設計**
+    - [ ] LIKE機能
+    - [ ] PVカウントの管理
+- [ ] **7.5 パフォーマンス・キャッシュ最適化**
+    - [ ] CloudFlareによる画像キャッシュの導入
+- [ ] **7.6 ユーザー体験の向上**
+    - [ ] 最高のユーザー体験を実現するためのサイトデザインの清廉化
+
+## Phase 8: セキュリティテストとパフォーマンスチューニング
+- [ ] **8.1 セキュリティテストの導入**
+    - [ ] SAST (Static Application Security Testing)
+    - [ ] DAST (Dynamic Application Security Testing)
+    - [ ] SCA (Software Composition Analysis)
+- [ ] **8.2 パフォーマンス最適化**
+    - [ ] パフォーマンステストとチューニング
+
+## Phase 9: Pre-Launch Marketing & Growth Foundation (Acquisition - Pre)
+- [ ] **9.1 Pre-Launch Asset Creation**
     - [ ] **[実装]** シンプルなランディングページ (Teaser LP) の公開
         - [ ] Vercel + Supabase Auth でメール登録フォーム（Waitlist）のみ機能するLPを作成し、ドメインのエイジングを開始する。
     - [ ] **[実装]** SNS配信用アセットの自動生成パイプライン
         - [ ] `abcjs` で描画された「美しい譜例」を画像化し、SNSでBuild in Publicを行うためのワークフロー整備。
-
-- [ ] **7.2 Viral Mechanics Implementation**
+- [ ] **9.2 Viral Mechanics Implementation**
     - [ ] **[実装]** Dynamic OGP Generation (Shareability)
         - [ ] 楽曲タイトル、作曲家、譜例の一部を合成したOGP画像を、各言語ごとに `@vercel/og` を用いて決定論的に自動生成する。
     - [ ] **[実装]** 構造化データ (JSON-LD) の完全実装
         - [ ] `MusicComposition`, `MusicRecording` スキーマを埋め込み、Googleのリッチリザルト表示を狙う。
-
-- [ ] **7.3 Technical SEO Foundation**
+- [ ] **9.3 Technical SEO Foundation**
     - [ ] **[実装]** sitemap.xml & Robots.txt の構成
     - [ ] **[実装]** リンク切れ監視 (Dead Link Monitor) のセットアップ
+- [ ] **9.4 Monetization Strategy**
+    - [ ] **[実装]** 初回ローンチ時のマネタイズ対応（アフェリエイトリンクなど）
 
-## Phase 8: 検証・ローンチ (Launch)
-- [ ] **8.1 最終検証**
+## Phase 10: 検証・ローンチ (Launch)
+- [ ] **10.1 最終検証**
     - [ ] パイロット記事（Pillar Content）の実機検証
     - [ ] クロスブラウザ確認 & モバイルレスポンシブ確認
     - [ ] **[セキュリティ]** 脆弱性診断 (OWASP Top 10) の実施
-- [ ] **8.2 ローンチ実行**
+- [ ] **10.2 ローンチ実行**
     - [ ] パブリックリリース (Vercel Production Deploy)
     - [ ] Product Hunt, Hacker News, Reddit (r/classicalmusic) へのShowcase投稿
 
-## Phase 9: ローンチ後の成長と収益化 (Post-Launch Growth & Monetization)
-- [ ] **9.1 コミュニティ・エンゲージメント (Community Engagement)**
+## Phase 11: ローンチ後の成長と収益化 (Post-Launch Growth & Monetization)
+- [ ] **11.1 コミュニティ・エンゲージメント (Community Engagement)**
     - [ ] **[実装]** ユーザー機能（いいね / お気に入り / 履歴）の実装
     - [ ] **[実装]** 誤訳報告機能 (Translation Feedback Loop) の実装
-- [ ] **9.2 ソーシャル・バイラル施策 (Social Viral Loops)**
+- [ ] **11.2 ソーシャル・バイラル施策 (Social Viral Loops)**
     - [ ] **[運用]** "Today's Score" Bot の運用開始（日替わりで名曲の譜例を投稿）
     - [ ] **[実装]** YouTube Shorts/TikTok 用の楽曲解説動画生成フローの検討
-- [ ] **9.3 マネタイズ・ビジネス (Monetization & Business)**
+- [ ] **11.3 マネタイズ・ビジネス (Monetization & Business)**
     - [ ] **[実装]** アフィリエイトリンク (Score/Audio) のコンテキスト配置
     - [ ] **[実装]** KPIモニタリングダッシュボード (Vercel Analytics / GSC) の構築
 
