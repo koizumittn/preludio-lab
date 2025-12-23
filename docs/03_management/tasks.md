@@ -11,6 +11,7 @@ Status: `[/]` 進行中
     - [x] 各要件に対する「完了条件（Acceptance Criteria）」の記述
     - [x] **[Update]** AIデザインプロセス (`REQ-UI-PROCESS`) の追加
     - [x] **[Update]** Designer Agent (`REQ-TECH-AGENT-007`) の追加
+
 - [x] **1.2 基本設計**
     - [x] **ルーティング設計:** `app/[lang]/` 配下のURL構造とページ遷移の定義
     - [x] **コンテンツデータ設計:** MDX Frontmatterのスキーマ定義 (Title, Composer, Difficulty, Tags...)
@@ -27,18 +28,22 @@ Status: `[/]` 進行中
     - [x] `docs/02_guidelines/development-guidelines.md` (開発)
     - [x] `docs/02_guidelines/testing-guidelines.md` (テスト)
     - [x] **[Final Review]** Ensure all guidelines are consistent (Clean Architecture).
+
 - [x] **2.2 プロジェクトセットアップ**
     - [x] GitHubリポジトリの作成とRemote設定
     - [x] Next.js アプリの初期化 (App Router, TypeScript)
     - [x] Tailwind CSS & デザインシステムの実装 (Variables in `globals.css`, Fonts in `layout.tsx`)
     - [x] ESLint & Prettier の設定
+
 - [x] **2.3 インフラ構築**
     - [x] Vercel プロジェクトのセットアップ
     - [x] Supabase プロジェクトのセットアップ (Auth: SSO Only)
     - [x] **ドメイン設定:** `preludiolab.com` の取得とVercelへの紐付け
+
 - [x] **2.4 DevOps & QA基盤構築**
     - [x] GitHub Actions Workflow作成: `ci-check.yml` (Lint / TypeCheck / Unit Test)
     - [x] Vitest テスト環境のセットアップ
+
 - [x] **2.5 AIエージェント環境構築 (AI Env)**
     - [x] `agents/` ディレクトリの初期化 (package.json, tsconfig.json)
     - [x] Google Generative AI SDK (Gemini) のインストール
@@ -49,6 +54,7 @@ Status: `[/]` 進行中
     - [x] トップページのデザイン・実装 (Hardcoded + Design Tokens)
     - [x] 記事詳細ページのレイアウト確認 (Dummy Data + Skeleton)
     - [x] 楽譜・プレイヤーのプレースホルダー配置
+
 - [x] **3.2 デプロイ・動作確認**
     - [x] Vercelへの初回デプロイ (Framework Preset, Pino Config Fixed)
     - [x] サーバーサイドログ (Pino) の復旧と確認
@@ -60,11 +66,13 @@ Status: `[/]` 進行中
     - [x] `ScoreRenderer` コンポーネントの実装 (`abcjs`)
     - [x] SVGレンダリングパフォーマンスの検証
     - [x] スケルトン表示 (Loading State) の実装 (Ref: `REQ-UI-006-01`)
+
 - [x] **4.2 オーディオプレイヤー統合** (Ref: `REQ-TECH-AUDIO`)
     - [x] 要件と完了条件の定義
     - [x] `AudioPlayer` コンポーネントの実装 (YouTube IFrame API)
     - [x] UIモード実装: Mini Player (Footer) & Focus Mode (Ref: `REQ-UI-004-02`)
     - [x] 楽譜との同期ロジックの実装（Click to Play / StartTime指定の実装）
+
 - [x] **4.3 多言語MDXシステム & コンテンツフロー**
     - [x] MDXディレクトリ構成の設計 (`content/[lang]/...`)
     - [x] MDX Loader / Parser の実装
@@ -72,6 +80,7 @@ Status: `[/]` 進行中
     - [x] 目次 (TOC) 自動生成機能の実装 (Ref: `REQ-UI-005-02`)
     - [x] シリーズナビゲーション (Previous/Next/Index) の実装 (Ref: `REQ-CONT-SERIES`)
     - [x] コンテンツパイプラインの定義: Agent出力(MDX) -> Git PR -> Deployの流れを検証 (Manual Build Verified)
+
 - [x] **4.4 アーキテクチャ・リファクタリング (Architecture Refactoring)**
     - [x] **Score機能のClean Architecture化**
         - [x] Domain (Score entity), Infra (AbcMetadataParser), UI (ScoreFeature) の責務分離
@@ -260,6 +269,7 @@ Status: `[/]` 進行中
     - [ ] **[実装]** 主要ユーザーフロー（閲覧、言語切り替え、音源再生確認）のテストシナリオ実装
     - [ ] **[運用]** テスト失敗時のレポート自動生成とGitHub上での可視化
     - [ ] **[基盤]** **多言語ルーティング (i18n) の精緻化**: ブラウザ言語の検知と、特定の言語を最上位にプロモートするブラウザロケール連動ロジックの実装
+
 - [ ] **8.2 シリーズ機能の実装 (Content Series)**
     - [ ] **[DB設計]** `series` テーブルおよび `series_items` (多対多) のスキーマ設計
     - [ ] **[UI実装]** シリーズインデックスページ（特集一覧）の実装
@@ -272,6 +282,7 @@ Status: `[/]` 進行中
     - [ ] **[ロジック]** 同一作曲家・同一楽器・同一時代の「重み付け」アルゴリズムの実装
     - [ ] **[UI実装]** **推薦理由の可視化 (Explainable AI)**: 「なぜこの曲がおすすめなのか」を提示するUIの実装
     - [ ] **[実験的機能]** **AIキュレーション・コレクション**: 「雨の日に聴きたい」等の文脈に基づいた自動パッケージ化機能
+
 - [ ] **8.4 ユーザーインタラクションとエンゲージメント設計 (Interaction & Engagement)**
     - [ ] **[認証・基盤]** Supabase Auth（SSO/SNS認証）の導入と RLS (Row Level Security) によるユーザーデータ保護
     - [ ] **[LIKE機能]** 楽曲へのLIKE機能の実装。Optimistic Updates（楽観的更新）による即時フィードバック。
@@ -281,6 +292,7 @@ Status: `[/]` 進行中
     - [ ] **[ソーシャル発見]** **Social Highlights (Heatmap)**: どの譜例がよく再生されているかをスコア上に表示する機能
     - [ ] **[高度化]** パーソナライズ・インサイト（ユーザーの好みに合わせた独自の楽曲提案ワークフロー）
     - [ ] **[収益化準備]** プレミアムゲートの設計（特定コンテンツや高品質アセットの会員限定化）
+
 - [ ] **8.5 最高のユーザー体験を実現するためのサイトデザインの清廉化 (Premium UX & Design)**
     - [ ] **[アニメーション]** **Framer Motion** を用いた、ページ遷移や譜例表示時の滑らかなマイクロインタラクションの実装
     - [ ] **[デザイン]** デザインシステムの再定義。没入感を最大化するタイポグラフィ、カラーパレット、余白の「清廉化」
@@ -292,14 +304,17 @@ Status: `[/]` 進行中
         - [ ] Vercel + Supabase Auth でメール登録フォーム（Waitlist）のみ機能するLPを作成し、ドメインのエイジングを開始する。
     - [ ] **[実装]** SNS配信用アセットの自動生成パイプライン
         - [ ] `abcjs` で描画された「美しい譜例」を画像化し、SNSでBuild in Publicを行うためのワークフロー整備。
+
 - [ ] **9.2 Viral Mechanics Implementation**
     - [ ] **[実装]** Dynamic OGP Generation (Shareability)
         - [ ] 楽曲タイトル、作曲家、譜例の一部を合成したOGP画像を、各言語ごとに `@vercel/og` を用いて決定論的に自動生成する。
     - [ ] **[実装]** 構造化データ (JSON-LD) の完全実装
         - [ ] `MusicComposition`, `MusicRecording` スキーマを埋め込み、Googleのリッチリザルト表示を狙う。
+
 - [ ] **9.3 Technical SEO Foundation**
     - [ ] **[実装]** sitemap.xml & Robots.txt の構成
     - [ ] **[実装]** リンク切れ監視 (Dead Link Monitor) のセットアップ
+
 - [ ] **9.4 マネタイズ戦略の具体化 (Monetization Strategy)**
     - [ ] **[準備]** アフィリエイト・プラットフォームの選定と登録（Amazon, Sheet Music Plus, Henle Urtext等）
     - [ ] **[自動化]** 楽曲メタデータ（作曲家・作品番号）に基づく商品リンクの自動マッチング・キャッシュロジックの実装
@@ -313,6 +328,7 @@ Status: `[/]` 進行中
     - [ ] パイロット記事（Pillar Content）の実機検証
     - [ ] クロスブラウザ確認 & モバイルレスポンシブ確認
     - [ ] **[セキュリティ]** 脆弱性診断 (OWASP Top 10) の実施
+
 - [ ] **10.2 ローンチ実行**
     - [ ] パブリックリリース (Vercel Production Deploy)
     - [ ] Product Hunt, Hacker News, Reddit (r/classicalmusic) へのShowcase投稿
@@ -321,9 +337,11 @@ Status: `[/]` 進行中
 - [ ] **11.1 コミュニティ・エンゲージメント (Community Engagement)**
     - [ ] **[実装]** ユーザー機能（いいね / お気に入り / 履歴）の実装
     - [ ] **[実装]** 誤訳報告機能 (Translation Feedback Loop) の実装
+
 - [ ] **11.2 ソーシャル・バイラル施策 (Social Viral Loops)**
     - [ ] **[運用]** "Today's Score" Bot の運用開始（日替わりで名曲の譜例を投稿）
     - [ ] **[実装]** YouTube Shorts/TikTok 用の楽曲解説動画生成フローの検討
+
 - [ ] **11.3 マネタイズ・ビジネス (Monetization & Business)**
     - [ ] **[実装]** 収益パスの最適化
         - [ ] アフィリエイトリンク (Score/Audio) のコンテキスト配置の精緻化
