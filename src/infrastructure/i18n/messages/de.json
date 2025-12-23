@@ -71,5 +71,8 @@
     "Footer": {
         "copyright": "© {year} Preludio Lab. Alle Rechte vorbehalten.",
         "tagline": "Jenseits des Zuhörens. Tauchen Sie tiefer in die Klassik ein."
+    },
+    "Player": {
+        "invalidRequest": "Ungültige Wiedergabeanfrage"
     }
 }

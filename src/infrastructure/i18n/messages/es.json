@@ -71,5 +71,8 @@
     "Footer": {
         "copyright": "© {year} Preludio Lab. Todos los derechos reservados.",
         "tagline": "Más allá de la escucha. Sumérgete más profundo en los clásicos."
+    },
+    "Player": {
+        "invalidRequest": "Solicitud de reproducción no válida"
     }
 }

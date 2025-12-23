@@ -71,5 +71,8 @@
     "Footer": {
         "copyright": "© {year} Preludio Lab. All rights reserved.",
         "tagline": "Beyond Listening. クラシック音楽を「構造」から理解する体験を。"
+    },
+    "Player": {
+        "invalidRequest": "再生リクエストが無効です"
     }
 }
