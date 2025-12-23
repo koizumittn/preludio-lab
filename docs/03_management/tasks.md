@@ -142,18 +142,26 @@ Status: `[/]` 進行中
     - [ ] **[リファクタリング]** フィルターロジックの分離
         - [ ] 検索・絞り込みロジックを Custom Hook（`useFilter`）へ抽出し、保守性を向上
 
-- [ ] **5.5 検索機能の実装 (Pagefind Integration)**
-    - [ ] **[仕様策定]** 検索UI/UXとインデックス範囲の定義
-        - [ ] Pagefindの日本語トークナイザー設定、検索対象フィールド（タイトル、本文、タグ）の優先順位付け
-        - [ ] 検索モーダル（Cmd+K）の外観と操作フロー（キーボード操作含む）の詳細UI設計
-        - [ ] **インデックス更新タイミング** の定義（ビルドフロー内での実行順序）
-    - [ ] **[実装]** 検索機能の統合
-        - [ ] 検索モーダル（Cmd+K対応）のデザインと実装
-        - [ ] `Pagefind` ライブラリのセットアップとGitHub Actionsでのビルド設定
+- [ ] **5.5 コンテンツ管理のSupabase移行 (Supabase Content Management)**
+    - [ ] **[仕様策定]** DBスキーマと同期戦略の定義
+        - [ ] Hybrid Content Modelの設計 (Master: MDX / Index & Vector: Supabase)
+        - [ ] MDXメタデータとSupabaseテーブル (`works`, `composers`) のマッピング定義
+    - [ ] **[実装]** 同期パイプラインの実装
+        - [ ] `scripts/sync-supabase.ts` の実装（MDXパース -> DB Upsert）
+        - [ ] OpenAI/Gemini APIを用いたEmbedding生成処理の実装
+        - [ ] GitHub Actionsによる自動同期フロー (`content-sync.yml`) の構築
+    - [ ] **[検証]** データ整合性確認
+        - [ ] ローカル環境での同期テストとSupabase Dashboardでのデータ確認
+
+- [ ] **5.6 検索機能の実装 (Supabase Hybrid Search)**
+    - [ ] **[仕様策定]** ハイブリッド検索仕様の策定
+        - [ ] Full Text Search (pg_trgm) と Vector Search (pgvector) の重み付け設計
+        - [ ] 検索モーダル（Cmd+K）のUI設計
+    - [ ] **[実装]** 検索機能の実装
+        - [ ] Supabase RPC (PostgreSQL Function) によるハイブリッド検索ロジック実装
+        - [ ] クライアントサイド検索UIの実装（`useSearch` Hook）
     - [ ] **[テスト・動作検証]** 検索精度の検証
-        - [ ] 日本語キーワード（例：「バッハ 前奏曲」）でのヒット率、検索結果の表示速度確認
-    - [ ] **[リファクタリング]** 検索結果UIの最適化
-        - [ ] 検索結果のハイライト表示（Snippets）のスタイリング、不要なインデックスデータの除外
+        - [ ] 日本語キーワードおよび意味検索（Semantic Search）の精度確認
 
 ## Phase 6: AIエージェント開発 ("Brain") & コンテンツ量産
 - [ ] **6.1 音楽学者エージェント (Musicologist Agent)**
