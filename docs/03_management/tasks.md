@@ -259,13 +259,7 @@ Status: `[/]` 進行中
     - [ ] **[ソーシャル発見]** **Social Highlights (Heatmap)**: どの譜例がよく再生されているかをスコア上に表示する機能
     - [ ] **[高度化]** パーソナライズ・インサイト（ユーザーの好みに合わせた独自の楽曲提案ワークフロー）
     - [ ] **[収益化準備]** プレミアムゲートの設計（特定コンテンツや高品質アセットの会員限定化）
-- [ ] **7.5 パフォーマンスと配信の極致 (Performance & Asset Optimization)**
-    - [ ] **[基盤]** **Cloudflare Images / R2** の導入。画像アセットの管理・配信を統合。
-    - [ ] **[実装]** `next/image` と Cloudflare を連携させた、デバイス・通信環境別の画像最適化・キャッシュ戦略の実装
-    - [ ] **[計測]** Vercel Speed Insights / Lighthouse による Core Web Vitals (LCP, CLS, TBT) の定量的モニタリング
-    - [ ] **[最適化]** 1万記事規模を見据えた ISR (Incremental Static Regeneration) と エッジキャッシュ戦略の最終調整
-
-- [ ] **7.6 最高のユーザー体験を実現するためのサイトデザインの清廉化 (Premium UX & Design)**
+- [ ] **7.5 最高のユーザー体験を実現するためのサイトデザインの清廉化 (Premium UX & Design)**
     - [ ] **[アニメーション]** **Framer Motion** を用いた、ページ遷移や譜例表示時の滑らかなマイクロインタラクションの実装
     - [ ] **[デザイン]** デザインシステムの再定義。没入感を最大化するタイポグラフィ、カラーパレット、余白の「清廉化」
     - [ ] **[没入感]** 音源再生とUIアニメーション（波形、プログレスバー等）のさらなる統合
@@ -278,8 +272,12 @@ Status: `[/]` 進行中
         - [ ] Vercel Preview URLに対して自動実行するスキャンシナリオの実装
     - [ ] **[秘密情報]** **Secret Scanning** の有効化（APIキー等の誤コミット防止）
 
-- [ ] **8.2 パフォーマンス耐久テストとチューニング (Performance Load Testing)**
+- [ ] **8.2 パフォーマンス耐久テストと最適化の極致 (Performance & Asset Optimization)**
+    - [ ] **[基盤]** **Cloudflare Images / R2** の導入。画像アセットの管理・配信を統合。
+    - [ ] **[実装]** `next/image` と Cloudflare を連携させた、デバイス・通信環境別の画像最適化・キャッシュ戦略の実装
+    - [ ] **[計測]** Vercel Speed Insights / Lighthouse による Core Web Vitals (LCP, CLS, TBT) の定量的モニタリング
     - [ ] **[負荷テスト]** **k6** 等を用いた、同時アクセス時のAPI応答性能およびDB負荷の検証
+    - [ ] **[最適化]** 1万記事規模を見据えた ISR (Incremental Static Regeneration) と エッジキャッシュ戦略の最終調整
     - [ ] **[ボトルネック解消]** スロークエリの特定とDBインデックスの最適化
     - [ ] **[チューニング]** Vercel Edge Runtime / Cache Control ヘッダーの最終最適化
 
