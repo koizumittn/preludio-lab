@@ -255,3 +255,10 @@ Status: `[/]` 進行中
 
 - [ ] **Dynamic Language Sorting by Browser Locale**
     - ブラウザ言語による動的な並び替え: 技術スタック（Next.js）を活かし、**「基本はこの順序だが、ユーザーのブラウザ言語を検知して、その言語を最上位にプロモートする」**というロジックを組むと、グローバルな没入感がさらに高まります。
+
+- [ ] **Content Component Evolution & Layout Strategy**
+    - **`ContentCard` の拡張**: `variant` プロパティ (`'vertical'` / `'horizontal'`) を追加し、サイドバーやリスト形式など、コンテキストに応じた表示切替をサポートする。
+    - **`ContentGrid` の柔軟性向上**: PC表示時のカラム数を `maxColumns` プロパティに加えて、より詳細なレスポンシブ制御を可能にする。
+    - **ページ特性に応じた使い分け**: 
+        - Landing/Topページ: `HeroCard` + `Card` で情報の強弱をつける。
+        - Search/Archivesページ: 均一なグリッド表示（`Card` のみ）で一覧性と検索性を優先する。
