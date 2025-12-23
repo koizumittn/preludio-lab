@@ -10,7 +10,7 @@ import { AudioPlayerProvider } from '@/components/player/AudioPlayerContext';
 import { LazyMotionConfig } from '@/components/ui/LazyMotionConfig';
 import { ConsentBanner } from '@/components/layout/ConsentBanner';
 import { Toaster } from 'react-hot-toast';
-import { supportedLocales } from '@/domain/shared/locale';
+import { supportedLocales, AppLocale } from '@/domain/i18n/Locale';
 
 // フォント設定
 const inter = Inter({
@@ -91,11 +91,11 @@ export default async function RootLayout({
     let fontVariables = `${inter.variable} ${playfair.variable}`;
     let baseFontClass = 'font-sans-en text-primary bg-paper';
 
-    if (lang === 'ja') {
+    if (lang === AppLocale.JA) {
         // 日本語: Noto Sans JP + Zen Old Mincho
         fontVariables += ` ${notoSansJP.variable} ${zenOldMincho.variable}`;
         baseFontClass = 'font-sans-ja text-primary bg-paper';
-    } else if (lang === 'zh') {
+    } else if (lang === AppLocale.ZH) {
         // 中国語: Noto Sans SC + Noto Serif SC
         fontVariables += ` ${notoSansSC.variable} ${notoSerifSC.variable}`;
         baseFontClass = 'font-sans-zh text-primary bg-paper';

@@ -17,7 +17,7 @@ import { ContentDetail, ContentSummary } from '@/domain/content/Content';
 
 
 // Supported languages
-const languages = ['en', 'ja', 'es', 'de', 'fr', 'it', 'zh'];
+import { supportedLocales } from '@/domain/i18n/Locale';
 
 export async function generateStaticParams() {
     const params: { lang: string; slug: string[] }[] = [];
@@ -25,7 +25,7 @@ export async function generateStaticParams() {
     const repository = new FsContentRepository();
 
     try {
-        for (const lang of languages) {
+        for (const lang of supportedLocales) {
             // Use lightweight summary for build params
             const contents = await repository.getContentSummariesByCategory(lang, 'works');
             for (const content of contents) {

@@ -67,10 +67,10 @@ endSeconds: 60
         });
     });
 
-    describe('getAllContentSummaries', () => {
+    describe('getContentSummariesByCategory', () => {
         it('should return empty array if directory does not exist', async () => {
             vi.mocked(fs.existsSync).mockReturnValue(false);
-            const result = await repository.getAllContentSummaries('en', 'works');
+            const result = await repository.getContentSummariesByCategory('en', 'works');
             expect(result).toHaveLength(0);
         });
     });
