@@ -6,6 +6,8 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { AudioPlayerFeature } from '@/components/player';
 import { AudioPlayerProvider } from '@/components/player/AudioPlayerContext';
+// Instead we import our new config
+import { LazyMotionConfig } from '@/components/ui/LazyMotionConfig';
 import { ConsentBanner } from '@/components/layout/ConsentBanner';
 import { Toaster } from 'react-hot-toast';
 import { supportedLocales } from '@/domain/shared/locale';
@@ -103,15 +105,17 @@ export default async function RootLayout({
             <body className={`${baseFontClass} antialiased`}>
                 <NextIntlClientProvider messages={messages}>
                     <AudioPlayerProvider>
-                        <Header lang={lang} />
-                        <main className="min-h-screen pb-24">{children}</main>
-                        <Footer />
+                        <LazyMotionConfig>
+                            <Header lang={lang} />
+                            <main className="min-h-screen pb-24">{children}</main>
+                            <Footer />
 
-                        {/* Global Audio Player Components */}
-                        <AudioPlayerFeature />
+                            {/* Global Audio Player Components */}
+                            <AudioPlayerFeature />
 
-                        <ConsentBanner />
-                        <Toaster position="bottom-right" />
+                            <ConsentBanner />
+                            <Toaster position="bottom-right" />
+                        </LazyMotionConfig>
                     </AudioPlayerProvider>
                 </NextIntlClientProvider>
             </body>

@@ -1,6 +1,8 @@
+'use client';
+
 import Link from 'next/link';
 import { ContentSummary } from '@/domain/content/Content';
-import * as motion from 'framer-motion/client';
+import { m } from 'framer-motion';
 
 export interface ContentCardProps {
     content: ContentSummary;
@@ -17,7 +19,7 @@ export function ContentCard({ content, readMoreLabel, categoryLabel, index = 0 }
     const { lang, category, slug, metadata } = content;
 
     return (
-        <motion.div
+        <m.div
             className="overflow-hidden rounded-xl bg-paper-white p-6 shadow-md transition hover:shadow-lg"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -40,6 +42,6 @@ export function ContentCard({ content, readMoreLabel, categoryLabel, index = 0 }
             >
                 {readMoreLabel}
             </Link>
-        </motion.div>
+        </m.div>
     );
 }

@@ -1,7 +1,9 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { ContentSummary } from '@/domain/content/Content';
-import * as motion from 'framer-motion/client';
+import { m } from 'framer-motion';
 
 export interface ContentHeroCardProps {
     content: ContentSummary;
@@ -22,12 +24,8 @@ export function ContentHeroCard({
     const { lang, category, slug, metadata } = content;
 
     return (
-        <motion.div
+        <m.div
             className="mx-auto mb-12 max-w-4xl overflow-hidden rounded-2xl bg-paper-white shadow-xl transition-shadow duration-300 hover:shadow-2xl"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
         >
             <div className="p-8 sm:p-12">
                 {metadata.thumbnail && (
@@ -55,6 +53,6 @@ export function ContentHeroCard({
                     </Link>
                 </div>
             </div>
-        </motion.div>
+        </m.div>
     );
 }
