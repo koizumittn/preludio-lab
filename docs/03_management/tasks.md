@@ -232,25 +232,42 @@ Status: `[/]` 進行中
         - [ ] GitHub Actionsによる定期実行ワークフローの実装
         - [ ] 異常検知時の通知・レポート機能
 
-## Phase 7: ローンチに向けた機能拡充とリファクタリング
-- [ ] **7.1 E2Eテストの導入と実装 (Playwright)**
+## Phase 7: セキュリティテストとパフォーマンスチューニング
+- [ ] **7.1 セキュリティテストと脆弱性診断の自動化 (Security Analysis)**
+    - [ ] **[SAST]** **GitHub CodeQL** のワークフロー統合（コードスキャン）
+    - [ ] **[SCA]** **GitHub Dependabot** による依存関係の脆弱性自動検知とPR作成の有効化
+    - [ ] **[DAST]** **OWASP ZAP (GitHub Action)** による動的診断環境の構築
+        - [ ] Vercel Preview URLに対して自動実行するスキャンシナリオの実装
+    - [ ] **[秘密情報]** **Secret Scanning** の有効化（APIキー等の誤コミット防止）
+
+- [ ] **7.2 パフォーマンス耐久テストと最適化の極致 (Performance & Asset Optimization)**
+    - [ ] **[基盤]** **Cloudflare Images / R2** の導入。画像アセットの管理・配信を統合。
+    - [ ] **[実装]** `next/image` と Cloudflare を連携させた、デバイス・通信環境別の画像最適化・キャッシュ戦略の実装
+    - [ ] **[計測]** Vercel Speed Insights / Lighthouse による Core Web Vitals (LCP, CLS, TBT) の定量的モニタリング
+    - [ ] **[負荷テスト]** **k6** 等を用いた、同時アクセス時のAPI応答性能およびDB負荷の検証
+    - [ ] **[最適化]** 1万記事規模を見据えた ISR (Incremental Static Regeneration) と エッジキャッシュ戦略の最終調整
+    - [ ] **[ボトルネック解消]** スロークエリの特定とDBインデックスの最適化
+    - [ ] **[チューニング]** Vercel Edge Runtime / Cache Control ヘッダーの最終最適化
+
+## Phase 8: ローンチに向けた機能拡充とリファクタリング
+- [ ] **8.1 E2Eテストの導入と実装 (Playwright)**
     - [ ] **[準備]** Playwrightの導入と初期設定（Mobile/PCブラウザ等）
     - [ ] **[インフラ]** Vercel Preview環境を自動検知してテストを実行するGitHub Actionsの構築
         - [ ] PR/Push時にデプロイ完了を待機し、動的なPreview URLに対してテストを実行するロジックの実装
     - [ ] **[実装]** 主要ユーザーフロー（閲覧、言語切り替え、音源再生確認）のテストシナリオ実装
     - [ ] **[運用]** テスト失敗時のレポート自動生成とGitHub上での可視化
-- [ ] **7.2 シリーズ機能の実装 (Content Series)**
+- [ ] **8.2 シリーズ機能の実装 (Content Series)**
     - [ ] **[DB設計]** `series` テーブルおよび `series_items` (多対多) のスキーマ設計
     - [ ] **[UI実装]** シリーズインデックスページ（特集一覧）の実装
     - [ ] **[UI実装]** 各楽曲ページにおける「前の曲 / 次の曲」スマートナビゲーションの実装
         - [ ] 同一シリーズ内での順序を考慮したページ遷移
 
-- [ ] **7.3 AIレコメンド機能と発見的探索 (AI Recommendation & Discovery)**
+- [ ] **8.3 AIレコメンド機能と発見的探索 (AI Recommendation & Discovery)**
     - [ ] **[基盤]** Supabase pgvector を利用した、埋め込みベクトルによる類似楽曲の抽出の高度化
     - [ ] **[ロジック]** 同一作曲家・同一楽器・同一時代の「重み付け」アルゴリズムの実装
     - [ ] **[UI実装]** **推薦理由の可視化 (Explainable AI)**: 「なぜこの曲がおすすめなのか」を提示するUIの実装
     - [ ] **[実験的機能]** **AIキュレーション・コレクション**: 「雨の日に聴きたい」等の文脈に基づいた自動パッケージ化機能
-- [ ] **7.4 ユーザーインタラクションとエンゲージメント設計 (Interaction & Engagement)**
+- [ ] **8.4 ユーザーインタラクションとエンゲージメント設計 (Interaction & Engagement)**
     - [ ] **[認証・基盤]** Supabase Auth（SSO/SNS認証）の導入と RLS (Row Level Security) によるユーザーデータ保護
     - [ ] **[LIKE機能]** 楽曲へのLIKE機能の実装。Optimistic Updates（楽観的更新）による即時フィードバック。
     - [ ] **[マイライブラリ]** 「あとで読むリスト」や「視聴履歴のビジュアル化」による再訪動機の創出
@@ -259,27 +276,10 @@ Status: `[/]` 進行中
     - [ ] **[ソーシャル発見]** **Social Highlights (Heatmap)**: どの譜例がよく再生されているかをスコア上に表示する機能
     - [ ] **[高度化]** パーソナライズ・インサイト（ユーザーの好みに合わせた独自の楽曲提案ワークフロー）
     - [ ] **[収益化準備]** プレミアムゲートの設計（特定コンテンツや高品質アセットの会員限定化）
-- [ ] **7.5 最高のユーザー体験を実現するためのサイトデザインの清廉化 (Premium UX & Design)**
+- [ ] **8.5 最高のユーザー体験を実現するためのサイトデザインの清廉化 (Premium UX & Design)**
     - [ ] **[アニメーション]** **Framer Motion** を用いた、ページ遷移や譜例表示時の滑らかなマイクロインタラクションの実装
     - [ ] **[デザイン]** デザインシステムの再定義。没入感を最大化するタイポグラフィ、カラーパレット、余白の「清廉化」
     - [ ] **[没入感]** 音源再生とUIアニメーション（波形、プログレスバー等）のさらなる統合
-
-## Phase 8: セキュリティテストとパフォーマンスチューニング
-- [ ] **8.1 セキュリティテストと脆弱性診断の自動化 (Security Analysis)**
-    - [ ] **[SAST]** **GitHub CodeQL** のワークフロー統合（コードスキャン）
-    - [ ] **[SCA]** **GitHub Dependabot** による依存関係の脆弱性自動検知とPR作成の有効化
-    - [ ] **[DAST]** **OWASP ZAP (GitHub Action)** による動的診断環境の構築
-        - [ ] Vercel Preview URLに対して自動実行するスキャンシナリオの実装
-    - [ ] **[秘密情報]** **Secret Scanning** の有効化（APIキー等の誤コミット防止）
-
-- [ ] **8.2 パフォーマンス耐久テストと最適化の極致 (Performance & Asset Optimization)**
-    - [ ] **[基盤]** **Cloudflare Images / R2** の導入。画像アセットの管理・配信を統合。
-    - [ ] **[実装]** `next/image` と Cloudflare を連携させた、デバイス・通信環境別の画像最適化・キャッシュ戦略の実装
-    - [ ] **[計測]** Vercel Speed Insights / Lighthouse による Core Web Vitals (LCP, CLS, TBT) の定量的モニタリング
-    - [ ] **[負荷テスト]** **k6** 等を用いた、同時アクセス時のAPI応答性能およびDB負荷の検証
-    - [ ] **[最適化]** 1万記事規模を見据えた ISR (Incremental Static Regeneration) と エッジキャッシュ戦略の最終調整
-    - [ ] **[ボトルネック解消]** スロークエリの特定とDBインデックスの最適化
-    - [ ] **[チューニング]** Vercel Edge Runtime / Cache Control ヘッダーの最終最適化
 
 ## Phase 9: Pre-Launch Marketing & Growth Foundation (Acquisition - Pre)
 - [ ] **9.1 Pre-Launch Asset Creation**
