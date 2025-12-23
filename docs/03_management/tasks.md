@@ -249,6 +249,8 @@ Status: `[/]` 進行中
 
 - [ ] **Edge Config & Cache Strategy Optimization**
     - Supabaseのデータや翻訳辞書の取得において、Vercel Edge Configや`stale-while-revalidate` (SWR) パターンを適用し、グローバル規模での低遅延アクセス（瞬時の没入体験）を実現する。
+    - **重要なページだけ事前ビルドする仕組み**: 全7万件規模のコンテンツに備え、`generateStaticParams` で「最新記事」や「人気記事」のみを事前ビルド（SSG）の対象とし、残りはオンデマンド生成（ISR）にする制御ロジックを実装する。
+    - **コンテンツのISRとキャッシュ戦略の検討と実装**: 大量コンテンツの更新頻度に応じた再検証（Revalidation）間隔の定義と、グローバルなCDNキャッシュ最適化。
 
 - [ ] **Automated Highlight & Timestamp Extraction**
     - AIにより「楽曲の聴きどころ（Highlight）」とYouTube音源の対応するタイムスタンプを自動抽出し、コンテンツ制作（ドラフト）の効率を飛躍的に高める。
