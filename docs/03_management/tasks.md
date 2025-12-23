@@ -35,7 +35,6 @@ Status: `[/]` 進行中
 - [x] **2.3 インフラ構築**
     - [x] Vercel プロジェクトのセットアップ
     - [x] Supabase プロジェクトのセットアップ (Auth: SSO Only)
-    - [ ] **Local DB Setup:** Docker Compose & Supabase CLI Setup (for Dev Isolation) <!-- Postponed due to Docker version issue -->
     - [x] **ドメイン設定:** `preludiolab.com` の取得とVercelへの紐付け
 - [x] **2.4 DevOps & QA基盤構築**
     - [x] GitHub Actions Workflow作成: `ci-check.yml` (Lint / TypeCheck / Unit Test)
