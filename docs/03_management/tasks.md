@@ -112,20 +112,20 @@ Status: `[/]` 進行中
     - [x] **[リファクタリング]** 既存コードへの適用
         - [x] `ScoreRenderer` 内のプレイヤー呼び出しを新コンポーネントへ置き換え
 
-- [ ] **5.3 ホームページの実装 (Dynamic Homepage)**
-    - [ ] **[仕様策定]** データフェッチ戦略とサイドバー構造の定義
-        - [ ] "Featured Work" の選定基準とデータ取得範囲
-        - [ ] サイドバー（Listening Guide/Player Widget）の配置設計とMDX連携仕様
-        - [ ] 各セクションのUIレイアウトおよびスクロール演出（Framer Motion）の設計
-    - [ ] **[実装]** 動的コンテンツとサイドバーの実装
-        - [ ] `Featured Work` セクションへの最新MDXデータの流し込み
-        - [ ] サイドバーウィジェット（Listening Guideプレビュー等）の実装
-        - [ ] Discoverカテゴリ（Analysis, Composers等）への遷移ロジック
-        - [ ] スクロールアニメーション（Framer Motion等）による没入感の演出
-    - [ ] **[テスト・動作検証]** 表示パフォーマンスとレスポンシブの検証
-        - [ ] LCP（Largest Contentful Paint）の計測、モバイル実機での「Discover」カードの操作性確認
-    - [ ] **[リファクタリング]** ホームページ専用コンポーネントのクリーン化
-        - [ ] 巨大になりがちな `page.tsx` の Organisms 単位への分割
+- [x] **5.3 ホームページの実装 (Dynamic Homepage)**
+    - [x] **[仕様策定]** データフェッチ戦略とサイドバー構造の定義
+        - [x] "Featured Work" の選定基準とデータ取得範囲
+        - [x] サイドバー（Listening Guide/Player Widget）の配置設計とMDX連携仕様
+        - [x] 各セクションのUIレイアウトおよびスクロール演出（Framer Motion）の設計
+    - [x] **[実装]** 動的コンテンツとサイドバーの実装
+        - [x] `Featured Work` セクションへの最新MDXデータの流し込み
+        - [x] サイドバーウィジェット（Listening Guideプレビュー等）の実装
+        - [x] Discoverカテゴリ（Analysis, Composers等）への遷移ロジック
+        - [x] スクロールアニメーション（Framer Motion等）による没入感の演出
+    - [x] **[テスト・動作検証]** 表示パフォーマンスとレスポンシブの検証
+        - [x] LCP（Largest Contentful Paint）の計測、モバイル実機での「Discover」カードの操作性確認
+    - [x] **[リファクタリング]** ホームページ専用コンポーネントのクリーン化
+        - [x] 巨大になりがちな `page.tsx` の Organisms 単位への分割
 
 - [ ] **5.4 一覧ページの実装 (Works / Composers Index)**
     - [ ] **[仕様策定]** フィルタリング・ソート仕様の策定
