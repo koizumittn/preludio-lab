@@ -61,7 +61,9 @@ export function AudioPlayerBinder({ source, format, playRequest: propRequest, ch
             },
             options: isExplicitSource
                 ? extractedOptions
-                : { ...propOptions, ...extractedOptions }
+                : (extractedOptions.startSeconds !== undefined || extractedOptions.endSeconds !== undefined)
+                    ? extractedOptions
+                    : propOptions
         };
     }, [source, format, propRequest]);
 

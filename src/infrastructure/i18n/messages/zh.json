@@ -71,5 +71,8 @@
     "Footer": {
         "copyright": "© {year} Preludio Lab. 版权所有。",
         "tagline": "超越聆听。更深入地沉浸在经典中。"
+    },
+    "Player": {
+        "invalidRequest": "播放请求无效"
     }
 }

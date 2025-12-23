@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useCallback, useMemo, useRef, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { PlayerPlatform, PlayerPlatformType } from '@/domain/player/PlayerConstants';
 import { PlayRequestSchema } from '@/domain/player/Player';
 import { handleClientError } from '@/utils/client-error-handler';
@@ -121,6 +122,7 @@ export function useAudioPlayer() {
 const STORAGE_KEY = 'preludio_player_state';
 
 export function AudioPlayerProvider({ children }: { children: React.ReactNode }) {
+    const t = useTranslations('Player');
     const [state, setState] = useState<PlayerState>({
         isPlaying: false,
         currentTime: 0,
@@ -255,7 +257,7 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
             console.error('[AudioPlayerContext] Validation Error:', validationResult.error);
             // 本番ではユーザーに通知するか、エラーハンドリングポリシーに従う
             // ここではコンソールエラーのみとし、処理は継続させない（安全策）
-            handleClientError(new Error(`Invalid play request: ${validationResult.error.message}`), '再生リクエストが無効です');
+            handleClientError(new Error(`Invalid play request: ${validationResult.error.message}`), t('invalidRequest'));
             return;
         }
 
