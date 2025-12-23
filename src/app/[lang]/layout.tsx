@@ -27,30 +27,30 @@ const playfair = Playfair_Display({
 
 const notoSansJP = Noto_Sans_JP({
     weight: ['400', '500', '700'],
-    subsets: ['latin'],
     variable: '--font-noto-sans-jp',
     display: 'swap',
+    preload: false,
 });
 
 const zenOldMincho = Zen_Old_Mincho({
     weight: ['400', '600', '700'],
-    subsets: ['latin'],
     variable: '--font-zen-old-mincho',
     display: 'swap',
+    preload: false,
 });
 
 const notoSansSC = Noto_Sans_SC({
     weight: ['400', '500', '700'],
-    subsets: ['latin'],
     variable: '--font-noto-sans-sc',
     display: 'swap',
+    preload: false,
 });
 
 const notoSerifSC = Noto_Serif_SC({
     weight: ['400', '600', '700'],
-    subsets: ['latin'],
     variable: '--font-noto-serif-sc',
     display: 'swap',
+    preload: false,
 });
 
 type Props = {
