@@ -271,12 +271,17 @@ Status: `[/]` 進行中
     - [ ] **[没入感]** 音源再生とUIアニメーション（波形、プログレスバー等）のさらなる統合
 
 ## Phase 8: セキュリティテストとパフォーマンスチューニング
-- [ ] **8.1 セキュリティテストの導入**
-    - [ ] SAST (Static Application Security Testing)
-    - [ ] DAST (Dynamic Application Security Testing)
-    - [ ] SCA (Software Composition Analysis)
-- [ ] **8.2 パフォーマンス最適化**
-    - [ ] パフォーマンステストとチューニング
+- [ ] **8.1 セキュリティテストと脆弱性診断の自動化 (Security Analysis)**
+    - [ ] **[SAST]** **GitHub CodeQL** のワークフロー統合（コードスキャン）
+    - [ ] **[SCA]** **GitHub Dependabot** による依存関係の脆弱性自動検知とPR作成の有効化
+    - [ ] **[DAST]** **OWASP ZAP (GitHub Action)** による動的診断環境の構築
+        - [ ] Vercel Preview URLに対して自動実行するスキャンシナリオの実装
+    - [ ] **[秘密情報]** **Secret Scanning** の有効化（APIキー等の誤コミット防止）
+
+- [ ] **8.2 パフォーマンス耐久テストとチューニング (Performance Load Testing)**
+    - [ ] **[負荷テスト]** **k6** 等を用いた、同時アクセス時のAPI応答性能およびDB負荷の検証
+    - [ ] **[ボトルネック解消]** スロークエリの特定とDBインデックスの最適化
+    - [ ] **[チューニング]** Vercel Edge Runtime / Cache Control ヘッダーの最終最適化
 
 ## Phase 9: Pre-Launch Marketing & Growth Foundation (Acquisition - Pre)
 - [ ] **9.1 Pre-Launch Asset Creation**
