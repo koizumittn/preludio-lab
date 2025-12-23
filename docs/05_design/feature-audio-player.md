@@ -74,6 +74,14 @@ graph TD
 `react-youtube` などの外部ライブラリは `window` オブジェクトに依存するため、そのままServer Componentで使用するとビルドエラーになります。
 これを防ぐため、`GlobalAudioPlayer` の呼び出し元 (`ClientWrapper`) で `next/dynamic` (`ssr: false`) を使用し、クライアントサイドでの実行を保証しています。
 
+### 3.3. **Strict Lazy Loading (LCP Optimization)**
+YouTubeなどの外部プレイヤー（Iframe）は初期化コストが高く、ページの初期表示性能（LCP）を著しく低下させる要因となります。
+本フューチャーでは、「ユーザーが明確な再生意思を示すまで、Heavy Player（YouTubeAdapter等）をマウントしない」戦略を採用しています。
+
+*   **Implementation:** `AudioPlayerAdapter` 内で `hasStarted` ステートを持ち、`isPlaying` が一度も `true` になっていない間は、何もレンダリングしません（`null` を返す）。
+*   **Trigger:** ユーザーが再生ボタンを押すと、`GlobalAudioPlayer` が `isPlaying: true` を発行し、Adapterが初めて実際のプレイヤーコンポーネントをロードします。
+*   **Result:** これにより、初期ロード時のネットワークペイロードを数MB単位で削減し、LCPを劇的に改善します。
+
 ## 4. State Management (AudioPlayerContext)
 
 アプリケーション全体で単一の「再生状態」を共有します。
