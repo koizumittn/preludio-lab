@@ -80,7 +80,7 @@ export class FsContentRepository implements IContentRepository {
                     metadata,
                 };
             } catch (e) {
-                this.logger.warn(`Invalid metadata in ${filePath}`, { context: 'FsContentRepository', error: e });
+                this.logger.warn(`メタデータのパースエラー (${filePath}):`, { context: 'FsContentRepository', error: e });
                 return null;
             }
         })

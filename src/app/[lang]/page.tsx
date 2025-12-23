@@ -5,6 +5,7 @@ import { FsContentRepository } from '@/infrastructure/content/FsContentRepositor
 import { GetFeaturedContentUseCase } from '@/application/content/GetFeaturedContentUseCase';
 import { FeaturedSection } from '@/components/content/FeaturedSection';
 import { ContentCategory } from '@/domain/content/ContentConstants';
+import { ContentSummary } from '@/domain/content/Content';
 
 // ホーム画面のDiscoverセクションに表示するカテゴリ
 const HOME_DISPLAY_CATEGORIES: ContentCategory[] = [
@@ -30,9 +31,15 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
     const lang = (await params).lang;
 
     // UseCaseの実行
-    const repository = new FsContentRepository();
-    const getFeaturedContent = new GetFeaturedContentUseCase(repository);
-    const featuredContent = await getFeaturedContent.execute({ lang, criteria: 'latest' });
+    let featuredContent: ContentSummary[] = [];
+    try {
+        const repository = new FsContentRepository();
+        const getFeaturedContent = new GetFeaturedContentUseCase(repository);
+        featuredContent = await getFeaturedContent.execute({ lang, criteria: 'latest' });
+    } catch (error) {
+        const { handleError } = await import('@/utils/errorHandler');
+        handleError(error, 'Home:GetFeaturedContent');
+    }
 
     // ホーム画面のDiscoverセクションに表示するカテゴリ
     // HOME_DISPLAY_CATEGORIES に基づいて表示
