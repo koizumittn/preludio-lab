@@ -87,17 +87,20 @@ export default async function RootLayout({
     const messages = await getMessages();
 
     // 言語に基づいてフォント変数とベースクラスを決定
-    const fontVariables = `${inter.variable} ${playfair.variable} ${notoSansJP.variable} ${zenOldMincho.variable} ${notoSansSC.variable} ${notoSerifSC.variable}`;
-
-    // Body Font Selection:
-    // - JA: Noto Sans JP
-    // - ZH: Noto Sans SC
-    // - Others (EN, DE, FR, IT, ES): Inter
+    // 最適化: 必要な言語のフォント変数のみを注入し、不要なフォントのプリロードを防ぐ
+    let fontVariables = `${inter.variable} ${playfair.variable}`;
     let baseFontClass = 'font-sans-en text-primary bg-paper';
+
     if (lang === 'ja') {
+        // 日本語: Noto Sans JP + Zen Old Mincho
+        fontVariables += ` ${notoSansJP.variable} ${zenOldMincho.variable}`;
         baseFontClass = 'font-sans-ja text-primary bg-paper';
     } else if (lang === 'zh') {
+        // 中国語: Noto Sans SC + Noto Serif SC
+        fontVariables += ` ${notoSansSC.variable} ${notoSerifSC.variable}`;
         baseFontClass = 'font-sans-zh text-primary bg-paper';
+    } else {
+        // その他 (欧文): 追加フォントなし (Inter/Playfairのみ)
     }
 
     return (
