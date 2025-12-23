@@ -249,6 +249,10 @@ Status: `[/]` 進行中
     - [ ] **[ボトルネック解消]** スロークエリの特定とDBインデックスの最適化
     - [ ] **[チューニング]** Vercel Edge Runtime / Cache Control ヘッダーの最終最適化
 
+- [ ] **7.3 オフライン体験とグローバル基盤の強化 (PWA & Global Infrastructure)**
+    - [ ] **[実装]** **PWA (Progressive Web App)** 対応。モバイルホーム画面への追加とオフラインキャッシュ（楽譜・音源）の検討。
+    - [ ] **[最適化]** **Edge Config & SWR** パターンの適用による、グローバル規模での低遅延アクセス（瞬時の没入体験）の実現。
+
 ## Phase 8: ローンチに向けた機能拡充とリファクタリング
 - [ ] **8.1 E2Eテストの導入と実装 (Playwright)**
     - [ ] **[準備]** Playwrightの導入と初期設定（Mobile/PCブラウザ等）
@@ -256,11 +260,13 @@ Status: `[/]` 進行中
         - [ ] PR/Push時にデプロイ完了を待機し、動的なPreview URLに対してテストを実行するロジックの実装
     - [ ] **[実装]** 主要ユーザーフロー（閲覧、言語切り替え、音源再生確認）のテストシナリオ実装
     - [ ] **[運用]** テスト失敗時のレポート自動生成とGitHub上での可視化
+    - [ ] **[基盤]** **多言語ルーティング (i18n) の精緻化**: ブラウザ言語の検知と、特定の言語を最上位にプロモートするブラウザロケール連動ロジックの実装
 - [ ] **8.2 シリーズ機能の実装 (Content Series)**
     - [ ] **[DB設計]** `series` テーブルおよび `series_items` (多対多) のスキーマ設計
     - [ ] **[UI実装]** シリーズインデックスページ（特集一覧）の実装
     - [ ] **[UI実装]** 各楽曲ページにおける「前の曲 / 次の曲」スマートナビゲーションの実装
         - [ ] 同一シリーズ内での順序を考慮したページ遷移
+    - [ ] **[基盤]** **共通ウィジェット・フレームワーク**: サイドバー用の `ContentCard` 拡張 (Vertical/Horizontal) と、再利用可能なウィジェット配置基盤の構築
 
 - [ ] **8.3 AIレコメンド機能と発見的探索 (AI Recommendation & Discovery)**
     - [ ] **[基盤]** Supabase pgvector を利用した、埋め込みベクトルによる類似楽曲の抽出の高度化
@@ -338,20 +344,5 @@ Status: `[/]` 進行中
 - [ ] **Accessibility (A11y) Audit for Score & Player**
     - 視覚障害者ユーザー（Screen Reader利用）が、「楽曲の構造」や「現在再生位置」を把握できるか、WAI-ARIA 属性の適切性を検証・改善する。
 
-- [ ] **Edge Config & Cache Strategy Optimization**
-    - Supabaseのデータや翻訳辞書の取得において、Vercel Edge Configや`stale-while-revalidate` (SWR) パターンを適用し、グローバル規模での低遅延アクセス（瞬時の没入体験）を実現する。
-    - **重要なページだけ事前ビルドする仕組み**: 全7万件規模のコンテンツに備え、`generateStaticParams` で「最新記事」や「人気記事」のみを事前ビルド（SSG）の対象とし、残りはオンデマンド生成（ISR）にする制御ロジックを実装する。
-    - **コンテンツのISRとキャッシュ戦略の検討と実装**: 大量コンテンツの更新頻度に応じた再検証（Revalidation）間隔の定義と、グローバルなCDNキャッシュ最適化。
-
 - [ ] **Automated Highlight & Timestamp Extraction**
     - AIにより「楽曲の聴きどころ（Highlight）」とYouTube音源の対応するタイムスタンプを自動抽出し、コンテンツ制作（ドラフト）の効率を飛躍的に高める。
-
-- [ ] **Dynamic Language Sorting by Browser Locale**
-    - ブラウザ言語による動的な並び替え: 技術スタック（Next.js）を活かし、**「基本はこの順序だが、ユーザーのブラウザ言語を検知して、その言語を最上位にプロモートする」**というロジックを組むと、グローバルな没入感がさらに高まります。
-
-- [ ] **Content Component Evolution & Layout Strategy**
-    - **`ContentCard` の拡張**: `variant` プロパティ (`'vertical'` / `'horizontal'`) を追加し、サイドバーやリスト形式など、コンテキストに応じた表示切替をサポートする。
-    - **`ContentGrid` の柔軟性向上**: PC表示時のカラム数を `maxColumns` プロパティに加えて、より詳細なレスポンシブ制御を可能にする。
-    - **ページ特性に応じた使い分け**: 
-        - Landing/Topページ: `HeroCard` + `Card` で情報の強弱をつける。
-        - Search/Archivesページ: 均一なグリッド表示（`Card` のみ）で一覧性と検索性を優先する。
