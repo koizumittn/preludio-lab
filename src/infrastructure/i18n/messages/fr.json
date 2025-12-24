@@ -1,7 +1,7 @@
 {
     "Metadata": {
         "title": "Preludio Lab | Plus proche des classiques, plus de joie dans chaque note",
-        "description": "Approfondissez cette étincelle de 'J'aime cette pièce'. Grâce à des partitions interactives et de l'audio, nous vous apportons une expérience qui touche le cœur des chefs-d'œuvre. Rejoignez-nous pour des moments enrichissants où la musique classique devient un compagnon constant de votre vie."
+        "description": "Approfondissez cette étincelle de 'J'aime cette pièce'. Grâce à des partitions interactives et de l'audio, we vous apportons une expérience qui touche le cœur des chefs-d'œuvre. Rejoignez-nous pour des moments enrichissants où la musique classique devient un compagnon constant de votre vie."
     },
     "Common": {
         "loading": "Chargement...",
@@ -74,5 +74,44 @@
     },
     "Player": {
         "invalidRequest": "Demande de lecture non valide"
+    },
+    "CategoryIndex": {
+        "title": "{category}",
+        "searchPlaceholder": "Rechercher par mot-clé...",
+        "emptyState": "Aucun contenu trouvé correspondant à vos critères.",
+        "totalCount": "{count} articles au total",
+        "filter": {
+            "title": "Filtrer",
+            "difficulty": "Difficulté",
+            "era": "Époque",
+            "instrument": "Instrument",
+            "all": "Tout"
+        },
+        "sort": {
+            "label": "Trier",
+            "latest": "Plus récents",
+            "oldest": "Plus anciens",
+            "title": "Nom",
+            "difficulty_asc": "Difficulté (Facile à Difficile)",
+            "difficulty_desc": "Difficulté (Difficile à Facile)",
+            "popular": "Les plus populaires",
+            "trending": "Tendances"
+        },
+        "categories": {
+            "works": "Œuvres",
+            "composers": "Compositeurs",
+            "theory": "Théorie musicale",
+            "eras": "Époques musicales",
+            "instruments": "Instruments",
+            "performers": "Interprètes",
+            "terminology": "Terminologie",
+            "columns": "Chroniques"
+        },
+        "difficulty": {
+            "Beginner": "Débutant",
+            "Intermediate": "Intermédiaire",
+            "Advanced": "Avancé"
+        },
+        "readMore": "En savoir plus"
     }
 }

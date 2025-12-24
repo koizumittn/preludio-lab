@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { AppLocale, supportedLocales, defaultLocale } from './locale';
+import { AppLocale, supportedLocales, defaultLocale } from './Locale';
 
 describe('Domain: Locale', () => {
     it('should have correct default locale', () => {

@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState, useCallback, useMemo, useRe
 import { useTranslations } from 'next-intl';
 import { PlayerPlatform, PlayerPlatformType } from '@/domain/player/PlayerConstants';
 import { PlayRequestSchema } from '@/domain/player/Player';
-import { handleClientError } from '@/utils/client-error-handler';
+import { handleClientError } from '@/lib/client-error';
 
 export type PlayerMode = 'hidden' | 'mini' | 'focus';
 

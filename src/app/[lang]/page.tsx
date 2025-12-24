@@ -37,7 +37,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         const getFeaturedContent = new GetFeaturedContentUseCase(repository);
         featuredContent = await getFeaturedContent.execute({ lang, criteria: 'latest' });
     } catch (error) {
-        const { handleError } = await import('@/utils/errorHandler');
+        const { handleError } = await import('@/lib/error');
         handleError(error, 'Home:GetFeaturedContent');
     }
 

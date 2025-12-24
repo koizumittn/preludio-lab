@@ -74,5 +74,50 @@
     },
     "Player": {
         "invalidRequest": "再生リクエストが無効です"
+    },
+    "CategoryIndex": {
+        "title": "{category}一覧",
+        "searchPlaceholder": "キーワードで検索...",
+        "emptyState": "条件に一致するコンテンツが見つかりませんでした。",
+        "totalCount": "全 {count} 件",
+        "filter": {
+            "title": "フィルター",
+            "difficulty": "難易度",
+            "era": "時代",
+            "instrument": "楽器",
+            "all": "すべて"
+        },
+        "sort": {
+            "label": "並び替え",
+            "latest": "最新順",
+            "oldest": "古い順",
+            "title": "名前順",
+            "difficulty_asc": "難易度（易しい順）",
+            "difficulty_desc": "難易度（難しい順）",
+            "popular": "人気順",
+            "trending": "注目順"
+        },
+        "categories": {
+            "works": "楽曲紹介",
+            "composers": "作曲家",
+            "theory": "音楽の仕組み",
+            "eras": "時代様式",
+            "instruments": "楽器",
+            "performers": "演奏家",
+            "terminology": "用語集",
+            "columns": "コラム"
+        },
+        "difficulty": {
+            "Beginner": "初級",
+            "Intermediate": "中級",
+            "Advanced": "上級"
+        },
+        "readMore": "もっと見る"
+    },
+    "Error": {
+        "title": "予期せぬエラーが発生しました",
+        "description": "ご不便をおかけして申し訳ありません。エラーの内容はログに記録されました。",
+        "toastMessage": "ページの読み込み中に予期せぬエラーが発生しました。",
+        "retry": "再試行する"
     }
 }

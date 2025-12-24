@@ -1,4 +1,21 @@
 import { ContentDetail, ContentSummary } from '@/domain/content/Content';
+import { ContentSortOption } from './ContentConstants';
+
+/**
+ * コンテンツの検索・フィルタリング条件
+ */
+export type ContentFilterCriteria = {
+    lang: string;
+    category: string;
+    /** 難易度による絞り込み */
+    difficulty?: string;
+    /** タグによる絞り込み (複数指定時はAND) */
+    tags?: string[];
+    /** 検索キーワード (タイトルやタグを対象) */
+    keyword?: string;
+    /** ソート順 */
+    sort?: ContentSortOption;
+};
 
 /**
  * コンテンツデータへのアクセスを抽象化するリポジトリインターフェース
@@ -11,6 +28,11 @@ export interface IContentRepository {
      */
     getContentDetailBySlug(lang: string, category: string, slug: string[]): Promise<ContentDetail | null>;
 
+    /**
+     * 指定された条件に基づいてコンテンツ概要一覧を取得する
+     * フィルタリングやソーティングはリポジトリ（インフラ層）の具象クラスで実装される。
+     */
+    findSummariesByCriteria(criteria: ContentFilterCriteria): Promise<ContentSummary[]>;
 
     /**
      * 指定された言語・カテゴリのコンテンツ概要一覧（メタデータのみ）を取得する

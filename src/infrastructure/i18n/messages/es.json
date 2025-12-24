@@ -74,5 +74,44 @@
     },
     "Player": {
         "invalidRequest": "Solicitud de reproducción no válida"
+    },
+    "CategoryIndex": {
+        "title": "{category}",
+        "searchPlaceholder": "Buscar por palabra clave...",
+        "emptyState": "No se encontraron contenidos que coincidan con sus criterios.",
+        "totalCount": "{count} artículos en total",
+        "filter": {
+            "title": "Filtro",
+            "difficulty": "Dificultad",
+            "era": "Época",
+            "instrument": "Instrumento",
+            "all": "Todo"
+        },
+        "sort": {
+            "label": "Ordenar",
+            "latest": "Más recientes",
+            "oldest": "Más antiguos",
+            "title": "Nombre",
+            "difficulty_asc": "Dificultad (Fácil a Difícil)",
+            "difficulty_desc": "Dificultad (Difícil a Fácil)",
+            "popular": "Más populares",
+            "trending": "Tendencias"
+        },
+        "categories": {
+            "works": "Obras",
+            "composers": "Compositores",
+            "theory": "Teoría",
+            "eras": "Épocas",
+            "instruments": "Instrumentos",
+            "performers": "Intérpretes",
+            "terminology": "Terminología",
+            "columns": "Columnas"
+        },
+        "difficulty": {
+            "Beginner": "Principiante",
+            "Intermediate": "Intermedio",
+            "Advanced": "Avanzado"
+        },
+        "readMore": "Leer más"
     }
 }
