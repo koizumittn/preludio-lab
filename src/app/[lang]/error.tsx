@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { handleClientError } from '@/utils/client-error-handler';
+import { handleClientError } from '@/lib/client-error';
 
 export default function Error({
     error,

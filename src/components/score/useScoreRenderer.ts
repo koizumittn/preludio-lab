@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Score } from '@/domain/score/Score';
 import { AbcjsScoreRenderer } from '@/infrastructure/score/AbcjsScoreRenderer';
-import { handleClientError } from '@/utils/client-error-handler';
+import { handleClientError } from '@/lib/client-error';
 
 /**
  * useScoreRenderer

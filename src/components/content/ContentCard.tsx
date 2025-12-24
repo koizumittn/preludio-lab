@@ -25,8 +25,8 @@ export function ContentCard({ content, readMoreLabel, categoryLabel, index = 0 }
 
     // Resolve thumbnail URL
     let thumbnailUrl = metadata.thumbnail;
-    if (!thumbnailUrl && metadata.videoId) {
-        thumbnailUrl = YoutubeMediaAdapter.getStandardThumbnailUrl(metadata.videoId);
+    if (!thumbnailUrl && metadata.audioSrc) {
+        thumbnailUrl = YoutubeMediaAdapter.getStandardThumbnailUrl(metadata.audioSrc);
     }
 
     // Fallback if no image at all

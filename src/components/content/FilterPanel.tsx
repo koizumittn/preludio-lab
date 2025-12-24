@@ -1,6 +1,9 @@
 import { useTranslations } from 'next-intl';
 import { FilterState } from '@/hooks/useFilterState';
 import { ContentSortOption } from '@/domain/content/ContentConstants';
+import { Input } from '@/components/ui/Input';
+import { useDebouncedCallback } from 'use-debounce';
+import { useState, useEffect } from 'react';
 
 interface FilterPanelProps {
     state: FilterState;
@@ -17,6 +20,25 @@ export function FilterPanel({ state, onFilterChange, lang }: FilterPanelProps) {
     const difficulties = ['Beginner', 'Intermediate', 'Advanced'];
     const sorts = Object.values(ContentSortOption);
 
+    // Local state for search input to enable debouncing
+    const [searchTerm, setSearchTerm] = useState(state.keyword || '');
+
+    // Sync local state when parent state changes (e.g. via URL direct access)
+    useEffect(() => {
+        setSearchTerm(state.keyword || '');
+    }, [state.keyword]);
+
+    // Debounced filter update
+    const debouncedFilterChange = useDebouncedCallback((value: string) => {
+        onFilterChange('keyword', value || undefined);
+    }, 500);
+
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setSearchTerm(value);
+        debouncedFilterChange(value);
+    };
+
     return (
         <div className="bg-paper shadow-sm border border-divider rounded-2xl p-6 mb-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -27,15 +49,15 @@ export function FilterPanel({ state, onFilterChange, lang }: FilterPanelProps) {
                         {t('filter.all')}
                     </label>
                     <div className="relative">
-                        <input
+                        <Input
                             id="search"
                             type="text"
-                            className="w-full bg-white border border-divider rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all pl-10"
                             placeholder={t('searchPlaceholder')}
-                            value={state.keyword || ''}
-                            onChange={(e) => onFilterChange('keyword', e.target.value)}
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                            className="pl-10"
                         />
-                        <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-tertiary" />
+                        <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-tertiary pointer-events-none" />
                     </div>
                 </div>
 
