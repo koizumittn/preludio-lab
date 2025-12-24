@@ -28,10 +28,15 @@ export function FilterPanel({ state, onFilterChange, lang }: FilterPanelProps) {
         setSearchTerm(state.keyword || '');
     }, [state.keyword]);
 
+    // 検索入力のデバウンス遅延時間（ミリ秒）
+    // ユーザーが入力を終えたとみなすまでの待機時間。
+    // 短すぎると頻繁なURL更新が発生し、長すぎると反応が遅く感じるため、500msに設定。
+    const DEBOUNCE_DELAY_MS = 500;
+
     // Debounced filter update
     const debouncedFilterChange = useDebouncedCallback((value: string) => {
         onFilterChange('keyword', value || undefined);
-    }, 500);
+    }, DEBOUNCE_DELAY_MS);
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
