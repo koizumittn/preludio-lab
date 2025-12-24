@@ -2,8 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import { ContentDetail, ContentSummary, MetadataSchema } from '@/domain/content/Content';
-import { IContentRepository } from '@/domain/content/ContentRepository';
-import { SUPPORTED_CATEGORIES } from '@/domain/content/ContentConstants';
+import { IContentRepository, ContentFilterCriteria } from '@/domain/content/ContentRepository';
+import { SUPPORTED_CATEGORIES, ContentSortOption } from '@/domain/content/ContentConstants';
 import { ILogger } from '@/domain/shared/logger';
 import { PinoLogger } from '@/infrastructure/logging/pino-logger';
 
@@ -50,6 +50,71 @@ export class FsContentRepository implements IContentRepository {
             this.logger.error(`Markdownファイルの読み込みエラー: ${fullPath}`, error as Error, { context: 'FsContentRepository' });
             return null;
         }
+    }
+
+    /**
+     * 指定された条件に基づいてコンテンツ概要一覧を取得する
+     * ファイルシステム上のMDXファイルを全件読み込んだ後、メモリ上でフィルタリング・ソートを行う。
+     */
+    async findSummariesByCriteria(criteria: ContentFilterCriteria): Promise<ContentSummary[]> {
+        const { lang, category, difficulty, tags, keyword, sort } = criteria;
+
+        // 全件取得
+        let summaries = await this.getContentSummariesByCategory(lang, category);
+
+        // 1. フィルタリング (難易度)
+        if (difficulty) {
+            summaries = summaries.filter(s => s.metadata.difficulty === difficulty);
+        }
+
+        // 2. フィルタリング (タグ - AND一致)
+        if (tags && tags.length > 0) {
+            summaries = summaries.filter(s =>
+                tags.every((tag: string) => s.metadata.tags?.includes(tag))
+            );
+        }
+
+        // 3. フィルタリング (キーワード - タイトルまたはタグ)
+        if (keyword) {
+            const lowKeyword = keyword.toLowerCase();
+            summaries = summaries.filter(s =>
+                s.metadata.title.toLowerCase().includes(lowKeyword) ||
+                s.metadata.tags?.some((tag: string) => tag.toLowerCase().includes(lowKeyword))
+            );
+        }
+
+        // 4. ソーティング
+        summaries.sort((a, b) => {
+            switch (sort) {
+                case ContentSortOption.OLDEST: {
+                    const dateA = a.metadata.date ? new Date(a.metadata.date).getTime() : Infinity;
+                    const dateB = b.metadata.date ? new Date(b.metadata.date).getTime() : Infinity;
+                    return dateA - dateB;
+                }
+                case ContentSortOption.TITLE:
+                    return a.metadata.title.localeCompare(b.metadata.title, lang);
+                case ContentSortOption.DIFFICULTY_ASC: {
+                    const diffOrder: Record<string, number> = { 'Beginner': 0, 'Intermediate': 1, 'Advanced': 2 };
+                    const valA = diffOrder[a.metadata.difficulty || ''] ?? 99;
+                    const valB = diffOrder[b.metadata.difficulty || ''] ?? 99;
+                    return valA - valB;
+                }
+                case ContentSortOption.DIFFICULTY_DESC: {
+                    const diffOrder: Record<string, number> = { 'Beginner': 0, 'Intermediate': 1, 'Advanced': 2 };
+                    const valA = diffOrder[a.metadata.difficulty || ''] ?? -1;
+                    const valB = diffOrder[b.metadata.difficulty || ''] ?? -1;
+                    return valB - valA;
+                }
+                case ContentSortOption.LATEST:
+                default: {
+                    const dateA = a.metadata.date ? new Date(a.metadata.date).getTime() : 0;
+                    const dateB = b.metadata.date ? new Date(b.metadata.date).getTime() : 0;
+                    return dateB - dateA;
+                }
+            }
+        });
+
+        return summaries;
     }
 
 

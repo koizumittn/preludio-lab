@@ -74,5 +74,44 @@
     },
     "Player": {
         "invalidRequest": "Invalid playback request"
+    },
+    "CategoryIndex": {
+        "title": "{category}",
+        "searchPlaceholder": "Search by keyword...",
+        "emptyState": "No content found matching your criteria.",
+        "totalCount": "{count} items in total",
+        "filter": {
+            "title": "Filter",
+            "difficulty": "Difficulty",
+            "era": "Era",
+            "instrument": "Instrument",
+            "all": "All"
+        },
+        "sort": {
+            "label": "Sort",
+            "latest": "Latest",
+            "oldest": "Oldest",
+            "title": "Name",
+            "difficulty_asc": "Difficulty (Easy to Hard)",
+            "difficulty_desc": "Difficulty (Hard to Easy)",
+            "popular": "Popular",
+            "trending": "Trending"
+        },
+        "categories": {
+            "works": "Works",
+            "composers": "Composers",
+            "theory": "Music Theory",
+            "eras": "Musical Eras",
+            "instruments": "Instruments",
+            "performers": "Performers",
+            "terminology": "Terminology",
+            "columns": "Columns"
+        },
+        "difficulty": {
+            "Beginner": "Beginner",
+            "Intermediate": "Intermediate",
+            "Advanced": "Advanced"
+        },
+        "readMore": "Read More"
     }
 }

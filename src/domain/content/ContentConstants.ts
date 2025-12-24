@@ -16,3 +16,18 @@ export type ContentCategory = typeof ContentCategory[keyof typeof ContentCategor
 
 // アプリケーションでサポートされる全カテゴリ
 export const SUPPORTED_CATEGORIES = Object.values(ContentCategory);
+
+/**
+ * Content Sort Options
+ */
+export const ContentSortOption = {
+    LATEST: 'latest',
+    OLDEST: 'oldest',
+    TITLE: 'title',
+    DIFFICULTY_ASC: 'difficulty_asc',
+    DIFFICULTY_DESC: 'difficulty_desc',
+    POPULAR: 'popular',   // 人気順 (将来用)
+    TRENDING: 'trending', // 注目順 (将来用)
+} as const;
+
+export type ContentSortOption = typeof ContentSortOption[keyof typeof ContentSortOption];

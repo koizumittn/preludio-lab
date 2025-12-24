@@ -12,8 +12,8 @@
     },
     "Home": {
         "hero": {
-            "title": "Dove trovi la musica che amerai per sempre.",
-            "description": "Scoprire musica meravigliosa è un tesoro che colora dolcemente la tua vita. Segui lo spartito e svela le storie dietro il suono. Preludio Lab è la tua guida a quel 'pezzo perfetto' che trasforma la tua vita quotidiana.",
+            "title": "Dove trovi la musica que amerai per sempre.",
+            "description": "Scoprire musica meravigliosa è un tesoro que colora dolcemente la tua vita. Segui lo spartito e svela le storie dietro il suono. Preludio Lab è la tua guida a quel 'pezzo perfetto' que trasforma la tua vita quotidiana.",
             "explore": "Esplora Opere",
             "about": "Chi siamo"
         },
@@ -21,11 +21,11 @@
         "categories": {
             "works": {
                 "name": "Opere",
-                "desc": "Le storie dietro i capolavori e i momenti che emozionano."
+                "desc": "Le storie dietro i capolavori e i momenti que emozionano."
             },
             "composers": {
                 "name": "Compositori",
-                "desc": "Le vite e le passioni dei musicisti che hanno colorato le loro epoche."
+                "desc": "Le vite e le passioni dei musicisti que hanno colorato le loro epoche."
             },
             "theory": {
                 "name": "Teoria",
@@ -74,5 +74,44 @@
     },
     "Player": {
         "invalidRequest": "Richiesta di riproduzione non valida"
+    },
+    "CategoryIndex": {
+        "title": "{category}",
+        "searchPlaceholder": "Cerca per parola chiave...",
+        "emptyState": "Nessun contenuto trovato corrispondente ai tuoi criteri.",
+        "totalCount": "{count} elementi in totale",
+        "filter": {
+            "title": "Filtra",
+            "difficulty": "Difficoltà",
+            "era": "Epoca",
+            "instrument": "Strumento",
+            "all": "Tutto"
+        },
+        "sort": {
+            "label": "Ordina",
+            "latest": "Più recenti",
+            "oldest": "Più vecchi",
+            "title": "Nome",
+            "difficulty_asc": "Difficoltà (Facile a Difficile)",
+            "difficulty_desc": "Difficoltà (Difficile a Facile)",
+            "popular": "Più popolari",
+            "trending": "In tendenza"
+        },
+        "categories": {
+            "works": "Opere",
+            "composers": "Compositori",
+            "theory": "Teoria musicale",
+            "eras": "Epoche musicali",
+            "instruments": "Strumenti",
+            "performers": "Esecutori",
+            "terminology": "Terminologia",
+            "columns": "Rubriche"
+        },
+        "difficulty": {
+            "Beginner": "Principiante",
+            "Intermediate": "Intermedio",
+            "Advanced": "Avanzato"
+        },
+        "readMore": "Leggi di più"
     }
 }
