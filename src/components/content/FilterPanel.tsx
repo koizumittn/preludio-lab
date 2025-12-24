@@ -9,7 +9,7 @@ interface FilterPanelProps {
 }
 
 /**
- * A panel containing search and filter controls for the category index.
+ * カテゴリ一覧の検索とフィルタリングコントロールを含むパネル。
  */
 export function FilterPanel({ state, onFilterChange, lang }: FilterPanelProps) {
     const t = useTranslations('CategoryIndex');
@@ -21,7 +21,7 @@ export function FilterPanel({ state, onFilterChange, lang }: FilterPanelProps) {
         <div className="bg-paper shadow-sm border border-divider rounded-2xl p-6 mb-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-                {/* Search Input */}
+                {/* 検索入力 */}
                 <div className="space-y-2">
                     <label htmlFor="search" className="text-sm font-medium text-secondary ml-1">
                         {t('filter.all')}
@@ -39,7 +39,7 @@ export function FilterPanel({ state, onFilterChange, lang }: FilterPanelProps) {
                     </div>
                 </div>
 
-                {/* Difficulty Filter */}
+                {/* 難易度フィルタ */}
                 <div className="space-y-2">
                     <label htmlFor="difficulty" className="text-sm font-medium text-secondary ml-1">
                         {t('filter.difficulty')}
@@ -59,7 +59,7 @@ export function FilterPanel({ state, onFilterChange, lang }: FilterPanelProps) {
                     </select>
                 </div>
 
-                {/* Sort Order */}
+                {/* 並び順 */}
                 <div className="space-y-2">
                     <label htmlFor="sort" className="text-sm font-medium text-secondary ml-1">
                         {t('sort.label')}

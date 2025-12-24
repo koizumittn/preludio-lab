@@ -14,22 +14,22 @@ interface CategoryIndexFeatureProps {
 }
 
 /**
- * Main feature component for category index pages.
- * Handles state, filtering UI, and results display.
+ * カテゴリ一覧ページのメイン機能コンポーネント。
+ * 状態管理、フィルタリングUI、および結果表示を処理します。
  */
 export function CategoryIndexFeature({ lang, category, contents }: CategoryIndexFeatureProps) {
     const t = useTranslations('CategoryIndex');
     const { state, setFilter } = useFilterState();
 
-    // The 'contents' passed from the Server Component (page) already reflects 
-    // the current searchParams updated by 'setFilter' (router.push).
-    // This allows for SEO-friendly filtering and smooth client interaction.
+    // Server Component (ページ) から渡される 'contents' は、
+    // 'setFilter' (router.push) によって更新された現在の searchParams をすでに反映しています。
+    // これにより、SEOに適したフィルタリングとスムーズなクライアント操作が可能になります。
 
     return (
         <section className="min-h-screen pt-28 pb-20 px-4 md:px-8">
             <div className="container mx-auto max-w-7xl">
 
-                {/* Heading Area */}
+                {/* 見出しエリア */}
                 <header className="mb-12 text-center">
                     <FadeInHeading className="text-4xl md:text-5xl font-black text-primary mb-4">
                         {t('title', { category: t(`categories.${category}`) })}
@@ -39,14 +39,14 @@ export function CategoryIndexFeature({ lang, category, contents }: CategoryIndex
                     </p>
                 </header>
 
-                {/* Filter & Search Controls */}
+                {/* フィルタ & 検索コントロール */}
                 <FilterPanel
                     state={state}
                     onFilterChange={setFilter}
                     lang={lang}
                 />
 
-                {/* Results Grid */}
+                {/* 結果グリッド */}
                 {contents.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {contents.map((content, idx) => (

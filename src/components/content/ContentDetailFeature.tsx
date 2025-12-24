@@ -19,8 +19,8 @@ interface ContentDetailFeatureProps {
 }
 
 /**
- * Feature component for content detail pages.
- * Renders metadata hero and the MDX body with a unified 2-column layout and sidebar.
+ * コンテンツ詳細ページの機能コンポーネント。
+ * メタデータヒーローとMDX本文を、統一された2カラムレイアウトとサイドバーでレンダリングします。
  */
 export async function ContentDetailFeature({ content, toc, prevContent, nextContent }: ContentDetailFeatureProps) {
     const t = await getTranslations('CategoryIndex');
@@ -28,7 +28,7 @@ export async function ContentDetailFeature({ content, toc, prevContent, nextCont
 
     const hasAudio = !!metadata.audioSrc;
 
-    // Construct AudioMetadata for binders
+    // AudioPlayerBinder用のAudioMetadataを構築
     const audioMetadata = hasAudio ? {
         src: metadata.audioSrc!,
         title: metadata.title,
@@ -84,7 +84,7 @@ export async function ContentDetailFeature({ content, toc, prevContent, nextCont
 
     return (
         <div className="container mx-auto px-4 py-8 lg:py-12 max-w-6xl pt-28">
-            {/* Breadcrumbs */}
+            {/* パンくずリスト */}
             <nav className="text-sm rounded-md mb-8 flex items-center gap-2 text-tertiary">
                 <a href={`/${lang}`} className="hover:text-primary transition-colors">Home</a>
                 <span>/</span>
@@ -93,7 +93,7 @@ export async function ContentDetailFeature({ content, toc, prevContent, nextCont
                 <span className="text-primary font-medium truncate">{metadata.title}</span>
             </nav>
 
-            {/* Header */}
+            {/* ヘッダー */}
             <header className="mb-12 border-b border-divider pb-8">
                 <div className="flex flex-col gap-4">
                     <div className="flex items-center gap-2">
@@ -125,7 +125,7 @@ export async function ContentDetailFeature({ content, toc, prevContent, nextCont
                 </div>
             </header>
 
-            {/* Main Content Area (Unified 2-column layout) */}
+            {/* メインコンテンツエリア (統一された2カラムレイアウト) */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
 
                 <article className="lg:col-span-7 whitespace-normal prose prose-lg prose-slate max-w-none 
@@ -133,7 +133,7 @@ export async function ContentDetailFeature({ content, toc, prevContent, nextCont
                     prose-a:text-accent prose-a:no-underline hover:prose-a:underline
                     prose-strong:text-primary prose-img:rounded-3xl prose-img:shadow-xl
                 ">
-                    {/* Mobile Sidebar (Visible < lg) */}
+                    {/* モバイル用サイドバー (lg未満で表示) */}
                     <div className="lg:hidden mb-12 space-y-8">
                         {hasAudio && (
                             <>
@@ -165,7 +165,7 @@ export async function ContentDetailFeature({ content, toc, prevContent, nextCont
                     <SeriesNavigation prev={prevContent} next={nextContent} lang={lang} />
                 </article>
 
-                {/* Desktop Sidebar (Always visible on lg) */}
+                {/* デスクトップ用サイドバー (lg以上で常に表示) */}
                 <aside className="hidden lg:block lg:col-span-4 lg:col-start-9">
                     <div className="sticky top-28 space-y-8">
                         {hasAudio && (

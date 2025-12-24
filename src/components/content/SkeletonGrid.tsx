@@ -7,24 +7,24 @@ interface SkeletonGridProps {
 }
 
 /**
- * A grid of skeleton cards to show while content is loading.
+ * コンテンツ読み込み中に表示するスケルトンカードのグリッド。
  */
 export function SkeletonGrid({ count = 6 }: SkeletonGridProps) {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {Array.from({ length: count }).map((_, i) => (
                 <div key={i} className="flex flex-col space-y-3">
-                    {/* Card Image Area */}
+                    {/* カード画像エリア */}
                     <Skeleton className="aspect-video w-full rounded-xl" />
 
                     <div className="space-y-2 px-1">
-                        {/* Metadata (Category/Date) */}
+                        {/* メタデータ (カテゴリ/日付) */}
                         <Skeleton className="h-4 w-1/3" />
 
-                        {/* Title */}
+                        {/* タイトル */}
                         <Skeleton className="h-6 w-full" />
 
-                        {/* Description lines */}
+                        {/* 説明文の行 */}
                         <Skeleton className="h-4 w-full" />
                         <Skeleton className="h-4 w-2/3" />
                     </div>
