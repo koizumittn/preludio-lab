@@ -117,7 +117,7 @@
     "Error": {
         "title": "Something went wrong!",
         "description": "We apologize for the inconvenience. The error has been logged.",
-        "logMessage": "Something went wrong while loading the page.",
+        "toastMessage": "Something went wrong while loading the page.",
         "retry": "Try again"
     }
 }

@@ -15,7 +15,8 @@ export default function Error({
 
     useEffect(() => {
         // 標準エラーハンドラを使用してエラーをログ記録
-        handleClientError(error, t('logMessage'));
+        // 第2引数はユーザー通知用なのでi18n化する
+        handleClientError(error, t('toastMessage'));
     }, [error, t]);
 
     return (
