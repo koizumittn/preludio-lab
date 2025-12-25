@@ -77,7 +77,9 @@ export function ContentCard({ content, readMoreLabel, categoryLabel, index = 0, 
                         alt={metadata.title}
                         fill
                         priority={priority}
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        // LCP Optimization: Refined sizes to account for page padding (approx 32px or 4-8vw)
+                        // Mobile: 1 col (~92vw), Tablet: 2 cols (~45vw), Desktop: 3 cols (~30vw)
+                        sizes="(max-width: 640px) 92vw, (max-width: 1024px) 45vw, 30vw"
                         className="object-cover transition-transform duration-700 group-hover:scale-105"
                         onError={handleThumbnailError}
                     />

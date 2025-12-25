@@ -1,10 +1,14 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
 import { Inter, Playfair_Display, Noto_Sans_JP, Zen_Old_Mincho, Noto_Sans_SC, Noto_Serif_SC } from 'next/font/google';
+
 import '../globals.css';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { AudioPlayerFeature } from '@/components/player';
+// Strict Lazy Loading for Player Feature to reduce initial bundle size (TBT)
+// Strict Lazy Loading for Player Feature to reduce initial bundle size (TBT)
+// We use a Client Component wrapper to handle dynamic import with ssr: false
+import { DynamicAudioPlayer } from '@/components/player/DynamicAudioPlayer';
 import { AudioPlayerProvider } from '@/components/player/AudioPlayerContext';
 // Instead we import our new config
 import { LazyMotionConfig } from '@/components/ui/LazyMotionConfig';
@@ -113,8 +117,8 @@ export default async function RootLayout({
                             <main className="min-h-screen pb-24">{children}</main>
                             <Footer />
 
-                            {/* Global Audio Player Components */}
-                            <AudioPlayerFeature />
+                            {/* Global Audio Player Components (Lazy Loaded) */}
+                            <DynamicAudioPlayer />
 
                             <ConsentBanner />
                             <Toaster position="bottom-right" />
