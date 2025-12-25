@@ -6,6 +6,7 @@ import { FilterPanel } from './FilterPanel';
 import { ContentCard } from './ContentCard';
 import { useTranslations } from 'next-intl';
 import { FadeInHeading } from '@/components/ui/FadeInHeading';
+import { useTransition } from 'react';
 
 interface CategoryIndexFeatureProps {
     lang: string;
@@ -19,7 +20,14 @@ interface CategoryIndexFeatureProps {
  */
 export function CategoryIndexFeature({ lang, category, contents }: CategoryIndexFeatureProps) {
     const t = useTranslations('CategoryIndex');
-    const { state, setFilter } = useFilterState();
+    const { state, setFilter: originalSetFilter } = useFilterState();
+    const [isPending, startTransition] = useTransition();
+
+    const setFilter = (key: any, value: any) => {
+        startTransition(() => {
+            originalSetFilter(key, value);
+        });
+    };
 
     // Server Component (ページ) から渡される 'contents' は、
     // 'setFilter' (router.push) によって更新された現在の searchParams をすでに反映しています。
@@ -47,33 +55,38 @@ export function CategoryIndexFeature({ lang, category, contents }: CategoryIndex
                 />
 
                 {/* 結果グリッド */}
-                {contents.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {contents.map((content, idx) => (
-                            <ContentCard
-                                key={`${content.category}-${content.slug}`}
-                                content={content}
-                                readMoreLabel={t('readMore')}
-                                index={idx}
-                            />
-                        ))}
-                    </div>
-                ) : (
-                    <div className="text-center py-20 bg-paper/30 backdrop-blur-sm rounded-3xl border border-divider/50 border-dashed">
-                        <div className="mb-4 text-tertiary">
-                            <SearchOffIcon className="w-16 h-16 mx-auto opacity-20" />
+                <div className={`transition-opacity duration-300 ${isPending ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
+                    {contents.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {contents.map((content, idx) => (
+                                <ContentCard
+                                    key={`${content.category}-${content.slug}`}
+                                    content={content}
+                                    readMoreLabel={t('readMore')}
+                                    index={idx}
+                                />
+                            ))}
                         </div>
-                        <p className="text-secondary text-lg font-medium">
-                            {t('emptyState')}
-                        </p>
-                        <button
-                            onClick={() => window.location.href = window.location.pathname}
-                            className="mt-6 text-sm font-bold text-accent hover:underline"
-                        >
-                            {t('filter.all')}
-                        </button>
-                    </div>
-                )}
+                    ) : (
+                        <div className="text-center py-24 bg-white/40 backdrop-blur-md rounded-[2.5rem] border border-divider shadow-inner flex flex-col items-center justify-center">
+                            <div className="mb-6 w-20 h-20 rounded-full bg-slate-50 flex items-center justify-center border border-divider">
+                                <SearchOffIcon className="w-10 h-10 text-tertiary/40" />
+                            </div>
+                            <h3 className="text-xl font-bold text-secondary mb-2">
+                                {t('emptyState')}
+                            </h3>
+                            <p className="text-tertiary text-sm mb-8 max-w-xs mx-auto">
+                                別のキーワードやフィルター条件で試してみてください。
+                            </p>
+                            <button
+                                onClick={() => window.location.href = window.location.pathname}
+                                className="px-6 py-2.5 bg-primary text-white text-sm font-bold rounded-full hover:bg-primary-dark transition-all transform hover:-translate-y-0.5 shadow-md"
+                            >
+                                {t('filter.all')}をリセット
+                            </button>
+                        </div>
+                    )}
+                </div>
 
             </div>
         </section>

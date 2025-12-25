@@ -32,11 +32,12 @@ export class YoutubeMediaAdapter {
     }
 
     /**
-     * 最も汎用性の高い高画質サムネイル（hqdefault）のURLを取得する
+     * 最高画質のサムネイル（maxresdefault）のURLを取得する。
+     * 存在しない場合は、ContentCard 側でフォールバック処理を行うことを想定。
      * @param videoId YouTube動画ID
      */
     static getStandardThumbnailUrl(videoId: string): string {
         if (!videoId) return '';
-        return `${this.BASE_URL}/${videoId}/hqdefault.jpg`;
+        return `${this.BASE_URL}/${videoId}/maxresdefault.jpg`;
     }
 }

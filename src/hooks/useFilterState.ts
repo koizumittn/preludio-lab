@@ -9,6 +9,7 @@ export type FilterState = {
     keyword?: string;
     sort?: string;
     tags?: string[];
+    category?: string;
 };
 
 /**
@@ -66,7 +67,7 @@ export function useFilterState() {
     }, [router, pathname]);
 
     return {
-        state,
+        state: { ...state, category: pathname.split('/').pop() }, // Basic extraction of category from path
         setFilter,
         clearFilters,
     };

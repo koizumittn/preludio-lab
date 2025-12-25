@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { ContentSummary } from '@/domain/content/Content';
 import { m } from 'framer-motion';
 import { YoutubeMediaAdapter } from '@/infrastructure/content/YoutubeMediaAdapter';
+import { useState, useMemo } from 'react';
 
 export interface ContentCardProps {
     content: ContentSummary;
@@ -23,16 +24,30 @@ export function ContentCard({ content, readMoreLabel, categoryLabel, index = 0 }
     const t = useTranslations('CategoryIndex');
     const { lang, category, slug, metadata } = content;
 
-    // Resolve thumbnail URL
-    let thumbnailUrl = metadata.thumbnail;
-    if (!thumbnailUrl && metadata.audioSrc) {
-        thumbnailUrl = YoutubeMediaAdapter.getStandardThumbnailUrl(metadata.audioSrc);
-    }
+    // Thumbnail management with fallback
+    const initialThumbnail = useMemo(() => {
+        let url = metadata.thumbnail;
+        if (!url && metadata.audioSrc) {
+            url = YoutubeMediaAdapter.getStandardThumbnailUrl(metadata.audioSrc);
+        }
+        return url || '/images/placeholders/default-content.webp';
+    }, [metadata.thumbnail, metadata.audioSrc]);
 
-    // Fallback if no image at all
-    const hasImage = !!thumbnailUrl;
-    // Updated: Use optimized .webp image
-    const resolvedThumbnail = thumbnailUrl || '/images/placeholders/default-content.webp';
+    const [imgSrc, setImgSrc] = useState(initialThumbnail);
+    const [imgErrorCount, setImgErrorCount] = useState(0);
+
+    const handleThumbnailError = () => {
+        if (!metadata.audioSrc) return;
+
+        const candidates = YoutubeMediaAdapter.getThumbnailUrlCandidates(metadata.audioSrc);
+        // next candidate after the one that failed
+        if (imgErrorCount < candidates.length - 1) {
+            setImgErrorCount(prev => prev + 1);
+            setImgSrc(candidates[imgErrorCount + 1]);
+        } else {
+            setImgSrc('/images/placeholders/default-content.webp');
+        }
+    };
 
     // Labels
     const displayCategory = categoryLabel || (t.has(`categories.${category}`) ? t(`categories.${category}`) : category);
@@ -54,11 +69,12 @@ export function ContentCard({ content, readMoreLabel, categoryLabel, index = 0 }
             {/* Image Area */}
             <Link href={`/${lang}/${category}/${slug}`} className="relative aspect-video overflow-hidden block">
                 <Image
-                    src={resolvedThumbnail}
+                    src={imgSrc}
                     alt={metadata.title}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    onError={handleThumbnailError}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
