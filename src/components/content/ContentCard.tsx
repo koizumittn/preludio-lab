@@ -66,73 +66,75 @@ export function ContentCard({ content, readMoreLabel, categoryLabel, index = 0 }
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 + (index * 0.05) }}
         >
-            {/* Image Area */}
-            <Link href={`/${lang}/${category}/${slug}`} className="relative aspect-video overflow-hidden block">
-                <Image
-                    src={imgSrc}
-                    alt={metadata.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    onError={handleThumbnailError}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <Link href={`/${lang}/${category}/${slug}`} className="flex flex-col h-full">
+                {/* Image Area */}
+                <div className="relative aspect-video overflow-hidden block">
+                    <Image
+                        src={imgSrc}
+                        alt={metadata.title}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                        onError={handleThumbnailError}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-                {/* Category Badge (Overlay) */}
-                <div className="absolute top-3 left-3">
-                    <span className="bg-white/90 backdrop-blur-sm text-[10px] font-bold px-2.5 py-1 rounded-full text-neutral-600 uppercase tracking-wider shadow-sm">
-                        {displayCategory}
-                    </span>
-                </div>
+                    {/* Category Badge (Overlay) */}
+                    <div className="absolute top-3 left-3">
+                        <span className="bg-white/90 backdrop-blur-sm text-[10px] font-bold px-2.5 py-1 rounded-full text-neutral-600 uppercase tracking-wider shadow-sm">
+                            {displayCategory}
+                        </span>
+                    </div>
 
-                {/* Difficulty Badge (Overlay) */}
-                {displayDifficulty && (
-                    <div className="absolute top-3 right-3">
-                        <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full text-white tracking-wider shadow-sm ${metadata.difficulty === 'Beginner' ? 'bg-emerald-500' :
+                    {/* Difficulty Badge (Overlay) */}
+                    {displayDifficulty && (
+                        <div className="absolute top-3 right-3">
+                            <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full text-white tracking-wider shadow-sm ${metadata.difficulty === 'Beginner' ? 'bg-emerald-500' :
                                 metadata.difficulty === 'Intermediate' ? 'bg-sky-500' : 'bg-rose-500'
-                            }`}>
-                            {displayDifficulty}
-                        </span>
-                    </div>
-                )}
-            </Link>
-
-            {/* Content Body */}
-            <div className="flex flex-col flex-grow p-5">
-                <Link href={`/${lang}/${category}/${slug}`} className="block mb-4">
-                    {/* Title */}
-                    <h3 className="text-xl font-bold text-neutral-800 mb-2 line-clamp-2 leading-tight group-hover:text-primary transition-colors duration-300">
-                        {metadata.title}
-                    </h3>
-
-                    {/* Composer */}
-                    {metadata.composer && (
-                        <p className="text-neutral-600 font-semibold text-sm flex items-center gap-2">
-                            <span className="w-5 h-[2px] bg-primary/20 group-hover:bg-primary/50 transition-colors inline-block rounded-full"></span>
-                            {metadata.composer}
-                        </p>
+                                }`}>
+                                {displayDifficulty}
+                            </span>
+                        </div>
                     )}
-                </Link>
+                </div>
 
-                <div className="flex-grow"></div>
+                {/* Content Body */}
+                <div className="flex flex-col flex-grow p-5">
+                    <div className="block mb-4">
+                        {/* Title */}
+                        <h3 className="text-xl font-bold text-neutral-800 mb-2 line-clamp-2 leading-tight group-hover:text-primary transition-colors duration-300">
+                            {metadata.title}
+                        </h3>
 
-                {/* Footer Metadata */}
-                <div className="flex items-center justify-between text-xs text-neutral-400 font-medium pt-4 border-t border-dashed border-neutral-100 group-hover:border-primary/10 transition-colors">
-                    <div className="flex items-center gap-4">
-                        <span className="flex items-center gap-1.5">
-                            <CalendarIcon className="w-3.5 h-3.5" />
-                            {metadata.date}
-                        </span>
+                        {/* Composer */}
+                        {metadata.composer && (
+                            <p className="text-neutral-600 font-semibold text-sm flex items-center gap-2">
+                                <span className="w-5 h-[2px] bg-primary/20 group-hover:bg-primary/50 transition-colors inline-block rounded-full"></span>
+                                {metadata.composer}
+                            </p>
+                        )}
                     </div>
-                    {/* Arrow Icon */}
-                    <div className="text-primary opacity-0 group-hover:opacity-100 transition-opacity -translate-x-2 group-hover:translate-x-0 duration-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M5 12h14" />
-                            <path d="m12 5 7 7-7 7" />
-                        </svg>
+
+                    <div className="flex-grow"></div>
+
+                    {/* Footer Metadata */}
+                    <div className="flex items-center justify-between text-xs text-neutral-400 font-medium pt-4 border-t border-dashed border-neutral-100 group-hover:border-primary/10 transition-colors">
+                        <div className="flex items-center gap-4">
+                            <span className="flex items-center gap-1.5">
+                                <CalendarIcon className="w-3.5 h-3.5" />
+                                {metadata.date}
+                            </span>
+                        </div>
+                        {/* Arrow Icon */}
+                        <div className="text-primary opacity-0 group-hover:opacity-100 transition-opacity -translate-x-2 group-hover:translate-x-0 duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M5 12h14" />
+                                <path d="m12 5 7 7-7 7" />
+                            </svg>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </Link>
         </m.div>
     );
 }
