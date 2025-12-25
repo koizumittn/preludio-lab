@@ -66,6 +66,7 @@ export function CategoryIndexFeature({ lang, category, contents }: CategoryIndex
                                     content={content}
                                     readMoreLabel={t('readMore')}
                                     index={idx}
+                                    priority={idx < 6}
                                 />
                             ))}
                         </div>

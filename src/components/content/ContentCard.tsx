@@ -13,6 +13,7 @@ export interface ContentCardProps {
     readMoreLabel: string;
     categoryLabel?: string;
     index?: number;
+    priority?: boolean;
 }
 
 /**
@@ -20,7 +21,7 @@ export interface ContentCardProps {
  * Prioritizes local thumbnail, falls back to YouTube thumbnail if videoId exists.
  * Now supports internationalized badges for Category and Difficulty.
  */
-export function ContentCard({ content, readMoreLabel, categoryLabel, index = 0 }: ContentCardProps) {
+export function ContentCard({ content, readMoreLabel, categoryLabel, index = 0, priority = false }: ContentCardProps) {
     const t = useTranslations('CategoryIndex');
     const { lang, category, slug, metadata } = content;
 
@@ -74,6 +75,7 @@ export function ContentCard({ content, readMoreLabel, categoryLabel, index = 0 }
                         src={imgSrc}
                         alt={metadata.title}
                         fill
+                        priority={priority}
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className="object-cover transition-transform duration-700 group-hover:scale-105"
                         onError={handleThumbnailError}
