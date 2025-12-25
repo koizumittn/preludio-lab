@@ -50,19 +50,19 @@ export function FilterPanel({ state, onFilterChange, lang, totalCount }: FilterP
         <div className="w-full mb-10 space-y-6">
 
             {/* Main Control Bar */}
-            <div className="flex flex-col lg:flex-row gap-4 items-stretch lg:items-center justify-between bg-white/60 backdrop-blur-md rounded-[2rem] p-3 shadow-sm border border-white/50">
+            <div className="flex flex-col lg:flex-row gap-4 items-stretch lg:items-center justify-between bg-white/60 backdrop-blur-md rounded-[2rem] p-3 shadow-sm border border-neutral-200">
 
                 {/* Left: Search Input */}
                 <div className="relative flex-grow max-w-full lg:max-w-md group">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <SearchIcon className="h-5 w-5 text-tertiary group-focus-within:text-primary transition-colors duration-300" />
+                        <SearchIcon className="h-5 w-5 text-neutral-400 group-focus-within:text-primary transition-colors duration-300" />
                     </div>
                     <Input
                         type="text"
                         placeholder={t('searchPlaceholder')}
                         value={searchTerm}
                         onChange={handleSearchChange}
-                        className="pl-11 pr-4 py-3 w-full bg-slate-100/50 border-transparent focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary/50 rounded-full transition-all duration-300 placeholder:text-tertiary/70 text-base"
+                        className="pl-11 pr-4 py-3 w-full bg-neutral-100/50 border-transparent focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary/50 rounded-full transition-all duration-300 placeholder:text-neutral-400 text-base text-primary"
                     />
                 </div>
 
@@ -72,7 +72,7 @@ export function FilterPanel({ state, onFilterChange, lang, totalCount }: FilterP
                     {/* Sort Dropdown (Pill Style) */}
                     <div className="relative w-full sm:w-auto">
                         <select
-                            className="w-full sm:w-auto appearance-none bg-white border border-divider hover:border-accent/50 py-3 pl-5 pr-10 rounded-full text-secondary text-sm font-medium focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all cursor-pointer shadow-sm hover:shadow-md"
+                            className="w-full sm:w-auto appearance-none bg-white border border-neutral-200 hover:border-accent/50 py-3 pl-5 pr-10 rounded-full text-neutral-700 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all cursor-pointer shadow-sm hover:shadow-md"
                             value={state.sort || ContentSortOption.LATEST}
                             onChange={(e) => onFilterChange('sort', e.target.value)}
                         >
@@ -85,13 +85,13 @@ export function FilterPanel({ state, onFilterChange, lang, totalCount }: FilterP
                                 ))
                             }
                         </select>
-                        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-tertiary">
+                        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-neutral-400">
                             <ChevronDownIcon className="w-4 h-4" />
                         </div>
                     </div>
 
                     {/* Total Count Badge */}
-                    <div className="hidden sm:flex items-center px-4 py-1.5 bg-slate-100 text-tertiary rounded-full text-xs font-semibold tracking-wide uppercase">
+                    <div className="hidden sm:flex items-center px-4 py-1.5 bg-neutral-100 text-neutral-500 rounded-full text-xs font-semibold tracking-wide uppercase">
                         {totalCount} Items
                     </div>
                 </div>
@@ -100,7 +100,7 @@ export function FilterPanel({ state, onFilterChange, lang, totalCount }: FilterP
             {/* Sub Filter: Difficulty (Chips) */}
             {showDifficulty && (
                 <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 px-2 animate-fade-in-up">
-                    <span className="text-sm font-bold text-tertiary/80 mr-1 uppercase tracking-wider text-[11px]">
+                    <span className="text-sm font-bold text-neutral-400 mr-1 uppercase tracking-wider text-[11px]">
                         {t('filter.difficulty')}
                     </span>
 
@@ -108,8 +108,8 @@ export function FilterPanel({ state, onFilterChange, lang, totalCount }: FilterP
                     <button
                         onClick={() => onFilterChange('difficulty', undefined)}
                         className={`px-5 py-1.5 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 ${!state.difficulty
-                                ? 'bg-preludio-black text-white shadow-md'
-                                : 'bg-white text-secondary hover:bg-slate-100 border border-transparent'
+                            ? 'bg-primary text-paper shadow-md'
+                            : 'bg-white text-neutral-600 hover:bg-neutral-50 border border-transparent'
                             }`}
                     >
                         {t('filter.all')}
@@ -119,7 +119,7 @@ export function FilterPanel({ state, onFilterChange, lang, totalCount }: FilterP
                     {difficulties.map((diff) => {
                         const isSelected = state.difficulty === diff;
                         // Color coding based on difficulty
-                        let activeColorClass = 'bg-preludio-black text-white';
+                        let activeColorClass = 'bg-primary text-paper';
                         if (diff === 'Beginner') activeColorClass = 'bg-emerald-500 text-white shadow-emerald-200';
                         if (diff === 'Intermediate') activeColorClass = 'bg-amber-500 text-white shadow-amber-200';
                         if (diff === 'Advanced') activeColorClass = 'bg-rose-500 text-white shadow-rose-200';
@@ -129,8 +129,8 @@ export function FilterPanel({ state, onFilterChange, lang, totalCount }: FilterP
                                 key={diff}
                                 onClick={() => onFilterChange('difficulty', isSelected ? undefined : diff)}
                                 className={`px-5 py-1.5 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 shadow-sm ${isSelected
-                                        ? `${activeColorClass} shadow-md`
-                                        : 'bg-white text-secondary hover:bg-slate-100'
+                                    ? `${activeColorClass} shadow-md`
+                                    : 'bg-white text-neutral-600 hover:bg-neutral-50'
                                     }`}
                             >
                                 {t(`difficulty.${diff}`)}
