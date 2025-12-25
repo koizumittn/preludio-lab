@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { handleError } from '@/utils/errorHandler';
+import { handleClientError } from '@/lib/client-error';
 
 export default function Error({
     error,
@@ -14,7 +14,7 @@ export default function Error({
     const t = useTranslations('CategoryIndex');
 
     useEffect(() => {
-        handleError(error, 'CategoryIndexPage:Error');
+        handleClientError(error, undefined, 'CategoryIndexPage:Error');
     }, [error]);
 
     return (

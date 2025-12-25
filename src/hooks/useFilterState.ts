@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useCallback, useMemo } from 'react';
 import { ContentSortOption } from '@/domain/content/ContentConstants';
-import { handleError } from '@/utils/errorHandler';
+import { handleClientError } from '@/lib/client-error';
 
 export type FilterState = {
     difficulty?: string;
@@ -58,7 +58,7 @@ export function useFilterState() {
             try {
                 router.push(nextUrl, { scroll: false });
             } catch (error) {
-                handleError(error, 'useFilterState:setFilter');
+                handleClientError(error, undefined, 'useFilterState:setFilter');
             }
         },
         [router, pathname, searchParams]
@@ -71,7 +71,7 @@ export function useFilterState() {
         try {
             router.push(pathname, { scroll: false });
         } catch (error) {
-            handleError(error, 'useFilterState:clearFilters');
+            handleClientError(error, undefined, 'useFilterState:clearFilters');
         }
     }, [router, pathname]);
 
