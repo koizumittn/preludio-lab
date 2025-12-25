@@ -1,6 +1,6 @@
 import React from 'react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { FilterPanel } from './FilterPanel';
 import { FilterState } from '@/hooks/useFilterState';
@@ -23,11 +23,6 @@ vi.mock('framer-motion', () => ({
     },
 }));
 
-// Mock use-debounce to execute immediately
-vi.mock('use-debounce', () => ({
-    useDebouncedCallback: (fn: Function) => fn,
-}));
-
 describe('FilterPanel', () => {
     const mockOnFilterChange = vi.fn();
     const defaultState: FilterState = {
@@ -39,6 +34,11 @@ describe('FilterPanel', () => {
 
     beforeEach(() => {
         vi.clearAllMocks();
+        vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+        vi.useRealTimers();
     });
 
     it('renders correctly with initial state', () => {
@@ -55,9 +55,7 @@ describe('FilterPanel', () => {
         expect(screen.getByText('10')).toBeInTheDocument();
     });
 
-    it('triggers onFilterChange when typing in search input', async () => {
-        const user = userEvent.setup();
-
+    it('triggers onFilterChange when typing in search input (debounced)', async () => {
         render(
             <FilterPanel
                 state={defaultState}
@@ -68,13 +66,20 @@ describe('FilterPanel', () => {
         );
 
         const input = screen.getByPlaceholderText('searchPlaceholder');
-        await user.type(input, 'Bach');
+        fireEvent.change(input, { target: { value: 'Bach' } });
+
+        // Should not be called immediately
+        expect(mockOnFilterChange).not.toHaveBeenCalled();
+
+        // Advance time to 500ms
+        act(() => {
+            vi.advanceTimersByTime(500);
+        });
 
         expect(mockOnFilterChange).toHaveBeenCalledWith('keyword', 'Bach');
     });
 
     it('clears search term when clear button is clicked', async () => {
-        const user = userEvent.setup();
         render(
             <FilterPanel
                 state={{ ...defaultState, keyword: 'Bach' }}
@@ -85,13 +90,17 @@ describe('FilterPanel', () => {
         );
 
         const clearBtn = screen.getByLabelText('Clear search');
-        await user.click(clearBtn);
+        fireEvent.click(clearBtn);
+
+        // Debounce applies here
+        act(() => {
+            vi.advanceTimersByTime(500);
+        });
 
         expect(mockOnFilterChange).toHaveBeenCalledWith('keyword', undefined);
     });
 
     it('changes difficulty when chip is clicked', async () => {
-        const user = userEvent.setup();
         render(
             <FilterPanel
                 state={defaultState}
@@ -102,13 +111,12 @@ describe('FilterPanel', () => {
         );
 
         const beginnerChip = screen.getByText('difficulty.Beginner');
-        await user.click(beginnerChip);
+        fireEvent.click(beginnerChip);
 
         expect(mockOnFilterChange).toHaveBeenCalledWith('difficulty', 'Beginner');
     });
 
     it('toggles sort dropdown and selects option', async () => {
-        const user = userEvent.setup();
         render(
             <FilterPanel
                 state={defaultState}
@@ -120,11 +128,11 @@ describe('FilterPanel', () => {
 
         // Open dropdown
         const trigger = screen.getByText(`sort.${ContentSortOption.LATEST}`);
-        await user.click(trigger);
+        fireEvent.click(trigger);
 
         // Select OLDEST
         const oldestOption = screen.getByText(`sort.${ContentSortOption.OLDEST}`);
-        await user.click(oldestOption);
+        fireEvent.click(oldestOption);
 
         expect(mockOnFilterChange).toHaveBeenCalledWith('sort', ContentSortOption.OLDEST);
     });

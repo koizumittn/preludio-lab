@@ -76,7 +76,7 @@ export function useFilterState() {
     }, [router, pathname]);
 
     return {
-        state: { ...state, category: pathname.split('/').pop() }, // Basic extraction of category from path
+        state: { ...state, category: pathname.split('/').filter(Boolean).pop() }, // Robust extraction of category from path
         setFilter,
         clearFilters,
     };

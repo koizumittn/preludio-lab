@@ -123,4 +123,20 @@ describe('CategoryIndexFeature', () => {
 
         expect(mockPush).toHaveBeenCalledWith('/en/works');
     });
+
+    it('handles contents with missing metadata gracefully', () => {
+        const incompleteContents = [
+            { slug: 'incomplete', category: 'works' } as any,
+        ];
+
+        render(
+            <CategoryIndexFeature
+                lang="en"
+                category="works"
+                contents={incompleteContents}
+            />
+        );
+
+        expect(screen.getByTestId('content-card')).toBeInTheDocument();
+    });
 });

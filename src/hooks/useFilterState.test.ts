@@ -6,12 +6,13 @@ import { handleClientError } from '@/lib/client-error';
 // Mock next/navigation
 const mockPush = vi.fn();
 const mockSearchParams = new URLSearchParams();
+const mockPathname = vi.fn(() => '/en/works');
 
 vi.mock('next/navigation', () => ({
     useRouter: () => ({
         push: mockPush,
     }),
-    usePathname: () => '/en/works',
+    usePathname: () => mockPathname(),
     useSearchParams: () => mockSearchParams,
 }));
 
@@ -43,19 +44,26 @@ describe('useFilterState', () => {
         });
     });
 
-    it('updates filter via setFilter (router.push)', () => {
+    it('updates filter via setFilter (router.push) preserving locale', () => {
         const { result } = renderHook(() => useFilterState());
 
         act(() => {
             result.current.setFilter('keyword', 'Mozart');
         });
 
-        // Current param was empty used in hook init. 
-        // setFilter creates NEW URLSearchParams from current + change.
-        // It does NOT update the mockSearchParams reference instantly (unless I mock that behavior but here checking push arg is enough)
-
+        // Current pathname is '/en/works'
         // Expected URL: /en/works?keyword=Mozart
+        // The test verifies if it starts with the locale prefix
+        expect(mockPush).toHaveBeenCalledWith(expect.stringMatching(/^\/en\//), { scroll: false });
         expect(mockPush).toHaveBeenCalledWith('/en/works?keyword=Mozart', { scroll: false });
+    });
+
+    it('extracts category correctly even with trailing slash', () => {
+        // Mock returning path with trailing slash
+        mockPathname.mockReturnValueOnce('/en/works/');
+
+        const { result } = renderHook(() => useFilterState());
+        expect(result.current.state.category).toBe('works');
     });
 
     it('clears filter clears all params', () => {
