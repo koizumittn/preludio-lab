@@ -38,13 +38,10 @@ export function CategoryIndexFeature({ lang, category, contents }: CategoryIndex
             <div className="container mx-auto max-w-7xl">
 
                 {/* 見出しエリア */}
-                <header className="mb-12 text-center">
-                    <FadeInHeading className="text-4xl md:text-5xl font-black text-primary mb-4">
+                <header className="mb-10 text-center">
+                    <FadeInHeading className="text-4xl md:text-5xl font-black text-primary mb-2">
                         {t('title', { category: t(`categories.${category}`) })}
                     </FadeInHeading>
-                    <p className="text-secondary font-medium tracking-wide">
-                        {t('totalCount', { count: contents.length })}
-                    </p>
                 </header>
 
                 {/* フィルタ & 検索コントロール */}
@@ -52,6 +49,7 @@ export function CategoryIndexFeature({ lang, category, contents }: CategoryIndex
                     state={state}
                     onFilterChange={setFilter}
                     lang={lang}
+                    totalCount={contents.length}
                 />
 
                 {/* 結果グリッド */}
