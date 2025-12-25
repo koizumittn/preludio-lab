@@ -366,3 +366,7 @@ Status: `[/]` 進行中
 
 - [ ] **Enhanced Search Scope (Composer, Era, etc.)**
     - 現在の検索機能はタイトルとタグのみを対象としている。UXと発見可能性を向上させるため、作曲家名、時代、楽器などのメタデータフィールドも検索対象に含めるようにリポジトリ層 (`FsContentRepository`) を改修する。
+
+- [ ] **Faceted Search Implementation (Chip Counts)**
+    - 未選択のフィルタ（難易度など）に対して、現在の絞り込み条件下でのヒット件数をリアルタイムに表示する機能（例：「中級 (4)」）。
+    - これを実現するために、バックエンド（Supabase）側で Faceted Search（多面検索・集計）の仕組みを実装する。
