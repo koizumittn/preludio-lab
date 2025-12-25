@@ -63,9 +63,10 @@ export function ContentCard({ content, readMoreLabel, categoryLabel, index = 0, 
         <m.div
             layout
             className="group block h-full bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-neutral-100 ease-out hover:-translate-y-1"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            // LCP Optimization: Skip entrance animation for priority items to ensure immediate visibility
+            initial={priority ? false : { opacity: 0, y: 20 }}
+            whileInView={priority ? undefined : { opacity: 1, y: 0 }}
+            viewport={priority ? undefined : { once: true }}
             transition={{ duration: 0.5, delay: 0.1 + (index * 0.05) }}
         >
             <Link href={`/${lang}/${category}/${slug}`} className="flex flex-col h-full">
