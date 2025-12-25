@@ -26,19 +26,19 @@ export function FilterPanel({ state, onFilterChange, lang, totalCount }: FilterP
     const difficulties = ['Beginner', 'Intermediate', 'Advanced'];
     const sorts = Object.values(ContentSortOption);
 
-    // Local state for search input to enable debouncing
+    // デバウンスを有効にするための検索入力のローカル状態
     const [searchTerm, setSearchTerm] = useState(state.keyword || '');
 
-    // Sort Dropdown State
+    // ソートドロップダウンの状態
     const [isSortOpen, setIsSortOpen] = useState(false);
     const sortRef = useRef<HTMLDivElement>(null);
 
-    // Sync local state
+    // ローカル状態の同期
     useEffect(() => {
         setSearchTerm(state.keyword || '');
     }, [state.keyword]);
 
-    // Close sort dropdown on outside click
+    // 外部クリックでソートドロップダウンを閉じる
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (sortRef.current && !sortRef.current.contains(event.target as Node)) {
@@ -67,10 +67,10 @@ export function FilterPanel({ state, onFilterChange, lang, totalCount }: FilterP
     return (
         <div className="w-full mb-10 space-y-6 relative z-40">
 
-            {/* Main Control Bar */}
+            {/* メインコントロールバー */}
             <div className="relative z-50 flex flex-col lg:flex-row gap-4 items-stretch lg:items-center justify-between bg-white/60 backdrop-blur-md rounded-3xl p-3 shadow-sm border border-neutral-200">
 
-                {/* Left: Search Input */}
+                {/* 左側: 検索入力 */}
                 <div className="relative flex-grow max-w-full lg:max-w-md group">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                         <SearchIcon className="h-5 w-5 text-neutral-400 group-focus-within:text-primary transition-colors duration-300" />
@@ -96,10 +96,10 @@ export function FilterPanel({ state, onFilterChange, lang, totalCount }: FilterP
                     )}
                 </div>
 
-                {/* Right: Controls & Count */}
+                {/* 右側: コントロールと件数 */}
                 <div className="flex flex-row items-center justify-between lg:justify-end gap-3 sm:gap-4">
 
-                    {/* Custom Sort Dropdown */}
+                    {/* カスタムソートドロップダウン */}
                     <div className="relative w-full sm:w-auto min-w-[160px]" ref={sortRef}>
                         <button
                             onClick={() => setIsSortOpen(!isSortOpen)}
@@ -150,7 +150,7 @@ export function FilterPanel({ state, onFilterChange, lang, totalCount }: FilterP
                         </AnimatePresence>
                     </div>
 
-                    {/* Total Count Badge (Refined) */}
+                    {/* 総件数バッジ (改良版) */}
                     <div className="flex-shrink-0 flex items-center gap-1.5 px-4 py-1.5 bg-neutral-50 text-neutral-400 rounded-full text-xs font-semibold tracking-wide border border-neutral-100/50">
                         <span className="text-primary text-sm font-bold table-nums">{totalCount}</span>
                         <span className="text-[10px] tracking-wider font-medium">Works</span>
@@ -158,7 +158,7 @@ export function FilterPanel({ state, onFilterChange, lang, totalCount }: FilterP
                 </div>
             </div>
 
-            {/* Sub Filter: Difficulty (Chips) - Scrollable on Mobile */}
+            {/* サブフィルタ: 難易度 (チップ) - モバイルではスクロール可能 */}
             {showDifficulty && (
                 <div className="flex items-center gap-3 px-2 animate-fade-in-up overflow-x-auto pb-4 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-hide">
                     <span className="text-sm font-bold text-neutral-400 mr-2 uppercase tracking-wider text-[11px] whitespace-nowrap hidden sm:inline-block">
@@ -166,7 +166,7 @@ export function FilterPanel({ state, onFilterChange, lang, totalCount }: FilterP
                     </span>
 
                     <div className="flex items-center gap-3 flex-nowrap sm:flex-wrap">
-                        {/* All Chip */}
+                        {/* 「すべて」チップ */}
                         <button
                             onClick={() => onFilterChange('difficulty', undefined)}
                             className={`px-5 py-1.5 rounded-full text-sm font-medium transition-all duration-300 transform whitespace-nowrap flex-shrink-0 ${!state.difficulty
@@ -177,10 +177,10 @@ export function FilterPanel({ state, onFilterChange, lang, totalCount }: FilterP
                             {t('filter.all')}
                         </button>
 
-                        {/* Difficulty Chips */}
+                        {/* 難易度チップ */}
                         {difficulties.map((diff) => {
                             const isSelected = state.difficulty === diff;
-                            // Color coding based on difficulty
+                            // 難易度に基づく色分け
                             let activeColorClass = 'bg-primary text-paper';
                             if (diff === 'Beginner') activeColorClass = 'bg-emerald-500 text-white shadow-emerald-200';
                             if (diff === 'Intermediate') activeColorClass = 'bg-sky-500 text-white shadow-sky-200';
@@ -218,7 +218,7 @@ function SortIcon({ sort, className }: { sort: string | ContentSortOption, class
             </svg>
         );
     }
-    // Default (Latest, Title ASC) - Descending feel or A-Z
+    // デフォルト (新着順, タイトル昇順) - 降順の雰囲気またはA-Z
     return (
         <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="m3 9 4 4 4-4" />
