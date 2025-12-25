@@ -60,6 +60,7 @@ export function ContentCard({ content, readMoreLabel, categoryLabel, index = 0 }
 
     return (
         <m.div
+            layout
             className="group block h-full bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-neutral-100 ease-out hover:-translate-y-1"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
