@@ -46,7 +46,7 @@ export function FilterPanel({ state, onFilterChange, lang }: FilterPanelProps) {
 
     return (
         <div className="bg-paper shadow-sm border border-divider rounded-2xl p-6 mb-8">
-            <div className={`grid grid-cols-1 ${state.category === 'works' ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-6`}>
+            <div className={`grid grid-cols-1 ${(state.category === 'works' || state.category === 'theory') ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-6`}>
 
                 {/* 検索入力 */}
                 <div className="space-y-2">
@@ -66,8 +66,8 @@ export function FilterPanel({ state, onFilterChange, lang }: FilterPanelProps) {
                     </div>
                 </div>
 
-                {/* 難易度フィルタ (Worksカテゴリのみ表示) */}
-                {state.category === 'works' && (
+                {/* 難易度フィルタ (Works または Theory カテゴリのみ表示) */}
+                {(state.category === 'works' || state.category === 'theory') && (
                     <div className="space-y-2">
                         <label htmlFor="difficulty" className="text-sm font-medium text-secondary ml-1">
                             {t('filter.difficulty')}
