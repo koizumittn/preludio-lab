@@ -1,4 +1,4 @@
-# Testing Guidelines (v2.2 - AI-Conscious Strategy)
+# Testing Guidelines (v2.3 - Global Execution Strategy)
 
 開発ガイドラインで定義された「クリーンアーキテクチャ」のレイヤー構造に基づき、各層のテスト戦略を規定する。
 
@@ -55,11 +55,11 @@ Playwrightにもコンポーネントテスト機能はあるが、以下の理�
 3.  **Hooksテスト**: `renderHook` によるカスタムフック単体テストが最も効率的。
 
 #### Strategy (Role Definitions):
-| ツール | テストの深さ | 生産性を守るための「割り切り」 |
-| :--- | :--- | :--- |
-| **RTL (Vitest)** | **ロジック中心** | 「ユーザーから見た振る舞い」を検証。スタイル(CSS)や複雑なブラウザ挙動は追わない。 |
-| **Playwright** | **導線中心** | 主要な画面遷移（スモークテスト）に限定。「ユーザーが目的を達成できるか」をブラウザ実機で検証。 |
-| **Storybook** | **視覚/AIマニュアル** | **AIエージェントへの「指示書」**として活用。Propsの定義や状態変化をAIに学習させるためのソースとする。 |
+| ツール | テストの深さ | ターゲット環境 | 生産性を守るための「割り切り」 |
+| :--- | :--- | :--- | :--- |
+| **RTL (Vitest)** | **ロジック中心** | **Local / CI** | 「ユーザーから見た振る舞い」を検証。スタイル(CSS)や複雑なブラウザ挙動は追わない。 |
+| **Playwright** | **導線中心** | **Vercel Preview** | 主要な画面遷移に限定。**実際のデプロイ環境**でユーザーが目的を達成できるかを検証。 |
+| **Storybook** | **視覚/AIマニュアル** | **Local** | **AIエージェントへの「指示書」**として活用。エッジケースの視覚確認を効率化。 |
 
 #### Storybook Selective Strategy:
 個人開発の生産性を維持するため、すべての部品にStorybookを作成するのではなく、**「状態によって見た目が大きく変わる複雑な部品」**に限定して導入する。
@@ -80,11 +80,11 @@ Playwrightにもコンポーネントテスト機能はあるが、以下の理�
 
 ## 3. Tooling Stack & Configuration
 
-| Category | Tool | Scope |
-| :--- | :--- | :--- |
-| **Unit / Integration** | **Vitest** | Domain, Application, Infra (Logic & State) |
-| **Component / Catalog** | **Storybook** | Complex UI Components (Visual & **AI Instruction Manual**) |
-| **E2E / Navigation** | **Playwright** | Critical User Flows (Smoke Test & Locale Preservation) |
+| Category | Tool | Scope | Environment |
+| :--- | :--- | :--- | :--- |
+| **Unit / Integration** | **Vitest** | Domain, Application, Infra (Logic & State) | Local & CI |
+| **Component / Catalog** | **Storybook** | Complex UI Components (**AI Manual**) | Local |
+| **E2E / Navigation** | **Playwright** | Critical User Flows (Smoke Test & Locale) | Vercel Preview |
 
 ### 3.1. Scripts & Config
 *   **Config File:** `vitest.config.ts` (React/TS対応済み), `vitest.setup.ts` (Global Setup)
