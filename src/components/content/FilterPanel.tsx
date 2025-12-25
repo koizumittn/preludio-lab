@@ -62,8 +62,20 @@ export function FilterPanel({ state, onFilterChange, lang, totalCount }: FilterP
                         placeholder={t('searchPlaceholder')}
                         value={searchTerm}
                         onChange={handleSearchChange}
-                        className="pl-11 pr-4 py-3 w-full bg-neutral-100/50 border-transparent focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary/50 rounded-full transition-all duration-300 placeholder:text-neutral-400 text-base text-primary"
+                        className="pl-11 pr-10 py-3 w-full bg-neutral-100/50 border-transparent focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary/50 rounded-full transition-all duration-300 placeholder:text-neutral-400 text-base text-primary"
                     />
+                    {searchTerm && (
+                        <button
+                            onClick={() => {
+                                setSearchTerm('');
+                                debouncedFilterChange('');
+                            }}
+                            className="absolute inset-y-0 right-3 flex items-center justify-center text-neutral-400 hover:text-primary transition-colors"
+                            aria-label="Clear search"
+                        >
+                            <XIcon className="h-5 w-5" />
+                        </button>
+                    )}
                 </div>
 
                 {/* Right: Controls & Count */}
