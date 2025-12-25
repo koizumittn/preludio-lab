@@ -139,6 +139,7 @@ graph TD
 2.  **Phase 2: Use Case Implementation** (`src/application` Business Logic)
 3.  **Phase 3: Infrastructure Implementation** (`src/infrastructure` DB/API Adapter)
 4.  **Phase 4: UI Connection** (`src/app` Server Action & View)
+5.  **Phase 5: Verification & Refinement** (Unit/Component/E2E Tests & UI Polish)
 
 ### 1.6. Component Categorization (UI vs Layout)
 `src/components` 内のフォルダ分けにおいて、特に混同しやすい `ui` と `layout` の境界を以下のように定義する。
