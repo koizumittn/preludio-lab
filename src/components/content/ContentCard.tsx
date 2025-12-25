@@ -109,7 +109,7 @@ export function ContentCard({ content, readMoreLabel, categoryLabel, index = 0 }
 
                         {/* Composer */}
                         {metadata.composer && (
-                            <p className="text-neutral-600 font-semibold text-sm flex items-center gap-2">
+                            <p className="text-neutral-700 font-bold text-sm flex items-center gap-2">
                                 <span className="w-5 h-[2px] bg-primary/20 group-hover:bg-primary/50 transition-colors inline-block rounded-full"></span>
                                 {metadata.composer}
                             </p>

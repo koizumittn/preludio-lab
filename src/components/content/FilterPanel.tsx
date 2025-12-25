@@ -119,7 +119,7 @@ export function FilterPanel({ state, onFilterChange, lang, totalCount }: FilterP
                                     animate={{ opacity: 1, y: 0, scale: 1 }}
                                     exit={{ opacity: 0, y: 8, scale: 0.95 }}
                                     transition={{ duration: 0.2 }}
-                                    className="absolute right-0 mt-2 w-full sm:w-56 bg-white/90 backdrop-blur-xl rounded-3xl shadow-xl border border-neutral-100 overflow-hidden z-50 p-1.5"
+                                    className="absolute right-0 mt-2 w-full sm:w-56 bg-white/80 backdrop-blur-md rounded-3xl shadow-xl border border-neutral-100/50 overflow-hidden z-50 p-1.5"
                                 >
                                     {sorts
                                         .filter(s => s !== ContentSortOption.POPULAR && s !== ContentSortOption.TRENDING)
