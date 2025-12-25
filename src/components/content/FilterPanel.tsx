@@ -133,7 +133,7 @@ export function FilterPanel({ state, onFilterChange, lang, totalCount }: FilterP
                         // Color coding based on difficulty
                         let activeColorClass = 'bg-primary text-paper';
                         if (diff === 'Beginner') activeColorClass = 'bg-emerald-500 text-white shadow-emerald-200';
-                        if (diff === 'Intermediate') activeColorClass = 'bg-amber-500 text-white shadow-amber-200';
+                        if (diff === 'Intermediate') activeColorClass = 'bg-sky-500 text-white shadow-sky-200';
                         if (diff === 'Advanced') activeColorClass = 'bg-rose-500 text-white shadow-rose-200';
 
                         return (
