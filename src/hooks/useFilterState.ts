@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useCallback, useMemo } from 'react';
 import { ContentSortOption } from '@/domain/content/ContentConstants';
+import { handleError } from '@/utils/errorHandler';
 
 export type FilterState = {
     difficulty?: string;
@@ -54,7 +55,11 @@ export function useFilterState() {
             const queryString = params.toString();
             const nextUrl = queryString ? `${pathname}?${queryString}` : pathname;
 
-            router.push(nextUrl, { scroll: false });
+            try {
+                router.push(nextUrl, { scroll: false });
+            } catch (error) {
+                handleError(error, 'useFilterState:setFilter');
+            }
         },
         [router, pathname, searchParams]
     );
@@ -63,7 +68,11 @@ export function useFilterState() {
      * Clears all filters and returns to the base category URL.
      */
     const clearFilters = useCallback(() => {
-        router.push(pathname, { scroll: false });
+        try {
+            router.push(pathname, { scroll: false });
+        } catch (error) {
+            handleError(error, 'useFilterState:clearFilters');
+        }
     }, [router, pathname]);
 
     return {

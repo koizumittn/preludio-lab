@@ -80,7 +80,14 @@ export function CategoryIndexFeature({ lang, category, contents }: CategoryIndex
                                 別のキーワードやフィルター条件で試してみてください。
                             </p>
                             <button
-                                onClick={() => router.push(window.location.pathname)}
+                                onClick={() => {
+                                    try {
+                                        router.push(window.location.pathname);
+                                    } catch (e) {
+                                        // Navigation errors are rare but possible
+                                        console.error('Navigation failed', e);
+                                    }
+                                }}
                                 className="px-6 py-2.5 bg-primary text-white text-sm font-bold rounded-full hover:bg-primary-dark transition-all transform hover:-translate-y-0.5 shadow-md"
                             >
                                 {t('filter.all')}をリセット
