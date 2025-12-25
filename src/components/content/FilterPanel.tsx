@@ -68,7 +68,7 @@ export function FilterPanel({ state, onFilterChange, lang, totalCount }: FilterP
         <div className="w-full mb-10 space-y-6 relative z-40">
 
             {/* Main Control Bar */}
-            <div className="relative z-50 flex flex-col lg:flex-row gap-4 items-stretch lg:items-center justify-between bg-white/60 backdrop-blur-md rounded-[2rem] p-3 shadow-sm border border-neutral-200">
+            <div className="relative z-50 flex flex-col lg:flex-row gap-4 items-stretch lg:items-center justify-between bg-white/60 backdrop-blur-md rounded-3xl p-3 shadow-sm border border-neutral-200">
 
                 {/* Left: Search Input */}
                 <div className="relative flex-grow max-w-full lg:max-w-md group">
@@ -105,7 +105,10 @@ export function FilterPanel({ state, onFilterChange, lang, totalCount }: FilterP
                             onClick={() => setIsSortOpen(!isSortOpen)}
                             className={`w-full flex items-center justify-between bg-white border ${isSortOpen ? 'border-primary ring-2 ring-primary/10' : 'border-neutral-200 hover:border-accent/50'} py-3 pl-5 pr-4 rounded-full text-neutral-700 text-sm font-medium transition-all shadow-sm hover:shadow-md`}
                         >
-                            <span>{t(`sort.${state.sort || ContentSortOption.LATEST}`)}</span>
+                            <div className="flex items-center gap-2">
+                                <SortIcon sort={state.sort || ContentSortOption.LATEST} className="w-4 h-4 text-neutral-400" />
+                                <span>{t(`sort.${state.sort || ContentSortOption.LATEST}`)}</span>
+                            </div>
                             <ChevronDownIcon className={`w-4 h-4 text-neutral-400 transition-transform duration-300 ${isSortOpen ? 'rotate-180' : ''}`} />
                         </button>
 
@@ -116,7 +119,7 @@ export function FilterPanel({ state, onFilterChange, lang, totalCount }: FilterP
                                     animate={{ opacity: 1, y: 0, scale: 1 }}
                                     exit={{ opacity: 0, y: 8, scale: 0.95 }}
                                     transition={{ duration: 0.2 }}
-                                    className="absolute right-0 mt-2 w-full sm:w-56 bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-neutral-100 overflow-hidden z-50 p-1.5"
+                                    className="absolute right-0 mt-2 w-full sm:w-56 bg-white/90 backdrop-blur-xl rounded-3xl shadow-xl border border-neutral-100 overflow-hidden z-50 p-1.5"
                                 >
                                     {sorts
                                         .filter(s => s !== ContentSortOption.POPULAR && s !== ContentSortOption.TRENDING)
@@ -129,12 +132,15 @@ export function FilterPanel({ state, onFilterChange, lang, totalCount }: FilterP
                                                         onFilterChange('sort', sort);
                                                         setIsSortOpen(false);
                                                     }}
-                                                    className={`w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium transition-colors flex items-center justify-between ${isActive
+                                                    className={`w-full text-left px-4 py-2.5 rounded-full text-sm font-medium transition-colors flex items-center justify-between ${isActive
                                                         ? 'bg-primary/5 text-primary'
                                                         : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900'
                                                         }`}
                                                 >
-                                                    {t(`sort.${sort}`)}
+                                                    <div className="flex items-center gap-2">
+                                                        <SortIcon sort={sort as ContentSortOption} className={`w-4 h-4 ${isActive ? 'text-primary' : 'text-neutral-400'}`} />
+                                                        {t(`sort.${sort}`)}
+                                                    </div>
                                                     {isActive && <CheckIcon className="w-4 h-4 text-primary" />}
                                                 </button>
                                             );
@@ -197,6 +203,30 @@ export function FilterPanel({ state, onFilterChange, lang, totalCount }: FilterP
                 </div>
             )}
         </div>
+    );
+}
+
+function SortIcon({ sort, className }: { sort: string | ContentSortOption, className?: string }) {
+    if (sort === ContentSortOption.OLDEST || sort === ContentSortOption.DIFFICULTY_DESC) {
+        return (
+            <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m3 16 4-4 4 4" />
+                <path d="M7 20V4" />
+                <path d="M11 4h10" />
+                <path d="M11 8h7" />
+                <path d="M11 12h4" />
+            </svg>
+        );
+    }
+    // Default (Latest, Title ASC) - Descending feel or A-Z
+    return (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="m3 9 4 4 4-4" />
+            <path d="M7 4v16" />
+            <path d="M11 4h10" />
+            <path d="M11 8h7" />
+            <path d="M11 12h4" />
+        </svg>
     );
 }
 

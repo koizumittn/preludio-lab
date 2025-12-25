@@ -8,6 +8,8 @@ import { useTranslations } from 'next-intl';
 import { FadeInHeading } from '@/components/ui/FadeInHeading';
 import { useTransition } from 'react';
 
+import { useRouter } from 'next/navigation';
+
 interface CategoryIndexFeatureProps {
     lang: string;
     category: string;
@@ -22,6 +24,7 @@ export function CategoryIndexFeature({ lang, category, contents }: CategoryIndex
     const t = useTranslations('CategoryIndex');
     const { state, setFilter: originalSetFilter } = useFilterState();
     const [isPending, startTransition] = useTransition();
+    const router = useRouter();
 
     const setFilter = (key: any, value: any) => {
         startTransition(() => {
@@ -66,7 +69,7 @@ export function CategoryIndexFeature({ lang, category, contents }: CategoryIndex
                             ))}
                         </div>
                     ) : (
-                        <div className="text-center py-24 bg-white/40 backdrop-blur-md rounded-[2.5rem] border border-divider shadow-inner flex flex-col items-center justify-center">
+                        <div className="text-center py-24 bg-white/40 backdrop-blur-md rounded-3xl border border-divider shadow-inner flex flex-col items-center justify-center">
                             <div className="mb-6 w-20 h-20 rounded-full bg-slate-50 flex items-center justify-center border border-divider">
                                 <SearchOffIcon className="w-10 h-10 text-tertiary/40" />
                             </div>
@@ -77,7 +80,7 @@ export function CategoryIndexFeature({ lang, category, contents }: CategoryIndex
                                 別のキーワードやフィルター条件で試してみてください。
                             </p>
                             <button
-                                onClick={() => window.location.href = window.location.pathname}
+                                onClick={() => router.push(window.location.pathname)}
                                 className="px-6 py-2.5 bg-primary text-white text-sm font-bold rounded-full hover:bg-primary-dark transition-all transform hover:-translate-y-0.5 shadow-md"
                             >
                                 {t('filter.all')}をリセット
