@@ -65,10 +65,10 @@ export function FilterPanel({ state, onFilterChange, lang, totalCount }: FilterP
     const showDifficulty = state.category === 'works' || state.category === 'theory';
 
     return (
-        <div className="w-full mb-10 space-y-6">
+        <div className="w-full mb-10 space-y-6 relative z-40">
 
             {/* Main Control Bar */}
-            <div className="flex flex-col lg:flex-row gap-4 items-stretch lg:items-center justify-between bg-white/60 backdrop-blur-md rounded-[2rem] p-3 shadow-sm border border-neutral-200">
+            <div className="relative z-50 flex flex-col lg:flex-row gap-4 items-stretch lg:items-center justify-between bg-white/60 backdrop-blur-md rounded-[2rem] p-3 shadow-sm border border-neutral-200">
 
                 {/* Left: Search Input */}
                 <div className="relative flex-grow max-w-full lg:max-w-md group">
@@ -130,8 +130,8 @@ export function FilterPanel({ state, onFilterChange, lang, totalCount }: FilterP
                                                         setIsSortOpen(false);
                                                     }}
                                                     className={`w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium transition-colors flex items-center justify-between ${isActive
-                                                            ? 'bg-primary/5 text-primary'
-                                                            : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900'
+                                                        ? 'bg-primary/5 text-primary'
+                                                        : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900'
                                                         }`}
                                                 >
                                                     {t(`sort.${sort}`)}
@@ -164,8 +164,8 @@ export function FilterPanel({ state, onFilterChange, lang, totalCount }: FilterP
                         <button
                             onClick={() => onFilterChange('difficulty', undefined)}
                             className={`px-5 py-1.5 rounded-full text-sm font-medium transition-all duration-300 transform whitespace-nowrap flex-shrink-0 ${!state.difficulty
-                                    ? 'bg-primary text-paper shadow-lg shadow-primary/20 scale-105'
-                                    : 'bg-white text-neutral-600 hover:bg-neutral-50 border border-transparent hover:scale-105'
+                                ? 'bg-primary text-paper shadow-lg shadow-primary/20 scale-105'
+                                : 'bg-white text-neutral-600 hover:bg-neutral-50 border border-transparent hover:scale-105'
                                 }`}
                         >
                             {t('filter.all')}
@@ -185,8 +185,8 @@ export function FilterPanel({ state, onFilterChange, lang, totalCount }: FilterP
                                     key={diff}
                                     onClick={() => onFilterChange('difficulty', isSelected ? undefined : diff)}
                                     className={`px-5 py-1.5 rounded-full text-sm font-medium transition-all duration-300 transform whitespace-nowrap flex-shrink-0 shadow-sm ${isSelected
-                                            ? `${activeColorClass} shadow-md scale-105`
-                                            : 'bg-white text-neutral-600 hover:bg-neutral-50 hover:scale-105'
+                                        ? `${activeColorClass} shadow-md scale-105`
+                                        : 'bg-white text-neutral-600 hover:bg-neutral-50 hover:scale-105'
                                         }`}
                                 >
                                     {t(`difficulty.${diff}`)}
