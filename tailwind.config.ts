@@ -15,6 +15,11 @@ const config: Config = {
                 'sans-zh': ['var(--font-noto-sans-sc)', 'sans-serif'],
                 'serif-zh': ['var(--font-noto-serif-sc)', 'serif'],
             },
+            colors: {
+                'classic-gold': '#C5A059',
+                'preludio-black': '#1A1A1A',
+                'paper-white': '#F9F9F7',
+            },
         },
     },
     plugins: [],

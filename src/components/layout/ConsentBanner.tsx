@@ -28,7 +28,7 @@ export function ConsentBanner() {
     if (!isVisible) return null;
 
     return (
-        <div className="fixed bottom-20 left-4 right-4 z-50 mx-auto max-w-lg rounded-lg border border-classic-gold/20 bg-paper-white/95 backdrop-blur-sm p-6 shadow-2xl sm:left-auto sm:right-4">
+        <div className="fixed bottom-20 left-4 right-4 z-50 mx-auto max-w-lg rounded-lg border border-classic-gold bg-paper-white p-6 shadow-2xl sm:left-auto sm:right-4">
             <h3 className="mb-2 font-bold text-preludio-black">{t('title')}</h3>
             <p className="mb-4 text-sm text-gray-600">
                 {t('message')}
