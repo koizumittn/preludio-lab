@@ -10,8 +10,8 @@
         "retry": "Riprova"
     },
     "Consent": {
-        "title": "Teniamo alla tua privacy",
-        "message": "Utilizziamo i cookie per migliorare la tua esperienza e analizzare il traffico.",
+        "title": "Utilizzo dei Cookie",
+        "message": "{siteName} utilizza i cookie per offrirti un'esperienza di ascolto ottimale e per analizzare l'utilizzo del sito.",
         "accept": "Accetta tutto",
         "reject": "Rifiuta"
     },

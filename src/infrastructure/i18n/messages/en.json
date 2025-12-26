@@ -121,8 +121,8 @@
         "retry": "Try again"
     },
     "Consent": {
-        "title": "We value your privacy",
-        "message": "We use cookies to enhance your experience and analyze traffic.",
+        "title": "About Cookie Usage",
+        "message": "{siteName} uses cookies to provide you with the optimal viewing experience and to analyze how our site is used.",
         "accept": "Accept All",
         "reject": "Reject"
     }

@@ -69,8 +69,8 @@
         "retry": "重试"
     },
     "Consent": {
-        "title": "我们重视您的隐私",
-        "message": "我们使用 Cookie 以此改善您的体验并分析流量。",
+        "title": "Cookies 使用说明",
+        "message": "{siteName} 使用 Cookie 旨在为您提供最佳的视听体验并分析网站使用情况。",
         "accept": "全部接受",
         "reject": "拒绝"
     },

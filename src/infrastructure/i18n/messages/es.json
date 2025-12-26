@@ -10,8 +10,8 @@
         "retry": "Intentar de nuevo"
     },
     "Consent": {
-        "title": "Valoramos su privacidad",
-        "message": "Utilizamos cookies para mejorar su experiencia y analizar el tráfico.",
+        "title": "Acerca del uso de cookies",
+        "message": "{siteName} utiliza cookies para ofrecerle una experiencia auditiva óptima y analizar el uso del sitio.",
         "accept": "Aceptar todo",
         "reject": "Rechazar"
     },

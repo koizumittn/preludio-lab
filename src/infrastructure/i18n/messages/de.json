@@ -113,5 +113,11 @@
             "Advanced": "Experte"
         },
         "readMore": "Mehr lesen"
+    },
+    "Consent": {
+        "title": "Über die Verwendung von Cookies",
+        "message": "{siteName} verwendet Cookies, um Ihnen ein optimales Hörerlebnis zu bieten und die Nutzung der Seite zu analysieren.",
+        "accept": "Alle akzeptieren",
+        "reject": "Ablehnen"
     }
 }
