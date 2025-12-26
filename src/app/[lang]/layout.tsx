@@ -67,15 +67,21 @@ export async function generateMetadata({ params }: Props) {
     const { lang } = await params;
     const t = await getTranslations({ locale: lang, namespace: 'Metadata' });
 
+    // サポートされている全ロケールのalternatesを動的に生成
+    const languages: Record<string, string> = {};
+    supportedLocales.forEach((locale) => {
+        languages[locale] = `/${locale}`;
+    });
+    // x-defaultはグローバルSEOに必須であり、英語版を指すように設定
+    languages['x-default'] = '/en';
+
     return {
         title: t('title'),
         description: t('description'),
         metadataBase: new URL(BASE_URL),
         alternates: {
-            languages: {
-                'en': '/en',
-                'ja': '/ja',
-            },
+            canonical: `/${lang}`,
+            languages,
         },
     };
 }
