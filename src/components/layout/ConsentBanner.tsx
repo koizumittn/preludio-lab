@@ -28,21 +28,21 @@ export function ConsentBanner() {
     if (!isVisible) return null;
 
     return (
-        <div className="fixed bottom-20 left-4 right-4 z-50 mx-auto max-w-lg rounded-lg border border-[#C5A059] bg-[#F9F9F7] p-6 shadow-2xl sm:left-auto sm:right-4">
-            <h3 className="mb-2 font-bold text-[#1A1A1A]">{t('title')}</h3>
-            <p className="mb-4 text-sm text-[#44403C]">
+        <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-[#C5A059] bg-[#F9F9F7] p-6 shadow-[0_-8px_30px_rgba(0,0,0,0.12)] sm:bottom-4 sm:left-auto sm:right-4 sm:max-w-md sm:rounded-2xl sm:border sm:shadow-2xl">
+            <h3 className="mb-2 text-lg font-bold text-[#1A1A1A]">{t('title')}</h3>
+            <p className="mb-6 text-sm leading-relaxed text-[#44403C]">
                 {t('message')}
             </p>
-            <div className="flex gap-2">
+            <div className="flex flex-col gap-3 sm:flex-row">
                 <button
                     onClick={handleAccept}
-                    className="rounded-md bg-[#1A1A1A] px-4 py-2 text-sm font-bold text-white transition hover:bg-[#333333]"
+                    className="flex-1 rounded-lg bg-[#1A1A1A] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#333333] active:scale-[0.98]"
                 >
                     {t('accept')}
                 </button>
                 <button
                     onClick={() => setIsVisible(false)}
-                    className="rounded-md border border-[#D6D3D1] bg-white px-4 py-2 text-sm font-bold text-[#44403C] transition hover:bg-[#F5F5F4]"
+                    className="flex-1 rounded-lg border border-[#D6D3D1] bg-white px-6 py-3 text-sm font-bold text-[#44403C] transition hover:bg-[#F5F5F4] active:scale-[0.98]"
                 >
                     {t('reject')}
                 </button>
