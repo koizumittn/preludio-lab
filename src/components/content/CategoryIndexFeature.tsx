@@ -43,7 +43,7 @@ export function CategoryIndexFeature({ lang, category, contents }: CategoryIndex
 
                 {/* 見出しエリア */}
                 <header className="mb-10 text-center">
-                    <FadeInHeading className="text-4xl md:text-5xl font-black text-primary mb-2">
+                    <FadeInHeading className="text-4xl md:text-5xl font-black text-primary mb-2" priority>
                         {t('title', { category: t(`categories.${category}`) })}
                     </FadeInHeading>
                 </header>
