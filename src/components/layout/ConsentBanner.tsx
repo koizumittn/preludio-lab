@@ -44,7 +44,7 @@ export function ConsentBanner() {
                 </button>
                 <button
                     onClick={() => setIsVisible(false)}
-                    className="flex-1 rounded-lg border border-[#D6D3D1] bg-white px-6 py-3 text-sm font-bold text-[#44403C] transition hover:bg-[#F5F5F4] active:scale-[0.98]"
+                    className="flex-1 rounded-lg border border-[#D6D3D1] bg-white px-6 py-3 text-sm font-bold text-[#555555] transition hover:bg-[#F5F5F4] active:scale-[0.98]"
                 >
                     {t('reject')}
                 </button>
