@@ -119,5 +119,11 @@
         "description": "We apologize for the inconvenience. The error has been logged.",
         "toastMessage": "Something went wrong while loading the page.",
         "retry": "Try again"
+    },
+    "Consent": {
+        "title": "About Cookie Usage",
+        "message": "{siteName} uses cookies to provide you with the optimal viewing experience and to analyze how our site is used.",
+        "accept": "Accept All",
+        "reject": "Reject"
     }
 }

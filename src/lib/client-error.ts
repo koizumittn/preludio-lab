@@ -7,12 +7,15 @@ import toast from 'react-hot-toast';
  * 第2引数はユーザーへのトースト通知用であり、必要に応じてi18n化されたメッセージを渡します。
  * 
  * @param error 発生したエラーオブジェクト
- * @param userNotificationMessage ユーザーに表示するトーストメッセージ (通知が不要な場合は省略可)
+ * @param context エラーの発生場所や文脈を示す識別子 (Sentryタグ用)
  */
-export function handleClientError(error: unknown, userNotificationMessage?: string): void {
-    Sentry.captureException(error);
+export function handleClientError(error: unknown, userNotificationMessage?: string, context?: string): void {
+    Sentry.captureException(error, {
+        tags: { context: context ?? 'unknown' },
+    });
+
     if (process.env.NODE_ENV === 'development') {
-        console.error('[Client Error]', error);
+        console.error('[Client Error]', error, context ? `Context: ${context}` : '');
     }
     if (userNotificationMessage) toast.error(userNotificationMessage);
 }

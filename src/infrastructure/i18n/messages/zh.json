@@ -62,6 +62,18 @@
             "defaultDescription": "{composer}的作品。"
         }
     },
+    "Error": {
+        "title": "发生错误！",
+        "description": "对于给您带来的不便，我们深表歉意。错误已记录。",
+        "toastMessage": "加载页面时发生错误。",
+        "retry": "重试"
+    },
+    "Consent": {
+        "title": "Cookies 使用说明",
+        "message": "{siteName} 使用 Cookie 旨在为您提供最佳的视听体验并分析网站使用情况。",
+        "accept": "全部接受",
+        "reject": "拒绝"
+    },
     "Navigation": {
         "home": "首页",
         "works": "作品",

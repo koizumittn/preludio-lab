@@ -1,6 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
+
+import { SITE_NAME } from '@/lib/constants';
 
 /**
  * [REQ-UI-006-02] Privacy Consent Banner
@@ -9,6 +12,7 @@ import { useState, useEffect } from 'react';
 export function ConsentBanner() {
 
 
+    const t = useTranslations('Consent');
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
@@ -26,23 +30,23 @@ export function ConsentBanner() {
     if (!isVisible) return null;
 
     return (
-        <div className="fixed bottom-20 left-4 right-4 z-40 mx-auto max-w-lg rounded-lg border border-classic-gold/20 bg-paper-white p-6 shadow-2xl sm:left-auto sm:right-4">
-            <h3 className="mb-2 font-bold text-preludio-black">We value your privacy</h3>
-            <p className="mb-4 text-sm text-gray-600">
-                We use cookies to enhance your experience and analyze traffic.
+        <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-[#C5A059] bg-[#F9F9F7] p-6 shadow-[0_-8px_30px_rgba(0,0,0,0.12)] sm:bottom-4 sm:left-auto sm:right-4 sm:max-w-md sm:rounded-2xl sm:border sm:shadow-2xl">
+            <h3 className="mb-2 text-lg font-bold text-[#1A1A1A]">{t('title')}</h3>
+            <p className="mb-6 text-sm leading-relaxed text-[#44403C]">
+                {t('message', { siteName: SITE_NAME })}
             </p>
-            <div className="flex gap-2">
+            <div className="flex flex-col gap-3 sm:flex-row">
                 <button
                     onClick={handleAccept}
-                    className="rounded-md bg-preludio-black px-4 py-2 text-sm font-bold text-white transition hover:bg-gray-800"
+                    className="flex-1 rounded-lg bg-[#1A1A1A] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#333333] active:scale-[0.98]"
                 >
-                    Accept All
+                    {t('accept')}
                 </button>
                 <button
                     onClick={() => setIsVisible(false)}
-                    className="rounded-md border border-gray-300 px-4 py-2 text-sm font-bold text-gray-700 transition hover:bg-gray-50 bg-white"
+                    className="flex-1 rounded-lg border border-[#D6D3D1] bg-white px-6 py-3 text-sm font-bold text-[#555555] transition hover:bg-[#F5F5F4] active:scale-[0.98]"
                 >
-                    Reject
+                    {t('reject')}
                 </button>
             </div>
         </div>

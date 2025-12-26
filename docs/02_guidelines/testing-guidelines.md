@@ -1,4 +1,4 @@
-# Testing Guidelines (v2.0 - Clean Architecture)
+# Testing Guidelines (v2.3 - Global Execution Strategy)
 
 開発ガイドラインで定義された「クリーンアーキテクチャ」のレイヤー構造に基づき、各層のテスト戦略を規定する。
 
@@ -43,33 +43,48 @@ UIやインフラは変わりやすいため、そこに依存しない `Domain`
     *   **Mocking:** `supabase-js` クライアント自体をモックし、通信発生を回避する。実際の通信テストは手動またはE2Eで行う。
 
 ### 2.4. UI Layer (`src/app/`, `src/components/`)
-**見た目とユーザーインタラクションを確認する。**
+**見た目、ユーザーインタラクション、およびURL同期の整合性を確認する。**
 
-*   **Type:** **Component Test / E2E**
-*   **Tools:** `React Testing Library`, `Storybook`, `Playwright`
-*   **Strategy:**
-    *   **Server Component (`src/app/**/page.tsx`):**
-        *   **Rule:** `async` コンポーネントの単体テストは困難（RTL非対応）なため、**Unit Testは作成しない**。
-        *   **Alternative:** E2Eテスト (`Playwright`) で表示確認を行う。
-    *   **Client Component (`src/components`):**
-        *   **Rule:** `React Testing Library (RTL)` を使用し、内部stateではなく「ユーザーから見た振る舞い（ボタンが押せるか、表示が変わったか）」をテストする。
-        *   **Wrapper Pattern:**
-            *   `[Feature]Renderer.tsx`: テスト対象のメイン。RTLでロジック検証。
-            *   `[Feature]ClientWrapper.tsx`: E2Eに任せ、Unit Testはスキップ可。
-    *   **Controller (`src/app` - Server Actions):**
-        *   **Mocking Strategy:** `next/navigation` (`redirect`) や `next/headers` (`cookies`) を使用している場合は、必ず `vi.mock` でモック化する。
-            ```ts
-            vi.mock('next/navigation', () => ({ redirect: vi.fn() }));
-            ```
-        *   **Validation Check:** Zodバリデーションが機能しているか、不正データを渡して検証する。
+*   **Type:** **Component Test / Hook Test / E2E**
+*   **Tools:** `React Testing Library (RTL)`, `Vitest`, `Playwright`, `Storybook`
+
+#### Why Vitest/RTL over Playwright Component Testing?
+Playwrightにもコンポーネントテスト機能はあるが、以下の理由からVitest/RTLを優先する。
+1.  **実行速度**: Node.js上で動作するためフィードバックループが極めて速い。
+2.  **AI互換性**: Gemini等のAIエージェントにとって、JSDOMベースのRTLコードは生成精度が高く、学習・修正が容易。
+3.  **Hooksテスト**: `renderHook` によるカスタムフック単体テストが最も効率的。
+
+#### Strategy (Role Definitions):
+| ツール | テストの深さ | ターゲット環境 | 生産性を守るための「割り切り」 |
+| :--- | :--- | :--- | :--- |
+| **RTL (Vitest)** | **ロジック中心** | **Local / CI** | 「ユーザーから見た振る舞い」を検証。スタイル(CSS)や複雑なブラウザ挙動は追わない。 |
+| **Playwright** | **導線中心** | **Vercel Preview** | 主要な画面遷移に限定。**実際のデプロイ環境**でユーザーが目的を達成できるかを検証。 |
+| **Storybook** | **視覚/AIマニュアル** | **Local** | **AIエージェントへの「指示書」**として活用。エッジケースの視覚確認を効率化。 |
+
+#### Storybook Selective Strategy:
+個人開発の生産性を維持するため、すべての部品にStorybookを作成するのではなく、**「状態によって見た目が大きく変わる複雑な部品」**に限定して導入する。
+*   **Target:** `FilterPanel`, `AudioPlayer`, `ScoreRenderer` 等
+*   **Value:** 10,000記事のエッジケース（極端に長いタイトル等）をカタログ上で瞬時に確認できるようにする。
+
+*   **Specific Testing Patterns:**
+    1.  **Debounce (入力遅延) 検証**:
+        *   `vi.useFakeTimers()` を使用し、指定時間（例: 500ms）経過後に初めて処理が実行されることを厳密に検証する。
+    2.  **URL/Navigation (Locale) 検証**:
+        *   `router.push` の引数に **ロケール（`/ja/..` や `/en/..`）が正しく含まれているか** を必ず検証する（多言語展開時のデグレード防止）。
+    3.  **Data Robustness (AI Content)**:
+        *   生成AIによる不完全なデータ（メタデータ欠損等）が渡された場合でも、UIがクラッシュせずに代替表示を出せるか（Graceful Failure）のテストケースを必須とする。
+
+*   **Implementation Rules:**
+    *   **Server Component:** Unit Testは作成せず、Playwrightでの表示確認のみとする。
+    *   **Controller (Server Actions):** `next/navigation` をモック化し、リダイレクト先やバリデーションエラーを検証する。
 
 ## 3. Tooling Stack & Configuration
 
-| Category | Tool | Scope |
-| :--- | :--- | :--- |
-| **Unit / Integration** | **Vitest** | Domain, Application, Infra |
-| **Component** | **Storybook** | UI Components (Visual) |
-| **E2E** | **Playwright** | Critical User Flows (Smoke Test) |
+| Category | Tool | Scope | Environment |
+| :--- | :--- | :--- | :--- |
+| **Unit / Integration** | **Vitest** | Domain, Application, Infra (Logic & State) | Local & CI |
+| **Component / Catalog** | **Storybook** | Complex UI Components (**AI Manual**) | Local |
+| **E2E / Navigation** | **Playwright** | Critical User Flows (Smoke Test & Locale) | Vercel Preview |
 
 ### 3.1. Scripts & Config
 *   **Config File:** `vitest.config.ts` (React/TS対応済み), `vitest.setup.ts` (Global Setup)
@@ -88,13 +103,18 @@ const score = new Score({ level: 5 });
 expect(score.isDifficult()).toBe(true); // 純粋な計算
 ```
 
-### Application Test
+### Application Test (with Locale Check)
 ```typescript
-// RegisterUserUseCase.test.ts
-const mockRepo = { save: vi.fn() }; // Mock
-const useCase = new RegisterUserUseCase(mockRepo);
-await useCase.execute(input);
-expect(mockRepo.save).toHaveBeenCalledWith(expectedUser); // 呼び出し確認
+// useFilterState.test.ts
+const mockPush = vi.fn();
+// ...
+act(() => { result.current.setFilter('keyword', 'Mozart'); });
+
+// Validate logic AND locale preservation
+expect(mockPush).toHaveBeenCalledWith(
+  expect.stringMatching(/^\/en\//), // Locale must be preserved
+  { scroll: false }
+);
 ```
 
 ## 5. File Location & Naming
@@ -137,12 +157,17 @@ E2Eテストはアプリケーション全体を外部から叩くテストで�
     *   **Note:** `src/app/test` のようにルート直下に配置すると、`[lang]` の動的ルーティングやMiddlewareと競合して 404 になる場合があるため注意する。
 *   **Cleanup:** 検証完了後は速やかに削除する。Gitにはコミットしない（または検証用ブランチでのみ管理する）。
 
-### 6.3. Negative Testing (Fault Injection)
+### 6.3. Negative Testing (Fault Injection & AI Robustness)
 「正常に動くこと」だけでなく、「異常時に正しく失敗すること（Fail Gracefully）」を検証する。
 
 *   **Verified Error UI:**
-    *   開発中（特に `_test` ページ等）に「強制的にエラーを発生させるボタン（Test Error Trigger）」を設置し、エラーハンドラ、Sentry通知、Toaster表示が機能することを目視確認する。
-    *   **Reason:** エラーハンドリングコード自体もバグを含む可能性があり、本番で初めて実行される事態を避けるため。
+    *   開発中に「強制的にエラーを発生させるボタン」等で、エラーハンドラやトースト表示が機能することを目視確認する。
+*   **Robustness against AI Content:**
+    *   10,000記事規模のAI生成コンテンツでは、一部のデータ欠損や予期せぬフォーマットが混入する可能性がある。
+    *   **検証項目:**
+        *   タイトルや説明文が空の場合のフォールバック表示。
+        *   不正な日付フォーマットや壊れた画像URLでの挙動。
+        *   APIエラー時のローディング/エラー表示の持続。
 *   **Promise Rejection:**
     *   非同期処理の検証では、意図的に Reject させるケースを必ずテストする。
 

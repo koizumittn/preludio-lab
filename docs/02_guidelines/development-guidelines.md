@@ -139,6 +139,7 @@ graph TD
 2.  **Phase 2: Use Case Implementation** (`src/application` Business Logic)
 3.  **Phase 3: Infrastructure Implementation** (`src/infrastructure` DB/API Adapter)
 4.  **Phase 4: UI Connection** (`src/app` Server Action & View)
+5.  **Phase 5: Verification & Refinement** (Unit/Component/E2E Tests & UI Polish)
 
 ### 1.6. Component Categorization (UI vs Layout)
 `src/components` 内のフォルダ分けにおいて、特に混同しやすい `ui` と `layout` の境界を以下のように定義する。
@@ -175,6 +176,11 @@ graph TD
     *   Good: `AudioPlayerController.tsx` (「音声」プレイヤーであることが自明)
     *   Bad: `PlayerController.tsx` (何のプレイヤーか文脈依存になる)
 
+### 2.8. Constants & Configuration
+*   **Centralization:** アプリ全体で共通の定数（サイト名、Base URL、ロケール定義など）は、**`src/lib/constants.ts`** に集約する。
+*   **No Magic Strings/Numbers:** 本番URLや特定のタイムアウト値などをコード中にハードコーディングすることを禁止する。
+    *   **Env Vars:** 環境依存の値は `process.env` から取得し、`constants.ts` 内で適切なフォールバック値と共に定義する。
+    *   **Shared:** 複数のファイルから参照される値は必ず定数化する。
 
 ### 2.1. TypeScript & JavaScript
 *   **TypeScript:** `strict: true` を必須とする。`any` 型の使用は原則禁止（`unknown` を使用し、型ガードを行う）。
@@ -284,7 +290,7 @@ Next.js (App Router) における Hydration Mismatch を防ぐため、以下の
 | 観点 | 推奨内容 | 目的 |
 |------|----------|------|
 | **統一的な例外捕捉** | すべての非同期処理（`fetch`, `axios`, `Promise` 系）と UI イベントハンドラは `try / catch` でラップし、例外は必ず捕捉する。 | 予期しないクラッシュを防ぎ、エラーログを一元化 |
-| **エラーハンドラ関数の共通化** | `src/utils/errorHandler.ts` に `handleError(error: unknown, context?: string)` を実装し、`Sentry.captureException` と `console.error` を内部で呼び出す。 | 再利用性と一貫したエラーレポート |
+| **エラーハンドラ関数の共通化** | `src/lib/client-error.ts` に `handleClientError(error: unknown, userMessage?: string, context?: string)` を実装し、`Sentry.captureException` と `console.error` を内部で呼び出す。 | 再利用性と一貫したエラーレポート |
 | **ユーザー向けフィードバック** | UI では **エラートースト**（例: `react-hot-toast`）や **フォールバック UI** を表示し、内部エラー情報は決して露出しない。 | UX の低下防止と情報漏洩防止 |
 | **型安全なエラー** | カスタムエラークラス `AppError extends Error { code: string; status?: number; }` を作成し、`code` でエラー種別を識別できるようにする。 | エラーの分類とハンドリングロジックの簡素化 |
 | **境界層でのサニタイズ** | API 呼び出し層（`src/infrastructure/api/*`）で受け取ったエラーは **外部情報を除去** した上で上位に伝搬する。 | セキュリティ（機密情報漏洩防止） |
@@ -307,51 +313,36 @@ Next.js (App Router) における Hydration Mismatch を防ぐため、以下の
     *   YouTube等の埋め込みプレイヤーを使用する場合、`www.youtube-nocookie.com` ドメインを使用することで、トラッキングCookieを抑制し、ブラウザコンソールへのCORSエラーノイズ（`googleads.g.doubleclick.net`等）を低減できる。
 
 
-#### 例：クライアント側エラーハンドラ実装（`src/utils/client-error-handler.ts`）
+#### 例：クライアント側エラーハンドラ実装（`src/lib/client-error.ts`）
 ```ts
 import * as Sentry from '@sentry/nextjs';
 import toast from 'react-hot-toast';
 
 /**
- * クライアント用エラーハンドラ。Sentry へ送信し、ユーザーにはトーストで通知。
+ * クライアント用エラーハンドラ。
+ * エラー自体はSentry等のログ収集基盤に送信されます（英語推奨）。
+ * 第2引数はユーザーへのトースト通知用であり、必要に応じてi18n化されたメッセージを渡します。
+ * 第3引数はSentryでの検索性を高めるためのコンテキスト情報です。
+ * 
+ * @param error 発生したエラーオブジェクト
+ * @param userNotificationMessage ユーザーに表示するトーストメッセージ (通知が不要な場合は省略可)
+ * @param context エラーの発生場所や文脈を示す識別子 (Sentryタグ用)
  */
-export function handleClientError(error: unknown, userMessage?: string): void {
-  Sentry.captureException(error);
-  if (process.env.NODE_ENV === 'development') {
-    console.error('[Client Error]', error);
-  }
-  if (userMessage) toast.error(userMessage);
-}
-```
-```ts
-// src/utils/errorHandler.ts
-import * as Sentry from '@sentry/nextjs';
-
-/**
- * アプリ全体で使用する例外ハンドラ。
- * - Sentry に例外を送信
- * - console.error でスタックトレースを出力（開発時のみ）
- * - 必要に応じて UI フィードバックをトリガー
- */
-export function handleError(error: unknown, context?: string): void {
-  const err = error instanceof Error ? error : new Error(String(error));
-
-  // Sentry に例外を送信
-  Sentry.captureException(err, {
-    tags: { context: context ?? 'unknown' },
-  });
-
-  // 開発環境では console.error で詳細を出力
-  // クライアント側は別ハンドラに委譲。サーバー側は PinoLogger を使用するのでここでは何もしない。
-  if (process.env.NODE_ENV === 'development') {
-    console.error('[Server Error]', err);
-  }
+export function handleClientError(error: unknown, userNotificationMessage?: string, context?: string): void {
+    Sentry.captureException(error, {
+        tags: { context: context ?? 'unknown' },
+    });
+    
+    if (process.env.NODE_ENV === 'development') {
+        console.error('[Client Error]', error, context ? `Context: ${context}` : '');
+    }
+    if (userNotificationMessage) toast.error(userNotificationMessage);
 }
 ```
 
 #### 例：コンポーネントでの使用例
 ```tsx
-import { handleError } from '@/utils/errorHandler';
+import { handleClientError } from '@/lib/client-error';
 import toast from 'react-hot-toast';
 
 export default function SomeComponent() {
@@ -361,8 +352,10 @@ export default function SomeComponent() {
       if (!res.ok) throw new Error('Network response was not ok');
       // …データ処理
     } catch (e) {
-      handleError(e, 'SomeComponent:fetchData');
-      toast.error('データ取得に失敗しました。再度お試しください。');
+      if (!res.ok) throw new Error('Network response was not ok');
+      // …データ処理
+    } catch (e) {
+      handleClientError(e, 'データ取得に失敗しました。再度お試しください。', 'SomeComponent:fetchData');
     }
   };
 

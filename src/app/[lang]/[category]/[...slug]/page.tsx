@@ -4,6 +4,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import GithubSlugger from 'github-slugger';
 import { LOCALES } from '@/lib/constants';
+import { supportedLocales } from '@/domain/i18n/Locale';
 import { SUPPORTED_CATEGORIES } from '@/domain/content/ContentConstants';
 import { ContentDetail, ContentSummary } from '@/domain/content/Content';
 
@@ -114,8 +115,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     if (!content) return {};
 
+    const slugStr = Array.isArray(slug) ? slug.join('/') : slug;
+
+    // SEO: このコンテンツ詳細ページ固有のalternates（canonicalとhreflang）を動的に生成
+    const languages: Record<string, string> = {};
+    supportedLocales.forEach((locale) => {
+        languages[locale] = `/${locale}/${category}/${slugStr}`;
+    });
+    languages['x-default'] = `/en/${category}/${slugStr}`;
+
     return {
         title: `${content.metadata.title} | Preludio Lab`,
         description: content.metadata.ogp_excerpt || `Discover more about ${content.metadata.title} on Preludio Lab.`,
+        alternates: {
+            canonical: `/${lang}/${category}/${slugStr}`,
+            languages,
+        },
     };
 }

@@ -3,6 +3,18 @@
         "title": "Preludio Lab | Más cerca de los clásicos, más alegría en cada nota",
         "description": "Profundiza en esa chispa de 'Me encanta esta pieza'. A través de partituras interactivas y audio, te traemos una experiencia que toca el corazón de las obras maestras. Únete a nosotros para momentos enriquecedores donde la música clásica se convierte en una compañera constante en tu vida."
     },
+    "Error": {
+        "title": "¡Algo salió mal!",
+        "description": "Pedimos disculpas por las molestias. El error ha sido registrado.",
+        "toastMessage": "Algo salió mal al cargar la página.",
+        "retry": "Intentar de nuevo"
+    },
+    "Consent": {
+        "title": "Acerca del uso de cookies",
+        "message": "{siteName} utiliza cookies para ofrecerle una experiencia auditiva óptima y analizar el uso del sitio.",
+        "accept": "Aceptar todo",
+        "reject": "Rechazar"
+    },
     "Common": {
         "loading": "Cargando...",
         "error": "Ocurrió un error",

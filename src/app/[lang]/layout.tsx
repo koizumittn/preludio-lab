@@ -1,12 +1,15 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
 import { Inter, Playfair_Display, Noto_Sans_JP, Zen_Old_Mincho, Noto_Sans_SC, Noto_Serif_SC } from 'next/font/google';
+
 import '../globals.css';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { AudioPlayerFeature } from '@/components/player';
+// 初期バンドルサイズ削減 (TBT改善) のため、プレイヤー機能を厳密に遅延読み込み
+// ssr: false での動的インポートを処理するためにClient Componentラッパーを使用
+import { DynamicAudioPlayer } from '@/components/player/DynamicAudioPlayer';
 import { AudioPlayerProvider } from '@/components/player/AudioPlayerContext';
-// Instead we import our new config
+// 代わりに新しい設定をインポート
 import { LazyMotionConfig } from '@/components/ui/LazyMotionConfig';
 import { ConsentBanner } from '@/components/layout/ConsentBanner';
 import { Toaster } from 'react-hot-toast';
@@ -53,6 +56,8 @@ const notoSerifSC = Noto_Serif_SC({
     preload: false,
 });
 
+import { BASE_URL } from '@/lib/constants';
+
 type Props = {
     children: React.ReactNode;
     params: Promise<{ lang: string }>;
@@ -62,14 +67,21 @@ export async function generateMetadata({ params }: Props) {
     const { lang } = await params;
     const t = await getTranslations({ locale: lang, namespace: 'Metadata' });
 
+    // サポートされている全ロケールのalternatesを動的に生成
+    const languages: Record<string, string> = {};
+    supportedLocales.forEach((locale) => {
+        languages[locale] = `/${locale}`;
+    });
+    // x-defaultはグローバルSEOに必須であり、英語版を指すように設定
+    languages['x-default'] = '/en';
+
     return {
         title: t('title'),
         description: t('description'),
+        metadataBase: new URL(BASE_URL),
         alternates: {
-            languages: {
-                'en': '/en',
-                'ja': '/ja',
-            },
+            canonical: `/${lang}`,
+            languages,
         },
     };
 }
@@ -113,8 +125,8 @@ export default async function RootLayout({
                             <main className="min-h-screen pb-24">{children}</main>
                             <Footer />
 
-                            {/* Global Audio Player Components */}
-                            <AudioPlayerFeature />
+                            {/* グローバルオーディオプレイヤー (遅延読み込み) */}
+                            <DynamicAudioPlayer />
 
                             <ConsentBanner />
                             <Toaster position="bottom-right" />

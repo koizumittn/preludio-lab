@@ -113,5 +113,11 @@
             "Advanced": "Avancé"
         },
         "readMore": "En savoir plus"
+    },
+    "Consent": {
+        "title": "À propos de l'utilisation des cookies",
+        "message": "{siteName} utilise des cookies pour vous offrir une expérience d'écoute optimale et pour analyser l'utilisation du site.",
+        "accept": "Tout accepter",
+        "reject": "Refuser"
     }
 }

@@ -13,7 +13,16 @@ export default function middleware(req: NextRequest) {
 
     // ルートパス、または有効なロケールの場合は next-intl に任せる
     if (!firstSegment || routing.locales.includes(firstSegment as any)) {
-        return intlMiddleware(req);
+        const response = intlMiddleware(req);
+
+        // UX Enhancement: Enable BFcache (Back/Forward Cache) for smoother navigation
+        // By default, Next.js sets 'no-store' for dynamic pages, which prevents BFcache.
+        // We override this to allow caching but require revalidation ('no-cache').
+        if (!response.headers.has('Cache-Control')) {
+            response.headers.set('Cache-Control', 'private, no-cache, no-transform, must-revalidate');
+        }
+
+        return response;
     }
 
     // 無効なロケール（例: /jaa）の場合、デフォルト言語（en）に置き換えてリダイレクト
