@@ -5,6 +5,7 @@ import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { SUPPORTED_CATEGORIES } from '@/domain/content/ContentConstants';
+import { supportedLocales } from '@/domain/i18n/Locale';
 
 type Props = {
     params: Promise<{
@@ -63,8 +64,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const categoryName = t(`categories.${category}`);
     const title = t('title', { category: categoryName });
 
+    // SEO: このカテゴリページ固有のalternates（canonicalとhreflang）を動的に生成
+    const languages: Record<string, string> = {};
+    supportedLocales.forEach((locale) => {
+        languages[locale] = `/${locale}/${category}`;
+    });
+    // x-defaultは英語版を指す
+    languages['x-default'] = `/en/${category}`;
+
     return {
         title: `${title} | Preludio Lab`,
         description: `Explore all ${categoryName} content on Preludio Lab.`,
+        alternates: {
+            canonical: `/${lang}/${category}`,
+            languages,
+        },
     };
 }
