@@ -1,13 +1,12 @@
 import { MetadataRoute } from 'next';
+import { BASE_URL } from '@/lib/constants';
 
 export default function robots(): MetadataRoute.Robots {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://preludiolab.com';
-
     return {
         rules: {
             userAgent: '*',
             allow: '/',
         },
-        sitemap: `${baseUrl}/sitemap.xml`,
+        sitemap: `${BASE_URL}/sitemap.xml`,
     };
 }

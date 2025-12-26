@@ -56,8 +56,7 @@ const notoSerifSC = Noto_Serif_SC({
     preload: false,
 });
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://preludiolab.com';
-
+import { BASE_URL } from '@/lib/constants';
 
 type Props = {
     children: React.ReactNode;
@@ -71,7 +70,7 @@ export async function generateMetadata({ params }: Props) {
     return {
         title: t('title'),
         description: t('description'),
-        metadataBase: new URL(baseUrl),
+        metadataBase: new URL(BASE_URL),
         alternates: {
             languages: {
                 'en': '/en',

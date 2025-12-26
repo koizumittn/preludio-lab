@@ -176,6 +176,11 @@ graph TD
     *   Good: `AudioPlayerController.tsx` (「音声」プレイヤーであることが自明)
     *   Bad: `PlayerController.tsx` (何のプレイヤーか文脈依存になる)
 
+### 2.8. Constants & Configuration
+*   **Centralization:** アプリ全体で共通の定数（サイト名、Base URL、ロケール定義など）は、**`src/lib/constants.ts`** に集約する。
+*   **No Magic Strings/Numbers:** 本番URLや特定のタイムアウト値などをコード中にハードコーディングすることを禁止する。
+    *   **Env Vars:** 環境依存の値は `process.env` から取得し、`constants.ts` 内で適切なフォールバック値と共に定義する。
+    *   **Shared:** 複数のファイルから参照される値は必ず定数化する。
 
 ### 2.1. TypeScript & JavaScript
 *   **TypeScript:** `strict: true` を必須とする。`any` 型の使用は原則禁止（`unknown` を使用し、型ガードを行う）。
