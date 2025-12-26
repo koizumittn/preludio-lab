@@ -3,6 +3,18 @@
         "title": "Preludio Lab | Più vicino ai classici, più gioia in ogni nota",
         "description": "Approfondisci quella scintilla di 'Amo questo pezzo'. Attraverso spartiti interattivi e audio, ti offriamo un'esperienza che tocca il cuore dei capolavori. Unisciti a noi per momenti arricchenti in cui la musica classica diventa una compagna costante della tua vita."
     },
+    "Error": {
+        "title": "Qualcosa è andato storto!",
+        "description": "Ci scusiamo per l'inconveniente. L'errore è stato registrato.",
+        "toastMessage": "Si è verificato un errore durante il caricamento della pagina.",
+        "retry": "Riprova"
+    },
+    "Consent": {
+        "title": "Teniamo alla tua privacy",
+        "message": "Utilizziamo i cookie per migliorare la tua esperienza e analizzare il traffico.",
+        "accept": "Accetta tutto",
+        "reject": "Rifiuta"
+    },
     "Common": {
         "loading": "Caricamento...",
         "error": "Si è verificato un errore",
