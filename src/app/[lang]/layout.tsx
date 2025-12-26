@@ -5,12 +5,11 @@ import { Inter, Playfair_Display, Noto_Sans_JP, Zen_Old_Mincho, Noto_Sans_SC, No
 import '../globals.css';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-// Strict Lazy Loading for Player Feature to reduce initial bundle size (TBT)
-// Strict Lazy Loading for Player Feature to reduce initial bundle size (TBT)
-// We use a Client Component wrapper to handle dynamic import with ssr: false
+// 初期バンドルサイズ削減 (TBT改善) のため、プレイヤー機能を厳密に遅延読み込み
+// ssr: false での動的インポートを処理するためにClient Componentラッパーを使用
 import { DynamicAudioPlayer } from '@/components/player/DynamicAudioPlayer';
 import { AudioPlayerProvider } from '@/components/player/AudioPlayerContext';
-// Instead we import our new config
+// 代わりに新しい設定をインポート
 import { LazyMotionConfig } from '@/components/ui/LazyMotionConfig';
 import { ConsentBanner } from '@/components/layout/ConsentBanner';
 import { Toaster } from 'react-hot-toast';
@@ -121,7 +120,7 @@ export default async function RootLayout({
                             <main className="min-h-screen pb-24">{children}</main>
                             <Footer />
 
-                            {/* Global Audio Player Components (Lazy Loaded) */}
+                            {/* グローバルオーディオプレイヤー (遅延読み込み) */}
                             <DynamicAudioPlayer />
 
                             <ConsentBanner />
