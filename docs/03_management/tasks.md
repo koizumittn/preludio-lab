@@ -151,9 +151,9 @@ Status: `[/]` 進行中
         - [x] 検索・絞り込みロジックを Custom Hook（`useFilter`）へ抽出し、保守性を向上
 
 - [ ] **5.5 コンテンツ管理のSupabase移行 (Supabase Content Management)**
-    - [ ] **[環境構築]** Supabaseプロジェクト設計とセットアップ
-        - [ ] 環境定義: Production (Main) と Staging/Verify (Branch/Preview) の2環境構成を無料枠内で設計
-        - [ ] Supabaseプロジェクトの作成とAPIキー管理（Vercel環境変数への連携）
+    - [x] **[環境構築]** Supabaseプロジェクト設計とセットアップ
+        - [x] 環境定義: Production (Main) と Staging/Verify (Branch/Preview) の2環境構成を無料枠内で設計
+        - [x] Supabaseプロジェクトの作成とAPIキー管理（Vercel環境変数への連携）
     - [ ] **[仕様策定]** DBスキーマとHybrid Content Model
         - [ ] Master: MDX / Index & Vector: Supabase という役割分担の定義
         - [ ] テーブル設計 (`works`, `composers`, `embeddings`)

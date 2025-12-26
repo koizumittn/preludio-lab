@@ -182,6 +182,22 @@ graph TD
     *   **Env Vars:** 環境依存の値は `process.env` から取得し、`constants.ts` 内で適切なフォールバック値と共に定義する。
     *   **Shared:** 複数のファイルから参照される値は必ず定数化する。
 
+### 2.9. Naming Conventions (Casing Policy)
+コードの役割（UI、ロジック、設定）を直感的に判別し、OS間のビルド事故を防ぐため、以下のケース使い分けを厳守する。
+
+#### 2.9.1. Filenames & Directory Names
+| ケース | 適用対象 | 例 |
+| :--- | :--- | :--- |
+| **PascalCase** | **UIコンポーネント、ドメイン実体、型定義ファイル**<br>そのファイルが「一つの明確な名詞（Noun）」をエクスポートしている場合。 | `Header.tsx`, `Content.ts`, `GetContentUseCase.ts`, `FsRepository.ts` |
+| **kebab-case** | **ユーティリティ、技術設定、共有インスタンス提供、ディレクトリ**<br>役割が「道具箱（Tools）」や「抽象的な技術レイヤー」である場合。 | `supabase.ts`, `env.ts`, `constants.ts`, `utils/`, `infrastructure/` |
+
+#### 2.9.2. Code Elements
+| ケース | 適用対象 | 例 |
+| :--- | :--- | :--- |
+| **PascalCase** | 型 (Type), インターフェース (Interface), クラス (Class), Reactコンポーネント名 | `interface User { ... }`, `class AppError ...`, `function Header() { ... }` |
+| **camelCase** | 変数 (Variable), 関数 (Function), インスタンス名 | `const user = ...`, `function fetchData() { ... }`, `const supabase = ...` |
+| **SCREAMING_SNAKE** | 定数 (Constants) | `export const SITE_NAME = '...'` |
+
 ### 2.1. TypeScript & JavaScript
 *   **TypeScript:** `strict: true` を必須とする。`any` 型の使用は原則禁止（`unknown` を使用し、型ガードを行う）。
 *   **Immutability:** 変数は可能な限り `const` を使用し、再代入可能な `let` の使用を避ける。
